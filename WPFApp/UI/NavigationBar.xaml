@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="Oratoria36.UI.NavigationBar"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Height="40" Background="#FFE0E0E0" BorderThickness="1" BorderBrush="#A0A0A4">
+
+    <DockPanel LastChildFill="True" Height="40" Width="1920">
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+            <Button 
+                Content="Главная" 
+                Width="120" Height ="30" 
+                Click="MainPage_Click" 
+                FontWeight="Bold" 
+                Background="#FFC6C6C6" 
+                BorderBrush="#FFAAAAAA" 
+                Foreground="#FF3F3F3F"/>
+            <Button 
+                Content="Сигналы" Width="120" 
+                Height ="30" 
+                Click="SignalsPage_Click" 
+                FontWeight="Bold" 
+                Background="#FFC6C6C6" 
+                BorderBrush="#FFAAAAAA" 
+                Foreground="#FF3F3F3F"/>
+            <Button 
+                Content="Сеть" 
+                Width="120" 
+                Height ="30" 
+                Click="ConnectionSettings_Click" 
+                FontWeight="Bold" 
+                Background="#FFC6C6C6" 
+                BorderBrush="#FFAAAAAA" 
+                Foreground="#FF3F3F3F"/>
+            <Button 
+                Content="Логи" 
+                Width="120" 
+                Height ="30" 
+                Click="LogPage_Click" 
+                FontWeight="Bold" 
+                Background="#FFC6C6C6" 
+                BorderBrush="#FFAAAAAA" 
+                Foreground="#FF3F3F3F"/>
+        </StackPanel>
+    </DockPanel>
+</UserControl>
