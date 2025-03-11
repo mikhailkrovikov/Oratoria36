@@ -16,4 +16,14 @@
 *.suo
 /Oratoria36/bin
 /Oratoria36/obj
-/WPFApp
+
+*.so
+*.dylib
+*.baml
+*.Up2Date
+*.cache
+*.BuildWithSkipAnalyzers
+*.resources
+*.editorconfig
+*.pdb
+*.user
