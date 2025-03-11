@@ -1,29 +1,34 @@
-﻿################################################################################
-# Данный GITIGNORE-файл был автоматически создан Microsoft(R) Visual Studio.
-################################################################################
+﻿# Build artifacts
+bin/
+obj/
 
-/.vs/Oratoria36/CopilotIndices/17.12.38.29086
-*.db
-/.vs/Oratoria36/FileContentIndex
-/.vs/Oratoria36/v17
-/.vs/Oratoria36/DesignTimeBuild
-/.vs/ProjectEvaluation
-/.vs/UnitronicsTester/DesignTimeBuild
-*.vsidx
-*.testlog
-*.manifest
-*.v2
+# User-specific files
+*.rsuser
 *.suo
-/Oratoria36/bin
-/Oratoria36/obj
-
-*.so
-*.dylib
-*.baml
-*.Up2Date
-*.cache
-*.BuildWithSkipAnalyzers
-*.resources
-*.editorconfig
-*.pdb
 *.user
+*.userosscache
+*.sln.docstates
+
+# Mono Auto Generated Files
+mono_crash.*
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# VS Code directories
+.vscode/
+/.vs/UnitronicsTester/v17
+/.vs/UnitronicsTester
+/.vs/ProjectEvaluation
+/.vs/Oratoria36/v17
+/Oratoria36/.vs/UnitronicsConfig
+/.vs/Oratoria36/FileContentIndex
+/.vs/Oratoria36/DesignTimeBuild
+/.vs/Oratoria36/CopilotIndices/17.12.38.29086
