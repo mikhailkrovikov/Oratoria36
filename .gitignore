@@ -1,0 +1,19 @@
+﻿################################################################################
+# Данный GITIGNORE-файл был автоматически создан Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/Oratoria36/CopilotIndices/17.12.38.29086
+*.db
+/.vs/Oratoria36/FileContentIndex
+/.vs/Oratoria36/v17
+/.vs/Oratoria36/DesignTimeBuild
+/.vs/ProjectEvaluation
+/.vs/UnitronicsTester/DesignTimeBuild
+*.vsidx
+*.testlog
+*.manifest
+*.v2
+*.suo
+/Oratoria36/bin
+/Oratoria36/obj
+/WPFApp
