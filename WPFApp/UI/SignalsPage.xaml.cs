@@ -25,11 +25,8 @@ namespace Oratoria36.UI
     }
     public class SignalsVM : INotifyPropertyChanged
     {
-        private readonly ModuleConfig _modbusDevice;
         public SignalsVM(SignalsPage page)
         {
-            _modbusDevice = ModulesConfigManager.GetDevice("192.168.0.102");
-            
             ModbusCommandsNameConfig(Signals.Commands, page.CommandGrid);
             SignalsNameConfig(Signals.Commands, page.CommandGrid);
             SignalsNameConfig(Signals.DigitalInputSignals, page.DigitalInputGrid);
@@ -37,7 +34,7 @@ namespace Oratoria36.UI
             SignalsNameConfig(Signals.AnalogInputSignals, page.AnalogInputGrid);
             SignalsNameConfig(Signals.AnalogOutputSignals, page.AnalogOutputGrid);
 
-            ModbsusCommandsButtonsConfig(Signals.Commands, _modbusDevice.IsConnected, page.CommandGrid);
+            ModbsusCommandsButtonsConfig(Signals.Commands, page.CommandGrid);
             SignalsValueConfig(Signals.DigitalInputSignals, page.DigitalInputGrid);
             SignalsValueConfig(Signals.DigitalOutputSignals, page.DigitalOutputGrid);
             SignalsValueConfig(Signals.AnalogInputSignals, page.AnalogInputGrid);
@@ -47,27 +44,18 @@ namespace Oratoria36.UI
             ConvertedValue(Signals.AnalogOutputSignals.Values.ToList(), page.AnalogOutputGrid);
         }
 
-        private void ModbsusCommandsButtonsConfig(Dictionary<string, ushort> commands, bool isConnected, Grid grid)
+        private void ModbsusCommandsButtonsConfig(Dictionary<string, ushort> commands, Grid grid)
         {
             int rowIndex = 2;
             foreach (var command in commands)
             {
                 Button button = new Button
-                {
-                    IsEnabled = isConnected,
+                {   
                     Content = "Выполнить",
                     Background = new SolidColorBrush(Color.FromRgb(198, 198, 198)),
                     BorderBrush = new SolidColorBrush(Color.FromRgb(170, 170, 170)),
                     Foreground = new SolidColorBrush(Color.FromRgb(63, 63, 63)),
                 };
-                if (!isConnected)
-                {
-                    button.Content = "Нет связи";
-                    button.Background = new SolidColorBrush(Color.FromRgb(63, 63, 63));
-                    button.BorderBrush = new SolidColorBrush(Color.FromRgb(192, 192, 192));
-                    button.Foreground = new SolidColorBrush(Color.FromRgb(192, 192, 192));
-                }
-                button.Click += (sender, e) => _modbusDevice.WriteSingleRegister(40, command.Value);
                 Grid.SetRow(button, rowIndex);
                 Grid.SetColumn(button, 2);
                 grid.Children.Add(button);

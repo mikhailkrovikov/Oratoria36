@@ -60,14 +60,14 @@
                 <RowDefinition Height="27*"/>
                 <RowDefinition Height="27*"/>
                 <RowDefinition Height="27*"/>
-                <RowDefinition Height="27.309"/>
+                <RowDefinition Height="27"/>
                 <RowDefinition Height="27*"/>
                 <RowDefinition Height="27*"/>
                 <RowDefinition Height="27*"/>
             </Grid.RowDefinitions>
-            <Label Grid.Row="0" Grid.Column="0" Content="Modbus команды" Grid.ColumnSpan="3" FontWeight="Bold" FontSize="16" Foreground="#FF3F3F3F"/>
-            <Label Grid.Row="1" Grid.Column="0" Content="Название команды" Foreground="#FF3F3F3F" FontWeight="Bold"/>
-            <Label Grid.Row="1" Grid.Column="1" Content="Код" Foreground="#FF3F3F3F" FontWeight="Bold"/>
+            <Label Grid.Row="0" Grid.Column="0" Content="Modbus команды" Grid.ColumnSpan="3" FontSize="16" Style="{StaticResource HeaderLabel}"/>
+            <Label Grid.Row="1" Grid.Column="0" Content="Название команды" Style="{StaticResource HeaderLabel}"/>
+            <Label Grid.Row="1" Grid.Column="1" Content="Код" Style="{StaticResource HeaderLabel}"/>
         </Grid>
         <Grid x:Name="DigitalInputGrid" Grid.Row="1" Grid.Column="2">
             <Grid.ColumnDefinitions>
@@ -111,9 +111,9 @@
                 <RowDefinition Height="0.8*"/>
                 <RowDefinition Height="0.8*"/>
             </Grid.RowDefinitions>
-            <Label Content="Дискретные входы" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontWeight="Bold" FontSize="16" Foreground="#FF3F3F3F"/>
-            <Label Content="Сигнал"  Grid.Row="1" Grid.Column="0" Foreground="#FF3F3F3F" FontWeight="Bold" />
-            <Label Content="Значение" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="1" Foreground="#FF3F3F3F" FontWeight="Bold" HorizontalContentAlignment="Center"/>
+            <Label Content="Дискретные входы" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="16" Style="{StaticResource HeaderLabel}"/>
+            <Label Content="Сигнал"  Grid.Row="1" Grid.Column="0" Style="{StaticResource HeaderLabel}"/>
+            <Label Content="Значение" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="1" Style="{StaticResource HeaderLabel}" />
         </Grid>
         <Grid x:Name="DigitalOutputGrid" Grid.Row="1" Grid.Column="3" >
             <Grid.ColumnDefinitions>
@@ -157,9 +157,9 @@
                 <RowDefinition Height="0.8*"/>
                 <RowDefinition Height="0.8*"/>
             </Grid.RowDefinitions>
-            <Label Grid.Row="0" Grid.Column="0" Content="Дискретные выходы" FontWeight="Bold" FontSize="16" Foreground="#FF3F3F3F"/>
-            <Label Grid.Row="1" Grid.Column="0" Content="Сигнал" Foreground="#FF3F3F3F" FontWeight="Bold"/>
-            <Label Grid.Row="1" Grid.Column="1" Content="Значение" Grid.ColumnSpan="2" Foreground="#FF3F3F3F" FontWeight="Bold"/>
+            <Label Grid.Row="0" Grid.Column="0" Content="Дискретные выходы" FontSize="16" Style="{StaticResource HeaderLabel}"/>
+            <Label Grid.Row="1" Grid.Column="0" Content="Сигнал" Style="{StaticResource HeaderLabel}"/>
+            <Label Grid.Row="1" Grid.Column="1" Content="Значение" Grid.ColumnSpan="2" Style="{StaticResource HeaderLabel}"/>
         </Grid>
         <Grid x:Name="AnalogInputGrid" Grid.Row="1" Grid.Column="4">
             <Grid.ColumnDefinitions>
@@ -204,10 +204,10 @@
                 <RowDefinition Height="0.8*"/>
                 <RowDefinition Height="0.8*"/>
             </Grid.RowDefinitions>
-            <Label Grid.Row="0" Grid.Column="0" Content="Аналоговые входы" Grid.ColumnSpan="4" FontWeight="Bold" FontSize="16" Foreground="#FF3F3F3F"/>
-            <Label Grid.Row="1" Grid.Column="0" Content="Сигнал" Foreground="#FF3F3F3F" FontWeight="Bold"/>
-            <Label Grid.Row="1" Grid.Column="1" Content="Значение" Foreground="#FF3F3F3F" FontWeight="Bold" HorizontalContentAlignment="Center"/>
-            <Label Grid.Row="1" Grid.Column="2" Content="Разряд" Foreground="#FF3F3F3F" FontWeight="Bold" HorizontalContentAlignment="Center"/>
+            <Label Grid.Row="0" Grid.Column="0" Content="Аналоговые входы" Grid.ColumnSpan="4" FontSize="16" Style="{StaticResource HeaderLabel}"/>
+            <Label Grid.Row="1" Grid.Column="0" Content="Сигнал" Style="{StaticResource HeaderLabel}"/>
+            <Label Grid.Row="1" Grid.Column="1" Content="Значение" Style="{StaticResource HeaderLabel}"/>
+            <Label Grid.Row="1" Grid.Column="2" Content="Разряд" Style="{StaticResource HeaderLabel}"/>
         </Grid>
         <Grid x:Name="AnalogOutputGrid" Grid.Row="1" Grid.Column="5">
             <Grid.ColumnDefinitions>
@@ -252,10 +252,10 @@
                 <RowDefinition Height="0.8*"/>
                 <RowDefinition Height="0.8*"/>
             </Grid.RowDefinitions>
-            <Label Grid.Row="0" Grid.Column="0" Content="Аналоговые выходы" Grid.ColumnSpan="4" FontWeight="Bold" FontSize="16" Foreground="#FF3F3F3F"/>
-            <Label Grid.Row="1" Grid.Column="0" Content="Сигнал" Foreground="#FF3F3F3F" FontWeight="Bold"/>
-            <Label Grid.Row="1" Grid.Column="1" Content="Значение" Foreground="#FF3F3F3F" FontWeight="Bold" HorizontalContentAlignment="Center"/>
-            <Label Grid.Row="1" Grid.Column="2" Content="Разряд" Foreground="#FF3F3F3F" FontWeight="Bold" HorizontalContentAlignment="Center"/>
+            <Label Grid.Row="0" Grid.Column="0" Content="Аналоговые выходы" Grid.ColumnSpan="4" FontSize="16" Style="{StaticResource HeaderLabel}"/>
+            <Label Grid.Row="1" Grid.Column="0" Content="Сигнал" Style="{StaticResource HeaderLabel}"/>
+            <Label Grid.Row="1" Grid.Column="1" Content="Значение" Style="{StaticResource HeaderLabel}"/>
+            <Label Grid.Row="1" Grid.Column="2" Content="Разряд" Style="{StaticResource HeaderLabel}"/>
         </Grid>
     </Grid>
 </Page>

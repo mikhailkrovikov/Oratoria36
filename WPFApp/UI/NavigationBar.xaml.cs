@@ -12,12 +12,10 @@ namespace Oratoria36.UI
         {
             InitializeComponent();
         }
-
         private void MainPage_Click(object sender, RoutedEventArgs e)
         {
             PageChanged.Invoke("MainPage");
         }
-
         private void SignalsPage_Click(object sender, RoutedEventArgs e)
         {
             PageChanged.Invoke("SignalsPage");

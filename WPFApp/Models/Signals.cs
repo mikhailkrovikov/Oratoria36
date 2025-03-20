@@ -7,23 +7,7 @@ using System.Runtime.CompilerServices;
 namespace Oratoria36.Models
 {
     public class Signals : INotifyPropertyChanged
-    {
-        private static ModuleConfig _module = ModulesConfigManager.GetDevice("192.168.0.102");
-        private static string _ipAddress = "192.168.0.102";
-        public static string IPAddress
-        {
-            get => _ipAddress;
-            set
-            {
-                if (_ipAddress != value)
-                {
-                    _ipAddress = value;
-                    _module = ModulesConfigManager.GetDevice(_ipAddress);
-                }
-            }
-        }
-
-        public static bool IsConnected => _module.IsConnected;
+    { 
 
         private static bool[] _digitalInputs;
         private static bool[] _digitalOutputs;

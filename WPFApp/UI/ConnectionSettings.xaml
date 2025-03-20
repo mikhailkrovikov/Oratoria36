@@ -9,25 +9,65 @@
       Title="ConnectionSettings">
 
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.05*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.05*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.05*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.05*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.05*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.05*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="0.02*"/>
+            <RowDefinition Height="0.05*"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="0.05*"/>
         </Grid.RowDefinitions>
+        <Label Content="Модуль 1 ВЧ очистки" Grid.Column="1" Grid.Row="1" FontSize="16" Style="{StaticResource HeaderLabel}" HorizontalAlignment="Center"/>
+        <Label Content="Модуль 2 напыления" Grid.Column="3" Grid.Row="1" FontSize="16" Style="{StaticResource HeaderLabel}" HorizontalAlignment="Center"/>
+        <Label Content="Модуль 3 напыления" Grid.Column="5" Grid.Row="1" FontSize="16" Style="{StaticResource HeaderLabel}" HorizontalAlignment="Center"/>
+        <Label Content="Модуль 4 напыления" Grid.Column="7" Grid.Row="1" FontSize="16" Style="{StaticResource HeaderLabel}" HorizontalAlignment="Center"/>
+        <Label Content="Транспортный модуль" Grid.Column="9" Grid.Row="1" FontSize="16" Style="{StaticResource HeaderLabel}" HorizontalAlignment="Center"/>
+        <Rectangle Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Style="{StaticResource ContureRectangleStyle}"/>
+        <Rectangle Grid.Column="3" Grid.Row="1" Grid.RowSpan="2" Style="{StaticResource ContureRectangleStyle}"/>
+        <Rectangle Grid.Column="5" Grid.Row="1" Grid.RowSpan="2" Style="{StaticResource ContureRectangleStyle}"/>
+        <Rectangle Grid.Column="7" Grid.Row="1" Grid.RowSpan="2" Style="{StaticResource ContureRectangleStyle}"/>
+        <Rectangle Grid.Column="9" Grid.Row="1" Grid.RowSpan="2" Style="{StaticResource ContureRectangleStyle}"/>
+        <Grid Grid.Column="1" Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.1*"/>
+                <ColumnDefinition Width="1.5*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="0.1*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="26"/>
+                <RowDefinition Height="26"/>
+                <RowDefinition Height="26"/>
+                <RowDefinition Height="26"/>
+                <RowDefinition Height="26"/>
+                <RowDefinition Height="26"/>
+                <RowDefinition Height="26"/>
+                <RowDefinition Height="26"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Content="Статус соединения:" Grid.Column="1"  Grid.Row="0" Style="{StaticResource BaseTextLabel}" />
+            <Label Content="Текущий IP адресс:" Grid.Row="1" Grid.Column="1" Style="{StaticResource BaseTextLabel}"/>
+            <Label Content="Текущий порт:" Grid.Row="2" Grid.Column="1" Style="{StaticResource BaseTextLabel}"/>
+            <Label Content="Задание нового IP:" Grid.Column="1" Grid.Row="4" Style="{StaticResource BaseTextLabel}"/>
+            <Label Content="Задание нового порта:" Grid.Column="1" Grid.Row="5" Style="{StaticResource BaseTextLabel}"/>
 
-        <TextBlock Text="Настройки соединений" FontSize="24" FontWeight="Bold" Margin="10"/>
+            <TextBlock Grid.Column="2" Grid.Row="0" Text="{Binding Module1Status}"/>
+            <TextBlock Grid.Column="2" Grid.Row="1" Text="{Binding Module1CurrentIP}"/>
+            <TextBlock Grid.Column="2" Grid.Row="2" Text="{Binding Module1CurrentPort}"/>
 
-        <StackPanel Grid.Row="1" Margin="10">
-            <ItemsControl ItemsSource="{Binding Modules}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal" Margin="5">
-                            <TextBlock Text="{Binding IP}" Width="150" VerticalAlignment="Center"/>
-                            <TextBox Text="{Binding NewIP}" Width="200" Margin="5" VerticalAlignment="Center"/>
-                            <Button Content="Применить" Margin="5" VerticalAlignment="Center" Command="{Binding ApplyNewIPCommand}"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </StackPanel>
+            <TextBox Grid.Column="2" Grid.Row="4"/>
+            <TextBox Grid.Column="2" Grid.Row="5"/>
+        </Grid>
     </Grid>
 </Page>

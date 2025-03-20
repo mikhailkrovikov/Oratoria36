@@ -7,38 +7,28 @@
         <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
             <Button 
                 Content="Главная" 
-                Width="120" Height ="30" 
+                Width="120" 
+                Height ="30" 
                 Click="MainPage_Click" 
-                FontWeight="Bold" 
-                Background="#FFC6C6C6" 
-                BorderBrush="#FFAAAAAA" 
-                Foreground="#FF3F3F3F"/>
+                Style="{StaticResource NavigationButton}"/>
             <Button 
-                Content="Сигналы" Width="120" 
+                Content="Сигналы" 
+                Width="120" 
                 Height ="30" 
                 Click="SignalsPage_Click" 
-                FontWeight="Bold" 
-                Background="#FFC6C6C6" 
-                BorderBrush="#FFAAAAAA" 
-                Foreground="#FF3F3F3F"/>
+                Style="{StaticResource NavigationButton}"/>
             <Button 
                 Content="Сеть" 
                 Width="120" 
                 Height ="30" 
                 Click="ConnectionSettings_Click" 
-                FontWeight="Bold" 
-                Background="#FFC6C6C6" 
-                BorderBrush="#FFAAAAAA" 
-                Foreground="#FF3F3F3F"/>
+                Style="{StaticResource NavigationButton}"/>
             <Button 
                 Content="Логи" 
                 Width="120" 
                 Height ="30" 
                 Click="LogPage_Click" 
-                FontWeight="Bold" 
-                Background="#FFC6C6C6" 
-                BorderBrush="#FFAAAAAA" 
-                Foreground="#FF3F3F3F"/>
+                Style="{StaticResource NavigationButton}"/>
         </StackPanel>
     </DockPanel>
 </UserControl>
