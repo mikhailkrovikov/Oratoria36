@@ -8,6 +8,12 @@
         <Setter Property="FontWeight" Value="Bold"/>
     </Style>
 
+    <Style x:Key="BaseEnableButton" TargetType="Button">
+        <Setter Property="Background" Value="#FFC6C6C6"/>
+        <Setter Property="Foreground" Value="#FF3F3F3F"/>
+        <Setter Property="BorderBrush" Value="#FFAAAAAA"/>
+    </Style>
+
     <Style x:Key="HeaderLabel" TargetType="Label">
         <Setter Property="Foreground" Value="#FF3F3F3F"/>
         <Setter Property="BorderBrush" Value="#FFAAAAAA"/>
