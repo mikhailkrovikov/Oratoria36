@@ -20,25 +20,31 @@
                   IsReadOnly="True"
                   Grid.Column="0"
                   Margin="10">
+            <DataGrid.Resources>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Level}" Value="Error">
+                            <Setter Property="Background" Value="#FFDDDD"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Level}" Value="Warn">
+                            <Setter Property="Background" Value="Yellow"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Level}" Value="Info">
+                            <Setter Property="Background" Value="White"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Level}" Value="Debug">
+                            <Setter Property="Background" Value="White"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Level}" Value="Trace">
+                            <Setter Property="Background" Value="White"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Resources>
+
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Время" Binding="{Binding Timestamp, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}'}" Width="150"/>
-                <DataGridTextColumn Header="Уровень" Binding="{Binding Level}" Width="80">
-                    <DataGridTextColumn.CellStyle>
-                        <Style TargetType="DataGridCell">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding Level}" Value="Error">
-                                    <Setter Property="Background" Value="#FFDDDD"/>
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding Level}" Value="Warn">
-                                    <Setter Property="Background" Value="#FFFFDD"/>
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding Level}" Value="Info">
-                                    <Setter Property="Background" Value="#DDFFDD"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </DataGridTextColumn.CellStyle>
-                </DataGridTextColumn>
+                <DataGridTextColumn Header="Время" Binding="{Binding Timestamp, StringFormat='{}{0:dd-MM-yyyy HH:mm:ss}'}" Width="150"/>
+                <DataGridTextColumn Header="Уровень" Binding="{Binding Level}" Width="80"/>
                 <DataGridTextColumn Header="Источник" Binding="{Binding Logger}" Width="100"/>
                 <DataGridTextColumn Header="Сообщение" Binding="{Binding Message}" Width="*"/>
             </DataGrid.Columns>

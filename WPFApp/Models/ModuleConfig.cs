@@ -14,6 +14,7 @@ namespace Oratoria36.Models
         private TcpClient _tcpClient;
         private bool _isConnected;
         private string _ip;
+        private string _lastLoggedIp;
 
         public string IP
         {
@@ -22,13 +23,20 @@ namespace Oratoria36.Models
             {
                 if (_ip != value)
                 {
-                    _logger.Info($"IP изменен с {_ip} на {value}");
+                    if (!string.IsNullOrEmpty(value) && _lastLoggedIp != value)
+                    {
+                        _logger.Info($"IP изменен с {_ip ?? "не задан"} на {value}");
+                        _lastLoggedIp = value;
+                    }
+
                     _ip = value;
                     OnPropertyChanged();
                 }
             }
         }
+
         private int _port = 502;
+        private int _lastLoggedPort = 0;
 
         public int Port
         {
@@ -37,12 +45,18 @@ namespace Oratoria36.Models
             {
                 if (_port != value)
                 {
-                    _logger.Info($"Порт изменен с {_port} на {value}");
+                    if (value != 0 && _lastLoggedPort != value)
+                    {
+                        _logger.Info($"Порт изменен с {_port} на {value}");
+                        _lastLoggedPort = value;
+                    }
+
                     _port = value;
                     OnPropertyChanged();
                 }
             }
         }
+
         public bool IsConnected
         {
             get => _isConnected;
@@ -77,7 +91,7 @@ namespace Oratoria36.Models
         }
 
         public void CloseConnection()
-        { 
+        {
             if (IsConnected)
             {
                 try

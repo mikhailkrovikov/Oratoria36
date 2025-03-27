@@ -1,29 +1,35 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Oratoria36.Service;
 using System.Text.Json.Serialization;
 using System.IO;
 using System.Text.Json;
+using NLog;
 
 namespace Oratoria36.Models
 {
     public class ModuleManager
     {
+        private static readonly Logger _logger = LogManager.GetLogger("Connection");
+        private static readonly Lazy<ModuleManager> _instance =
+            new Lazy<ModuleManager>(() => new ModuleManager());
+        public static ModuleManager Instance => _instance.Value;
+        public event Action<string> ConnectionStatusChanged;
         private readonly JsonSettingsService _settingsService;
         private const string CONNECTION_SETTINGS_FILE = "ConnectionSettings.json";
 
-        // Свойства для сериализации/десериализации JSON
-        public string Module1IP { get; set; } = "192.168.0.102";
-        public int Module1Port { get; set; } = 502;
+        public string Module1IP { get; set; }
+        public int Module1Port { get; set; }
         public string Module2IP { get; set; }
-        public int Module2Port { get; set; } = 502;
+        public int Module2Port { get; set; }
         public string Module3IP { get; set; }
-        public int Module3Port { get; set; } = 502;
+        public int Module3Port { get; set; }
         public string Module4IP { get; set; }
-        public int Module4Port { get; set; } = 502;
+        public int Module4Port { get; set; }
         public string TransportModuleIP { get; set; }
-        public int TransportModulePort { get; set; } = 502;
+        public int TransportModulePort { get; set; }
 
-        // Игнорируем эти свойства при сериализации в JSON
+
         [JsonIgnore]
         public ModuleConfig Module1 { get; private set; } = new ModuleConfig();
         [JsonIgnore]
@@ -35,7 +41,7 @@ namespace Oratoria36.Models
         [JsonIgnore]
         public ModuleConfig TransportModule { get; private set; } = new ModuleConfig();
 
-        public ModuleManager()
+        private ModuleManager()
         {
             _settingsService = new JsonSettingsService();
             LoadConnectionSettings();
@@ -44,8 +50,6 @@ namespace Oratoria36.Models
 
         private void LoadConnectionSettings()
         {
-            // Вместо десериализации в объект ModuleManager, используем анонимный тип
-            // или словарь для временного хранения данных
             try
             {
                 string filePath = Path.Combine(_settingsService.SettingsFolder, CONNECTION_SETTINGS_FILE);
@@ -56,7 +60,6 @@ namespace Oratoria36.Models
 
                     if (tempSettings != null)
                     {
-                        // Копируем значения из временного объекта
                         Module1IP = tempSettings.Module1IP ?? Module1IP;
                         Module1Port = tempSettings.Module1Port;
                         Module2IP = tempSettings.Module2IP;
@@ -72,12 +75,9 @@ namespace Oratoria36.Models
             }
             catch (Exception ex)
             {
-                // Логирование ошибки
-                Console.WriteLine($"Ошибка при загрузке настроек: {ex.Message}");
+                _logger.Error(ex, "Ошибка при загрузке настроек");
             }
         }
-
-        // Вспомогательный класс только для десериализации
         private class ModuleManagerSettings
         {
             public string Module1IP { get; set; }
@@ -112,7 +112,6 @@ namespace Oratoria36.Models
 
         public async Task SaveConnectionSettingsAsync()
         {
-            // Обновляем свойства для сохранения из объектов ModuleConfig
             Module1IP = Module1.IP;
             Module1Port = Module1.Port;
             Module2IP = Module2.IP;
@@ -129,21 +128,55 @@ namespace Oratoria36.Models
 
         public async Task ConnectAllAsync()
         {
-            await Task.WhenAll(
-                Module1.InitializeModbusAsync(Module1.IP),
-                Module2.InitializeModbusAsync(Module2.IP),
-                Module3.InitializeModbusAsync(Module3.IP),
-                Module4.InitializeModbusAsync(Module4.IP),
-                TransportModule.InitializeModbusAsync(TransportModule.IP));
+            try
+            {
+                _logger.Info("Начало автоматического подключения к модулям...");
+
+                await Task.WhenAll(
+                    Module1.InitializeModbusAsync(Module1.IP),
+                    Module2.InitializeModbusAsync(Module2.IP),
+                    Module3.InitializeModbusAsync(Module3.IP),
+                    Module4.InitializeModbusAsync(Module4.IP),
+                    TransportModule.InitializeModbusAsync(TransportModule.IP));
+
+                var status = Module1.IsConnected ? "Подключено" : "Отключено";
+                ConnectionStatusChanged?.Invoke(status);
+                if (Module1.IsConnected || Module2.IsConnected || Module3.IsConnected || Module4.IsConnected || TransportModule.IsConnected)
+                {
+                    _logger.Info("Автоматическое подключение завершено");
+                }
+                else
+                {
+                    _logger.Error("Автоматическое подключение завершено с ошибкой");
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Ошибка при автоматическом подключении к модулям");
+                ConnectionStatusChanged?.Invoke("Ошибка");
+            }
         }
 
         public void DisconnectAll()
         {
-            Module1.CloseConnection();
-            Module2.CloseConnection();
-            Module3.CloseConnection();
-            Module4.CloseConnection();
-            TransportModule.CloseConnection();
+            try
+            {
+                _logger.Info("Отключение всех модулей");
+
+                Module1.CloseConnection();
+                Module2.CloseConnection();
+                Module3.CloseConnection();
+                Module4.CloseConnection();
+                TransportModule.CloseConnection();
+
+                ConnectionStatusChanged?.Invoke("Отключено");
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Ошибка при отключении модулей");
+                ConnectionStatusChanged?.Invoke("Ошибка отключения");
+            }
         }
     }
 }

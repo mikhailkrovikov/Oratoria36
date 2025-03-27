@@ -9,21 +9,24 @@ namespace Oratoria36.UI
 {
     public partial class MainWindow : Window
     {
-        private readonly ModuleConfig _modbusDevice;
         private readonly MainWindowVM _vm;
 
         public MainWindow()
         {
             InitializeComponent();
             _vm = new MainWindowVM();
-            _modbusDevice = new ModuleConfig();
             DataContext = this;
+
             _vm.StartClock();
             NavigationBarControl.PageChanged += NavigateToPage;
             MainFrame.NavigationService.Navigate(new MainPage());
+
+            ModuleManager.Instance.ConnectionStatusChanged += status =>
+                Application.Current.Dispatcher.Invoke(() => _vm.ConnectionStatus = status);
+
+            _ = ModuleManager.Instance.ConnectAllAsync();
         }
 
-        public ModuleConfig ModbusDevice => _modbusDevice;
         public MainWindowVM ViewModel => _vm;
 
         private void NavigateToPage(string pageName)
@@ -50,7 +53,8 @@ namespace Oratoria36.UI
         private void Window_Closed(object sender, EventArgs e)
         {
             NavigationBarControl.PageChanged -= NavigateToPage;
-            _modbusDevice?.CloseConnection();
+
+            ModuleManager.Instance.DisconnectAll();
         }
     }
 
@@ -59,6 +63,7 @@ namespace Oratoria36.UI
         private DispatcherTimer _timer;
         private string _date;
         private string _time;
+        private string _connectionStatus = "Не подключено";
 
         public string Date
         {
@@ -86,6 +91,19 @@ namespace Oratoria36.UI
             }
         }
 
+        public string ConnectionStatus
+        {
+            get => _connectionStatus;
+            set
+            {
+                if (_connectionStatus != value)
+                {
+                    _connectionStatus = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public void StartClock()
         {
             _timer = new DispatcherTimer
@@ -105,8 +123,7 @@ namespace Oratoria36.UI
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
     }
 }

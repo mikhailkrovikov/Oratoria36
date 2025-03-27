@@ -1,5 +1,6 @@
 ﻿using Oratoria36.Models;
 using Oratoria36.Service;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -21,7 +22,7 @@ namespace Oratoria36.UI
 
     public class ConnectionSettingsVM : INotifyPropertyChanged
     {
-        Logger _logger = LogManager.GetLogger("Settings");
+        private static readonly Logger _logger = LogManager.GetLogger("Settings");
 
         ModuleManager _moduleManager;
         public ModuleConfig Module1 { get; }
@@ -86,10 +87,9 @@ namespace Oratoria36.UI
 
         private async void Connect(object parameter)
         {
+            _logger.Info($"Попытка подключения к {Module1.IP}:{Module1.Port}");
             await Module1.InitializeModbusAsync(Module1.IP);
             UpdateModule1Status();
-            NewIP = Module1.IP;
-            NewPort = Module1.Port.ToString();
         }
 
         private void UpdateModule1Status()
@@ -101,98 +101,82 @@ namespace Oratoria36.UI
 
         private void Disconnect(object parameter)
         {
+            _logger.Info($"Отключение от {Module1.IP}:{Module1.Port}");
             Module1.CloseConnection();
             UpdateModule1Status();
         }
 
         private async void ApplySettings(object parameter)
         {
-            _logger.Info("Начало применения настроек");
 
-            if (string.IsNullOrWhiteSpace(NewIP) || string.IsNullOrWhiteSpace(NewPort))
+            if (string.IsNullOrWhiteSpace(NewIP) && string.IsNullOrWhiteSpace(NewPort))
             {
-                _logger.Warn("IP или порт не указаны");
+
                 return;
             }
 
-            if (int.TryParse(NewPort, out int port))
+            _logger.Info($"Начало применения настроек. NewIP: '{NewIP}', NewPort: '{NewPort}'");
+
+            string ipToApply = string.IsNullOrWhiteSpace(NewIP) ? Module1.IP : NewIP;
+
+            int portToApply = Module1.Port;
+            if (!string.IsNullOrWhiteSpace(NewPort) && int.TryParse(NewPort, out int newPort))
             {
-                _logger.Info($"Применение новых настроек: IP={NewIP}, Port={port}");
-
-                Module1.IP = NewIP;
-                Module1.Port = port;
-
-                try
-                {
-                    // Сохраняем настройки в JSON
-                    await _moduleManager.SaveConnectionSettingsAsync();
-                    _logger.Info("Настройки успешно сохранены");
-                }
-                catch (Exception ex)
-                {
-                    _logger.Error(ex, "Ошибка при сохранении настроек");
-                }
-
-                UpdateModule1Status();
-
-                // Очищаем поля ввода
-                NewIP = string.Empty;
-                NewPort = string.Empty;
+                portToApply = newPort;
             }
-            else
+            else if (!string.IsNullOrWhiteSpace(NewPort))
             {
                 _logger.Error($"Не удалось преобразовать порт '{NewPort}' в число");
+                return;
             }
+
+            if (ipToApply == Module1.IP && portToApply == Module1.Port)
+            {
+                _logger.Info("Настройки не изменились, сохранение не требуется");
+                return;
+            }
+
+            _logger.Info($"Применение новых настроек: IP={ipToApply}, Port={portToApply}");
+
+            Module1.IP = ipToApply;
+            Module1.Port = portToApply;
+
+            try
+            {
+                await _moduleManager.SaveConnectionSettingsAsync();
+                _logger.Info("Настройки успешно применены");
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Ошибка при сохранении настроек");
+            }
+
+            UpdateModule1Status();
+
+            NewIP = string.Empty;
+            NewPort = string.Empty;
         }
 
         public ConnectionSettingsVM()
         {
-            _moduleManager = new ModuleManager();
-            Module1 = _moduleManager.Module1;
 
-            NewIP = Module1.IP;
-            NewPort = Module1.Port.ToString();
+                _moduleManager = ModuleManager.Instance; 
+                Module1 = _moduleManager.Module1;
 
-            ConnectCommand = new RelayCommand(Connect);
-            DisconnectCommand = new RelayCommand(Disconnect);
-            ApplySettingsCommand = new RelayCommand(ApplySettings);
+                ConnectCommand = new RelayCommand(Connect);
+                DisconnectCommand = new RelayCommand(Disconnect);
+                ApplySettingsCommand = new RelayCommand(ApplySettings);
 
-            UpdateModule1Status();
+                UpdateModule1Status();
+
+
+
         }
-
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-    }
-
-    public class RelayCommand : ICommand
-    {
-        private readonly System.Action<object> _execute;
-        private readonly System.Func<object, bool> _canExecute;
-
-        public RelayCommand(System.Action<object> execute, System.Func<object, bool> canExecute = null)
-        {
-            _execute = execute;
-            _canExecute = canExecute;
-        }
-
-        public event System.EventHandler CanExecuteChanged
-        {
-            add { System.Windows.Input.CommandManager.RequerySuggested += value; }
-            remove { System.Windows.Input.CommandManager.RequerySuggested -= value; }
-        }
-
-        public bool CanExecute(object parameter)
-        {
-            return _canExecute == null || _canExecute(parameter);
-        }
-
-        public void Execute(object parameter)
-        {
-            _execute(parameter);
         }
     }
 }

@@ -8,16 +8,14 @@ namespace Oratoria36.Service
 {
     public class JsonSettingsService
     {
-        private static readonly NLog.Logger _logger = NLog.LogManager.GetLogger("Settings");
+        private static readonly Logger _logger = LogManager.GetLogger("Settings");
 
         public string SettingsFolder { get; }
 
         public JsonSettingsService()
         {
-            // Путь к папке Settings относительно исполняемого файла
             SettingsFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings");
 
-            // Создаем папку, если она не существует
             if (!Directory.Exists(SettingsFolder))
             {
                 _logger.Info($"Создание папки настроек: {SettingsFolder}");
@@ -40,12 +38,12 @@ namespace Oratoria36.Service
                 string jsonString = JsonSerializer.Serialize(settings, options);
                 await File.WriteAllTextAsync(filePath, jsonString);
 
-                _logger.Info("Файл настроек успешно записан");
+                _logger.Info($"Файл настроек {fileName} успешно записан");
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Ошибка при сохранении настроек");
-                throw; // Перебрасываем исключение для обработки в вызывающем коде
+                _logger.Error(ex, $"Ошибка при сохранении настроек в файл {fileName}");
+                throw;
             }
         }
 
@@ -63,17 +61,17 @@ namespace Oratoria36.Service
                     if (!string.IsNullOrWhiteSpace(jsonString))
                     {
                         var result = JsonSerializer.Deserialize<T>(jsonString);
-                        _logger.Info("Настройки успешно загружены");
+                        _logger.Info($"Настройки из файла {fileName} успешно загружены");
                         return result;
                     }
                 }
 
-                _logger.Warn($"Файл настроек не найден или пуст: {filePath}. Используются настройки по умолчанию.");
+                _logger.Warn($"Файл настроек {fileName} не найден или пуст. Используются настройки по умолчанию.");
                 return defaultSettings;
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, $"Ошибка при загрузке настроек из файла: {filePath}");
+                _logger.Error(ex, $"Ошибка при загрузке настроек из файла {fileName}");
                 return defaultSettings;
             }
         }

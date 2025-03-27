@@ -49,7 +49,6 @@ namespace Oratoria36.Service
                 exception
             );
 
-            // Добавляем запись в коллекцию через диспетчер UI-потока
             _dispatcher.BeginInvoke(new Action(() =>
             {
                 _logEntries.Add(logEntry);
