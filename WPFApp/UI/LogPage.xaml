@@ -24,7 +24,7 @@
                 <Style TargetType="DataGridRow">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Level}" Value="Error">
-                            <Setter Property="Background" Value="#FFDDDD"/>
+                            <Setter Property="Background" Value="Red"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Level}" Value="Warn">
                             <Setter Property="Background" Value="Yellow"/>

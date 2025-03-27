@@ -8,7 +8,7 @@ namespace Oratoria36.Service
 {
     public class JsonSettingsService
     {
-        private static readonly Logger _logger = LogManager.GetLogger("Settings");
+        private static readonly Logger _logger = LogManager.GetLogger("Настройки");
 
         public string SettingsFolder { get; }
 

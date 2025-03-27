@@ -22,13 +22,13 @@ namespace Oratoria36.UI
 
     public class ConnectionSettingsVM : INotifyPropertyChanged
     {
-        private static readonly Logger _logger = LogManager.GetLogger("Settings");
+        private static readonly Logger _logger = LogManager.GetLogger("Настройки");
 
         ModuleManager _moduleManager;
         public ModuleConfig Module1 { get; }
-        public ICommand ApplySettingsCommand { get; }
-        public ICommand ConnectCommand { get; }
-        public ICommand DisconnectCommand { get; }
+        public ICommand ApplySettingsCommandModule1 { get; }
+        public ICommand ConnectCommandModule1 { get; }
+        public ICommand DisconnectCommandModule1 { get; }
 
         private string _module1Status;
         public string Module1Status
@@ -63,29 +63,29 @@ namespace Oratoria36.UI
             }
         }
 
-        private string _newIP;
-        public string NewIP
+        private string _newIPModule1;
+        public string NewIPModule1
         {
-            get => _newIP;
+            get => _newIPModule1;
             set
             {
-                _newIP = value;
+                _newIPModule1 = value;
                 OnPropertyChanged();
             }
         }
 
-        private string _newPort;
-        public string NewPort
+        private string _newPortModule1;
+        public string NewPortModule1
         {
-            get => _newPort;
+            get => _newPortModule1;
             set
             {
-                _newPort = value;
+                _newPortModule1 = value;
                 OnPropertyChanged();
             }
         }
 
-        private async void Connect(object parameter)
+        private async void ConnectModule1(object parameter)
         {
             _logger.Info($"Попытка подключения к {Module1.IP}:{Module1.Port}");
             await Module1.InitializeModbusAsync(Module1.IP);
@@ -99,34 +99,34 @@ namespace Oratoria36.UI
             Module1CurrentPort = Module1.Port;
         }
 
-        private void Disconnect(object parameter)
+        private void DisconnectModule1(object parameter)
         {
             _logger.Info($"Отключение от {Module1.IP}:{Module1.Port}");
             Module1.CloseConnection();
             UpdateModule1Status();
         }
 
-        private async void ApplySettings(object parameter)
+        private async void ApplySettingsModule1(object parameter)
         {
 
-            if (string.IsNullOrWhiteSpace(NewIP) && string.IsNullOrWhiteSpace(NewPort))
+            if (string.IsNullOrWhiteSpace(NewIPModule1) && string.IsNullOrWhiteSpace(NewPortModule1))
             {
 
                 return;
             }
 
-            _logger.Info($"Начало применения настроек. NewIP: '{NewIP}', NewPort: '{NewPort}'");
+            _logger.Info($"Начало применения настроек. NewIPModule1: '{NewIPModule1}', NewPortModule1: '{NewPortModule1}'");
 
-            string ipToApply = string.IsNullOrWhiteSpace(NewIP) ? Module1.IP : NewIP;
+            string ipToApply = string.IsNullOrWhiteSpace(NewIPModule1) ? Module1.IP : NewIPModule1;
 
             int portToApply = Module1.Port;
-            if (!string.IsNullOrWhiteSpace(NewPort) && int.TryParse(NewPort, out int newPort))
+            if (!string.IsNullOrWhiteSpace(NewPortModule1) && int.TryParse(NewPortModule1, out int newPort))
             {
                 portToApply = newPort;
             }
-            else if (!string.IsNullOrWhiteSpace(NewPort))
+            else if (!string.IsNullOrWhiteSpace(NewPortModule1))
             {
-                _logger.Error($"Не удалось преобразовать порт '{NewPort}' в число");
+                _logger.Error($"Не удалось преобразовать порт '{NewPortModule1}' в число");
                 return;
             }
 
@@ -153,8 +153,8 @@ namespace Oratoria36.UI
 
             UpdateModule1Status();
 
-            NewIP = string.Empty;
-            NewPort = string.Empty;
+            NewIPModule1 = string.Empty;
+            NewPortModule1 = string.Empty;
         }
 
         public ConnectionSettingsVM()
@@ -163,9 +163,9 @@ namespace Oratoria36.UI
                 _moduleManager = ModuleManager.Instance; 
                 Module1 = _moduleManager.Module1;
 
-                ConnectCommand = new RelayCommand(Connect);
-                DisconnectCommand = new RelayCommand(Disconnect);
-                ApplySettingsCommand = new RelayCommand(ApplySettings);
+                ConnectCommandModule1 = new RelayCommand(ConnectModule1);
+                DisconnectCommandModule1 = new RelayCommand(DisconnectModule1);
+                ApplySettingsCommandModule1 = new RelayCommand(ApplySettingsModule1);
 
                 UpdateModule1Status();
 

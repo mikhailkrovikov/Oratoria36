@@ -10,7 +10,7 @@ namespace Oratoria36.Models
 {
     public class ModuleManager
     {
-        private static readonly Logger _logger = LogManager.GetLogger("Connection");
+        private static readonly Logger _logger = LogManager.GetLogger("Соединение");
         private static readonly Lazy<ModuleManager> _instance =
             new Lazy<ModuleManager>(() => new ModuleManager());
         public static ModuleManager Instance => _instance.Value;

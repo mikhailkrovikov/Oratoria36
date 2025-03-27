@@ -10,7 +10,7 @@ namespace Oratoria36.Models
 {
     public class ModuleConfig : INotifyPropertyChanged
     {
-        private Logger _logger = LogManager.GetLogger("Net");
+        private Logger _logger = LogManager.GetLogger("Сеть");
         private TcpClient _tcpClient;
         private bool _isConnected;
         private string _ip;
