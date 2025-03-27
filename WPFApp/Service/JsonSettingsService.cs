@@ -8,63 +8,73 @@ namespace Oratoria36.Service
 {
     public class JsonSettingsService
     {
-        private static readonly Logger _logger = LogManager.GetLogger("Settings");
+        private static readonly NLog.Logger _logger = NLog.LogManager.GetLogger("Settings");
 
         public string SettingsFolder { get; }
 
-        public JsonSettingsService(string settingsFolder = "Settings")
+        public JsonSettingsService()
         {
-            SettingsFolder = settingsFolder;
-            EnsureSettingsFolderExists();
-        }
+            // Путь к папке Settings относительно исполняемого файла
+            SettingsFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings");
 
-        private void EnsureSettingsFolderExists()
-        {
+            // Создаем папку, если она не существует
             if (!Directory.Exists(SettingsFolder))
             {
+                _logger.Info($"Создание папки настроек: {SettingsFolder}");
                 Directory.CreateDirectory(SettingsFolder);
-                _logger.Info($"Создана папка для настроек: {SettingsFolder}");
-            }
-        }
-
-        public T LoadSettings<T>(string fileName) where T : new()
-        {
-            string filePath = Path.Combine(SettingsFolder, fileName);
-
-            try
-            {
-                if (!File.Exists(filePath))
-                {
-                    _logger.Info($"Файл настроек {fileName} не найден. Будут использованы настройки по умолчанию.");
-                    return new T();
-                }
-
-                string json = File.ReadAllText(filePath);
-                var settings = JsonSerializer.Deserialize<T>(json);
-                _logger.Info($"Настройки успешно загружены из {fileName}");
-                return settings ?? new T();
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, $"Ошибка при загрузке настроек из {fileName}");
-                return new T();
             }
         }
 
         public async Task SaveSettingsAsync<T>(T settings, string fileName)
         {
+            try
+            {
+                string filePath = Path.Combine(SettingsFolder, fileName);
+                _logger.Info($"Сохранение настроек в файл: {filePath}");
+
+                var options = new JsonSerializerOptions
+                {
+                    WriteIndented = true
+                };
+
+                string jsonString = JsonSerializer.Serialize(settings, options);
+                await File.WriteAllTextAsync(filePath, jsonString);
+
+                _logger.Info("Файл настроек успешно записан");
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Ошибка при сохранении настроек");
+                throw; // Перебрасываем исключение для обработки в вызывающем коде
+            }
+        }
+
+        public async Task<T> LoadSettingsAsync<T>(string fileName, T defaultSettings = default)
+        {
             string filePath = Path.Combine(SettingsFolder, fileName);
 
             try
             {
-                var options = new JsonSerializerOptions { WriteIndented = true };
-                string json = JsonSerializer.Serialize(settings, options);
-                await File.WriteAllTextAsync(filePath, json);
-                _logger.Info($"Настройки успешно сохранены в {fileName}");
+                if (File.Exists(filePath))
+                {
+                    _logger.Info($"Загрузка настроек из файла: {filePath}");
+                    string jsonString = await File.ReadAllTextAsync(filePath);
+
+                    if (!string.IsNullOrWhiteSpace(jsonString))
+                    {
+                        var result = JsonSerializer.Deserialize<T>(jsonString);
+                        _logger.Info("Настройки успешно загружены");
+                        return result;
+                    }
+                }
+
+                _logger.Warn($"Файл настроек не найден или пуст: {filePath}. Используются настройки по умолчанию.");
+                return defaultSettings;
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, $"Ошибка при сохранении настроек в {fileName}");
+                _logger.Error(ex, $"Ошибка при загрузке настроек из файла: {filePath}");
+                return defaultSettings;
             }
         }
     }

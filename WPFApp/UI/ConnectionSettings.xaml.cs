@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Threading.Tasks;
+using NLog;
 
 namespace Oratoria36.UI
 {
@@ -20,6 +21,8 @@ namespace Oratoria36.UI
 
     public class ConnectionSettingsVM : INotifyPropertyChanged
     {
+        Logger _logger = LogManager.GetLogger("Settings");
+
         ModuleManager _moduleManager;
         public ModuleConfig Module1 { get; }
         public ICommand ApplySettingsCommand { get; }
@@ -85,6 +88,8 @@ namespace Oratoria36.UI
         {
             await Module1.InitializeModbusAsync(Module1.IP);
             UpdateModule1Status();
+            NewIP = Module1.IP;
+            NewPort = Module1.Port.ToString();
         }
 
         private void UpdateModule1Status()
@@ -102,16 +107,31 @@ namespace Oratoria36.UI
 
         private async void ApplySettings(object parameter)
         {
+            _logger.Info("Начало применения настроек");
+
             if (string.IsNullOrWhiteSpace(NewIP) || string.IsNullOrWhiteSpace(NewPort))
+            {
+                _logger.Warn("IP или порт не указаны");
                 return;
+            }
 
             if (int.TryParse(NewPort, out int port))
             {
+                _logger.Info($"Применение новых настроек: IP={NewIP}, Port={port}");
+
                 Module1.IP = NewIP;
                 Module1.Port = port;
 
-                // Сохраняем настройки в JSON
-                await _moduleManager.SaveConnectionSettingsAsync();
+                try
+                {
+                    // Сохраняем настройки в JSON
+                    await _moduleManager.SaveConnectionSettingsAsync();
+                    _logger.Info("Настройки успешно сохранены");
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error(ex, "Ошибка при сохранении настроек");
+                }
 
                 UpdateModule1Status();
 
@@ -119,13 +139,20 @@ namespace Oratoria36.UI
                 NewIP = string.Empty;
                 NewPort = string.Empty;
             }
+            else
+            {
+                _logger.Error($"Не удалось преобразовать порт '{NewPort}' в число");
+            }
         }
 
         public ConnectionSettingsVM()
         {
             _moduleManager = new ModuleManager();
-
             Module1 = _moduleManager.Module1;
+
+            NewIP = Module1.IP;
+            NewPort = Module1.Port.ToString();
+
             ConnectCommand = new RelayCommand(Connect);
             DisconnectCommand = new RelayCommand(Disconnect);
             ApplySettingsCommand = new RelayCommand(ApplySettings);
