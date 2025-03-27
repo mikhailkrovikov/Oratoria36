@@ -13,8 +13,43 @@
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <DataGrid x:Name="LogGrid">
-            
+
+        <DataGrid x:Name="LogGrid" 
+                  ItemsSource="{Binding Logs}" 
+                  AutoGenerateColumns="False" 
+                  IsReadOnly="True"
+                  Grid.Column="0"
+                  Margin="10">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Время" Binding="{Binding Timestamp, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}'}" Width="150"/>
+                <DataGridTextColumn Header="Уровень" Binding="{Binding Level}" Width="80">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Level}" Value="Error">
+                                    <Setter Property="Background" Value="#FFDDDD"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Level}" Value="Warn">
+                                    <Setter Property="Background" Value="#FFFFDD"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Level}" Value="Info">
+                                    <Setter Property="Background" Value="#DDFFDD"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Источник" Binding="{Binding Logger}" Width="100"/>
+                <DataGridTextColumn Header="Сообщение" Binding="{Binding Message}" Width="*"/>
+            </DataGrid.Columns>
         </DataGrid>
+
+        <TextBox x:Name="ExceptionDetails" 
+                 Grid.Column="1" 
+                 Margin="10"
+                 IsReadOnly="True"
+                 TextWrapping="Wrap"
+                 VerticalScrollBarVisibility="Auto"
+                 Text="{Binding ElementName=LogGrid, Path=SelectedItem.Exception}"/>
     </Grid>
 </Page>

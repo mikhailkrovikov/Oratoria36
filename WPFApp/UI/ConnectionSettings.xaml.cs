@@ -133,6 +133,7 @@ namespace Oratoria36.UI
             UpdateModule1Status();
         }
 
+
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
