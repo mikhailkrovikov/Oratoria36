@@ -5,11 +5,10 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Threading.Tasks;
 
-
-namespace Oratoria36.UI 
+namespace Oratoria36.UI
 {
-
     public partial class ConnectionSettings : Page
     {
         public ConnectionSettings()
@@ -18,6 +17,7 @@ namespace Oratoria36.UI
             DataContext = new ConnectionSettingsVM();
         }
     }
+
     public class ConnectionSettingsVM : INotifyPropertyChanged
     {
         ModuleManager _moduleManager;
@@ -86,28 +86,85 @@ namespace Oratoria36.UI
             await Module1.InitializeModbusAsync(Module1.IP);
             UpdateModule1Status();
         }
+
         private void UpdateModule1Status()
         {
             Module1Status = Module1.IsConnected ? "Подключено" : "Отключено";
+            Module1CurrentIP = Module1.IP;
+            Module1CurrentPort = Module1.Port;
         }
+
         private void Disconnect(object parameter)
         {
             Module1.CloseConnection();
             UpdateModule1Status();
         }
+
+        private async void ApplySettings(object parameter)
+        {
+            if (string.IsNullOrWhiteSpace(NewIP) || string.IsNullOrWhiteSpace(NewPort))
+                return;
+
+            if (int.TryParse(NewPort, out int port))
+            {
+                Module1.IP = NewIP;
+                Module1.Port = port;
+
+                // Сохраняем настройки в JSON
+                await _moduleManager.SaveConnectionSettingsAsync();
+
+                UpdateModule1Status();
+
+                // Очищаем поля ввода
+                NewIP = string.Empty;
+                NewPort = string.Empty;
+            }
+        }
+
         public ConnectionSettingsVM()
         {
             _moduleManager = new ModuleManager();
 
-            Module1 = _moduleManager.Module1;            
+            Module1 = _moduleManager.Module1;
             ConnectCommand = new RelayCommand(Connect);
             DisconnectCommand = new RelayCommand(Disconnect);
-        }      
+            ApplySettingsCommand = new RelayCommand(ApplySettings);
+
+            UpdateModule1Status();
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+
+    public class RelayCommand : ICommand
+    {
+        private readonly System.Action<object> _execute;
+        private readonly System.Func<object, bool> _canExecute;
+
+        public RelayCommand(System.Action<object> execute, System.Func<object, bool> canExecute = null)
+        {
+            _execute = execute;
+            _canExecute = canExecute;
+        }
+
+        public event System.EventHandler CanExecuteChanged
+        {
+            add { System.Windows.Input.CommandManager.RequerySuggested += value; }
+            remove { System.Windows.Input.CommandManager.RequerySuggested -= value; }
+        }
+
+        public bool CanExecute(object parameter)
+        {
+            return _canExecute == null || _canExecute(parameter);
+        }
+
+        public void Execute(object parameter)
+        {
+            _execute(parameter);
         }
     }
 }

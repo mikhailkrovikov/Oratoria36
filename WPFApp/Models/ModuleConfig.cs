@@ -64,15 +64,15 @@ namespace Oratoria36.Models
             try
             {
                 _tcpClient = new TcpClient();
-                await _tcpClient.ConnectAsync(ip, 502);
+                await _tcpClient.ConnectAsync(ip, Port);
                 Master = ModbusIpMaster.CreateIp(_tcpClient);
                 IsConnected = true;
-                _logger.Info($"Успешное подключение к IP: {ip}");
+                _logger.Info($"Успешное подключение к IP: {ip}, порт: {Port}");
             }
             catch (Exception ex)
             {
                 IsConnected = false;
-                _logger.Error(ex, $"Не удалось подключиться к IP: {ip}");
+                _logger.Error(ex, $"Не удалось подключиться к IP: {ip}, порт: {Port}");
             }
         }
 
