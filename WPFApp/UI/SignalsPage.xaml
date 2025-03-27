@@ -5,7 +5,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:local="clr-namespace:Oratoria36"
       mc:Ignorable="d"
-      Height="940" Width="1920" Background="#FFE0E0E0">
+      Height="890" Width="1920" Background="#FFE0E0E0">
 
     <Grid x:Name="MainGrid">
         <Grid.ColumnDefinitions>
@@ -158,7 +158,7 @@
                 <RowDefinition Height="0.8*"/>
             </Grid.RowDefinitions>
             <Label Grid.Row="0" Grid.Column="0" Content="Дискретные выходы" FontSize="16" Style="{StaticResource HeaderLabel}"/>
-            <Label Grid.Row="1" Grid.Column="0" Content="Сигнал" Style="{StaticResource HeaderLabel}"/>
+            <Label Grid.Row="1" Grid.Column="0" Content="Сигнал" Style="{StaticResource HeaderLabel}" />
             <Label Grid.Row="1" Grid.Column="1" Content="Значение" Grid.ColumnSpan="2" Style="{StaticResource HeaderLabel}"/>
         </Grid>
         <Grid x:Name="AnalogInputGrid" Grid.Row="1" Grid.Column="4">
@@ -206,8 +206,8 @@
             </Grid.RowDefinitions>
             <Label Grid.Row="0" Grid.Column="0" Content="Аналоговые входы" Grid.ColumnSpan="4" FontSize="16" Style="{StaticResource HeaderLabel}"/>
             <Label Grid.Row="1" Grid.Column="0" Content="Сигнал" Style="{StaticResource HeaderLabel}"/>
-            <Label Grid.Row="1" Grid.Column="1" Content="Значение" Style="{StaticResource HeaderLabel}"/>
-            <Label Grid.Row="1" Grid.Column="2" Content="Разряд" Style="{StaticResource HeaderLabel}"/>
+            <Label Grid.Row="1" Grid.Column="1" Content="Значение" Style="{StaticResource HeaderLabel}" HorizontalAlignment="Center"/>
+            <Label Grid.Row="1" Grid.Column="2" Content="Разряд" Style="{StaticResource HeaderLabel}" HorizontalAlignment="Center"/>
         </Grid>
         <Grid x:Name="AnalogOutputGrid" Grid.Row="1" Grid.Column="5">
             <Grid.ColumnDefinitions>
@@ -254,8 +254,8 @@
             </Grid.RowDefinitions>
             <Label Grid.Row="0" Grid.Column="0" Content="Аналоговые выходы" Grid.ColumnSpan="4" FontSize="16" Style="{StaticResource HeaderLabel}"/>
             <Label Grid.Row="1" Grid.Column="0" Content="Сигнал" Style="{StaticResource HeaderLabel}"/>
-            <Label Grid.Row="1" Grid.Column="1" Content="Значение" Style="{StaticResource HeaderLabel}"/>
-            <Label Grid.Row="1" Grid.Column="2" Content="Разряд" Style="{StaticResource HeaderLabel}"/>
+            <Label Grid.Row="1" Grid.Column="1" Content="Значение" Style="{StaticResource HeaderLabel}" HorizontalAlignment="Center"/>
+            <Label Grid.Row="1" Grid.Column="2" Content="Разряд" Style="{StaticResource HeaderLabel}" HorizontalAlignment="Center"/>
         </Grid>
     </Grid>
 </Page>

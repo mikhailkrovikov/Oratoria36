@@ -10,25 +10,25 @@
                 Width="120" 
                 Height ="30" 
                 Click="MainPage_Click" 
-                Style="{StaticResource NavigationButton}"/>
+                Style="{DynamicResource NavigationButton}"/>
             <Button 
                 Content="Сигналы" 
                 Width="120" 
                 Height ="30" 
                 Click="SignalsPage_Click" 
-                Style="{StaticResource NavigationButton}"/>
+                Style="{DynamicResource NavigationButton}"/>
             <Button 
                 Content="Сеть" 
                 Width="120" 
                 Height ="30" 
                 Click="ConnectionSettings_Click" 
-                Style="{StaticResource NavigationButton}"/>
+                Style="{DynamicResource NavigationButton}"/>
             <Button 
                 Content="Логи" 
                 Width="120" 
                 Height ="30" 
                 Click="LogPage_Click" 
-                Style="{StaticResource NavigationButton}"/>
+                Style="{DynamicResource NavigationButton}"/>
         </StackPanel>
     </DockPanel>
 </UserControl>

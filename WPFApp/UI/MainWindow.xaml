@@ -10,35 +10,18 @@
         ResizeMode="NoResize"
         Background="#FFE0E0E0">
 
-    <Window.Resources>
-        <Style x:Key="ConnectionStatusStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding ModbusDevice.IsConnected}" Value="True">
-                    <Setter Property="Foreground" Value="Green"/>
-                    <Setter Property="Text" Value="есть связь"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding ModbusDevice.IsConnected}" Value="False">
-                    <Setter Property="Foreground" Value="#EC8629"/>
-                    <Setter Property="Text" Value="нет связи"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-    </Window.Resources>
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="70"/>
+            <RowDefinition Height="110"/>
         </Grid.RowDefinitions>
 
         <local:NavigationBar x:Name="NavigationBarControl" Grid.Row="0"/>
-        <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" Grid.Row="1"/>
+        <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" Grid.Row="2"/>
 
-        <Grid Grid.Row="2" Background="#D8D8D8">
+        <Grid Grid.Row="3" Background="#D8D8D8">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="250"/>
@@ -51,14 +34,6 @@
                 </Grid.RowDefinitions>
                 <TextBlock Text="{Binding ViewModel.Date}" FontSize="14" Foreground="#3F3F3F" Grid.Row="0" VerticalAlignment="Bottom"/>
                 <TextBlock Text="{Binding ViewModel.Time}" FontSize="14" Foreground="#3F3F3F" Grid.Row="1" VerticalAlignment="Top"/>
-            </Grid>
-            <Grid Name="ConnectionGrid" Grid.Column="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="130"/>
-                    <ColumnDefinition Width="90"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="Modbus TCP/IP:" FontSize="16" Foreground="#FF3F3F3F" FontWeight="Bold" Grid.Column="0" VerticalAlignment="Center"/>
-                <TextBlock Style="{StaticResource ConnectionStatusStyle}" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" />
             </Grid>
         </Grid>
     </Grid>

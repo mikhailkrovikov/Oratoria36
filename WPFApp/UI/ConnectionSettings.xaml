@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Oratoria36.UI"
       mc:Ignorable="d" 
-      d:DesignHeight="940" d:DesignWidth="1920" Background="#FFE0E0E0"
+      d:DesignHeight="890" d:DesignWidth="1920" Background="#FFE0E0E0"
       Title="ConnectionSettings">
 
     <Grid>
@@ -28,16 +28,19 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="0.05*"/>
         </Grid.RowDefinitions>
-        <Label Content="Модуль 1 ВЧ очистки" Grid.Column="1" Grid.Row="1" FontSize="16" Style="{StaticResource HeaderLabel}" HorizontalAlignment="Center"/>
-        <Label Content="Модуль 2 напыления" Grid.Column="3" Grid.Row="1" FontSize="16" Style="{StaticResource HeaderLabel}" HorizontalAlignment="Center"/>
-        <Label Content="Модуль 3 напыления" Grid.Column="5" Grid.Row="1" FontSize="16" Style="{StaticResource HeaderLabel}" HorizontalAlignment="Center"/>
-        <Label Content="Модуль 4 напыления" Grid.Column="7" Grid.Row="1" FontSize="16" Style="{StaticResource HeaderLabel}" HorizontalAlignment="Center"/>
-        <Label Content="Транспортный модуль" Grid.Column="9" Grid.Row="1" FontSize="16" Style="{StaticResource HeaderLabel}" HorizontalAlignment="Center"/>
-        <Rectangle Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Style="{StaticResource ContureRectangleStyle}"/>
-        <Rectangle Grid.Column="3" Grid.Row="1" Grid.RowSpan="2" Style="{StaticResource ContureRectangleStyle}"/>
-        <Rectangle Grid.Column="5" Grid.Row="1" Grid.RowSpan="2" Style="{StaticResource ContureRectangleStyle}"/>
-        <Rectangle Grid.Column="7" Grid.Row="1" Grid.RowSpan="2" Style="{StaticResource ContureRectangleStyle}"/>
-        <Rectangle Grid.Column="9" Grid.Row="1" Grid.RowSpan="2" Style="{StaticResource ContureRectangleStyle}"/>
+
+        <Label Content="Модуль 1 ВЧ очистки" Grid.Column="1" Grid.Row="1" FontSize="16" Style="{DynamicResource HeaderLabel}" HorizontalAlignment="Center"/>
+        <Label Content="Модуль 2 напыления" Grid.Column="3" Grid.Row="1" FontSize="16" Style="{DynamicResource HeaderLabel}" HorizontalAlignment="Center"/>
+        <Label Content="Модуль 3 напыления" Grid.Column="5" Grid.Row="1" FontSize="16" Style="{DynamicResource HeaderLabel}" HorizontalAlignment="Center"/>
+        <Label Content="Модуль 4 напыления" Grid.Column="7" Grid.Row="1" FontSize="16" Style="{DynamicResource HeaderLabel}" HorizontalAlignment="Center"/>
+        <Label Content="Транспортный модуль" Grid.Column="9" Grid.Row="1" FontSize="16" Style="{DynamicResource HeaderLabel}" HorizontalAlignment="Center"/>
+
+        <Rectangle Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Style="{DynamicResource ContureRectangleStyle}"/>
+        <Rectangle Grid.Column="3" Grid.Row="1" Grid.RowSpan="2" Style="{DynamicResource ContureRectangleStyle}"/>
+        <Rectangle Grid.Column="5" Grid.Row="1" Grid.RowSpan="2" Style="{DynamicResource ContureRectangleStyle}"/>
+        <Rectangle Grid.Column="7" Grid.Row="1" Grid.RowSpan="2" Style="{DynamicResource ContureRectangleStyle}"/>
+        <Rectangle Grid.Column="9" Grid.Row="1" Grid.RowSpan="2" Style="{DynamicResource ContureRectangleStyle}"/>
+
         <Grid Grid.Column="1" Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.1*"/>
@@ -56,20 +59,32 @@
                 <RowDefinition Height="26"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Label Content="Статус соединения:" Grid.Column="1"  Grid.Row="0" Style="{StaticResource BaseTextLabel}" />
-            <Label Content="Текущий IP адресс:" Grid.Row="1" Grid.Column="1" Style="{StaticResource BaseTextLabel}"/>
-            <Label Content="Текущий порт:" Grid.Row="2" Grid.Column="1" Style="{StaticResource BaseTextLabel}"/>
-            <Label Content="Задание нового IP:" Grid.Column="1" Grid.Row="4" Style="{StaticResource BaseTextLabel}"/>
-            <Label Content="Задание нового порта:" Grid.Column="1" Grid.Row="5" Style="{StaticResource BaseTextLabel}"/>
+
+            <Label Content="Статус соединения:" Grid.Column="1" Grid.Row="0" Style="{DynamicResource BaseTextLabel}"/>
+            <Label Content="Текущий IP адресс:" Grid.Column="1" Grid.Row="1" Style="{DynamicResource BaseTextLabel}"/>
+            <Label Content="Текущий порт:" Grid.Column="1" Grid.Row="2" Style="{DynamicResource BaseTextLabel}"/>
 
             <TextBlock Grid.Column="2" Grid.Row="0" Text="{Binding Module1Status}"/>
             <TextBlock Grid.Column="2" Grid.Row="1" Text="{Binding Module1CurrentIP}"/>
             <TextBlock Grid.Column="2" Grid.Row="2" Text="{Binding Module1CurrentPort}"/>
 
-            <TextBox Grid.Column="2" Grid.Row="4" Height="20"/>
-            <TextBox Grid.Column="2" Grid.Row="5"  Height="20"/>
+            <Label Content="Задание нового IP:" Grid.Column="1" Grid.Row="4" Style="{DynamicResource BaseTextLabel}"/>
+            <Label Content="Задание нового порта:" Grid.Column="1" Grid.Row="5" Style="{DynamicResource BaseTextLabel}"/>
 
-            <Button Content="Применить" Grid.Column="2" Grid.Row="7" Style="{StaticResource BaseEnableButton}"/>
+            <TextBox Grid.Column="2" Grid.Row="4" Height="20" Text="{Binding NewIP, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox Grid.Column="2" Grid.Row="5" Height="20" Text="{Binding NewPort, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <Button Content="Применить" Grid.Column="2" Grid.Row="7" Style="{DynamicResource BaseEnableButton}" Command="{Binding ApplySettingsCommand}"/>
+            <Grid Grid.Column="1" Grid.Row="7">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="5"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="5"/>
+                </Grid.ColumnDefinitions>
+                <Button Content="Подключиться" Style="{DynamicResource BaseEnableButton}" Command="{Binding ConnectCommand}"/>
+                <Button Content="Отключиться" Style="{DynamicResource BaseEnableButton}" Grid.Column="2" Command="{Binding DisconnectCommand}"/>
+            </Grid>
         </Grid>
     </Grid>
 </Page>

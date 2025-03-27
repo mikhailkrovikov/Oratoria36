@@ -10,17 +10,15 @@ namespace Oratoria36.Models
 {
     public class ModuleConfig : INotifyPropertyChanged
     {
-        Logger _logger = LogManager.GetLogger("Net");
-        TcpClient? TcpClient;
-        public ModbusIpMaster? Master { get; private set; }
-
-        bool _isConnected;
-        string? _ip;
+        private Logger _logger = LogManager.GetLogger("Net");
+        private TcpClient _tcpClient;
+        private bool _isConnected;
+        private string _ip;
 
         public string IP
         {
             get => _ip;
-            private set
+            set
             {
                 if (_ip != value)
                 {
@@ -30,7 +28,21 @@ namespace Oratoria36.Models
                 }
             }
         }
+        private int _port = 502;
 
+        public int Port
+        {
+            get => _port;
+            set
+            {
+                if (_port != value)
+                {
+                    _logger.Info($"Порт изменен с {_port} на {value}");
+                    _port = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         public bool IsConnected
         {
             get => _isConnected;
@@ -45,24 +57,15 @@ namespace Oratoria36.Models
             }
         }
 
-        public async void SetIP(string newIp)
-        {
-            if (IP != newIp)
-            {
-                CloseConnection();
-                IP = newIp;
-                await InitializeModbusAsync(newIp);
-                OnPropertyChanged(nameof(IP));
-            }
-        }
+        public ModbusIpMaster Master { get; private set; }
 
         public async Task InitializeModbusAsync(string ip)
         {
             try
             {
-                TcpClient = new TcpClient();
-                await TcpClient.ConnectAsync(ip, 502);
-                Master = ModbusIpMaster.CreateIp(TcpClient);
+                _tcpClient = new TcpClient();
+                await _tcpClient.ConnectAsync(ip, 502);
+                Master = ModbusIpMaster.CreateIp(_tcpClient);
                 IsConnected = true;
                 _logger.Info($"Успешное подключение к IP: {ip}");
             }
@@ -74,14 +77,14 @@ namespace Oratoria36.Models
         }
 
         public void CloseConnection()
-        {
+        { 
             if (IsConnected)
             {
                 try
                 {
                     Master?.Dispose();
-                    TcpClient?.Close();
-                    TcpClient?.Dispose();
+                    _tcpClient?.Close();
+                    _tcpClient?.Dispose();
                     IsConnected = false;
                     _logger.Info("Соединение закрыто");
                 }
@@ -97,9 +100,10 @@ namespace Oratoria36.Models
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        public void OnPropertyChanged([CallerMemberName] string prop = "")
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
     }
 }

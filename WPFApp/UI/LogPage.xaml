@@ -5,14 +5,16 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Oratoria36.UI"
       mc:Ignorable="d" 
-      d:DesignHeight="940" d:DesignWidth="1920" Background="#FFE0E0E0"
+      d:DesignHeight="890" d:DesignWidth="1920" Background="#FFE0E0E0"
       Title="LogPage">
 
     <Grid>
-        <DataGrid ItemsSource="{Binding Logs}" AutoGenerateColumns="False" HeadersVisibility="Column">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Log" Binding="{Binding}" Width="*" />
-            </DataGrid.Columns>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <DataGrid x:Name="LogGrid">
+            
         </DataGrid>
     </Grid>
 </Page>
