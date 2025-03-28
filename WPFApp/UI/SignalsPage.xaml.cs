@@ -27,21 +27,21 @@ namespace Oratoria36.UI
     {
         public SignalsVM(SignalsPage page)
         {
-            ModbusCommandsNameConfig(Signals.Commands, page.CommandGrid);
-            SignalsNameConfig(Signals.Commands, page.CommandGrid);
-            SignalsNameConfig(Signals.DigitalInputSignals, page.DigitalInputGrid);
-            SignalsNameConfig(Signals.DigitalOutputSignals, page.DigitalOutputGrid);
-            SignalsNameConfig(Signals.AnalogInputSignals, page.AnalogInputGrid);
-            SignalsNameConfig(Signals.AnalogOutputSignals, page.AnalogOutputGrid);
+            ModbusCommandsNameConfig(Signalold.Commands, page.CommandGrid);
+            SignalsNameConfig(Signalold.Commands, page.CommandGrid);
+            SignalsNameConfig(Signalold.DigitalInputSignals, page.DigitalInputGrid);
+            SignalsNameConfig(Signalold.DigitalOutputSignals, page.DigitalOutputGrid);
+            SignalsNameConfig(Signalold.AnalogInputSignals, page.AnalogInputGrid);
+            SignalsNameConfig(Signalold.AnalogOutputSignals, page.AnalogOutputGrid);
 
-            ModbsusCommandsButtonsConfig(Signals.Commands, page.CommandGrid);
-            SignalsValueConfig(Signals.DigitalInputSignals, page.DigitalInputGrid);
-            SignalsValueConfig(Signals.DigitalOutputSignals, page.DigitalOutputGrid);
-            SignalsValueConfig(Signals.AnalogInputSignals, page.AnalogInputGrid);
-            SignalsValueConfig(Signals.AnalogOutputSignals, page.AnalogOutputGrid);
+            ModbsusCommandsButtonsConfig(Signalold.Commands, page.CommandGrid);
+            SignalsValueConfig(Signalold.DigitalInputSignals, page.DigitalInputGrid);
+            SignalsValueConfig(Signalold.DigitalOutputSignals, page.DigitalOutputGrid);
+            SignalsValueConfig(Signalold.AnalogInputSignals, page.AnalogInputGrid);
+            SignalsValueConfig(Signalold.AnalogOutputSignals, page.AnalogOutputGrid);
 
-            ConvertedValue(Signals.AnalogInputSignals.Values.ToList(), page.AnalogInputGrid);
-            ConvertedValue(Signals.AnalogOutputSignals.Values.ToList(), page.AnalogOutputGrid);
+            ConvertedValue(Signalold.AnalogInputSignals.Values.ToList(), page.AnalogInputGrid);
+            ConvertedValue(Signalold.AnalogOutputSignals.Values.ToList(), page.AnalogOutputGrid);
         }
 
         private void ModbsusCommandsButtonsConfig(Dictionary<string, ushort> commands, Grid grid)

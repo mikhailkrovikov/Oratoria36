@@ -3,18 +3,26 @@ using System.ComponentModel;
 using System.Net.Sockets;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Threading;
 using Modbus.Device;
 using NLog;
+using Oratoria36.Models.Signals;
+
 
 namespace Oratoria36.Models
 {
-    public class ModuleConfig : INotifyPropertyChanged
+    public partial class ModuleConfig : INotifyPropertyChanged
     {
-        private Logger _logger = LogManager.GetLogger("Сеть");
+        private Logger _logger = LogManager.GetLogger("Net");
         private TcpClient _tcpClient;
         private bool _isConnected;
         private string _ip;
-        private string _lastLoggedIp;
+
+        private Poller _poller;
+
+
+        private readonly List<Signal> _signals = new List<Signal>();
 
         public string IP
         {
@@ -23,12 +31,7 @@ namespace Oratoria36.Models
             {
                 if (_ip != value)
                 {
-                    if (!string.IsNullOrEmpty(value) && _lastLoggedIp != value)
-                    {
-                        _logger.Info($"IP изменен с {_ip ?? "не задан"} на {value}");
-                        _lastLoggedIp = value;
-                    }
-
+                    _logger.Info($"IP изменен с {_ip} на {value}");
                     _ip = value;
                     OnPropertyChanged();
                 }
@@ -36,8 +39,6 @@ namespace Oratoria36.Models
         }
 
         private int _port = 502;
-        private int _lastLoggedPort = 0;
-
         public int Port
         {
             get => _port;
@@ -45,12 +46,7 @@ namespace Oratoria36.Models
             {
                 if (_port != value)
                 {
-                    if (value != 0 && _lastLoggedPort != value)
-                    {
-                        _logger.Info($"Порт изменен с {_port} на {value}");
-                        _lastLoggedPort = value;
-                    }
-
+                    _logger.Info($"Порт изменен с {_port} на {value}");
                     _port = value;
                     OnPropertyChanged();
                 }
@@ -67,6 +63,11 @@ namespace Oratoria36.Models
                     _isConnected = value;
                     _logger.Info($"Состояние сети изменено: {(value ? "Подключено" : "Отключено")}");
                     OnPropertyChanged(nameof(IsConnected));
+
+                    if (value)
+                        StartPolling();
+                    else
+                        StopPolling();
                 }
             }
         }
@@ -113,11 +114,43 @@ namespace Oratoria36.Models
             }
         }
 
+
+        internal void RegisterSignal(Signal signal)
+        {
+            if (signal != null && !_signals.Contains(signal))
+            {
+                _signals.Add(signal);
+
+                _poller?.RegisterSignal(signal);
+            }
+        }
+
+        private void StartPolling()
+        {
+            if (_poller == null)
+            {
+                _poller = new Poller(this);
+
+                foreach (var signal in _signals)
+                {
+                    _poller.RegisterSignal(signal);
+                }
+            }
+            else
+            {
+                _poller.Start();
+            }
+        }
+
+        private void StopPolling()
+        {
+            _poller?.Stop();
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
     }
 }

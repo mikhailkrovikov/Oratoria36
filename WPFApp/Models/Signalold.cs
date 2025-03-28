@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace Oratoria36.Models
 {
-    public class Signals : INotifyPropertyChanged
+    public class Signalold : INotifyPropertyChanged
     { 
 
         private static bool[] _digitalInputs;
