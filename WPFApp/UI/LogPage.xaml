@@ -19,7 +19,10 @@
                   AutoGenerateColumns="False" 
                   IsReadOnly="True"
                   Grid.Column="0"
-                  Margin="10">
+                  Margin="10"
+                  SelectionUnit="Cell"
+                  SelectionMode="Extended"
+                  ClipboardCopyMode="IncludeHeader">
             <DataGrid.Resources>
                 <Style TargetType="DataGridRow">
                     <Style.Triggers>
