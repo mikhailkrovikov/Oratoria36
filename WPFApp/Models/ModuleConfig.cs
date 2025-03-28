@@ -3,27 +3,36 @@ using System.ComponentModel;
 using System.Net.Sockets;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Threading;
 using Modbus.Device;
 using NLog;
-using Oratoria36.Models.Signals;
-
+using Oratoria36.Service;
 
 namespace Oratoria36.Models
 {
-    public partial class ModuleConfig : INotifyPropertyChanged
+    public class ModuleConfig : INotifyPropertyChanged
     {
-        private Logger _logger = LogManager.GetLogger("Net");
+        private static readonly Logger _logger = LogManager.GetLogger("ModuleConfig");
+        public ModbusIpMaster Master { get; private set; }
         private TcpClient _tcpClient;
-        private bool _isConnected;
+
         private string _ip;
-
-        private Poller _poller;
-
-
-        private readonly List<Signal> _signals = new List<Signal>();
-
+        private int _port = 502;
+        private bool _isConnected;
+        private int _moduleId;
+        
+        public int ModuleId
+        {
+            get => _moduleId;
+            set
+            {
+                if (_moduleId != value)
+                {
+                    _logger.Info($"ID модуля изменен с {_moduleId} на {value}");
+                    _moduleId = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         public string IP
         {
             get => _ip;
@@ -37,8 +46,6 @@ namespace Oratoria36.Models
                 }
             }
         }
-
-        private int _port = 502;
         public int Port
         {
             get => _port;
@@ -52,7 +59,6 @@ namespace Oratoria36.Models
                 }
             }
         }
-
         public bool IsConnected
         {
             get => _isConnected;
@@ -61,21 +67,21 @@ namespace Oratoria36.Models
                 if (_isConnected != value)
                 {
                     _isConnected = value;
-                    _logger.Info($"Состояние сети изменено: {(value ? "Подключено" : "Отключено")}");
-                    OnPropertyChanged(nameof(IsConnected));
-
-                    if (value)
-                        StartPolling();
-                    else
-                        StopPolling();
+                    _logger.Info($"Состояние подключения модуля {ModuleId} изменено: {(value ? "Подключено" : "Отключено")}");
+                    OnPropertyChanged();
                 }
             }
         }
 
-        public ModbusIpMaster Master { get; private set; }
-
         public async Task InitializeModbusAsync(string ip)
         {
+            if (string.IsNullOrEmpty(ip))
+            {
+                _logger.Warn("Попытка подключения с пустым IP");
+                IsConnected = false;
+                return;
+            }
+
             try
             {
                 _tcpClient = new TcpClient();
@@ -83,6 +89,7 @@ namespace Oratoria36.Models
                 Master = ModbusIpMaster.CreateIp(_tcpClient);
                 IsConnected = true;
                 _logger.Info($"Успешное подключение к IP: {ip}, порт: {Port}");
+                ModbusPoller.Instance.OnModuleConnected(this);
             }
             catch (Exception ex)
             {
@@ -90,13 +97,14 @@ namespace Oratoria36.Models
                 _logger.Error(ex, $"Не удалось подключиться к IP: {ip}, порт: {Port}");
             }
         }
-
         public void CloseConnection()
         {
             if (IsConnected)
             {
                 try
                 {
+                    ModbusPoller.Instance.OnModuleDisconnected(this);
+
                     Master?.Dispose();
                     _tcpClient?.Close();
                     _tcpClient?.Dispose();
@@ -114,43 +122,11 @@ namespace Oratoria36.Models
             }
         }
 
-
-        internal void RegisterSignal(Signal signal)
-        {
-            if (signal != null && !_signals.Contains(signal))
-            {
-                _signals.Add(signal);
-
-                _poller?.RegisterSignal(signal);
-            }
-        }
-
-        private void StartPolling()
-        {
-            if (_poller == null)
-            {
-                _poller = new Poller(this);
-
-                foreach (var signal in _signals)
-                {
-                    _poller.RegisterSignal(signal);
-                }
-            }
-            else
-            {
-                _poller.Start();
-            }
-        }
-
-        private void StopPolling()
-        {
-            _poller?.Stop();
-        }
-
         public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string prop = "")
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

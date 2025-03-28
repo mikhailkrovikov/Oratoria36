@@ -2,23 +2,18 @@
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
-using NLog;
 
 namespace Oratoria36.Service
 {
     public class JsonSettingsService
     {
-        private static readonly Logger _logger = LogManager.GetLogger("Настройки");
-
         public string SettingsFolder { get; }
 
         public JsonSettingsService()
         {
             SettingsFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings");
-
             if (!Directory.Exists(SettingsFolder))
             {
-                _logger.Info($"Создание папки настроек: {SettingsFolder}");
                 Directory.CreateDirectory(SettingsFolder);
             }
         }
@@ -28,51 +23,38 @@ namespace Oratoria36.Service
             try
             {
                 string filePath = Path.Combine(SettingsFolder, fileName);
-                _logger.Info($"Сохранение настроек в файл: {filePath}");
-
                 var options = new JsonSerializerOptions
                 {
                     WriteIndented = true
                 };
 
-                string jsonString = JsonSerializer.Serialize(settings, options);
-                await File.WriteAllTextAsync(filePath, jsonString);
-
-                _logger.Info($"Файл настроек {fileName} успешно записан");
+                string json = JsonSerializer.Serialize(settings, options);
+                await File.WriteAllTextAsync(filePath, json);
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, $"Ошибка при сохранении настроек в файл {fileName}");
+                Console.WriteLine($"Ошибка при сохранении настроек: {ex.Message}");
                 throw;
             }
         }
 
-        public async Task<T> LoadSettingsAsync<T>(string fileName, T defaultSettings = default)
+        public async Task<T> LoadSettingsAsync<T>(string fileName) where T : new()
         {
-            string filePath = Path.Combine(SettingsFolder, fileName);
-
             try
             {
-                if (File.Exists(filePath))
+                string filePath = Path.Combine(SettingsFolder, fileName);
+                if (!File.Exists(filePath))
                 {
-                    _logger.Info($"Загрузка настроек из файла: {filePath}");
-                    string jsonString = await File.ReadAllTextAsync(filePath);
-
-                    if (!string.IsNullOrWhiteSpace(jsonString))
-                    {
-                        var result = JsonSerializer.Deserialize<T>(jsonString);
-                        _logger.Info($"Настройки из файла {fileName} успешно загружены");
-                        return result;
-                    }
+                    return new T();
                 }
 
-                _logger.Warn($"Файл настроек {fileName} не найден или пуст. Используются настройки по умолчанию.");
-                return defaultSettings;
+                string json = await File.ReadAllTextAsync(filePath);
+                return JsonSerializer.Deserialize<T>(json) ?? new T();
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, $"Ошибка при загрузке настроек из файла {fileName}");
-                return defaultSettings;
+                Console.WriteLine($"Ошибка при загрузке настроек: {ex.Message}");
+                return new T();
             }
         }
     }

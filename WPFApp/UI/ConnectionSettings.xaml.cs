@@ -1,13 +1,12 @@
-﻿using Oratoria36.Models;
-using Oratoria36.Service;
-using System;
-using System.Collections.ObjectModel;
+﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Threading.Tasks;
 using NLog;
+using Oratoria36.Models;
+using Oratoria36.Service;
 
 namespace Oratoria36.UI
 {
@@ -23,8 +22,8 @@ namespace Oratoria36.UI
     public class ConnectionSettingsVM : INotifyPropertyChanged
     {
         private static readonly Logger _logger = LogManager.GetLogger("Настройки");
+        private readonly ModuleManager _moduleManager;
 
-        ModuleManager _moduleManager;
         public ModuleConfig Module1 { get; }
         public ModuleConfig Module2 { get; }
 
@@ -35,6 +34,8 @@ namespace Oratoria36.UI
         public ICommand ApplySettingsCommandModule2 { get; }
         public ICommand ConnectCommandModule2 { get; }
         public ICommand DisconnectCommandModule2 { get; }
+
+        #region Module1 Properties
 
         private string _module1Status;
         public string Module1Status
@@ -91,6 +92,10 @@ namespace Oratoria36.UI
             }
         }
 
+        #endregion
+
+        #region Module2 Properties
+
         private string _module2Status;
         public string Module2Status
         {
@@ -146,16 +151,22 @@ namespace Oratoria36.UI
             }
         }
 
-        private async void ConnectModule1(object parameter)
+        #endregion
+
+        public ConnectionSettingsVM()
         {
-            _logger.Info($"Попытка подключения к {Module1.IP}:{Module1.Port}");
-            await Module1.InitializeModbusAsync(Module1.IP);
-            UpdateModuleStatus();
-        }
-        private async void ConnectModule2(object parameter)
-        {
-            _logger.Info($"Попытка подключения к {Module2.IP}:{Module2.Port}");
-            await Module2.InitializeModbusAsync(Module2.IP);
+            _moduleManager = ModuleManager.Instance;
+            Module1 = _moduleManager.Module1;
+            Module2 = _moduleManager.Module2;
+
+            ConnectCommandModule1 = new RelayCommand(ConnectModule1);
+            DisconnectCommandModule1 = new RelayCommand(DisconnectModule1);
+            ApplySettingsCommandModule1 = new RelayCommand(ApplySettingsModule1);
+
+            ConnectCommandModule2 = new RelayCommand(ConnectModule2);
+            DisconnectCommandModule2 = new RelayCommand(DisconnectModule2);
+            ApplySettingsCommandModule2 = new RelayCommand(ApplySettingsModule2);
+
             UpdateModuleStatus();
         }
 
@@ -170,25 +181,24 @@ namespace Oratoria36.UI
             Module2CurrentPort = Module2.Port;
         }
 
+        private async void ConnectModule1(object parameter)
+        {
+            _logger.Info($"Попытка подключения к {Module1.IP}:{Module1.Port}");
+            await Module1.InitializeModbusAsync(Module1.IP);
+            UpdateModuleStatus();
+        }
+
         private void DisconnectModule1(object parameter)
         {
             _logger.Info($"Отключение от {Module1.IP}:{Module1.Port}");
             Module1.CloseConnection();
             UpdateModuleStatus();
         }
-        private void DisconnectModule2(object parameter)
-        {
-            _logger.Info($"Отключение от {Module2.IP}:{Module2.Port}");
-            Module2.CloseConnection();
-            UpdateModuleStatus();
-        }
 
         private async void ApplySettingsModule1(object parameter)
         {
-
             if (string.IsNullOrWhiteSpace(NewIPModule1) && string.IsNullOrWhiteSpace(NewPortModule1))
             {
-
                 return;
             }
 
@@ -234,9 +244,22 @@ namespace Oratoria36.UI
             NewPortModule1 = string.Empty;
         }
 
+        private async void ConnectModule2(object parameter)
+        {
+            _logger.Info($"Попытка подключения к {Module2.IP}:{Module2.Port}");
+            await Module2.InitializeModbusAsync(Module2.IP);
+            UpdateModuleStatus();
+        }
+
+        private void DisconnectModule2(object parameter)
+        {
+            _logger.Info($"Отключение от {Module2.IP}:{Module2.Port}");
+            Module2.CloseConnection();
+            UpdateModuleStatus();
+        }
+
         private async void ApplySettingsModule2(object parameter)
         {
-
             if (string.IsNullOrWhiteSpace(NewIPModule2) && string.IsNullOrWhiteSpace(NewPortModule2))
             {
                 return;
@@ -282,24 +305,6 @@ namespace Oratoria36.UI
 
             NewIPModule2 = string.Empty;
             NewPortModule2 = string.Empty;
-        }
-
-        public ConnectionSettingsVM()
-        {
-
-            _moduleManager = ModuleManager.Instance;
-            Module1 = _moduleManager.Module1;
-            Module2 = _moduleManager.Module2;
-
-            ConnectCommandModule1 = new RelayCommand(ConnectModule1);
-            DisconnectCommandModule1 = new RelayCommand(DisconnectModule1);
-            ApplySettingsCommandModule1 = new RelayCommand(ApplySettingsModule1);
-
-            ConnectCommandModule2 = new RelayCommand(ConnectModule2);
-            DisconnectCommandModule2 = new RelayCommand(DisconnectModule2);
-            ApplySettingsCommandModule2 = new RelayCommand(ApplySettingsModule2);
-
-            UpdateModuleStatus();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

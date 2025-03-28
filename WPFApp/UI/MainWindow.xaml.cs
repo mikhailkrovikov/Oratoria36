@@ -15,19 +15,37 @@ namespace Oratoria36.UI
         {
             InitializeComponent();
             _vm = new MainWindowVM();
-            DataContext = this;
+            DataContext = _vm; // Изменено с this на _vm
 
             _vm.StartClock();
             NavigationBarControl.PageChanged += NavigateToPage;
             MainFrame.NavigationService.Navigate(new MainPage());
 
-            ModuleManager.Instance.ConnectionStatusChanged += status =>
-                Application.Current.Dispatcher.Invoke(() => _vm.ConnectionStatus = status);
+            // Исправлена подписка на событие ConnectionStatusChanged
+            ModuleManager.Instance.ConnectionStatusChanged += (sender, e) =>
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    UpdateConnectionStatus();
+                });
+            };
 
+            // Запускаем подключение ко всем модулям
             _ = ModuleManager.Instance.ConnectAllAsync();
         }
 
-        public MainWindowVM ViewModel => _vm;
+        // Метод для обновления статуса подключения
+        private void UpdateConnectionStatus()
+        {
+            var manager = ModuleManager.Instance;
+            bool anyConnected = manager.Module1.IsConnected ||
+                               manager.Module2.IsConnected ||
+                               manager.Module3.IsConnected ||
+                               manager.Module4.IsConnected ||
+                               manager.TransportModule.IsConnected;
+
+            _vm.ConnectionStatus = anyConnected ? "Подключено" : "Не подключено";
+        }
 
         private void NavigateToPage(string pageName)
         {
@@ -53,7 +71,6 @@ namespace Oratoria36.UI
         private void Window_Closed(object sender, EventArgs e)
         {
             NavigationBarControl.PageChanged -= NavigateToPage;
-
             ModuleManager.Instance.DisconnectAll();
         }
     }
