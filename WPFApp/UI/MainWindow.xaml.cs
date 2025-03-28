@@ -3,7 +3,9 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Threading;
+using NLog;
 using Oratoria36.Models;
+using Oratoria36.Service;
 
 namespace Oratoria36.UI
 {
@@ -15,37 +17,15 @@ namespace Oratoria36.UI
         {
             InitializeComponent();
             _vm = new MainWindowVM();
-            DataContext = _vm; // Изменено с this на _vm
+            DataContext = this;
 
             _vm.StartClock();
             NavigationBarControl.PageChanged += NavigateToPage;
             MainFrame.NavigationService.Navigate(new MainPage());
-
-            // Исправлена подписка на событие ConnectionStatusChanged
-            ModuleManager.Instance.ConnectionStatusChanged += (sender, e) =>
-            {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    UpdateConnectionStatus();
-                });
-            };
-
-            // Запускаем подключение ко всем модулям
             _ = ModuleManager.Instance.ConnectAllAsync();
         }
 
-        // Метод для обновления статуса подключения
-        private void UpdateConnectionStatus()
-        {
-            var manager = ModuleManager.Instance;
-            bool anyConnected = manager.Module1.IsConnected ||
-                               manager.Module2.IsConnected ||
-                               manager.Module3.IsConnected ||
-                               manager.Module4.IsConnected ||
-                               manager.TransportModule.IsConnected;
-
-            _vm.ConnectionStatus = anyConnected ? "Подключено" : "Не подключено";
-        }
+        public MainWindowVM ViewModel => _vm;
 
         private void NavigateToPage(string pageName)
         {
@@ -71,7 +51,9 @@ namespace Oratoria36.UI
         private void Window_Closed(object sender, EventArgs e)
         {
             NavigationBarControl.PageChanged -= NavigateToPage;
+            _vm.StopClock();
             ModuleManager.Instance.DisconnectAll();
+            ModbusPoller.Instance.StopPolling();
         }
     }
 
@@ -80,7 +62,6 @@ namespace Oratoria36.UI
         private DispatcherTimer _timer;
         private string _date;
         private string _time;
-        private string _connectionStatus = "Не подключено";
 
         public string Date
         {
@@ -108,19 +89,6 @@ namespace Oratoria36.UI
             }
         }
 
-        public string ConnectionStatus
-        {
-            get => _connectionStatus;
-            set
-            {
-                if (_connectionStatus != value)
-                {
-                    _connectionStatus = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
         public void StartClock()
         {
             _timer = new DispatcherTimer
@@ -129,6 +97,16 @@ namespace Oratoria36.UI
             };
             _timer.Tick += UpdateDateTime;
             _timer.Start();
+            UpdateDateTime(null, null);
+        }
+
+        public void StopClock()
+        {
+            if (_timer != null)
+            {
+                _timer.Stop();
+                _timer.Tick -= UpdateDateTime;
+            }
         }
 
         private void UpdateDateTime(object sender, EventArgs e)
@@ -138,7 +116,8 @@ namespace Oratoria36.UI
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string prop = "")
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string prop = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }

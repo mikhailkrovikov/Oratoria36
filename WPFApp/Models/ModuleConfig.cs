@@ -27,7 +27,6 @@ namespace Oratoria36.Models
             {
                 if (_moduleId != value)
                 {
-                    _logger.Info($"ID модуля изменен с {_moduleId} на {value}");
                     _moduleId = value;
                     OnPropertyChanged();
                 }

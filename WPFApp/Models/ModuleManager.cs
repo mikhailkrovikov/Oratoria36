@@ -15,13 +15,13 @@ namespace Oratoria36.Models
         public static ModuleManager Instance => _instance ??= new ModuleManager();
         public string Module1IP { get; set; } = "192.168.0.102";
         public int Module1Port { get; set; } = 502;
-        public string Module2IP { get; set; }
+        public string Module2IP { get; set; } = "192.168.0.103";
         public int Module2Port { get; set; } = 502;
-        public string Module3IP { get; set; }
+        public string Module3IP { get; set; } = "192.168.0.104";
         public int Module3Port { get; set; } = 502;
-        public string Module4IP { get; set; }
+        public string Module4IP { get; set; } = "192.168.0.105";
         public int Module4Port { get; set; } = 502;
-        public string TransportModuleIP { get; set; }
+        public string TransportModuleIP { get; set; } = "192.168.0.106";
         public int TransportModulePort { get; set; } = 502;
 
         [JsonIgnore]
@@ -58,7 +58,6 @@ namespace Oratoria36.Models
             Module4.PropertyChanged += ModulePropertyChanged;
             TransportModule.PropertyChanged += ModulePropertyChanged;
 
-            _logger.Info("ModuleManager инициализирован");
         }
 
         private void ModulePropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -82,8 +81,7 @@ namespace Oratoria36.Models
                 if (File.Exists(_settingsPath))
                 {
                     string json = File.ReadAllText(_settingsPath);
-                    _logger.Info($"Загружен файл настроек: {json}");
-
+                   
                     var options = new JsonSerializerOptions
                     {
                         PropertyNameCaseInsensitive = true,
@@ -127,27 +125,25 @@ namespace Oratoria36.Models
 
         private void InitializeModules()
         {
-            _logger.Info($"Инициализация Module1: IP={Module1IP}, Port={Module1Port}");
+            _logger.Info($"Инициализация Модуля 1: IP={Module1IP}, Port={Module1Port}");
             Module1.IP = Module1IP;
             Module1.Port = Module1Port;
 
-            _logger.Info($"Инициализация Module2: IP={Module2IP}, Port={Module2Port}");
+            _logger.Info($"Инициализация Модуля 2: IP={Module2IP}, Port={Module2Port}");
             Module2.IP = Module2IP;
             Module2.Port = Module2Port;
 
-            _logger.Info($"Инициализация Module3: IP={Module3IP}, Port={Module3Port}");
+            _logger.Info($"Инициализация Модуля 3: IP={Module3IP}, Port={Module3Port}");
             Module3.IP = Module3IP;
             Module3.Port = Module3Port;
 
-            _logger.Info($"Инициализация Module4: IP={Module4IP}, Port={Module4Port}");
+            _logger.Info($"Инициализация Модуля 4: IP={Module4IP}, Port={Module4Port}");
             Module4.IP = Module4IP;
             Module4.Port = Module4Port;
 
-            _logger.Info($"Инициализация TransportModule: IP={TransportModuleIP}, Port={TransportModulePort}");
+            _logger.Info($"Инициализация Транспортного модуля: IP={TransportModuleIP}, Port={TransportModulePort}");
             TransportModule.IP = TransportModuleIP;
             TransportModule.Port = TransportModulePort;
-
-            _logger.Info("Модули инициализированы");
         }
 
         public async Task SaveConnectionSettingsAsync()
@@ -188,9 +184,7 @@ namespace Oratoria36.Models
                     Directory.CreateDirectory(directory);
                 }
 
-                await File.WriteAllTextAsync(_settingsPath, json);
-
-                _logger.Info($"Настройки соединения сохранены: {json}");
+                await File.WriteAllTextAsync(_settingsPath, json);  
             }
             catch (Exception ex)
             {
