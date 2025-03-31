@@ -74,52 +74,38 @@ namespace Oratoria36.Models
 
         public async Task InitializeModbusAsync(string ip)
         {
-            if (string.IsNullOrEmpty(ip))
-            {
-                _logger.Warn("Попытка подключения с пустым IP");
-                IsConnected = false;
-                return;
-            }
-
             try
             {
                 _tcpClient = new TcpClient();
                 await _tcpClient.ConnectAsync(ip, Port);
                 Master = ModbusIpMaster.CreateIp(_tcpClient);
                 IsConnected = true;
-                _logger.Info($"Успешное подключение к IP: {ip}, порт: {Port}");
+                _logger.Info($"Подключено к {ip}:{Port}");
                 ModbusPoller.Instance.OnModuleConnected(this);
             }
             catch (Exception ex)
             {
                 IsConnected = false;
-                _logger.Error(ex, $"Не удалось подключиться к IP: {ip}, порт: {Port}");
+                _logger.Error(ex, $"Ошибка подключения к {ip}:{Port}");
             }
         }
+
         public void CloseConnection()
         {
-            if (IsConnected)
+            try
             {
-                try
-                {
-                    ModbusPoller.Instance.OnModuleDisconnected(this);
-
-                    Master?.Dispose();
-                    _tcpClient?.Close();
-                    _tcpClient?.Dispose();
-                    IsConnected = false;
-                    _logger.Info("Соединение закрыто");
-                }
-                catch (Exception ex)
-                {
-                    _logger.Error(ex, "Соединение не удалось закрыть");
-                }
+                ModbusPoller.Instance.OnModuleDisconnected(this);
+                Master?.Dispose();
+                _tcpClient?.Close();
+                _tcpClient?.Dispose();
+                IsConnected = false;
             }
-            else
+            catch (Exception ex)
             {
-                _logger.Info("Нет активного соединения для закрытия");
+                _logger.Error(ex, "Ошибка при закрытии соединения");
             }
         }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 

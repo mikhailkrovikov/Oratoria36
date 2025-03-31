@@ -200,16 +200,12 @@ namespace Oratoria36.Models
 
                 if (!string.IsNullOrEmpty(Module1.IP))
                     tasks.Add(Module1.InitializeModbusAsync(Module1.IP));
-
                 if (!string.IsNullOrEmpty(Module2.IP))
                     tasks.Add(Module2.InitializeModbusAsync(Module2.IP));
-
                 if (!string.IsNullOrEmpty(Module3.IP))
                     tasks.Add(Module3.InitializeModbusAsync(Module3.IP));
-
                 if (!string.IsNullOrEmpty(Module4.IP))
                     tasks.Add(Module4.InitializeModbusAsync(Module4.IP));
-
                 if (!string.IsNullOrEmpty(TransportModule.IP))
                     tasks.Add(TransportModule.InitializeModbusAsync(TransportModule.IP));
 
@@ -217,8 +213,6 @@ namespace Oratoria36.Models
                     await Task.WhenAll(tasks);
 
                 ConnectionStatusChanged?.Invoke(this, EventArgs.Empty);
-
-                _logger.Info("Попытка подключения ко всем модулям завершена");
             }
             catch (Exception ex)
             {

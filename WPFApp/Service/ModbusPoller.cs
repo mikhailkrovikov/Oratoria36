@@ -31,9 +31,7 @@ namespace Oratoria36.Service
         /// Запускает опрос сигналов
         /// </summary>
         public void StartPolling()
-        {
-            if (_isPolling) return;
-
+        { 
             _isPolling = true;
             _pollingCts = new CancellationTokenSource();
             _pollingTask = Task.Run(() => PollSignalsAsync(_pollingCts.Token));
@@ -63,12 +61,6 @@ namespace Oratoria36.Service
         /// </summary>
         public void RegisterModule(ModuleConfig config, List<Signal> signals)
         {
-            if (config == null)
-            {
-                _logger.Warn("Попытка регистрации null-модуля");
-                return;
-            }
-
             if (!_moduleSignals.ContainsKey(config))
             {
                 _moduleSignals[config] = new List<Signal>();
@@ -78,8 +70,27 @@ namespace Oratoria36.Service
             {
                 _moduleSignals[config].AddRange(signals);
             }
+        }
 
-            _logger.Info($"Зарегистрирован модуль {config.ModuleId} с {signals?.Count ?? 0} сигналами");
+        /// <summary>
+        /// Записывает значение в выходной сигнал
+        /// </summary>
+        public async Task WriteSignalAsync(OutputSignal signal)
+        {
+            ModuleConfig targetModule = _moduleSignals.Keys.FirstOrDefault(m => _moduleSignals[m].Contains(signal));
+
+            if (targetModule?.IsConnected != true)
+                return;
+
+            try
+            {
+                await Task.Run(() => targetModule.Master.WriteSingleCoil(0, signal.Channel, signal.Value));
+                _logger.Debug($"Записано {signal.Value} в {signal.Name}");
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, $"Ошибка записи в {signal.Name}");
+            }
         }
 
         /// <summary>
@@ -107,43 +118,8 @@ namespace Oratoria36.Service
             }
         }
 
-        /// <summary>
-        /// Записывает значение в выходной сигнал
-        /// </summary>
-        public async Task WriteSignalAsync(OutputSignal signal)
-        {
-            if (signal == null)
-            {
-                _logger.Warn("Попытка записи в null-сигнал");
-                return;
-            }
-            ModuleConfig targetModule = null;
-            foreach (var kvp in _moduleSignals)
-            {
-                if (kvp.Value.Contains(signal))
-                {
-                    targetModule = kvp.Key;
-                    break;
-                }
-            }
 
-            if (targetModule == null || !targetModule.IsConnected)
-            {
-                _logger.Warn($"Попытка записи в сигнал {signal.Name}, но модуль не найден или не подключен");
-                return;
-            }
-
-            try
-            {
-                await Task.Run(() => targetModule.Master.WriteSingleCoil(0, signal.Channel, signal.Value));
-                _logger.Debug($"Записано {signal.Value} в {signal.Name}");
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, $"Ошибка записи в {signal.Name}");
-            }
-        }
-
+        
         /// <summary>
         /// Опрашивает сигналы всех модулей
         /// </summary>

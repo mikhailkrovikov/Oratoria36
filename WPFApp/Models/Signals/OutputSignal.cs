@@ -25,12 +25,11 @@ namespace Oratoria36.Models.Signals
 
         internal void UpdateValueWithoutWrite(bool newValue)
         {
-            if (_value != newValue)
-            {
-                _value = newValue;
-                OnPropertyChanged(nameof(Value));
-                ValueChanged?.Invoke(newValue);
-            }
+            if (_value == newValue) return;
+
+            _value = newValue;
+            OnPropertyChanged(nameof(Value));
+            ValueChanged?.Invoke(newValue);
         }
     }
 }
