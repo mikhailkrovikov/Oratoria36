@@ -18,7 +18,7 @@ namespace Oratoria36.UI
         }
         private void SignalsPage_Click(object sender, RoutedEventArgs e)
         {
-            PageChanged.Invoke("SignalsPage");
+            PageChanged.Invoke("Module2SignalsPage");
         }
         private void ConnectionSettings_Click(object sender, RoutedEventArgs e)
         {

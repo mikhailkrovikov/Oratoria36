@@ -22,7 +22,7 @@ namespace Oratoria36.UI
     public class ConnectionSettingsVM : INotifyPropertyChanged
     {
         private static readonly Logger _logger = LogManager.GetLogger("Настройки");
-        private readonly ModuleManager _moduleManager;
+        private readonly MainContext _moduleManager;
 
         public ModuleConfig Module1 { get; }
         public ModuleConfig Module2 { get; }
@@ -155,7 +155,7 @@ namespace Oratoria36.UI
 
         public ConnectionSettingsVM()
         {
-            _moduleManager = ModuleManager.Instance;
+            _moduleManager = MainContext.Instance;
             Module1 = _moduleManager.Module1;
             Module2 = _moduleManager.Module2;
 
@@ -184,7 +184,7 @@ namespace Oratoria36.UI
         private async void ConnectModule1(object parameter)
         {
             _logger.Info($"Попытка подключения к {Module1.IP}:{Module1.Port}");
-            await Module1.InitializeModbusAsync(Module1.IP);
+            await Module1.Connect(Module1.IP);
             UpdateModuleStatus();
         }
 
@@ -247,7 +247,7 @@ namespace Oratoria36.UI
         private async void ConnectModule2(object parameter)
         {
             _logger.Info($"Попытка подключения к {Module2.IP}:{Module2.Port}");
-            await Module2.InitializeModbusAsync(Module2.IP);
+            await Module2.Connect(Module2.IP);
             UpdateModuleStatus();
         }
 

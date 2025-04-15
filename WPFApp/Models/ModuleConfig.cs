@@ -11,27 +11,14 @@ namespace Oratoria36.Models
 {
     public class ModuleConfig : INotifyPropertyChanged
     {
-        private static readonly Logger _logger = LogManager.GetLogger("ModuleConfig");
-        public ModbusIpMaster Master { get; private set; }
+        private Logger _logger = LogManager.GetLogger("ModuleConfig");
+        public ModbusIpMaster Master { get; set; }
         private TcpClient _tcpClient;
 
-        private string _ip;
+        private string _ip; 
         private int _port = 502;
         private bool _isConnected;
-        private int _moduleId;
-        
-        public int ModuleId
-        {
-            get => _moduleId;
-            set
-            {
-                if (_moduleId != value)
-                {
-                    _moduleId = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+ 
         public string IP
         {
             get => _ip;
@@ -66,13 +53,13 @@ namespace Oratoria36.Models
                 if (_isConnected != value)
                 {
                     _isConnected = value;
-                    _logger.Info($"Состояние подключения модуля {ModuleId} изменено: {(value ? "Подключено" : "Отключено")}");
+                    _logger.Info($"Состояние подключения модуля изменено: {(value ? "Подключено" : "Отключено")}");
                     OnPropertyChanged();
                 }
             }
         }
 
-        public async Task InitializeModbusAsync(string ip)
+        public async Task Connect(string ip)
         {
             try
             {
@@ -80,8 +67,7 @@ namespace Oratoria36.Models
                 await _tcpClient.ConnectAsync(ip, Port);
                 Master = ModbusIpMaster.CreateIp(_tcpClient);
                 IsConnected = true;
-                _logger.Info($"Подключено к {ip}:{Port}");
-                ModbusPoller.Instance.OnModuleConnected(this);
+                _logger.Info($"Подключено к {ip}:{Port}");  
             }
             catch (Exception ex)
             {
@@ -94,7 +80,7 @@ namespace Oratoria36.Models
         {
             try
             {
-                ModbusPoller.Instance.OnModuleDisconnected(this);
+                
                 Master?.Dispose();
                 _tcpClient?.Close();
                 _tcpClient?.Dispose();

@@ -1,35 +1,51 @@
-﻿using System;
+﻿using Modbus.Device;
+using NLog;
+using System;
 
 namespace Oratoria36.Models.Signals
 {
-    public class OutputSignal : Signal
+    public class OutputSignal<T> : IModbusStrategy
     {
-        private bool _value;
-        public bool Value
+        Logger _logger = LogManager.GetLogger("InputSignal");
+        private T _value;
+        private IModbusStrategy _modbusPoller;
+        private ModbusIpMaster _master;
+        public T Value
         {
             get => _value;
             set
             {
-                if (_value != value)
+                if (!Equals(_value, value))
                 {
                     _value = value;
-                    OnPropertyChanged();
-                    ValueChanged?.Invoke(value);
-                    Service.ModbusPoller.Instance.WriteSignalAsync(this);
+                    WriteValue();
+                    OnSignalChanged?.Invoke(_value);
                 }
             }
         }
-
-        public event Action<bool> ValueChanged;
-        public OutputSignal(string name, ushort channel) : base(name, channel) { }
-
-        internal void UpdateValueWithoutWrite(bool newValue)
+        public event Action<T> OnSignalChanged;
+        public string Name { get; set; }
+        public ushort PinNumber { get; set; }
+        public OutputSignal(string name, ushort pinNumber, IModbusStrategy modbusPoller, ModbusIpMaster master)
         {
-            if (_value == newValue) return;
-
-            _value = newValue;
-            OnPropertyChanged(nameof(Value));
-            ValueChanged?.Invoke(newValue);
+            Name = name;
+            PinNumber = pinNumber;
+            _modbusPoller = modbusPoller;
+            try
+            {
+                _master = master;
+            }
+            catch
+            {
+                _logger.Error("Master не инициализирован");
+            }
+        }
+        private void WriteValue()
+        {
+            if (typeof(T) == typeof(bool))
+                _modbusPoller.SetDigitalOutput(PinNumber, (bool)(object)_value, _master);
+            else if (typeof(T) == typeof(ushort))
+                _modbusPoller.SetAnalogOutput(PinNumber, (ushort)(object)_value, _master);
         }
     }
 }

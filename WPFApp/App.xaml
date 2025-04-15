@@ -2,12 +2,27 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Oratoria36"
-             StartupUri="UI/MainWindow.xaml">
+             xmlns:conv="clr-namespace:Oratoria36.Converters"
+             StartupUri="MainWindow.xaml">
+
     <Application.Resources>
+
+        <!-- 🔗 Подключение словаря со стилями, если ты его вынес -->
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Styles.xaml"/>
+                <ResourceDictionary Source="UI/Styles/ResourceDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
+            <!-- ✅ Конвертер: true/false → "ВКЛ"/"ВЫКЛ" -->
+            <conv:BooleanToTextConverter x:Key="SignalStateTextConverter"
+                                         TrueText="ВКЛ"
+                                         FalseText="ВЫКЛ" />
+
+            <!-- 🔄 На будущее: цветовая заливка по состоянию -->
+            <conv:BooleanToBrushConverter x:Key="SignalStateBrushConverter"
+                                          TrueBrush="LightGreen"
+                                          FalseBrush="LightGray" />
         </ResourceDictionary>
+
     </Application.Resources>
 </Application>

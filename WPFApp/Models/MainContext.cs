@@ -7,12 +7,39 @@ using NLog;
 
 namespace Oratoria36.Models
 {
-    public class ModuleManager
+    public class MainContext
     {
-        private static readonly Logger _logger = LogManager.GetLogger("ModuleManager");
-        private static ModuleManager _instance;
+        private static MainContext _instance;
+        public static MainContext Instance => GetInstance();
+
+        private static MainContext GetInstance()
+        {
+            if (_instance == null)
+                _instance = new MainContext();
+            return _instance;
+        }
+
+        private MainContext()
+        {
+
+            _settingsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings", "ConnectionSettings.json");
+            _logger.Info($"Путь к файлу настроек: {_settingsPath}");
+
+            LoadConnectionSettings();
+
+            InitializeModules();
+
+            Module1.PropertyChanged += ModulePropertyChanged;
+            Module2.PropertyChanged += ModulePropertyChanged;
+            Module3.PropertyChanged += ModulePropertyChanged;
+            Module4.PropertyChanged += ModulePropertyChanged;
+            TransportModule.PropertyChanged += ModulePropertyChanged;
+
+        }
+
+        private static readonly Logger _logger = LogManager.GetLogger("MainContext");
         private readonly string _settingsPath;
-        public static ModuleManager Instance => _instance ??= new ModuleManager();
+
         public string Module1IP { get; set; } = "192.168.0.102";
         public int Module1Port { get; set; } = 502;
         public string Module2IP { get; set; } = "192.168.0.103";
@@ -37,28 +64,7 @@ namespace Oratoria36.Models
 
         public event EventHandler ConnectionStatusChanged;
 
-        private ModuleManager()
-        {
-            Module1.ModuleId = 1;
-            Module2.ModuleId = 2;
-            Module3.ModuleId = 3;
-            Module4.ModuleId = 4;
-            TransportModule.ModuleId = 5;
-
-            _settingsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings", "ConnectionSettings.json");
-            _logger.Info($"Путь к файлу настроек: {_settingsPath}");
-
-            LoadConnectionSettings();
-
-            InitializeModules();
-
-            Module1.PropertyChanged += ModulePropertyChanged;
-            Module2.PropertyChanged += ModulePropertyChanged;
-            Module3.PropertyChanged += ModulePropertyChanged;
-            Module4.PropertyChanged += ModulePropertyChanged;
-            TransportModule.PropertyChanged += ModulePropertyChanged;
-
-        }
+        
 
         private void ModulePropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
@@ -76,12 +82,11 @@ namespace Oratoria36.Models
                 if (!Directory.Exists(directory))
                 {
                     Directory.CreateDirectory(directory);
-                    _logger.Info($"Создана директория для настроек: {directory}");
                 }
                 if (File.Exists(_settingsPath))
                 {
                     string json = File.ReadAllText(_settingsPath);
-                   
+
                     var options = new JsonSerializerOptions
                     {
                         PropertyNameCaseInsensitive = true,
@@ -91,25 +96,18 @@ namespace Oratoria36.Models
 
                     var settings = JsonSerializer.Deserialize<ConnectionSettings>(json, options);
 
-                    if (settings != null)
-                    {
-                        Module1IP = settings.Module1IP ?? Module1IP;
-                        Module1Port = settings.Module1Port > 0 ? settings.Module1Port : Module1Port;
-                        Module2IP = settings.Module2IP;
-                        Module2Port = settings.Module2Port > 0 ? settings.Module2Port : Module2Port;
-                        Module3IP = settings.Module3IP;
-                        Module3Port = settings.Module3Port > 0 ? settings.Module3Port : Module3Port;
-                        Module4IP = settings.Module4IP;
-                        Module4Port = settings.Module4Port > 0 ? settings.Module4Port : Module4Port;
-                        TransportModuleIP = settings.TransportModuleIP;
-                        TransportModulePort = settings.TransportModulePort > 0 ? settings.TransportModulePort : TransportModulePort;
 
-                        _logger.Info("Настройки соединения успешно загружены");
-                    }
-                    else
-                    {
-                        _logger.Warn("Файл настроек существует, но десериализация вернула null");
-                    }
+                    Module1IP = settings.Module1IP ?? Module1IP;
+                    Module1Port = settings.Module1Port > 0 ? settings.Module1Port : Module1Port;
+                    Module2IP = settings.Module2IP;
+                    Module2Port = settings.Module2Port > 0 ? settings.Module2Port : Module2Port;
+                    Module3IP = settings.Module3IP;
+                    Module3Port = settings.Module3Port > 0 ? settings.Module3Port : Module3Port;
+                    Module4IP = settings.Module4IP;
+                    Module4Port = settings.Module4Port > 0 ? settings.Module4Port : Module4Port;
+                    TransportModuleIP = settings.TransportModuleIP;
+                    TransportModulePort = settings.TransportModulePort > 0 ? settings.TransportModulePort : TransportModulePort;
+                    _logger.Info("Настройки соединения успешно загружены");
                 }
                 else
                 {
@@ -184,74 +182,12 @@ namespace Oratoria36.Models
                     Directory.CreateDirectory(directory);
                 }
 
-                await File.WriteAllTextAsync(_settingsPath, json);  
+                await File.WriteAllTextAsync(_settingsPath, json);
             }
             catch (Exception ex)
             {
                 _logger.Error(ex, "Ошибка при сохранении настроек соединения");
             }
         }
-
-        public async Task ConnectAllAsync()
-        {
-            try
-            {
-                var tasks = new List<Task>();
-
-                if (!string.IsNullOrEmpty(Module1.IP))
-                    tasks.Add(Module1.InitializeModbusAsync(Module1.IP));
-                if (!string.IsNullOrEmpty(Module2.IP))
-                    tasks.Add(Module2.InitializeModbusAsync(Module2.IP));
-                if (!string.IsNullOrEmpty(Module3.IP))
-                    tasks.Add(Module3.InitializeModbusAsync(Module3.IP));
-                if (!string.IsNullOrEmpty(Module4.IP))
-                    tasks.Add(Module4.InitializeModbusAsync(Module4.IP));
-                if (!string.IsNullOrEmpty(TransportModule.IP))
-                    tasks.Add(TransportModule.InitializeModbusAsync(TransportModule.IP));
-
-                if (tasks.Count > 0)
-                    await Task.WhenAll(tasks);
-
-                ConnectionStatusChanged?.Invoke(this, EventArgs.Empty);
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, "Ошибка при подключении к модулям");
-            }
-        }
-
-        public void DisconnectAll()
-        {
-            try
-            {
-                Module1.CloseConnection();
-                Module2.CloseConnection();
-                Module3.CloseConnection();
-                Module4.CloseConnection();
-                TransportModule.CloseConnection();
-
-                ConnectionStatusChanged?.Invoke(this, EventArgs.Empty);
-
-                _logger.Info("Все модули отключены");
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, "Ошибка при отключении модулей");
-            }
-        }
-    }
-
-    public class ConnectionSettings
-    {
-        public string Module1IP { get; set; }
-        public int Module1Port { get; set; }
-        public string Module2IP { get; set; }
-        public int Module2Port { get; set; }
-        public string Module3IP { get; set; }
-        public int Module3Port { get; set; }
-        public string Module4IP { get; set; }
-        public int Module4Port { get; set; }
-        public string TransportModuleIP { get; set; }
-        public int TransportModulePort { get; set; }
     }
 }
