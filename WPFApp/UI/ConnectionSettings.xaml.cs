@@ -22,7 +22,7 @@ namespace Oratoria36.UI
     public class ConnectionSettingsVM : INotifyPropertyChanged
     {
         private static readonly Logger _logger = LogManager.GetLogger("Настройки");
-        private readonly MainContext _moduleManager;
+        private readonly NetContext _moduleManager;
 
         public ModuleConfig Module1 { get; }
         public ModuleConfig Module2 { get; }
@@ -155,7 +155,7 @@ namespace Oratoria36.UI
 
         public ConnectionSettingsVM()
         {
-            _moduleManager = MainContext.Instance;
+            _moduleManager = NetContext.Instance;
             Module1 = _moduleManager.Module1;
             Module2 = _moduleManager.Module2;
 

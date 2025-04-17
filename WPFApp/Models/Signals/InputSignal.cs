@@ -1,14 +1,15 @@
 ﻿using Modbus.Device;
 using NLog;
 using System;
+using System.Diagnostics.Metrics;
+using System.Threading.Channels;
 
 namespace Oratoria36.Models.Signals
 {
-    public class InputSignal<T> : IModbusStrategy
+    public class InputSignal<T> : IInputStrategy<T> /*IModbusStrategy*/
     {
         Logger _logger = LogManager.GetLogger("InputSignal");
         private T _value;
-        private IModbusStrategy _modbusPoller;
         private ModbusIpMaster _master;
         public T Value
         {
@@ -29,34 +30,35 @@ namespace Oratoria36.Models.Signals
         public event Action<T> OnSignalChanged;
         public string Name { get; set; }
         public ushort PinNumber { get; set; }
-        public InputSignal(string name, ushort pinNumber, IModbusStrategy modbusPoller, ModbusIpMaster master)
+        public InputSignal(string name, ushort pinNumber, ModbusIpMaster master)
         {
             Name = name;
             PinNumber = pinNumber;
-            _modbusPoller = modbusPoller;
             try
             {
                 _master = master;
             }
             catch
             {
-                _logger.Error("Master не инициализирован");
+                _logger.Warn("Master не инициализирован");
             }
         }
         private void UpdateValue()
         {
-            try
+            Value = GetInput(PinNumber);           
+        }
+
+        public T GetInput(ushort pinNumber)
+        {
+            if (_master != null)
             {
-                if (typeof(T) == typeof(bool))
-                {
-                    Value = (T)(object)_modbusPoller.GetDigitalInput(PinNumber, _master);
-                }
+                if (typeof(T) == typeof(bool))              
+                    return(T)(object)_master.ReadInputs(pinNumber, 1)[0];
                 else if (typeof(T) == typeof(ushort))
-                {
-                    Value = (T)(object)_modbusPoller.GetAnalogInput(PinNumber, _master);
-                }
+                    return (T)(object)_master.ReadHoldingRegisters(pinNumber, 1)[0];
+                else return default;
             }
-            catch { }
+            else return default;
         }
     }
 }

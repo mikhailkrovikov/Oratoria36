@@ -13,19 +13,42 @@ namespace Oratoria36.Models.Signals
     {
         public bool GetDigitalInput(ushort pinNumber, ModbusIpMaster master)
         {
-            return master.ReadInputs(pinNumber, 1)[0];
+            try
+            {
+                return master.ReadInputs(pinNumber, 1)[0];
+            }
+            catch
+            {
+                return false;
+            }
+            
         }
         public void SetDigitalOutput(ushort pinNumber, bool value, ModbusIpMaster master)
         {
-            master.WriteSingleCoil(pinNumber, value);
+            try
+            {
+                master.WriteSingleCoil(pinNumber, value);
+            }
+            catch { }
         }
         public ushort GetAnalogInput(ushort channel, ModbusIpMaster master)
         {
-            return master.ReadHoldingRegisters(channel, 1)[channel];
+            try
+            {
+                return master.ReadHoldingRegisters(channel, 1)[0];
+            }
+            catch
+            {
+                return 0;
+            }
         }
         public void SetAnalogOutput(ushort channel, ushort value, ModbusIpMaster master)
         {
-            master.WriteSingleRegister(channel, value);
+            try
+            {
+                master.WriteSingleRegister(channel, value);
+            }
+            catch { }
         }
-    }
+    }   
 }

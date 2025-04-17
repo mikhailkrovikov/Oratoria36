@@ -36,18 +36,24 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="CheckBox">
-                    <Border    
-                        CornerRadius="10"
-                        Width="50"
-                        Height="35">
-                        <Grid>
-                            <Rectangle x:Name="BackgroundRect"
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0"
+                            CornerRadius="10"
+                            Width="50"
+                            Height="35"
+                            Margin="0,0,5,0">
+                            <Grid>
+                                <Rectangle x:Name="BackgroundRect"
                                    Fill="#FFCCCCCC"
                                    Stroke="#FFA0A0A4"
                                    RadiusX="8"
                                    RadiusY="8"
                                    Height="16"/>
-                            <Ellipse x:Name="SwitchThumb"
+                                <Ellipse x:Name="SwitchThumb"
                                  Width="22"
                                  Height="22"
                                  HorizontalAlignment="Left"
@@ -55,55 +61,28 @@
                                  Margin="2"
                                  Fill="White"
                                  Stroke="#FFA0A0A4"
-                                 StrokeThickness="1" />
-                        </Grid>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="SwitchThumb" Property="HorizontalAlignment" Value="Right" />
-                            <Setter TargetName="BackgroundRect" Property="Fill" Value="White" />
-                        </Trigger>
-                        <Trigger Property="IsChecked" Value="False">
-                            <Setter TargetName="SwitchThumb" Property="HorizontalAlignment" Value="Left" />
-                            <Setter TargetName="BackgroundRect" Property="Fill" Value="#808080" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
+                                 StrokeThickness="1"/>
+                            </Grid>
+                        </Border>
+                    </Grid>
 
-    <Style x:Key="SignalDisplayToggleStyle" TargetType="ToggleButton">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="ToggleButton">
-                    <Border CornerRadius="8"
-                        BorderThickness="1"
-                        BorderBrush="#AAA"
-                        Background="{TemplateBinding Background}"
-                        Padding="6,2"
-                        Margin="2">
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
-                            <Setter Property="Background" Value="LightGreen"/>
-                            <Setter Property="Foreground" Value="Black"/>
+                            <Setter TargetName="SwitchThumb" Property="HorizontalAlignment" Value="Right"/>
+                            <Setter TargetName="BackgroundRect" Property="Fill" Value="White"/>
+                            <Setter TargetName="SwitchThumb" Property="Fill" Value="White"/>
+                            
                         </Trigger>
                         <Trigger Property="IsChecked" Value="False">
-                            <Setter Property="Background" Value="LightGray"/>
-                            <Setter Property="Foreground" Value="Black"/>
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Cursor" Value="Arrow"/>
+                            <Setter TargetName="SwitchThumb" Property="HorizontalAlignment" Value="Left"/>
+                            <Setter TargetName="BackgroundRect" Property="Fill" Value="#808080"/>
+                            <Setter TargetName="SwitchThumb" Property="Fill" Value="#606060"/>
+                           
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="FontSize" Value="13"/>
-        <Setter Property="IsEnabled" Value="False"/>
     </Style>
 
 

@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 
 namespace Oratoria36.Models.Modules
 {
-    public class Module2DI : IModbusStrategy
+    public class Module2DI /*IModbusStrategy*/
     {
+
         public List<InputSignal<bool>> DigitalInputs;
         public InputSignal<bool> Nakal_est { get; set; }
         public InputSignal<bool> Upravlenie_EVM { get; set; }
@@ -47,38 +48,38 @@ namespace Oratoria36.Models.Modules
 
         public Module2DI(ModbusIpMaster master)
         {
-            Nakal_est = new InputSignal<bool>("Накал есть", 0, this, master);
-            Upravlenie_EVM = new InputSignal<bool>("Управление ЭВМ", 1, this, master);
-            Uroven_EVM = new InputSignal<bool>("Уровень ЭВМ", 2, this, master);
-            Dvizhenie_BPM = new InputSignal<bool>("Движение БПМ", 3, this, master);
-            Anod_vklyuchen = new InputSignal<bool>("Анод включен", 4, this, master);
-            VCH_vklyuchen = new InputSignal<bool>("ВЧ включен", 5, this, master);
-            VCH_vyklyuchen = new InputSignal<bool>("ВЧ выключен", 6, this, master);
-            UURG_vklyucheno = new InputSignal<bool>("УУРГ включено", 7, this, master);
-            BPN_vklyuchen = new InputSignal<bool>("БПЕН включен", 8, this, master);
-            BPM1_vklyuchen = new InputSignal<bool>("БПМ1 включен", 9, this, master);
-            Peregrev_BPM_est = new InputSignal<bool>("Перегрев БПМ есть", 10, this, master);
-            Peregruzka_BPM_est = new InputSignal<bool>("Перегрузка БПМ есть", 11, this, master);
-            BPM2_vklyuchen = new InputSignal<bool>("БПМ2 включен", 12, this, master);
-            Poziciya_1 = new InputSignal<bool>("Позиция 1", 13, this, master);
-            Poziciya_2 = new InputSignal<bool>("Позиция 2", 14, this, master);
-            Poziciya_3 = new InputSignal<bool>("Позиция 3", 15, this, master);
-            BPM3_vklyuchen = new InputSignal<bool>("БПМ3 включен", 16, this, master);
-            Revers_vklyuchen = new InputSignal<bool>("Реверс включен", 17, this, master);
-            Kriogennyj_nasos_vklyuchen = new InputSignal<bool>("Криогенный насос включен", 18, this, master);
-            Natekatel_1_vklyuchen = new InputSignal<bool>("Натекатель 1 включен", 19, this, master);
-            Natekatel_2_vklyuchen = new InputSignal<bool>("Натекатель 2 включен", 20, this, master);
-            BP_UOG_vklyuchen = new InputSignal<bool>("БП УОГ включен", 21, this, master);
-            FK_KN_DU_63_otkryt = new InputSignal<bool>("ФК-КН ДУ-63 открыт", 22, this, master);
-            FK_KN_DU_63_zakryt = new InputSignal<bool>("ФК-КН ДУ-63 закрыт ", 23, this, master);
-            Zaslonka_otkryta = new InputSignal<bool>("Заслонка открыта", 24, this, master);
-            Zaslonka_zakryta = new InputSignal<bool>("Заслонка закрыта ", 25, this, master);
-            SHCHZ_otkryt = new InputSignal<bool>("ЩЗ открыт ", 26, this, master);
-            SHCHZ_zakryt = new InputSignal<bool>("ЩЗ закрыт ", 27, this, master);
-            Peregrev_vody_est = new InputSignal<bool>("Перегрев воды есть ", 28, this, master);
-            Voda_est = new InputSignal<bool>("Вода есть ", 29, this, master);
-            Tormoz_vklyuchen = new InputSignal<bool>("Тормоз включен ", 30, this, master);
-            Peregruz_privoda_est = new InputSignal<bool>("Перегруз привода есть ", 31, this, master);
+            Nakal_est = new InputSignal<bool>("Накал есть", 0, master);
+            Upravlenie_EVM = new InputSignal<bool>("Управление ЭВМ", 1, master);
+            Uroven_EVM = new InputSignal<bool>("Уровень ЭВМ", 2, master);
+            Dvizhenie_BPM = new InputSignal<bool>("Движение БПМ", 3, master);
+            Anod_vklyuchen = new InputSignal<bool>("Анод включен", 4, master);
+            VCH_vklyuchen = new InputSignal<bool>("ВЧ включен", 5, master);
+            VCH_vyklyuchen = new InputSignal<bool>("ВЧ выключен", 6, master);
+            UURG_vklyucheno = new InputSignal<bool>("УУРГ включено", 7, master);
+            BPN_vklyuchen = new InputSignal<bool>("БПН включен", 8, master);
+            BPM1_vklyuchen = new InputSignal<bool>("БПМ1 включен", 9, master);
+            Peregrev_BPM_est = new InputSignal<bool>("Перегрев БПМ есть", 10, master);
+            Peregruzka_BPM_est = new InputSignal<bool>("Перегрузка БПМ есть", 11, master);
+            BPM2_vklyuchen = new InputSignal<bool>("БПМ2 включен", 12, master);
+            Poziciya_1 = new InputSignal<bool>("Позиция 1", 13, master);
+            Poziciya_2 = new InputSignal<bool>("Позиция 2", 14, master);
+            Poziciya_3 = new InputSignal<bool>("Позиция 3", 15, master);
+            BPM3_vklyuchen = new InputSignal<bool>("БПМ3 включен", 16, master);
+            Revers_vklyuchen = new InputSignal<bool>("Реверс включен", 17, master);
+            Kriogennyj_nasos_vklyuchen = new InputSignal<bool>("Криогенный насос включен", 18, master);
+            Natekatel_1_vklyuchen = new InputSignal<bool>("Натекатель 1 включен", 19, master);
+            Natekatel_2_vklyuchen = new InputSignal<bool>("Натекатель 2 включен", 20, master);
+            BP_UOG_vklyuchen = new InputSignal<bool>("БП УОГ включен", 21, master);
+            FK_KN_DU_63_otkryt = new InputSignal<bool>("ФК-КН ДУ-63 открыт", 22, master);
+            FK_KN_DU_63_zakryt = new InputSignal<bool>("ФК-КН ДУ-63 закрыт ", 23, master);
+            Zaslonka_otkryta = new InputSignal<bool>("Заслонка открыта", 24, master);
+            Zaslonka_zakryta = new InputSignal<bool>("Заслонка закрыта ", 25, master);
+            SHCHZ_otkryt = new InputSignal<bool>("ЩЗ открыт ", 26, master);
+            SHCHZ_zakryt = new InputSignal<bool>("ЩЗ закрыт ", 27, master);
+            Peregrev_vody_est = new InputSignal<bool>("Перегрев воды есть ", 28, master);
+            Voda_est = new InputSignal<bool>("Вода есть ", 29, master);
+            Tormoz_vklyuchen = new InputSignal<bool>("Тормоз включен ", 30, master);
+            Peregruz_privoda_est = new InputSignal<bool>("Перегруз привода есть ", 31, master);
 
             DigitalInputs = new List<InputSignal<bool>>
             {

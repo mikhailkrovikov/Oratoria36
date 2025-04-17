@@ -7,19 +7,19 @@ using NLog;
 
 namespace Oratoria36.Models
 {
-    public class MainContext
+    public class NetContext
     {
-        private static MainContext _instance;
-        public static MainContext Instance => GetInstance();
+        private static NetContext _instance;
+        public static NetContext Instance => GetInstance();
 
-        private static MainContext GetInstance()
+        private static NetContext GetInstance()
         {
             if (_instance == null)
-                _instance = new MainContext();
+                _instance = new NetContext();
             return _instance;
         }
 
-        private MainContext()
+        private NetContext()
         {
 
             _settingsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings", "ConnectionSettings.json");
@@ -37,7 +37,7 @@ namespace Oratoria36.Models
 
         }
 
-        private static readonly Logger _logger = LogManager.GetLogger("MainContext");
+        private static readonly Logger _logger = LogManager.GetLogger("NetContext");
         private readonly string _settingsPath;
 
         public string Module1IP { get; set; } = "192.168.0.102";

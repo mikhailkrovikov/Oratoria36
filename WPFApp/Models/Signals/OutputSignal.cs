@@ -4,7 +4,7 @@ using System;
 
 namespace Oratoria36.Models.Signals
 {
-    public class OutputSignal<T> : IModbusStrategy
+    public class OutputSignal<T> : IOutputStrategy<T> /*IModbusStrategy*/
     {
         Logger _logger = LogManager.GetLogger("InputSignal");
         private T _value;
@@ -46,6 +46,19 @@ namespace Oratoria36.Models.Signals
                 _modbusPoller.SetDigitalOutput(PinNumber, (bool)(object)_value, _master);
             else if (typeof(T) == typeof(ushort))
                 _modbusPoller.SetAnalogOutput(PinNumber, (ushort)(object)_value, _master);
+        }
+
+        public void SetOutput(ushort pinNumber, T value)
+        {
+            if (_master != null)
+            {
+                if (typeof(T) == typeof(bool))
+                    _master.WriteSingleCoil(pinNumber, (bool)(object)value);
+                else
+                {
+                    _master.WriteSingleRegister(pinNumber, (ushort)(object)value);
+                }
+            }
         }
     }
 }

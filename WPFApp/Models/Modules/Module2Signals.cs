@@ -8,11 +8,11 @@ namespace Oratoria36.Models.Modules
 {
     public class Module2Signals
     {
-        MainContext context;
+        NetContext context;
         public Module2DI DISignals;
         public Module2Signals()
         {
-            context = MainContext.Instance;
+            context = NetContext.Instance;
             DISignals = new(context.Module2.Master);
         }
     }

@@ -13,7 +13,7 @@ namespace Oratoria36.UI
     public partial class MainWindow : Window
     {
         private readonly MainWindowVM _vm;
-        MainContext _context;
+        NetContext _context;
         public MainWindow()
         {
             InitializeComponent();
@@ -23,7 +23,7 @@ namespace Oratoria36.UI
             _vm.StartClock();
             NavigationBarControl.PageChanged += NavigateToPage;
             MainFrame.NavigationService.Navigate(new MainPage());
-            _context = MainContext.Instance;
+            _context = NetContext.Instance;
         }
 
         public MainWindowVM ViewModel => _vm;

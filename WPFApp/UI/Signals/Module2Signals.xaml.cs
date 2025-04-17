@@ -1,113 +1,81 @@
 ﻿using Oratoria36.Models.Modules;
-using System;
-using System.Collections.Generic;
+using Oratoria36.Models.Signals;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Oratoria36.UI.Signals
 {
-    /// <summary>
-    /// Логика взаимодействия для Module2Signals.xaml
-    /// </summary>
     public partial class Module2SignalsPage : Page
     {
         Module2SignalsVM _vm;
+        Module2Signals _signals = new Module2Signals();
+
         public Module2SignalsPage()
         {
-            
             InitializeComponent();
-            _vm = new Module2SignalsVM(this);
+            _vm = new Module2SignalsVM();
             DataContext = _vm;
+            Initialize(DigitalInputGrid, DigitalOutputGrid);
         }
-    }
-    public class Module2SignalsVM : INotifyPropertyChanged
-    {
-        Module2Signals _signals;
-        public Module2SignalsVM(Module2SignalsPage page)
+        private void Initialize(Grid inputGrid, Grid outputGrid)
         {
-            _signals = new Module2Signals();
-            ConfigInputs(page.DigitalInputGrid);
+            ConfigureSignalGrid(inputGrid, _signals.DISignals.DigitalInputs);
         }
-
-        public void ConfigInputs(Grid grid)
+        private void ConfigureSignalGrid(Grid grid, List<InputSignal<bool>> signals)
         {
-            int rowIndex = 1; // строка 0 занята заголовками
-
-            foreach (var signal in _signals.DISignals.DigitalInputs)
+            int rowIndex = 1;
+            foreach (var signal in signals)
             {
-                // Добавляем строку в грид
-                grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-
-                // Колонка 0 — № пина
-                var pinLabel = new Label
+                var pinLabel = new Label()
                 {
                     Content = signal.PinNumber,
-                    Style = (Style)Application.Current.Resources["BaseTextLabel"]
                 };
                 Grid.SetRow(pinLabel, rowIndex);
                 Grid.SetColumn(pinLabel, 0);
                 grid.Children.Add(pinLabel);
 
-                // Колонка 1 — Название сигнала
-                var nameLabel = new Label
+
+                var nameLabel = new Label()
                 {
                     Content = signal.Name,
-                    Style = (Style)Application.Current.Resources["BaseTextLabel"]
                 };
                 Grid.SetRow(nameLabel, rowIndex);
                 Grid.SetColumn(nameLabel, 1);
                 grid.Children.Add(nameLabel);
 
-                // Колонка 2 — Состояние сигнала через ToggleButton
-                var stateButton = new ToggleButton
+                var valueCheckBox = new CheckBox()
                 {
-                    Style = (Style)Application.Current.Resources["SignalDisplayToggleStyle"]
+                    Style = (Style)Application.Current.FindResource("ToggleSwitchStyle"),
+                    IsChecked = signal.Value
                 };
-
-                // Привязка к значению сигнала
-                stateButton.SetBinding(ToggleButton.IsCheckedProperty, new Binding("Value")
-                {
-                    Source = signal,
-                    Mode = BindingMode.OneWay
-                });
-
-                // Привязка текста (ВКЛ / ВЫКЛ)
-                stateButton.SetBinding(ToggleButton.ContentProperty, new Binding("Value")
-                {
-                    Source = signal,
-                    Mode = BindingMode.OneWay,
-                    Converter = (IValueConverter)Application.Current.Resources["SignalStateTextConverter"]
-                });
-
-                Grid.SetRow(stateButton, rowIndex);
-                Grid.SetColumn(stateButton, 2);
-                grid.Children.Add(stateButton);
+                Grid.SetRow(valueCheckBox, rowIndex);
+                Grid.SetColumn(valueCheckBox, 2);
+                grid.Children.Add(valueCheckBox);
 
                 rowIndex++;
             }
         }
+    }
+
+    public class Module2SignalsVM : INotifyPropertyChanged
+    {
+
+
+
 
 
 
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string prop = "")
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
