@@ -15,7 +15,7 @@
             <RowDefinition Height="40"/>
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="110"/>
+            <RowDefinition Height="150"/>
         </Grid.RowDefinitions>
 
         <local:NavigationBar x:Name="NavigationBarControl" Grid.Row="0"/>
@@ -23,13 +23,52 @@
 
         <Grid Grid.Row="3" Background="#D8D8D8">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="250"/>
                 <ColumnDefinition Width="130"/>
             </Grid.ColumnDefinitions>
-            <Grid Name="DateTimeGrid" Grid.Column="2">
+            <DataGrid x:Name="LogGrid" 
+              Grid.Column="1"
+              ItemsSource="{Binding Logs}" 
+              AutoGenerateColumns="False" 
+              IsReadOnly="True"
+              Margin="0"
+              SelectionUnit="Cell"
+              SelectionMode="Extended"
+              ClipboardCopyMode="IncludeHeader">
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridRow">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Level}" Value="Error">
+                                <Setter Property="Background" Value="Red"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Level}" Value="Warn">
+                                <Setter Property="Background" Value="Yellow"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Level}" Value="Info">
+                                <Setter Property="Background" Value="White"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Level}" Value="Debug">
+                                <Setter Property="Background" Value="White"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Level}" Value="Trace">
+                                <Setter Property="Background" Value="White"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Время" Binding="{Binding Timestamp, StringFormat='{}{0:dd-MM-yyyy HH:mm:ss}'}" Width="150"/>
+                    <DataGridTextColumn Header="Уровень" Binding="{Binding Level}" Width="80"/>
+                    <DataGridTextColumn Header="Логгер" Binding="{Binding Logger}" Width="100"/>
+                    <DataGridTextColumn Header="Сообщение" Binding="{Binding Message}" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+            <Grid Name="DateTimeGrid" Grid.Column="3">
                 <Grid.RowDefinitions>
-                    <RowDefinition/>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="20"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <TextBlock Text="{Binding ViewModel.Date}" FontSize="14" Foreground="#3F3F3F" Grid.Row="0" VerticalAlignment="Bottom"/>

@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Oratoria36.UI"
       mc:Ignorable="d" 
-      d:DesignHeight="890" d:DesignWidth="1920" Background="#FFE0E0E0"
+      d:DesignHeight="850" d:DesignWidth="1920" Background="#FFE0E0E0"
       Title="LogPage">
 
     <Grid>
@@ -48,7 +48,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Время" Binding="{Binding Timestamp, StringFormat='{}{0:dd-MM-yyyy HH:mm:ss}'}" Width="150"/>
                 <DataGridTextColumn Header="Уровень" Binding="{Binding Level}" Width="80"/>
-                <DataGridTextColumn Header="Источник" Binding="{Binding Logger}" Width="100"/>
+                <DataGridTextColumn Header="Логгер" Binding="{Binding Logger}" Width="100"/>
                 <DataGridTextColumn Header="Сообщение" Binding="{Binding Message}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>

@@ -34,6 +34,7 @@ namespace Oratoria36.UI.Signals
                 var pinLabel = new Label()
                 {
                     Content = signal.PinNumber,
+                    Foreground = new SolidColorBrush(Color.FromRgb(63, 63, 63)),
                 };
                 Grid.SetRow(pinLabel, rowIndex);
                 Grid.SetColumn(pinLabel, 0);
@@ -43,6 +44,7 @@ namespace Oratoria36.UI.Signals
                 var nameLabel = new Label()
                 {
                     Content = signal.Name,
+                    Foreground = new SolidColorBrush(Color.FromRgb(63, 63, 63)),
                 };
                 Grid.SetRow(nameLabel, rowIndex);
                 Grid.SetColumn(nameLabel, 1);

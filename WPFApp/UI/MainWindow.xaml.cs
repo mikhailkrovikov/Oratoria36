@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -13,6 +14,7 @@ namespace Oratoria36.UI
     public partial class MainWindow : Window
     {
         private readonly MainWindowVM _vm;
+        public ObservableCollection<LogEntry> Logs => DataGridTarget.LogEntries;
         NetContext _context;
         public MainWindow()
         {
