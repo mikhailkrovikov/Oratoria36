@@ -42,10 +42,7 @@ namespace Oratoria36.Models.Signals
         }
         private void WriteValue()
         {
-            if (typeof(T) == typeof(bool))
-                _modbusPoller.SetDigitalOutput(PinNumber, (bool)(object)_value, _master);
-            else if (typeof(T) == typeof(ushort))
-                _modbusPoller.SetAnalogOutput(PinNumber, (ushort)(object)_value, _master);
+            SetOutput(PinNumber, Value);
         }
 
         public void SetOutput(ushort pinNumber, T value)
@@ -54,10 +51,8 @@ namespace Oratoria36.Models.Signals
             {
                 if (typeof(T) == typeof(bool))
                     _master.WriteSingleCoil(pinNumber, (bool)(object)value);
-                else
-                {
-                    _master.WriteSingleRegister(pinNumber, (ushort)(object)value);
-                }
+                else if (typeof(T) == typeof(ushort))              
+                    _master.WriteSingleRegister(pinNumber, (ushort)(object)value); 
             }
         }
     }
