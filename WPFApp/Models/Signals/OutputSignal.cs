@@ -4,11 +4,10 @@ using System;
 
 namespace Oratoria36.Models.Signals
 {
-    public class OutputSignal<T> : IOutputStrategy<T> /*IModbusStrategy*/
+    public class OutputSignal<T> : IOutputStrategy<T>
     {
         Logger _logger = LogManager.GetLogger("InputSignal");
         private T _value;
-        private IModbusStrategy _modbusPoller;
         private ModbusIpMaster _master;
         public T Value
         {
@@ -26,11 +25,11 @@ namespace Oratoria36.Models.Signals
         public event Action<T> OnSignalChanged;
         public string Name { get; set; }
         public ushort PinNumber { get; set; }
-        public OutputSignal(string name, ushort pinNumber, IModbusStrategy modbusPoller, ModbusIpMaster master)
+        public OutputSignal(string name, ushort pinNumber, ModbusIpMaster master)
         {
             Name = name;
             PinNumber = pinNumber;
-            _modbusPoller = modbusPoller;
+            //_modbusPoller = modbusPoller;
             try
             {
                 _master = master;
