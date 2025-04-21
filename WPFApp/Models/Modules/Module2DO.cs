@@ -2,6 +2,7 @@
 using Oratoria36.Models.Signals;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,7 +11,7 @@ namespace Oratoria36.Models.Modules
 {
     public class Module2DO
     {
-        public List<OutputSignal<bool>> DigitalOutputs;
+        public ObservableCollection<OutputSignal<bool>> DigitalOutputs;
         public OutputSignal<bool> Vraschenie_magnetronov { get; set; }
         public OutputSignal<bool> Avariya_vakuumetra { get; set; }
         public OutputSignal<bool> Soglasovanie_bolshe { get; set; }
@@ -79,7 +80,7 @@ namespace Oratoria36.Models.Modules
             Tormoz_vklyuchit = new OutputSignal<bool>("Тормоз включить", 30, master);
             Kriogennyj_nasos_vklyuchit = new OutputSignal<bool>("Криогенный насос включить", 31, master);
 
-            DigitalOutputs = new List<OutputSignal<bool>>()
+            DigitalOutputs = new ObservableCollection<OutputSignal<bool>>()
             {
                 Vraschenie_magnetronov,
                 Avariya_vakuumetra,

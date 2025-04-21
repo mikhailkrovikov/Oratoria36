@@ -29,7 +29,6 @@ namespace Oratoria36.Models.Signals
         {
             Name = name;
             PinNumber = pinNumber;
-            //_modbusPoller = modbusPoller;
             try
             {
                 _master = master;

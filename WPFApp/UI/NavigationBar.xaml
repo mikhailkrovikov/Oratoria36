@@ -1,7 +1,7 @@
 ﻿<UserControl x:Class="Oratoria36.UI.NavigationBar"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Height="40" Background="#FFE0E0E0" BorderThickness="1" BorderBrush="#A0A0A4">
+    Height="45" Background="#FFE0E0E0" BorderThickness="1" BorderBrush="#A0A0A4">
 
     <DockPanel LastChildFill="True" Height="40" Width="1920">
         <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
@@ -9,7 +9,8 @@
                 Content="Главная" 
                 Width="120" 
                 Height ="30" 
-                Click="MainPage_Click" 
+                Click="MainPage_Click"
+                
                 Style="{DynamicResource NavigationButton}"/>
             <Button 
                 Content="Сигналы" 

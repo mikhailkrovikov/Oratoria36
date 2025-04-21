@@ -2,6 +2,7 @@
 using Oratoria36.Models.Signals;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,8 +11,7 @@ namespace Oratoria36.Models.Modules
 {
     public class Module2DI /*IModbusStrategy*/
     {
-
-        public List<InputSignal<bool>> DigitalInputs;
+        public ObservableCollection<InputSignal<bool>> DigitalInputs;
         public InputSignal<bool> Nakal_est { get; set; }
         public InputSignal<bool> Upravlenie_EVM { get; set; }
         public InputSignal<bool> Uroven_EVM { get; set; }
@@ -81,7 +81,7 @@ namespace Oratoria36.Models.Modules
             Tormoz_vklyuchen = new InputSignal<bool>("Тормоз включен ", 30, master);
             Peregruz_privoda_est = new InputSignal<bool>("Перегруз привода есть ", 31, master);
 
-            DigitalInputs = new List<InputSignal<bool>>
+            DigitalInputs = new ObservableCollection<InputSignal<bool>>
             {
                 Nakal_est,
                 Upravlenie_EVM,

@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Threading;
 using NLog;
 using Oratoria36.Models;
@@ -13,14 +14,14 @@ namespace Oratoria36.UI
 {
     public partial class MainWindow : Window
     {
-        private readonly MainWindowVM _vm;
-        public ObservableCollection<LogEntry> Logs => DataGridTarget.LogEntries;
-        NetContext _context;
+        private MainWindowVM _vm;
+        
+        private NetContext _context;
         public MainWindow()
         {
             InitializeComponent();
             _vm = new MainWindowVM();
-            DataContext = this;
+            DataContext = _vm;
 
             _vm.StartClock();
             NavigationBarControl.PageChanged += NavigateToPage;
@@ -29,7 +30,6 @@ namespace Oratoria36.UI
         }
 
         public MainWindowVM ViewModel => _vm;
-
         private void NavigateToPage(string pageName)
         {
             switch (pageName)
@@ -54,10 +54,18 @@ namespace Oratoria36.UI
 
     public class MainWindowVM : INotifyPropertyChanged
     {
+        public ObservableCollection<LogEntry> Logs => DataGridTarget.LogEntries;
+        public MainWindowVM()
+        {
+            CloseButtonCommand = new RelayCommand(_ => Application.Current.Shutdown());
+        }
+        public ICommand CloseButtonCommand { get; }
+
         private DispatcherTimer _timer;
         private string _date;
         private string _time;
 
+        
         public string Date
         {
             get => _date;

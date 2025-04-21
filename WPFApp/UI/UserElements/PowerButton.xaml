@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="Oratoria36.UI.UserElements.PowerButton"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
+             xmlns:userelements="clr-namespace:Oratoria36.UI.UserElements"
+             mc:Ignorable="d"
+             x:Name="powerButton"
+             Background="#FFC6C6C6"
+             BorderBrush="#FFAAAAAA"
+             BorderThickness="1"
+             Height="40"
+             Width="40">
+    <Grid>
+        <Path x:Name="powerIcon" 
+              Data="M15,18 L15,0 M22.5,7.5 A15,15 0 1 1 7.5,7.5" 
+              Stroke="#FF3F3F3F" 
+              StrokeThickness="{Binding PathStrokeThickness, RelativeSource={RelativeSource AncestorType=UserControl}}"
+              HorizontalAlignment="Center" 
+              VerticalAlignment="Center">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseEnter">
+                    <i:ChangePropertyAction TargetName="powerButton" 
+                                  PropertyName="PathStrokeThickness" 
+                                  Value="4"/>
+                </i:EventTrigger>
+                <i:EventTrigger EventName="MouseLeave">
+                    <i:ChangePropertyAction TargetName="powerButton" 
+                                  PropertyName="PathStrokeThickness" 
+                                  Value="2"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </Path>
+    </Grid>
+</UserControl>

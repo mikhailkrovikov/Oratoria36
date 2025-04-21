@@ -3,7 +3,8 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:Oratoria36.UI"
+      xmlns:local="clr-namespace:Oratoria36.UI" 
+      d:DataContext="{d:DesignInstance Type=local:ConnectionSettingsVM}"
       mc:Ignorable="d" 
       d:DesignHeight="850" d:DesignWidth="1920" Background="#FFE0E0E0"
       Title="ConnectionSettings">
@@ -79,7 +80,7 @@
                     <ColumnDefinition Width="5"/>
                 </Grid.ColumnDefinitions>
                 <Button Content="Подключиться" Style="{DynamicResource BaseEnableButton}" Command="{Binding ConnectCommandModule1}"/>
-                <Button Content="Отключиться" Style="{DynamicResource BaseEnableButton}" Grid.Column="2" Command="{Binding DisconnectCommandModule1}"/>
+                <Button Content="Отключиться" Style="{DynamicResource BaseEnableButton}"  Grid.Column="2" Command="{Binding DisconnectCommandModule1}"/>
             </Grid>
         </Grid>
         

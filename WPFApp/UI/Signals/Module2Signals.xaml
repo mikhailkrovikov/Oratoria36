@@ -126,5 +126,72 @@
                 </ScrollViewer>
             </DockPanel> 
         </Border>
+
+        <Border Grid.Column="4" Style="{StaticResource CardContainer}">
+            <DockPanel>
+                <TextBlock Text="АНАЛОГОВЫЕ ВХОДЫ" 
+                  Style="{StaticResource SectionTitle}" 
+                  DockPanel.Dock="Top"/>
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Grid x:Name="AnalogInputGrid">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" MinWidth="40"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="28"/>
+                        </Grid.RowDefinitions>
+                        <Label Content="№" Grid.Column="0" Style="{StaticResource HeaderLabel}"/>
+                        <Label Content="Наименование сигнала" Grid.Column="1" Style="{StaticResource HeaderLabel}"/>
+                        <Label Content="Значение" Grid.Column="2" Style="{StaticResource HeaderLabel}"/>
+                        <Label Content="Разряд" Grid.Column="3" Style="{StaticResource HeaderLabel}"/>
+                    </Grid>
+                </ScrollViewer>
+            </DockPanel>
+        </Border>
+
+        <Border Grid.Column="6" Style="{StaticResource CardContainer}">
+            <DockPanel>
+                <TextBlock Text="АНАЛОГОВЫЕ ВЫХОДЫ" 
+          Style="{StaticResource SectionTitle}" 
+          DockPanel.Dock="Top"/>
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Grid x:Name="AnalogOutputGrid">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" MinWidth="40"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="28"/>
+                        </Grid.RowDefinitions>
+                        <Label Content="№" Grid.Column="0" Style="{StaticResource HeaderLabel}"/>
+                        <Label Content="Наименование сигнала" Grid.Column="1" Style="{StaticResource HeaderLabel}"/>
+                        <Label Content="Значение" Grid.Column="2" Style="{StaticResource HeaderLabel}"/>
+                        <Label Content="Разряд" Grid.Column="3" Style="{StaticResource HeaderLabel}"/>
+                    </Grid>
+                </ScrollViewer>
+            </DockPanel>
+        </Border>
+        
     </Grid>
 </Page>
