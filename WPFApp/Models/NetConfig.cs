@@ -9,7 +9,7 @@ using Oratoria36.Service;
 
 namespace Oratoria36.Models
 {
-    public class ModuleConfig : INotifyPropertyChanged
+    public class NetConfig : INotifyPropertyChanged
     {
         private Logger _logger = LogManager.GetLogger("ModuleConfig");
         public ModbusIpMaster Master { get; set; }
@@ -24,7 +24,7 @@ namespace Oratoria36.Models
             get => _ip;
             set
             {
-                if (_ip != value)
+                if (_ip != value && _ip != "")
                 {
                     _logger.Info($"IP изменен с {_ip} на {value}");
                     _ip = value;

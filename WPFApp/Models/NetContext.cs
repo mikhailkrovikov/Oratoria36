@@ -52,15 +52,15 @@ namespace Oratoria36.Models
         public int TransportModulePort { get; set; } = 502;
 
         [JsonIgnore]
-        public ModuleConfig Module1 { get; private set; } = new ModuleConfig();
+        public NetConfig Module1 { get; private set; } = new NetConfig();
         [JsonIgnore]
-        public ModuleConfig Module2 { get; private set; } = new ModuleConfig();
+        public NetConfig Module2 { get; private set; } = new NetConfig();
         [JsonIgnore]
-        public ModuleConfig Module3 { get; private set; } = new ModuleConfig();
+        public NetConfig Module3 { get; private set; } = new NetConfig();
         [JsonIgnore]
-        public ModuleConfig Module4 { get; private set; } = new ModuleConfig();
+        public NetConfig Module4 { get; private set; } = new NetConfig();
         [JsonIgnore]
-        public ModuleConfig TransportModule { get; private set; } = new ModuleConfig();
+        public NetConfig TransportModule { get; private set; } = new NetConfig();
 
         public event EventHandler ConnectionStatusChanged;
 
@@ -68,7 +68,7 @@ namespace Oratoria36.Models
 
         private void ModulePropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(ModuleConfig.IsConnected))
+            if (e.PropertyName == nameof(NetConfig.IsConnected))
             {
                 ConnectionStatusChanged?.Invoke(this, EventArgs.Empty);
             }

@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace Oratoria36.UI.Signals
@@ -60,6 +61,12 @@ namespace Oratoria36.UI.Signals
                     Style = (Style)Application.Current.FindResource("ToggleSwitchStyle"),
                     IsChecked = signal.Value
                 };
+
+                signal.OnSignalChanged += newValue =>
+                {
+                    valueCheckBox.IsChecked = newValue;
+                };
+
                 Grid.SetRow(valueCheckBox, rowIndex);
                 Grid.SetColumn(valueCheckBox, 2);
                 grid.Children.Add(valueCheckBox);
@@ -81,7 +88,6 @@ namespace Oratoria36.UI.Signals
                 Grid.SetColumn(pinLabel, 0);
                 grid.Children.Add(pinLabel);
 
-
                 var nameLabel = new Label()
                 {
                     Content = signal.Name,
@@ -95,6 +101,18 @@ namespace Oratoria36.UI.Signals
                 {
                     Style = (Style)Application.Current.FindResource("ToggleSwitchStyle"),
                     IsChecked = signal.Value
+                };
+                valueCheckBox.Checked += (sender, e) =>
+                {
+                    signal.Value = true;
+                };
+                valueCheckBox.Unchecked += (sender, e) =>
+                {
+                    signal.Value = false;
+                };
+                signal.OnSignalChanged += newValue =>
+                {
+                    valueCheckBox.IsChecked = newValue;
                 };
                 Grid.SetRow(valueCheckBox, rowIndex);
                 Grid.SetColumn(valueCheckBox, 2);
@@ -153,7 +171,72 @@ namespace Oratoria36.UI.Signals
         {
             int rowIndex = 1;
             foreach (var signal in signals)
-            {              
+            {
+                var pinLabel = new Label()
+                {
+                    Content = signal.PinNumber,
+                    Foreground = new SolidColorBrush(Color.FromRgb(63, 63, 63)),
+                };
+                Grid.SetRow(pinLabel, rowIndex);
+                Grid.SetColumn(pinLabel, 0);
+                grid.Children.Add(pinLabel);
+
+                var nameLabel = new Label()
+                {
+                    Content = signal.Name,
+                    Foreground = new SolidColorBrush(Color.FromRgb(63, 63, 63)),
+                };
+                Grid.SetRow(nameLabel, rowIndex);
+                Grid.SetColumn(nameLabel, 1);
+                grid.Children.Add(nameLabel);
+
+                var valueLabel = new Label()
+                {
+                    Content = signal.Value,
+                    FontWeight = FontWeights.Bold,
+                    Style = (Style)Application.Current.FindResource("AnalogBlueValueLabel"),
+                };
+                Grid.SetRow(valueLabel, rowIndex);
+                Grid.SetColumn(valueLabel, 2);
+                grid.Children.Add(valueLabel);
+
+                var textBox = new TextBox()
+                {
+                    Style = (Style)Application.Current.FindResource("TextBoxInput"),
+                    Height = 20,
+                    Text = signal.Value.ToString(),
+                    VerticalContentAlignment = VerticalAlignment.Center
+                };
+                Grid.SetRow(textBox, rowIndex);
+                Grid.SetColumn(textBox, 3);
+                grid.Children.Add(textBox);
+
+                textBox.KeyDown += (sender, e) =>
+                {
+                    if (e.Key == Key.Enter)
+                    {
+                        if (ushort.TryParse(textBox.Text, out ushort newValue))
+                            signal.Value = newValue;
+                        else
+                            textBox.Text = signal.Value.ToString();
+                        Keyboard.ClearFocus();
+                        FocusManager.SetFocusedElement(grid, null);
+                    }
+                };
+                textBox.LostFocus += (sender, e) =>
+                {
+                    if (ushort.TryParse(textBox.Text, out ushort newValue))
+                        signal.Value = newValue;
+                    else
+                        textBox.Text = signal.Value.ToString();
+                    Keyboard.ClearFocus();
+                    FocusManager.SetFocusedElement(grid, null);
+                };
+                signal.OnSignalChanged += newValue =>
+                {
+                    textBox.Text = newValue.ToString();
+                };
+
                 rowIndex++;
             }
         }

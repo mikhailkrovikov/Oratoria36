@@ -8,6 +8,8 @@
         <Setter Property="Foreground" Value="#FF3F3F3F"/>
         <Setter Property="BorderBrush" Value="#FFAAAAAA"/>
         <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Width" Value="120"/>
     </Style>
 
     <Style x:Key="BaseEnableButton" TargetType="Button">
@@ -32,9 +34,22 @@
     </Style>
 
     <Style x:Key="AnalogGreyValueLabel" TargetType="Label">
-        <Setter Property="Foreground" Value="#C0C0C0"/>
+        <Setter Property="Foreground" Value="#AAAAAA"/>
     </Style>
 
+    <Style x:Key="TextBoxInput" TargetType="TextBox">
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="Foreground" Value="#3F3F3F"/>
+        <Setter Property="Background" Value="#FFF0F0F0"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Style.Triggers>
+            <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter Property="Background" Value="White"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    
     <Style x:Key="ContureRectangleStyle" TargetType="Rectangle">
         <Setter Property="Fill" Value="#00000000" />
         <Setter Property="StrokeThickness" Value="1" />

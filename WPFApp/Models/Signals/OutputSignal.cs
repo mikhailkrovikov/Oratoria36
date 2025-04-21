@@ -7,18 +7,20 @@ namespace Oratoria36.Models.Signals
     public class OutputSignal<T> : IOutputStrategy<T>
     {
         Logger _logger = LogManager.GetLogger("InputSignal");
-        private T _value;
-        private ModbusIpMaster _master;
+        T _value;
+        ModbusIpMaster _master;
         public T Value
         {
             get => _value;
             set
             {
-                if (!Equals(_value, value))
+                if (!object.Equals(_value, value))
                 {
+                    var oldValue = _value;
                     _value = value;
                     WriteValue();
                     OnSignalChanged?.Invoke(_value);
+                    _logger.Info($"{Name}; Пин {PinNumber} изменил значение с {oldValue} на {_value}");
                 }
             }
         }
@@ -29,18 +31,12 @@ namespace Oratoria36.Models.Signals
         {
             Name = name;
             PinNumber = pinNumber;
-            try
-            {
-                _master = master;
-            }
-            catch
-            {
-                _logger.Error("Master не инициализирован");
-            }
+            _master = master;
         }
         private void WriteValue()
         {
             SetOutput(PinNumber, Value);
+            //SetTestOutput(PinNumber, Value);
         }
 
         public void SetOutput(ushort pinNumber, T value)
@@ -49,9 +45,13 @@ namespace Oratoria36.Models.Signals
             {
                 if (typeof(T) == typeof(bool))
                     _master.WriteSingleCoil(pinNumber, (bool)(object)value);
-                else if (typeof(T) == typeof(ushort))              
-                    _master.WriteSingleRegister(pinNumber, (ushort)(object)value); 
+                else if (typeof(T) == typeof(ushort))
+                    _master.WriteSingleRegister(pinNumber, (ushort)(object)value);
             }
+        }
+        public void SetTestOutput(ushort pinNumber, T value)
+        {
+            Value = value;
         }
     }
 }

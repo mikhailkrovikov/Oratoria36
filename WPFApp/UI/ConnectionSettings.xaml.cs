@@ -24,8 +24,8 @@ namespace Oratoria36.UI
         private static readonly Logger _logger = LogManager.GetLogger("Настройки");
         private readonly NetContext _moduleManager;
 
-        public ModuleConfig Module1 { get; }
-        public ModuleConfig Module2 { get; }
+        public NetConfig Module1 { get; }
+        public NetConfig Module2 { get; }
 
         public ICommand ApplySettingsCommandModule1 { get; }
         public ICommand ConnectCommandModule1 { get; }

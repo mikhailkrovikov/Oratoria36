@@ -6,7 +6,7 @@
       Background="#FFE0E0E0"
       Height="850" Width="1920">
 
-    <Grid Margin="30">
+    <Grid Margin="20">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="10" />
@@ -16,6 +16,7 @@
             <ColumnDefinition Width="10" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
+        
         <Border Grid.Column="0" Style="{StaticResource CardContainer}">
             <DockPanel>
                 <TextBlock Text="ДИСКРЕТНЫЕ ВХОДЫ" 
@@ -30,39 +31,39 @@
                             <ColumnDefinition Width="Auto" MinWidth="120"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
                         </Grid.RowDefinitions>
                         <Label Content="№" Grid.Column="0" Style="{StaticResource HeaderLabel}"/>
                         <Label Content="Наименование сигнала" Grid.Column="1" Style="{StaticResource HeaderLabel}"/>
@@ -71,6 +72,7 @@
                 </ScrollViewer>
             </DockPanel>
         </Border>
+        
         <Border Grid.Column="2" Style="{StaticResource CardContainer}">
             <DockPanel>
                 <TextBlock Text="ДИСКРЕТНЫЕ ВЫХОДЫ" 
@@ -85,39 +87,39 @@
                             <ColumnDefinition Width="Auto" MinWidth="120"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
                         </Grid.RowDefinitions>
                         <Label Content="№" Grid.Column="0" Style="{StaticResource HeaderLabel}"/>
                         <Label Content="Наименование сигнала" Grid.Column="1" Style="{StaticResource HeaderLabel}"/>
@@ -141,18 +143,18 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
                         </Grid.RowDefinitions>
                         <Label Content="№" Grid.Column="0" Style="{StaticResource HeaderLabel}"/>
                         <Label Content="Наименование сигнала" Grid.Column="1" Style="{StaticResource HeaderLabel}"/>
@@ -177,12 +179,15 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
-                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
                         </Grid.RowDefinitions>
                         <Label Content="№" Grid.Column="0" Style="{StaticResource HeaderLabel}"/>
                         <Label Content="Наименование сигнала" Grid.Column="1" Style="{StaticResource HeaderLabel}"/>
