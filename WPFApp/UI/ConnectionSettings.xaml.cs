@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 using NLog;
-using Oratoria36.Models;
+using Oratoria36.Models.Connection;
 using Oratoria36.Service;
 
 namespace Oratoria36.UI

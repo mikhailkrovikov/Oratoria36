@@ -1,4 +1,4 @@
-﻿namespace Oratoria36.Models
+﻿namespace Oratoria36.Models.Connection
 {
     public class ConnectionSettings
     {

@@ -7,7 +7,7 @@ using Modbus.Device;
 using NLog;
 using Oratoria36.Service;
 
-namespace Oratoria36.Models
+namespace Oratoria36.Models.Connection
 {
     public class NetConfig : INotifyPropertyChanged
     {
@@ -15,10 +15,10 @@ namespace Oratoria36.Models
         public ModbusIpMaster Master { get; set; }
         private TcpClient _tcpClient;
 
-        private string _ip; 
+        private string _ip;
         private int _port = 502;
         private bool _isConnected;
- 
+
         public string IP
         {
             get => _ip;
@@ -67,7 +67,7 @@ namespace Oratoria36.Models
                 await _tcpClient.ConnectAsync(ip, Port);
                 Master = ModbusIpMaster.CreateIp(_tcpClient);
                 IsConnected = true;
-                _logger.Info($"Подключено к {ip}:{Port}");  
+                _logger.Info($"Подключено к {ip}:{Port}");
             }
             catch (Exception ex)
             {
@@ -80,7 +80,7 @@ namespace Oratoria36.Models
         {
             try
             {
-                
+
                 Master?.Dispose();
                 _tcpClient?.Close();
                 _tcpClient?.Dispose();

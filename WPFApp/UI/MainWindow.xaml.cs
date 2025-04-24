@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using NLog;
-using Oratoria36.Models;
+using Oratoria36.Models.Connection;
 using Oratoria36.Service;
 using Oratoria36.UI.Signals;
 
