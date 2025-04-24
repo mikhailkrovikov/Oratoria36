@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using NLog;
 
-namespace Oratoria36.Models
+namespace Oratoria36.Models.Connection
 {
     public class NetContext
     {
@@ -64,7 +64,7 @@ namespace Oratoria36.Models
 
         public event EventHandler ConnectionStatusChanged;
 
-        
+
 
         private void ModulePropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {

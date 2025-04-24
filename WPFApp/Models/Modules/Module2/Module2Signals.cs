@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Oratoria36.Models.Connection;
 
-namespace Oratoria36.Models.Modules
+namespace Oratoria36.Models.Modules.Module2
 {
     public class Module2Signals
     {

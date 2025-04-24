@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Oratoria36.Models.Modules
+namespace Oratoria36.Models.Modules.Module2
 {
     public class Module2DI /*IModbusStrategy*/
     {

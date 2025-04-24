@@ -2,10 +2,10 @@
 {
     public enum State
     {
-        Off,         
+        Off,
         Transition,
-        On,          
-        Warning,    
-        Error       
+        On,
+        Warning,
+        Error
     }
 }
