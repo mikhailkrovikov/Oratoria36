@@ -37,6 +37,11 @@
         <Setter Property="Foreground" Value="#AAAAAA"/>
     </Style>
 
+    <Style x:Key="StaticValueLabel" TargetType="Label">
+        <Setter Property="Foreground" Value="#919191"/>
+        <Setter Property="FontSize" Value="12"/>
+    </Style>
+
     <Style x:Key="TextBoxInput" TargetType="TextBox">
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="Foreground" Value="#3F3F3F"/>
@@ -130,6 +135,19 @@
         </Setter>
     </Style>
 
+    <Style x:Key="SoftGroupContainer" TargetType="Border">
+        <Setter Property="Background" Value="#E8E8E8"/>
+        <Setter Property="BorderBrush" Value="#D8D8D8"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="10"/>
+        <Setter Property="Margin" Value="0,0,0,15"/>
+    </Style>
+
+    <Style x:Key="SectionDivider" TargetType="Border">
+        <Setter Property="BorderBrush" Value="#FFD3D3D3"/>
+        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+        <Setter Property="Margin" Value="0,10,0,15"/>
+    </Style>
 
     <Style x:Key="CardContainer" TargetType="Border">
         <Setter Property="CornerRadius" Value="16"/>
