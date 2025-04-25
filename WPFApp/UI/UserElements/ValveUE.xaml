@@ -32,7 +32,17 @@
             </Style.Triggers>
         </Style>
 
-        <Style TargetType="Rectangle" x:Key="SquareStyle">
+        <Style TargetType="Rectangle" x:Key="RectangleStyle">
+            <Setter Property="Stroke" Value="Black"/>
+            <Setter Property="StrokeThickness" Value="4"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="True">
+                    <Setter Property="StrokeThickness" Value="8"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        
+        <Style TargetType="Ellipse" x:Key="CircleStyle">
             <Setter Property="Stroke" Value="Black"/>
             <Setter Property="StrokeThickness" Value="4"/>
             <Style.Triggers>
@@ -60,28 +70,33 @@
                     Style="{StaticResource InvisibleButtonStyle}"
                     Padding="0">
                 <Viewbox Stretch="Uniform">
-                    <Canvas Width="180" Height="100">
+                    <Canvas Width="180" Height="165">
 
-                        <Path Data="M 0,20 L 0,80 L 70,50 Z"
-                              Style="{StaticResource TriangleStyle}"
-                              Canvas.Left="0"
-                              Fill="{Binding State, Converter={StaticResource StateConverter}, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                              Height="100" Stretch="Fill" Width="90"  Canvas.Top="55"/>
+                        
 
-                        <Path Data="M 100,20 L 100,80 L 30,50 Z"
-                              Style="{StaticResource TriangleStyle}"
-                              Canvas.Left="90"
-                              Fill="{Binding State, Converter={StaticResource StateConverter}, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                              Height="100" Stretch="Fill" Width="90"  Canvas.Top="55" VerticalAlignment="Top"/>
-
-                        <Line X1="90" Y1="0" X2="90" Y2="50"
-                              Stroke="Black" StrokeThickness="8" Canvas.Left="0" Canvas.Top="55" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <Line X1="90" Y1="55" X2="90" Y2="115"
+                            Stroke="Black" StrokeThickness="8"/>
 
                         <Rectangle Canvas.Left="40" Canvas.Top="15" 
-                                   Width="100" Height="40"
-                                   Style="{DynamicResource SquareStyle}"
-                                   Stroke="Black" StrokeThickness="4"
-                                   Fill="{Binding State, Converter={StaticResource StateConverter}, RelativeSource={RelativeSource AncestorType=UserControl}}" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                            Width="100" Height="50"
+                            Style="{StaticResource RectangleStyle}"
+                            Fill="{Binding State, Converter={StaticResource StateConverter}, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+
+                        <Path Data="M 0,20 L 0,80 L 70,50 Z"
+                            Style="{StaticResource TriangleStyle}"
+                            Canvas.Left="0" Canvas.Top="75"
+                            Fill="{Binding State, Converter={StaticResource StateConverter}, RelativeSource={RelativeSource AncestorType=UserControl}}" HorizontalAlignment="Center" Stretch="Fill" VerticalAlignment="Top" Width="90" Height="80"/>
+
+                        <Path Data="M 100,20 L 100,80 L 30,50 Z"
+                            Style="{StaticResource TriangleStyle}"
+                            Canvas.Left="90" Canvas.Top="75"
+                            Fill="{Binding State, Converter={StaticResource StateConverter}, RelativeSource={RelativeSource AncestorType=UserControl}}" HorizontalAlignment="Center" Stretch="Fill" VerticalAlignment="Center" Width="90" Height="80"/>
+ 
+                        <Ellipse Canvas.Left="70" Canvas.Top="95"
+                            Width="40" Height="40"
+                            Style="{StaticResource CircleStyle}"
+                            Fill="{Binding State, Converter={StaticResource StateConverter}, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+
                     </Canvas>
                 </Viewbox>
             </Button>

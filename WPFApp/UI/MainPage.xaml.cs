@@ -1,8 +1,10 @@
 ﻿using Oratoria36.Models;
+using Oratoria36.Models.Devices;
 using Oratoria36.Models.Modules;
 using Oratoria36.Models.Modules.Module2;
 using Oratoria36.Service;
 using Oratoria36.Service.Enums;
+using Oratoria36.UI.DialogWindows;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -11,46 +13,41 @@ using System.Windows.Input;
 
 namespace Oratoria36.UI
 {
-    public partial class MainPage : Page, INotifyPropertyChanged
+    public partial class MainPage : Page
     {
-        private readonly Module2Signals _signals;
-
-        public ICommand Valve1Command { get; } = new RelayCommand(_ =>
-        {
-            MainContext.Instance.Module2Signals.DOSignals.Anod_vklyuchit.Value = true;
-            MainContext.Instance.Module2Signals.DOSignals.VCH_vyklyuchit.Value = false;
-        });
-
-        public ICommand Valve2Command { get; } = new RelayCommand(_ =>
-        {
-            MainContext.Instance.Module2Signals.DOSignals.VCH_vyklyuchit.Value = true;
-            MainContext.Instance.Module2Signals.DOSignals.Anod_vklyuchit.Value = false;
-        });
-
-
-
         public MainPage()
+        {
+            InitializeComponent();
+            this.DataContext = new MainPageVM();
+        }
+    }
+
+
+
+
+
+
+    public class MainPageVM : INotifyPropertyChanged
+    {
+        Module2Signals _signals;
+
+        public Valve Valve1 { get; set; }
+        public ICommand Valve1Command { get; set; }
+
+        public MainPageVM()
         {
             _signals = MainContext.Instance.Module2Signals;
 
-            InitializeComponent();
-            DataContext = this;
+            Valve1Command = new RelayCommand((object obj) => { ValveWindow valveWindow = new(Valve1); });
+            Valve1 = new Valve("ФК-КН ДУ-63",
+                _signals.DISignals.FK_KN_DU_63_otkryt,
+                _signals.DISignals.FK_KN_DU_63_zakryt,
+                _signals.DOSignals.FK_KN_otkryt,
+                null,
+                Valve1Command);
 
-            _signals.DOSignals.Anod_vklyuchit.OnSignalChanged += value =>
-            {
-                OnPropertyChanged(nameof(Valve1State));
-                OnPropertyChanged(nameof(Valve2State));
-            };
 
-            _signals.DOSignals.VCH_vyklyuchit.OnSignalChanged += value =>
-            {
-                OnPropertyChanged(nameof(Valve1State));
-                OnPropertyChanged(nameof(Valve2State));
-            };
         }
-
-        public State Valve1State => _signals.DOSignals.Anod_vklyuchit.Value ? State.On : State.Off;
-        public State Valve2State => _signals.DOSignals.VCH_vyklyuchit.Value ? State.On : State.Error;
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

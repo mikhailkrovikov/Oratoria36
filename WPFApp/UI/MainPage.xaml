@@ -1,22 +1,18 @@
-﻿<Page xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<Page x:Class="Oratoria36.UI.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:UserElements="clr-namespace:Oratoria36.UI.UserElements" 
-      x:Class="Oratoria36.UI.MainPage"
+      xmlns:UserElements="clr-namespace:Oratoria36.UI.UserElements"
+      xmlns:ui="clr-namespace:Oratoria36.UI"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      mc:Ignorable="d"
+      d:DataContext="{d:DesignInstance Type=ui:MainPageVM, IsDesignTimeCreatable=True}"
       Title="MainPage" Height="850" Width="1920" Background="#FFE0E0E0">
 
     <Grid>
-        <UserElements:ValveUE x:Name="Valve1"
-                            Label="Клапан 1"
-                            State="{Binding Valve1State, Mode=OneWay}" 
-                            Command="{Binding Valve1Command}"
-                            HorizontalAlignment="Left" Margin="1081,522,0,0" 
-                            VerticalAlignment="Top" Height="66" Width="78"/>
-
-        <UserElements:ValveUE x:Name="Valve2" 
-                            Label="Клапан 2"
-                            State="{Binding Valve2State, Mode=OneWay}" 
-                            Command="{Binding Valve2Command}"
-                            HorizontalAlignment="Center" Margin="0,514,0,0" 
-                            VerticalAlignment="Top" Height="62" Width="71"/>
+        <UserElements:ValveUE Label="{Binding Valve1.Name}"
+                              State="{Binding Valve1.State}"
+                              Command="{Binding Valve1.Command}"
+            HorizontalAlignment="Left" Margin="812,425,0,0" VerticalAlignment="Top" Height="114" Width="94"/>
     </Grid>
 </Page>

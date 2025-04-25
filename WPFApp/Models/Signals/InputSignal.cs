@@ -16,15 +16,9 @@ namespace Oratoria36.Models.Signals
             get
             {
                 if (_master == null)
-                {
-                    // Если Modbus не подключен, возвращаем локальное значение
-                    return _value;
-                }
+                    return _value;               
                 else
-                {
-                    // В противном случае читаем данные из Modbus
-                    return GetInput(PinNumber);
-                }
+                    return GetInput(PinNumber);         
             }
             set
             {
@@ -32,7 +26,6 @@ namespace Oratoria36.Models.Signals
                 {
                     var oldValue = _value;
                     _value = value;
-                    // Если значение изменилось, вызываем событие
                     OnSignalChanged?.Invoke(_value);
                     _logger.Info($"{Name}; Пин {PinNumber} изменил значение с {oldValue} на {_value}");
                 }
