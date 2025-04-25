@@ -138,9 +138,9 @@
                     <Grid x:Name="AnalogInputGrid">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" MinWidth="40"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" MinWidth="80"/>
+                            <ColumnDefinition Width="Auto" MinWidth="80"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30"/>
@@ -175,8 +175,8 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" MinWidth="40"/>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto" MinWidth="80"/>
+                            <ColumnDefinition Width="Auto" MinWidth="80"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30"/>
