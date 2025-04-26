@@ -19,6 +19,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Oratoria36.UI.DialogWindows;
+using Oratoria36.Service.Enums;
 
 namespace Oratoria36.UI.ModulePages.Module2
 {
@@ -38,8 +39,11 @@ namespace Oratoria36.UI.ModulePages.Module2
         Module2Signals _signals;
 
         public Valve FK_KN_DU_63 { get; set; }
-
         public ICommand FK_KN_DU_63Command { get; set; }
+
+
+        public Pipeline Pipeline1 { get; set; }
+        public Pipeline Pipeline2 { get; set; }
 
         public Module2PageVM()
         {
@@ -56,6 +60,8 @@ namespace Oratoria36.UI.ModulePages.Module2
                 null,
                 FK_KN_DU_63Command);
 
+            Pipeline1 = new Pipeline(FK_KN_DU_63);
+            Pipeline2 = new Pipeline(FK_KN_DU_63, Pipeline1);
 
         }
 

@@ -24,7 +24,7 @@
         <local:NavigationBar x:Name="NavigationBarControl" Grid.Row="0"/>
         <local1:PowerButton
                           Command="{Binding CloseButtonCommand}"
-                          CommandParameter="CustomParam" Margin="1877,2,3,3"/>
+                          CommandParameter="CustomParam" Margin="1879,2,3,0" Height="38" Width="38" VerticalAlignment="Top"/>
         <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" Grid.Row="2"/>
 
         <Grid Grid.Row="3" Background="#D8D8D8">

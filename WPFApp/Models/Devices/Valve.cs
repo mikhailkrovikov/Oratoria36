@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace Oratoria36.Models.Devices
 {
-    public class Valve : INotifyPropertyChanged
+    public class Valve : Device, INotifyPropertyChanged
     {
         public string Name { get; }
         public InputSignal<bool> IsOpen { get; }
@@ -19,7 +19,7 @@ namespace Oratoria36.Models.Devices
         public Setting<int>? TimeForWarning;
         public Setting<int>? TimeForError;
 
-        public State State
+        public override State State
         {
             get
             {

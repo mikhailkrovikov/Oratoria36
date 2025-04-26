@@ -21,19 +21,28 @@ namespace Oratoria36.UI.ModulePages.Module2
     /// </summary>
     public partial class Module2Scheme : UserControl
     {
-        public static DependencyProperty FK_KN_DU_63Property = DependencyProperty.Register
-            ("FK_KN_DU_63", 
+        public static DependencyProperty FK_KN_DU_63Property = DependencyProperty.Register("FK_KN_DU_63", 
             typeof(Valve), 
             typeof(Module2Scheme));
+
+        public static DependencyProperty Pipeline1Property = DependencyProperty.Register("Pipeline1",
+            typeof(Pipeline),
+            typeof(Module2Scheme));
+
+
         public Valve FK_KN_DU_63
         {
             get { return (Valve)GetValue(FK_KN_DU_63Property); }
             set { SetValue(FK_KN_DU_63Property, value); }
         }
+        public Pipeline Pipeline1
+        {
+            get { return (Pipeline)GetValue(Pipeline1Property); }
+            set { SetValue(Pipeline1Property, value); }
+        }
         public Module2Scheme()
         {
             InitializeComponent();
-            //DataContext = this;
         }
     }
 }

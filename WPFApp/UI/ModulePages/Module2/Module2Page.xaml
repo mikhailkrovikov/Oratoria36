@@ -19,7 +19,9 @@
             <ColumnDefinition Width="15*"/>
         </Grid.ColumnDefinitions>
 
-        <local:Module2Scheme FK_KN_DU_63="{Binding FK_KN_DU_63}" Grid.Column="1" Grid.Row="1" />
+        <local:Module2Scheme Grid.Column="1" Grid.Row="1"  
+                             FK_KN_DU_63="{Binding FK_KN_DU_63}"
+                             Pipeline1="{Binding Pipeline1}"/>
 
 
     </Grid>
