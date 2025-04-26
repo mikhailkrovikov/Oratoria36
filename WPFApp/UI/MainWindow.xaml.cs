@@ -8,6 +8,7 @@ using System.Windows.Threading;
 using NLog;
 using Oratoria36.Models.Connection;
 using Oratoria36.Service;
+using Oratoria36.UI.ModulePages.Module2;
 using Oratoria36.UI.Signals;
 
 namespace Oratoria36.UI
@@ -45,6 +46,9 @@ namespace Oratoria36.UI
                     break;
                 case "LogPage":
                     MainFrame.Navigate(new LogPage());
+                    break;
+                case "Module2Page":
+                    MainFrame.Navigate(new Module2Page());
                     break;
                 default:
                     throw new ArgumentException($"Unknown page: {pageName}");

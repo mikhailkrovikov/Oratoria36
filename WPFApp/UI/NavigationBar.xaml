@@ -10,6 +10,10 @@
                 Click="MainPage_Click"
                 Style="{DynamicResource NavigationButton}"/>
             <Button 
+                Content="Модуль 2" 
+                Click="Module2page_Click"
+                Style="{DynamicResource NavigationButton}"/>
+            <Button 
                 Content="Сигналы" 
                 Click="SignalsPage_Click" 
                 Style="{DynamicResource NavigationButton}"/>

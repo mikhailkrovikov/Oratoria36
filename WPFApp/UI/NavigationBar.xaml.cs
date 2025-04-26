@@ -30,17 +30,11 @@ namespace Oratoria36.UI
         }
         private void LogPage_Click(object sender, RoutedEventArgs e)
         {
-            PageChanged.Invoke("LogPage");
+            PageChanged.Invoke("LogPage"); 
         }
-    }
-    public class NavigationBarVM
-    {
-        public ICommand NavigateToMainPage { get; set; }
-        public ICommand NavigateToModule1Page {  get; set; }
-        public ICommand NavigateToModule2Page { get; set; }
-        public ICommand NavigateToModule3Page { get; set; }
-        public ICommand NavigateToModule4Page { get; set; }
-        public ICommand NavigateToNetSettingsPage { get; set; }
-
+        private void Module2page_Click(object sender, RoutedEventArgs e)
+        {
+            PageChanged.Invoke("Module2Page");
+        }
     }
 }

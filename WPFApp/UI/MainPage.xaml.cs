@@ -22,11 +22,6 @@ namespace Oratoria36.UI
         }
     }
 
-
-
-
-
-
     public class MainPageVM : INotifyPropertyChanged
     {
         Module2Signals _signals;
@@ -38,7 +33,10 @@ namespace Oratoria36.UI
         {
             _signals = MainContext.Instance.Module2Signals;
 
-            Valve1Command = new RelayCommand((object obj) => { ValveWindow valveWindow = new(Valve1); });
+            Valve1Command = new RelayCommand(
+                (object obj) => { ValveWindow valveWindow = new(Valve1); },
+                (object obj) => { return true; });
+
             Valve1 = new Valve("ФК-КН ДУ-63",
                 _signals.DISignals.FK_KN_DU_63_otkryt,
                 _signals.DISignals.FK_KN_DU_63_zakryt,

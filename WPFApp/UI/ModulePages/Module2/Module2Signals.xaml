@@ -16,7 +16,7 @@
             <ColumnDefinition Width="10" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        
+
         <Border Grid.Column="0" Style="{StaticResource CardContainer}">
             <DockPanel>
                 <TextBlock Text="ДИСКРЕТНЫЕ ВХОДЫ" 
@@ -32,38 +32,7 @@
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
+                            <!-- Header row -->
                         </Grid.RowDefinitions>
                         <Label Content="№" Grid.Column="0" Style="{StaticResource HeaderLabel}"/>
                         <Label Content="Наименование сигнала" Grid.Column="1" Style="{StaticResource HeaderLabel}"/>
@@ -72,7 +41,7 @@
                 </ScrollViewer>
             </DockPanel>
         </Border>
-        
+
         <Border Grid.Column="2" Style="{StaticResource CardContainer}">
             <DockPanel>
                 <TextBlock Text="ДИСКРЕТНЫЕ ВЫХОДЫ" 
@@ -88,45 +57,14 @@
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
+                            <!-- Header row -->
                         </Grid.RowDefinitions>
                         <Label Content="№" Grid.Column="0" Style="{StaticResource HeaderLabel}"/>
                         <Label Content="Наименование сигнала" Grid.Column="1" Style="{StaticResource HeaderLabel}"/>
                         <Label Content="Состояние" Grid.Column="2" Style="{StaticResource HeaderLabel}"/>
                     </Grid>
                 </ScrollViewer>
-            </DockPanel> 
+            </DockPanel>
         </Border>
 
         <Border Grid.Column="4" Style="{StaticResource CardContainer}">
@@ -144,17 +82,7 @@
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
+                            <!-- Header row -->
                         </Grid.RowDefinitions>
                         <Label Content="№" Grid.Column="0" Style="{StaticResource HeaderLabel}"/>
                         <Label Content="Наименование сигнала" Grid.Column="1" Style="{StaticResource HeaderLabel}"/>
@@ -180,14 +108,7 @@
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="30"/>
+                            <!-- Header row -->
                         </Grid.RowDefinitions>
                         <Label Content="№" Grid.Column="0" Style="{StaticResource HeaderLabel}"/>
                         <Label Content="Наименование сигнала" Grid.Column="1" Style="{StaticResource HeaderLabel}"/>
@@ -197,6 +118,5 @@
                 </ScrollViewer>
             </DockPanel>
         </Border>
-        
     </Grid>
 </Page>

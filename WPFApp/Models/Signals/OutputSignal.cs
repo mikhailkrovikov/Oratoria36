@@ -36,7 +36,6 @@ namespace Oratoria36.Models.Signals
         private void WriteValue()
         {
             SetOutput(PinNumber, Value);
-            //SetTestOutput(PinNumber, Value);
         }
 
         public void SetOutput(ushort pinNumber, T value)

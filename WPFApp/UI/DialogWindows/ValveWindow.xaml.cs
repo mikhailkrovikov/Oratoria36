@@ -29,7 +29,7 @@ namespace Oratoria36.UI.DialogWindows
             _vm = new ValveWindowVM(valve);
             DataContext = _vm;
             _vm.Valve = valve;
-            this.ShowDialog();          
+            this.ShowDialog();
         }
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
@@ -39,25 +39,25 @@ namespace Oratoria36.UI.DialogWindows
     public class ValveWindowVM
     {
         public Valve Valve { get; set; }
-        public string Status 
-        { 
+        public string Status
+        {
             get
             {
-                if(Valve.State == State.On)
+                if (Valve.State == State.On)
                     return "открыт";
                 else if (Valve.State == State.Off)
                     return "закрыт";
                 else return "переходное";
-            } 
+            }
         }
         public ICommand OpenValveCommand { get; set; }
         public ICommand CloseValveCommand { get; set; }
         public ValveWindowVM(Valve valve)
         {
             Valve = valve;
-            OpenValveCommand = new RelayCommand((object obj) => 
-            { 
-                Valve.Open.Value=true; 
+            OpenValveCommand = new RelayCommand((object obj) =>
+            {
+                Valve.Open.Value = true;
             });
 
             CloseValveCommand = new RelayCommand((object obj) =>

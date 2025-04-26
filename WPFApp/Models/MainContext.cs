@@ -10,14 +10,19 @@ namespace Oratoria36.Models
 {
     public class MainContext
     {
+        #region Singltone
         private static MainContext _instance;
         public static MainContext Instance => GetInstance();
-        public Module2Signals Module2Signals = new();
         private static MainContext GetInstance()
         {
             if (_instance == null)
                 _instance = new MainContext();
             return _instance;
         }
+        #endregion
+        public NetContext Net { get; } = NetContext.Instance;
+        public Module2Signals Module2Signals { get; } = new();
+
+
     }
 }

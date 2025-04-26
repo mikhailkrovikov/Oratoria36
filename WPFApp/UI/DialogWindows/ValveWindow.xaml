@@ -17,7 +17,7 @@
         Width="500">
 
     <Grid>
-        
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -39,18 +39,24 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="40"/>
             </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Row="0" Orientation="Horizontal">
-                <Label Content="{Binding Valve.Name}" ContentStringFormat="Клапан {0}" Style="{DynamicResource HeaderLabel}" HorizontalContentAlignment="Left" FontWeight="Regular"  Height="40" FontSize="20" />
-                
+                <Label Content="{Binding Valve.Name}" Style="{DynamicResource HeaderLabel}" HorizontalContentAlignment="Left" FontWeight="Regular"  Height="40" FontSize="20" />
             </StackPanel>
-
 
             <StackPanel Grid.Row="1" Orientation="Horizontal">
                 <Label Content="{Binding Status}" ContentStringFormat="Состояние: {0}" Style="{DynamicResource HeaderLabel}" HorizontalContentAlignment="Left" FontWeight="Regular"  Height="40" FontSize="20" />
             </StackPanel>
 
-            <Grid Grid.Row="3">
+            <UserElements:ValveUE State="{Binding Valve.State}"
+                                  IsHitTestVisible="False"
+                Grid.Column="1" Grid.RowSpan="2" Height="100" Width="80" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+
+            <Grid Grid.Row="3" Grid.ColumnSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="0.2*"/>

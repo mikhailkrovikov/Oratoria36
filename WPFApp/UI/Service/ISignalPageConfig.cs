@@ -11,6 +11,12 @@ namespace Oratoria36.UI.Service
     {
         public static void ConfigureDISignalGrid(Grid grid, ObservableCollection<InputSignal<bool>> signals)
         {
+            
+            for (int i = 0; i < signals.Count; i++)
+            {
+                grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(30) });
+            }
+
             int rowIndex = 1;
             foreach (var signal in signals)
             {
@@ -22,7 +28,6 @@ namespace Oratoria36.UI.Service
                 Grid.SetRow(pinLabel, rowIndex);
                 Grid.SetColumn(pinLabel, 0);
                 grid.Children.Add(pinLabel);
-
 
                 var nameLabel = new Label()
                 {
@@ -39,17 +44,12 @@ namespace Oratoria36.UI.Service
                     IsChecked = signal.Value
                 };
 
-                valueCheckBox.Checked += (sender, e) =>
-                {
-                    signal.Value = true;
-                };
-                valueCheckBox.Unchecked += (sender, e) =>
-                {
-                    signal.Value = false;
-                };
+                valueCheckBox.Checked += (sender, e) => signal.Value = true;
+                valueCheckBox.Unchecked += (sender, e) => signal.Value = false;
+
                 signal.OnSignalChanged += newValue =>
                 {
-                    valueCheckBox.IsChecked = newValue;
+                    valueCheckBox.Dispatcher.Invoke(() => valueCheckBox.IsChecked = newValue);
                 };
 
                 Grid.SetRow(valueCheckBox, rowIndex);
@@ -59,8 +59,15 @@ namespace Oratoria36.UI.Service
                 rowIndex++;
             }
         }
+
         public static void ConfigureDOSignalGrid(Grid grid, ObservableCollection<OutputSignal<bool>> signals)
         {
+
+            for (int i = 0; i < signals.Count; i++)
+            {
+                grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(30) });
+            }
+
             int rowIndex = 1;
             foreach (var signal in signals)
             {
@@ -87,18 +94,15 @@ namespace Oratoria36.UI.Service
                     Style = (Style)Application.Current.FindResource("ToggleSwitchStyle"),
                     IsChecked = signal.Value
                 };
-                valueCheckBox.Checked += (sender, e) =>
-                {
-                    signal.Value = true;
-                };
-                valueCheckBox.Unchecked += (sender, e) =>
-                {
-                    signal.Value = false;
-                };
+
+                valueCheckBox.Checked += (sender, e) => signal.Value = true;
+                valueCheckBox.Unchecked += (sender, e) => signal.Value = false;
+
                 signal.OnSignalChanged += newValue =>
                 {
-                    valueCheckBox.IsChecked = newValue;
+                    valueCheckBox.Dispatcher.Invoke(() => valueCheckBox.IsChecked = newValue);
                 };
+
                 Grid.SetRow(valueCheckBox, rowIndex);
                 Grid.SetColumn(valueCheckBox, 2);
                 grid.Children.Add(valueCheckBox);
@@ -106,8 +110,14 @@ namespace Oratoria36.UI.Service
                 rowIndex++;
             }
         }
+
         public static void ConfigureAISignalGrid(Grid grid, ObservableCollection<InputSignal<ushort>> signals)
         {
+            for (int i = 0; i < signals.Count; i++)
+            {
+                grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(30) });
+            }
+
             int rowIndex = 1;
             foreach (var signal in signals)
             {
@@ -148,11 +158,24 @@ namespace Oratoria36.UI.Service
                 Grid.SetColumn(realValueLabel, 3);
                 grid.Children.Add(realValueLabel);
 
+                signal.OnSignalChanged += newValue =>
+                {
+                    valueLabel.Dispatcher.Invoke(() => valueLabel.Content = newValue);
+                    realValueLabel.Dispatcher.Invoke(() => realValueLabel.Content = newValue);
+                };
+
                 rowIndex++;
             }
         }
+
         public static void ConfigureAOSignalGrid(Grid grid, ObservableCollection<OutputSignal<ushort>> signals)
         {
+
+            for (int i = 0; i < signals.Count; i++)
+            {
+                grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(30) });
+            }
+
             int rowIndex = 1;
             foreach (var signal in signals)
             {
@@ -207,18 +230,19 @@ namespace Oratoria36.UI.Service
                         FocusManager.SetFocusedElement(grid, null);
                     }
                 };
+
                 textBox.LostFocus += (sender, e) =>
                 {
                     if (ushort.TryParse(textBox.Text, out ushort newValue))
                         signal.Value = newValue;
                     else
                         textBox.Text = signal.Value.ToString();
-                    Keyboard.ClearFocus();
-                    FocusManager.SetFocusedElement(grid, null);
                 };
+
                 signal.OnSignalChanged += newValue =>
                 {
-                    textBox.Text = newValue.ToString();
+                    valueLabel.Dispatcher.Invoke(() => valueLabel.Content = newValue);
+                    textBox.Dispatcher.Invoke(() => textBox.Text = newValue.ToString());
                 };
 
                 rowIndex++;
