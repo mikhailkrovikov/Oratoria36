@@ -10,9 +10,6 @@
       Title="MainPage" Height="850" Width="1920" Background="#FFE0E0E0">
 
     <Grid>
-        <UserElements:ValveUE Label="{Binding Valve1.Name}"
-                              State="{Binding Valve1.State}"
-                              Command="{Binding Valve1.Command}"
-            HorizontalAlignment="Left" Margin="812,425,0,0" VerticalAlignment="Top" Height="100" Width="85"/>
+       
     </Grid>
 </Page>

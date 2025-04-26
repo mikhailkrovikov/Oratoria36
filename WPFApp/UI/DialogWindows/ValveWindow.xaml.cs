@@ -58,11 +58,19 @@ namespace Oratoria36.UI.DialogWindows
             OpenValveCommand = new RelayCommand((object obj) =>
             {
                 Valve.Open.Value = true;
+            },
+            (object obj) =>
+            {
+                return !Valve.Open.Value;
             });
 
             CloseValveCommand = new RelayCommand((object obj) =>
             {
                 Valve.Open.Value = false;
+            },
+            (object obj) =>
+            {
+                return Valve.Open.Value;
             });
         }
     }

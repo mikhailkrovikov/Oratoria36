@@ -24,29 +24,6 @@ namespace Oratoria36.UI
 
     public class MainPageVM : INotifyPropertyChanged
     {
-        Module2Signals _signals;
-
-        public Valve Valve1 { get; set; }
-        public ICommand Valve1Command { get; set; }
-
-        public MainPageVM()
-        {
-            _signals = MainContext.Instance.Module2Signals;
-
-            Valve1Command = new RelayCommand(
-                (object obj) => { ValveWindow valveWindow = new(Valve1); },
-                (object obj) => { return true; });
-
-            Valve1 = new Valve("ФК-КН ДУ-63",
-                _signals.DISignals.FK_KN_DU_63_otkryt,
-                _signals.DISignals.FK_KN_DU_63_zakryt,
-                _signals.DOSignals.FK_KN_otkryt,
-                null,
-                Valve1Command);
-
-
-        }
-
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
