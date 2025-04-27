@@ -50,7 +50,11 @@ namespace Oratoria36.UI.DialogWindows
                     return "открыт";
                 else if (Valve.State == State.Off)
                     return "закрыт";
-                else return "переходное";
+                else if (Valve.State == State.Transition)
+                    return "переходное";
+                else if (Valve.State == State.Warning)
+                    return "предупреждение";
+                else return "ошибка";
             }
         }
         public ICommand OpenValveCommand { get; set; }
