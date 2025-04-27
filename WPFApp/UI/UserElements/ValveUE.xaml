@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Oratoria36.Service"
-             mc:Ignorable="d" d:DesignWidth="180" Height="188">
+             mc:Ignorable="d" d:DesignWidth="85" Height="100">
 
     <UserControl.Resources>
         <local:StateToColorConverter x:Key="StateConverter"/>
@@ -53,9 +53,10 @@
 
         <Style TargetType="TextBlock" x:Key="LabelStyle">
             <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="Foreground" Value="#3F3F3F"/>
             <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="Margin" Value="0,5,0,0"/>
-            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontSize" Value="12"/>
         </Style>
     </UserControl.Resources>
 

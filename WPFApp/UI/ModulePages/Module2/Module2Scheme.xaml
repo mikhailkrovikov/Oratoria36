@@ -11,21 +11,26 @@
 
         <UserElements:PipelineUE State="{Binding Pipeline1.State}"
                                  Direction="180"
-            HorizontalAlignment="Left" Margin="406,420,0,0" VerticalAlignment="Top" Height="14" Width="132"/>
+            HorizontalAlignment="Left" Margin="406,417,0,0" VerticalAlignment="Top" Height="14" Width="132"/>
 
         <UserElements:PipelineUE State="{Binding Pipeline2.State}"
                                  Direction="180"
 
-            HorizontalAlignment="Left" Margin="466,326,0,0" VerticalAlignment="Top" Width="140"/>
-        
+            HorizontalAlignment="Left" Margin="138,417,0,0" VerticalAlignment="Top" Width="140"/>
+
         <UserElements:GasLineUE GasName="Ar" 
-                                HorizontalAlignment="Left" Margin="600,417,0,0" VerticalAlignment="Top" Width="107"/>
+                                HorizontalAlignment="Left" Margin="600,415,0,0" VerticalAlignment="Top" Width="107"/>
 
 
         <UserElements:ValveUE Label="{Binding FK_KN_DU_63.Name}"
                               State="{Binding FK_KN_DU_63.State}"
                               Command="{Binding FK_KN_DU_63.Command}"
                 Margin="528,351,386,149" Height="100" Width="85"/>
+        
+        <UserElements:RRGUe RRGRealValue="{Binding RRG.RRGRealValue}"
+                            RRGSetPoint="{Binding RRG.RRGSetPoint}"
+                            State="{Binding RRG.State}"
+            HorizontalAlignment="Left" Margin="266,398,0,0" VerticalAlignment="Top" Height="100" Width="140"/>
 
     </Grid>
 </UserControl>

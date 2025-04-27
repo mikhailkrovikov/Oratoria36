@@ -20,23 +20,23 @@ namespace Oratoria36.UI.Service
             int rowIndex = 1;
             foreach (var signal in signals)
             {
-                var pinLabel = new Label()
+                var pinTextBlock = new TextBlock()
                 {
-                    Content = signal.PinNumber,
+                    Text = signal.PinNumber.ToString(),
                     Foreground = new SolidColorBrush(Color.FromRgb(63, 63, 63)),
                 };
-                Grid.SetRow(pinLabel, rowIndex);
-                Grid.SetColumn(pinLabel, 0);
-                grid.Children.Add(pinLabel);
+                Grid.SetRow(pinTextBlock, rowIndex);
+                Grid.SetColumn(pinTextBlock, 0);
+                grid.Children.Add(pinTextBlock);
 
-                var nameLabel = new Label()
+                var nameTextBlock = new TextBlock()
                 {
-                    Content = signal.Name,
+                    Text = signal.Name,
                     Foreground = new SolidColorBrush(Color.FromRgb(63, 63, 63)),
                 };
-                Grid.SetRow(nameLabel, rowIndex);
-                Grid.SetColumn(nameLabel, 1);
-                grid.Children.Add(nameLabel);
+                Grid.SetRow(nameTextBlock, rowIndex);
+                Grid.SetColumn(nameTextBlock, 1);
+                grid.Children.Add(nameTextBlock);
 
                 var valueCheckBox = new CheckBox()
                 {
@@ -71,23 +71,23 @@ namespace Oratoria36.UI.Service
             int rowIndex = 1;
             foreach (var signal in signals)
             {
-                var pinLabel = new Label()
+                var pinTextBlock = new TextBlock()
                 {
-                    Content = signal.PinNumber,
+                    Text = signal.PinNumber.ToString(),
                     Foreground = new SolidColorBrush(Color.FromRgb(63, 63, 63)),
                 };
-                Grid.SetRow(pinLabel, rowIndex);
-                Grid.SetColumn(pinLabel, 0);
-                grid.Children.Add(pinLabel);
+                Grid.SetRow(pinTextBlock, rowIndex);
+                Grid.SetColumn(pinTextBlock, 0);
+                grid.Children.Add(pinTextBlock);
 
-                var nameLabel = new Label()
+                var nameTextBlock = new TextBlock()
                 {
-                    Content = signal.Name,
+                    Text = signal.Name,
                     Foreground = new SolidColorBrush(Color.FromRgb(63, 63, 63)),
                 };
-                Grid.SetRow(nameLabel, rowIndex);
-                Grid.SetColumn(nameLabel, 1);
-                grid.Children.Add(nameLabel);
+                Grid.SetRow(nameTextBlock, rowIndex);
+                Grid.SetColumn(nameTextBlock, 1);
+                grid.Children.Add(nameTextBlock);
 
                 var valueCheckBox = new CheckBox()
                 {
@@ -121,47 +121,47 @@ namespace Oratoria36.UI.Service
             int rowIndex = 1;
             foreach (var signal in signals)
             {
-                var pinLabel = new Label()
+                var pinTextBlock = new TextBlock()
                 {
-                    Content = signal.PinNumber,
+                    Text = signal.PinNumber.ToString(),
                     Foreground = new SolidColorBrush(Color.FromRgb(63, 63, 63)),
                 };
-                Grid.SetRow(pinLabel, rowIndex);
-                Grid.SetColumn(pinLabel, 0);
-                grid.Children.Add(pinLabel);
+                Grid.SetRow(pinTextBlock, rowIndex);
+                Grid.SetColumn(pinTextBlock, 0);
+                grid.Children.Add(pinTextBlock);
 
-                var nameLabel = new Label()
+                var nameTextBlock = new TextBlock()
                 {
-                    Content = signal.Name,
+                    Text = signal.Name,
                     Foreground = new SolidColorBrush(Color.FromRgb(63, 63, 63)),
                 };
-                Grid.SetRow(nameLabel, rowIndex);
-                Grid.SetColumn(nameLabel, 1);
-                grid.Children.Add(nameLabel);
+                Grid.SetRow(nameTextBlock, rowIndex);
+                Grid.SetColumn(nameTextBlock, 1);
+                grid.Children.Add(nameTextBlock);
 
-                var valueLabel = new Label()
+                var valueTextBlock = new TextBlock()
                 {
-                    Content = signal.Value,
+                    Text = signal.Value.ToString(),
                     FontWeight = FontWeights.Bold,
-                    Style = (Style)Application.Current.FindResource("AnalogBlueValueLabel"),
+                    Style = (Style)Application.Current.FindResource("AnalogBlueValueTextBlock"),
                 };
-                Grid.SetRow(valueLabel, rowIndex);
-                Grid.SetColumn(valueLabel, 2);
-                grid.Children.Add(valueLabel);
+                Grid.SetRow(valueTextBlock, rowIndex);
+                Grid.SetColumn(valueTextBlock, 2);
+                grid.Children.Add(valueTextBlock);
 
-                var realValueLabel = new Label()
+                var realValueTextBlock = new TextBlock()
                 {
-                    Content = signal.Value,
-                    Style = (Style)Application.Current.FindResource("AnalogGreyValueLabel"),
+                    Text = signal.Value.ToString(),
+                    Style = (Style)Application.Current.FindResource("AnalogGreyValueTextBlock"),
                 };
-                Grid.SetRow(realValueLabel, rowIndex);
-                Grid.SetColumn(realValueLabel, 3);
-                grid.Children.Add(realValueLabel);
+                Grid.SetRow(realValueTextBlock, rowIndex);
+                Grid.SetColumn(realValueTextBlock, 3);
+                grid.Children.Add(realValueTextBlock);
 
                 signal.OnSignalChanged += newValue =>
                 {
-                    valueLabel.Dispatcher.Invoke(() => valueLabel.Content = newValue);
-                    realValueLabel.Dispatcher.Invoke(() => realValueLabel.Content = newValue);
+                    valueTextBlock.Dispatcher.Invoke(() => valueTextBlock.Text = newValue.ToString());
+                    realValueTextBlock.Dispatcher.Invoke(() => realValueTextBlock.Text = newValue.ToString());
                 };
 
                 rowIndex++;
@@ -179,40 +179,40 @@ namespace Oratoria36.UI.Service
             int rowIndex = 1;
             foreach (var signal in signals)
             {
-                var pinLabel = new Label()
+                var pinTextBlock = new TextBlock()
                 {
-                    Content = signal.PinNumber,
+                    Text = signal.PinNumber.ToString(),
                     Foreground = new SolidColorBrush(Color.FromRgb(63, 63, 63)),
                 };
-                Grid.SetRow(pinLabel, rowIndex);
-                Grid.SetColumn(pinLabel, 0);
-                grid.Children.Add(pinLabel);
+                Grid.SetRow(pinTextBlock, rowIndex);
+                Grid.SetColumn(pinTextBlock, 0);
+                grid.Children.Add(pinTextBlock);
 
-                var nameLabel = new Label()
+                var nameTextBlock = new TextBlock()
                 {
-                    Content = signal.Name,
+                    Text = signal.Name,
                     Foreground = new SolidColorBrush(Color.FromRgb(63, 63, 63)),
                 };
-                Grid.SetRow(nameLabel, rowIndex);
-                Grid.SetColumn(nameLabel, 1);
-                grid.Children.Add(nameLabel);
+                Grid.SetRow(nameTextBlock, rowIndex);
+                Grid.SetColumn(nameTextBlock, 1);
+                grid.Children.Add(nameTextBlock);
 
-                var valueLabel = new Label()
+                var valueTextBlock = new TextBlock()
                 {
-                    Content = signal.Value,
+                    Text = signal.Value.ToString(),
                     FontWeight = FontWeights.Bold,
-                    Style = (Style)Application.Current.FindResource("AnalogBlueValueLabel"),
+                    Style = (Style)Application.Current.FindResource("AnalogBlueValueTextBlock"),
                 };
-                Grid.SetRow(valueLabel, rowIndex);
-                Grid.SetColumn(valueLabel, 2);
-                grid.Children.Add(valueLabel);
+                Grid.SetRow(valueTextBlock, rowIndex);
+                Grid.SetColumn(valueTextBlock, 2);
+                grid.Children.Add(valueTextBlock);
 
                 var textBox = new TextBox()
                 {
                     Style = (Style)Application.Current.FindResource("TextBoxInput"),
                     Height = 20,
                     Text = signal.Value.ToString(),
-                    VerticalContentAlignment = VerticalAlignment.Center
+                    VerticalAlignment = VerticalAlignment.Top,
                 };
                 Grid.SetRow(textBox, rowIndex);
                 Grid.SetColumn(textBox, 3);
@@ -241,7 +241,7 @@ namespace Oratoria36.UI.Service
 
                 signal.OnSignalChanged += newValue =>
                 {
-                    valueLabel.Dispatcher.Invoke(() => valueLabel.Content = newValue);
+                    valueTextBlock.Dispatcher.Invoke(() => valueTextBlock.Text = newValue.ToString());
                     textBox.Dispatcher.Invoke(() => textBox.Text = newValue.ToString());
                 };
 

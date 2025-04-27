@@ -32,11 +32,11 @@
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30"/>
-                            <!-- Header row -->
+                            
                         </Grid.RowDefinitions>
-                        <Label Content="№" Grid.Column="0" Style="{StaticResource HeaderLabel}"/>
-                        <Label Content="Наименование сигнала" Grid.Column="1" Style="{StaticResource HeaderLabel}"/>
-                        <Label Content="Состояние" Grid.Column="2" Style="{StaticResource HeaderLabel}"/>
+                        <TextBlock Text="№" Grid.Column="0" Style="{StaticResource HeaderTextBlock}"/>
+                        <TextBlock Text="Наименование сигнала" Grid.Column="1" Style="{StaticResource HeaderTextBlock}"/>
+                        <TextBlock Text="Состояние" Grid.Column="2" Style="{StaticResource HeaderTextBlock}"/>
                     </Grid>
                 </ScrollViewer>
             </DockPanel>
@@ -57,11 +57,10 @@
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30"/>
-                            <!-- Header row -->
                         </Grid.RowDefinitions>
-                        <Label Content="№" Grid.Column="0" Style="{StaticResource HeaderLabel}"/>
-                        <Label Content="Наименование сигнала" Grid.Column="1" Style="{StaticResource HeaderLabel}"/>
-                        <Label Content="Состояние" Grid.Column="2" Style="{StaticResource HeaderLabel}"/>
+                        <TextBlock Text="№" Grid.Column="0" Style="{StaticResource HeaderTextBlock}"/>
+                        <TextBlock Text="Наименование сигнала" Grid.Column="1" Style="{StaticResource HeaderTextBlock}"/>
+                        <TextBlock Text="Состояние" Grid.Column="2" Style="{StaticResource HeaderTextBlock}"/>
                     </Grid>
                 </ScrollViewer>
             </DockPanel>
@@ -82,12 +81,11 @@
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30"/>
-                            <!-- Header row -->
                         </Grid.RowDefinitions>
-                        <Label Content="№" Grid.Column="0" Style="{StaticResource HeaderLabel}"/>
-                        <Label Content="Наименование сигнала" Grid.Column="1" Style="{StaticResource HeaderLabel}"/>
-                        <Label Content="Значение" Grid.Column="2" Style="{StaticResource HeaderLabel}"/>
-                        <Label Content="Разряд" Grid.Column="3" Style="{StaticResource HeaderLabel}"/>
+                        <TextBlock Text="№" Grid.Column="0" Style="{StaticResource HeaderTextBlock}"/>
+                        <TextBlock Text="Наименование сигнала" Grid.Column="1" Style="{StaticResource HeaderTextBlock}"/>
+                        <TextBlock Text="Значение" Grid.Column="2" Style="{StaticResource HeaderTextBlock}"/>
+                        <TextBlock Text="Разряд" Grid.Column="3" Style="{StaticResource HeaderTextBlock}"/>
                     </Grid>
                 </ScrollViewer>
             </DockPanel>
@@ -108,12 +106,11 @@
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="30"/>
-                            <!-- Header row -->
                         </Grid.RowDefinitions>
-                        <Label Content="№" Grid.Column="0" Style="{StaticResource HeaderLabel}"/>
-                        <Label Content="Наименование сигнала" Grid.Column="1" Style="{StaticResource HeaderLabel}"/>
-                        <Label Content="Значение" Grid.Column="2" Style="{StaticResource HeaderLabel}"/>
-                        <Label Content="Разряд" Grid.Column="3" Style="{StaticResource HeaderLabel}"/>
+                        <TextBlock Text="№" Grid.Column="0" Style="{StaticResource HeaderTextBlock}"/>
+                        <TextBlock Text="Наименование сигнала" Grid.Column="1" Style="{StaticResource HeaderTextBlock}"/>
+                        <TextBlock Text="Значение" Grid.Column="2" Style="{StaticResource HeaderTextBlock}"/>
+                        <TextBlock Text="Разряд" Grid.Column="3" Style="{StaticResource HeaderTextBlock}"/>
                     </Grid>
                 </ScrollViewer>
             </DockPanel>

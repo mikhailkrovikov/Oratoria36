@@ -39,9 +39,9 @@ namespace Oratoria36.UI.ModulePages.Module2
         Module2Signals _signals;
 
         public Valve FK_KN_DU_63 { get; set; }
+        public RRG RRG1 { get; set; }
         public ICommand FK_KN_DU_63Command { get; set; }
-
-
+        public ICommand RRG1Command { get; set; }
         public Pipeline Pipeline1 { get; set; }
         public Pipeline Pipeline2 { get; set; }
 
@@ -59,6 +59,14 @@ namespace Oratoria36.UI.ModulePages.Module2
                 _signals.DOSignals.FK_KN_otkryt,
                 null,
                 FK_KN_DU_63Command);
+
+            RRG1Command = new RelayCommand(
+                (object obj) => { },
+                (object obj) => { return true; });
+
+            RRG1 = new RRG(_signals.AISignals.Raskhod_gasa_tekushchee,
+                           _signals.AOSignals.Raskhod_gasa_ustavka,
+                           RRG1Command);
 
             Pipeline1 = new Pipeline(FK_KN_DU_63);
             Pipeline2 = new Pipeline(FK_KN_DU_63, Pipeline1);

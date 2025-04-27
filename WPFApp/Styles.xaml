@@ -24,20 +24,25 @@
         <Setter Property="FontWeight" Value="Bold"/>
     </Style>
 
-    <Style x:Key="BaseTextLabel" TargetType="Label">
+    <Style x:Key="HeaderTextBlock" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="#FF3F3F3F"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+    </Style>
+
+    <Style x:Key="BaseTextTextBlock" TargetType="TextBlock">
         <Setter Property="Foreground" Value="#FF3F3F3F"/>
         <Setter Property="FontSize" Value="12"/>
     </Style>
 
-    <Style x:Key="AnalogBlueValueLabel" TargetType="Label">
+    <Style x:Key="AnalogBlueValueTextBlock" TargetType="TextBlock">
         <Setter Property="Foreground" Value="#475CA7"/>
     </Style>
 
-    <Style x:Key="AnalogGreyValueLabel" TargetType="Label">
+    <Style x:Key="AnalogGreyValueTextBlock" TargetType="TextBlock">
         <Setter Property="Foreground" Value="#AAAAAA"/>
     </Style>
 
-    <Style x:Key="StaticValueLabel" TargetType="Label">
+    <Style x:Key="StaticValueTextBlock" TargetType="TextBlock">
         <Setter Property="Foreground" Value="#919191"/>
         <Setter Property="FontSize" Value="12"/>
     </Style>
