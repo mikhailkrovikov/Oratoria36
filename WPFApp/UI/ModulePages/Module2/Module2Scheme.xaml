@@ -15,9 +15,13 @@
 
         <UserElements:PipelineUE State="{Binding Pipeline2.State}"
                                  Direction="180"
-            HorizontalAlignment="Left" Margin="602,420,0,0" VerticalAlignment="Top" Width="140"/>
+
+            HorizontalAlignment="Left" Margin="466,326,0,0" VerticalAlignment="Top" Width="140"/>
         
-        
+        <UserElements:GasLineUE GasName="Ar" 
+                                HorizontalAlignment="Left" Margin="600,417,0,0" VerticalAlignment="Top" Width="107"/>
+
+
         <UserElements:ValveUE Label="{Binding FK_KN_DU_63.Name}"
                               State="{Binding FK_KN_DU_63.State}"
                               Command="{Binding FK_KN_DU_63.Command}"

@@ -15,7 +15,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <ContentPresenter/>
+                        <ContentPresenter/> 
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>

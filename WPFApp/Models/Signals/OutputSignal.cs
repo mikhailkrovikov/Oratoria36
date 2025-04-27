@@ -6,7 +6,7 @@ namespace Oratoria36.Models.Signals
 {
     public class OutputSignal<T> : IOutputStrategy<T>
     {
-        Logger _logger = LogManager.GetLogger("InputSignal");
+        Logger _logger = LogManager.GetLogger("OutputSignal");
         T _value;
         ModbusIpMaster _master;
         public T Value
@@ -14,13 +14,13 @@ namespace Oratoria36.Models.Signals
             get => _value;
             set
             {
-                if (!object.Equals(_value, value))
+                if (!Equals(_value, value))
                 {
                     var oldValue = _value;
                     _value = value;
                     WriteValue();
                     OnSignalChanged?.Invoke(_value);
-                    _logger.Info($"{Name}; Пин {PinNumber} изменил значение с {oldValue} на {_value}");
+                    _logger.Info($"{Name}; пин {PinNumber} изменил значение с {oldValue} на {_value}");
                 }
             }
         }
@@ -37,7 +37,6 @@ namespace Oratoria36.Models.Signals
         {
             SetOutput(PinNumber, Value);
         }
-
         public void SetOutput(ushort pinNumber, T value)
         {
             if (_master != null)
@@ -47,10 +46,6 @@ namespace Oratoria36.Models.Signals
                 else if (typeof(T) == typeof(ushort))
                     _master.WriteSingleRegister(pinNumber, (ushort)(object)value);
             }
-        }
-        public void SetTestOutput(ushort pinNumber, T value)
-        {
-            Value = value;
         }
     }
 }

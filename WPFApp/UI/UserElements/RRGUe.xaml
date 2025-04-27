@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="Oratoria36.UI.UserElements.RRGUe"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Oratoria36.UI.UserElements"
+             mc:Ignorable="d" 
+             d:DesignHeight="150" d:DesignWidth="200">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="0.5*"/>
+        </Grid.ColumnDefinitions>
+        <Rectangle Grid.Row="0" Grid.ColumnSpan="3" Stroke=" #3F3F3F" />
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Уставка" FontSize="16" Foreground="#3F3F3F" />
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Текущее" FontSize="16" Foreground="#3F3F3F" />
+        <TextBlock Grid.Row="1" Grid.Column="2" Text="л/ч" FontSize="12" Foreground="#919191"/>
+        <TextBlock Grid.Row="2" Grid.Column="2" Text="л/ч" FontSize="12" Foreground="#919191"/>
+        <!--<TextBlock Grid.Row="1" Grid.Column="1" Style="{DynamicResource AnalogBlueValueLabel}"/>-->
+    </Grid>
+</UserControl>

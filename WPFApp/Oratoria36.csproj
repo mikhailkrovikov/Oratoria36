@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <Folder Include="UI\Signals\" />
+    <Folder Include="Unilogic\" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,5 @@
-﻿using Oratoria36.Models.Devices;
+﻿using NLog;
+using Oratoria36.Models.Devices;
 using Oratoria36.Service;
 using Oratoria36.Service.Enums;
 using System;
@@ -22,6 +23,7 @@ namespace Oratoria36.UI.DialogWindows
     /// </summary>
     public partial class ValveWindow : Window
     {
+        
         ValveWindowVM _vm;
         public ValveWindow(Valve valve)
         {
@@ -38,6 +40,7 @@ namespace Oratoria36.UI.DialogWindows
     }
     public class ValveWindowVM
     {
+        Logger _logger = LogManager.GetLogger("UI");
         public Valve Valve { get; set; }
         public string Status
         {
@@ -58,6 +61,7 @@ namespace Oratoria36.UI.DialogWindows
             OpenValveCommand = new RelayCommand((object obj) =>
             {
                 Valve.Open.Value = true;
+                _logger.Info($"Открытие клапана {Valve.Name}");
             },
             (object obj) =>
             {
@@ -67,6 +71,7 @@ namespace Oratoria36.UI.DialogWindows
             CloseValveCommand = new RelayCommand((object obj) =>
             {
                 Valve.Open.Value = false;
+                _logger.Info($"Закрытие клапана {Valve.Name}");
             },
             (object obj) =>
             {
