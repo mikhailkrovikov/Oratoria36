@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using NLog;
+using Oratoria36.Models;
 using Oratoria36.Models.Connection;
 using Oratoria36.Service;
 using Oratoria36.UI.ModulePages.Module2;
@@ -17,7 +18,7 @@ namespace Oratoria36.UI
     {
         private MainWindowVM _vm;
         
-        private NetContext _context;
+        private MainContext _context;
         public MainWindow()
         {
             InitializeComponent();
@@ -27,7 +28,7 @@ namespace Oratoria36.UI
             _vm.StartClock();
             NavigationBarControl.PageChanged += NavigateToPage;
             MainFrame.NavigationService.Navigate(new MainPage());
-            _context = NetContext.Instance;
+            _context = MainContext.Instance;
         }
 
         public MainWindowVM ViewModel => _vm;

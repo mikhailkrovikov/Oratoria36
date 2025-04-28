@@ -1,4 +1,5 @@
 ﻿using Modbus.Device;
+using Oratoria36.Models.Connection;
 using Oratoria36.Models.Signals;
 using System;
 using System.Collections.Generic;
@@ -23,19 +24,19 @@ namespace Oratoria36.Models.Modules.Module2
         public InputSignal<ushort> Termopara { get; set; }
         public InputSignal<ushort> VICB { get; set; }
         public InputSignal<ushort> Raskhod_gasa_tekushchee { get; set; }
-        public Module2AI(ModbusIpMaster master)
+        public Module2AI(NetConfig netConfig)
         {
-            Napryazhenie_BPN = new InputSignal<ushort>("Напряжение БПН", 0, master);
-            Tok_BPN = new InputSignal<ushort>("Ток БПН", 1, master);
-            Tok_BPM1 = new InputSignal<ushort>("Ток БПМ1", 2, master);
-            Napryazhenie_BPM1 = new InputSignal<ushort>("Напряжение БПМ1", 3, master);
-            Tok_BPM2 = new InputSignal<ushort>("Ток БПМ2", 4, master);
-            Napryazhenie_BPM2 = new InputSignal<ushort>("Напряжение БПМ2", 5, master);
-            Tok_BPM3 = new InputSignal<ushort>("Ток БПМ3", 6, master);
-            Napryazhenie_BPM3 = new InputSignal<ushort>("Напряжение БПМ3", 7, master);
-            Termopara = new InputSignal<ushort>("Термопара", 8, master);
-            VICB = new InputSignal<ushort>("ВИЦБ", 9, master);
-            Raskhod_gasa_tekushchee = new InputSignal<ushort>("Расход газа: текущее", 10, master);
+            Napryazhenie_BPN = new InputSignal<ushort>("Напряжение БПН", 0, netConfig);
+            Tok_BPN = new InputSignal<ushort>("Ток БПН", 1, netConfig);
+            Tok_BPM1 = new InputSignal<ushort>("Ток БПМ1", 2, netConfig);
+            Napryazhenie_BPM1 = new InputSignal<ushort>("Напряжение БПМ1", 3, netConfig);
+            Tok_BPM2 = new InputSignal<ushort>("Ток БПМ2", 4, netConfig);
+            Napryazhenie_BPM2 = new InputSignal<ushort>("Напряжение БПМ2", 5, netConfig);
+            Tok_BPM3 = new InputSignal<ushort>("Ток БПМ3", 6, netConfig);
+            Napryazhenie_BPM3 = new InputSignal<ushort>("Напряжение БПМ3", 7, netConfig);
+            Termopara = new InputSignal<ushort>("Термопара", 8, netConfig);
+            VICB = new InputSignal<ushort>("ВИЦБ", 9, netConfig);
+            Raskhod_gasa_tekushchee = new InputSignal<ushort>("Расход газа: текущее", 10, netConfig);
 
             AnalogInputs = new ObservableCollection<InputSignal<ushort>>()
             {

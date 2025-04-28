@@ -1,4 +1,5 @@
 ﻿using Modbus.Device;
+using Oratoria36.Models.Connection;
 using Oratoria36.Models.Signals;
 using System;
 using System.Collections.Generic;
@@ -19,14 +20,14 @@ namespace Oratoria36.Models.Modules.Module2
         public OutputSignal<ushort> Upravlenie_natekatelem { get; set; }
         public OutputSignal<ushort> Raskhod_gasa_ustavka { get; set; }
 
-        public Module2AO(ModbusIpMaster master)
+        public Module2AO(NetConfig netConfig)
         {
-            Moshchnost_BPN = new OutputSignal<ushort>("Мощность БПН", 0, master);
-            Moshchnost_BPM1 = new OutputSignal<ushort>("Мощность БПМ1", 1, master);
-            Moshchnost_BPM2 = new OutputSignal<ushort>("Мощность БПМ2", 2, master);
-            Moshchnost_BPM3 = new OutputSignal<ushort>("Мощность БПМ3", 3, master);
-            Upravlenie_natekatelem = new OutputSignal<ushort>("Управление натекателем", 4, master);
-            Raskhod_gasa_ustavka = new OutputSignal<ushort>("Расход газа: уставка", 5, master);
+            Moshchnost_BPN = new OutputSignal<ushort>("Мощность БПН", 0, netConfig);
+            Moshchnost_BPM1 = new OutputSignal<ushort>("Мощность БПМ1", 1, netConfig);
+            Moshchnost_BPM2 = new OutputSignal<ushort>("Мощность БПМ2", 2, netConfig);
+            Moshchnost_BPM3 = new OutputSignal<ushort>("Мощность БПМ3", 3, netConfig);
+            Upravlenie_natekatelem = new OutputSignal<ushort>("Управление натекателем", 4, netConfig);
+            Raskhod_gasa_ustavka = new OutputSignal<ushort>("Расход газа: уставка", 5, netConfig);
 
             AnalogOutputs = new ObservableCollection<OutputSignal<ushort>>()
             {

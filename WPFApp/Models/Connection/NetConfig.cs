@@ -13,7 +13,7 @@ namespace Oratoria36.Models.Connection
     {
         private Logger _logger = LogManager.GetLogger("ModuleConfig");
         public ModbusIpMaster Master { get; set; }
-        private TcpClient _tcpClient;
+        public TcpClient _tcpClient;
 
         private string _ip;
         private int _port = 502;
@@ -53,7 +53,6 @@ namespace Oratoria36.Models.Connection
                 if (_isConnected != value)
                 {
                     _isConnected = value;
-                    _logger.Info($"Состояние подключения модуля изменено: {(value ? "Подключено" : "Отключено")}");
                     OnPropertyChanged();
                 }
             }
@@ -64,7 +63,13 @@ namespace Oratoria36.Models.Connection
             try
             {
                 _tcpClient = new TcpClient();
-                await _tcpClient.ConnectAsync(ip, Port);
+                var ret = Task.WaitAll(
+                    new[]
+                    {
+                        _tcpClient.ConnectAsync(ip, Port)
+                    },
+                    TimeSpan.FromSeconds(5)
+                    );
                 Master = ModbusIpMaster.CreateIp(_tcpClient);
                 IsConnected = true;
                 _logger.Info($"Подключено к {ip}:{Port}");
@@ -82,13 +87,14 @@ namespace Oratoria36.Models.Connection
             {
 
                 Master?.Dispose();
+                Master = null;
                 _tcpClient?.Close();
                 _tcpClient?.Dispose();
                 IsConnected = false;
             }
-            catch (Exception ex)
+            catch
             {
-                _logger.Error(ex, "Ошибка при закрытии соединения");
+
             }
         }
 

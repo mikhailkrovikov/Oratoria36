@@ -1,5 +1,6 @@
 ﻿using Modbus.Device;
 using NLog;
+using Oratoria36.Models.Connection;
 using System;
 
 namespace Oratoria36.Models.Signals
@@ -9,16 +10,20 @@ namespace Oratoria36.Models.Signals
         private static readonly Logger _logger = LogManager.GetLogger("InputSignal");
 
         private T _value;
-        private ModbusIpMaster _master;
+        private NetConfig _netConfig;
+        public ModbusIpMaster _master => _netConfig.Master;
 
         public T Value
         {
             get
             {
                 if (_master == null)
-                    return _value;               
+                    return _value;
                 else
-                    return GetInput(PinNumber);         
+                {
+                    Value = GetInput(PinNumber);
+                    return _value;
+                }
             }
             set
             {
@@ -36,33 +41,38 @@ namespace Oratoria36.Models.Signals
         public string Name { get; set; }
         public ushort PinNumber { get; set; }
 
-        public InputSignal(string name, ushort pinNumber, ModbusIpMaster master = null)
+        public InputSignal(string name, ushort pinNumber, NetConfig netConfig = null)
         {
             Name = name;
             PinNumber = pinNumber;
-            _master = master;
+            _netConfig = netConfig;
         }
 
         public T GetInput(ushort pinNumber)
         {
-            if (_master != null)
+            try
             {
-                if (typeof(T) == typeof(bool))
+                if (_master != null)
                 {
-                    var result = _master.ReadInputs(pinNumber, 1);
-                    return (T)(object)result[0];
+                    if (typeof(T) == typeof(bool))
+                    {
+                        var result = _master.ReadInputs(pinNumber, 1);
+                        return (T)(object)result[0];
+                    }
+                    else if (typeof(T) == typeof(ushort))
+                    {
+                        //var result = _master.ReadHoldingRegisters(pinNumber, 1);
+                        //return (T)(object)result[0];
+                        return (T)(object)(ushort)0;
+                    }
+                    else return default;
                 }
-                else if (typeof(T) == typeof(ushort))
+                else
                 {
-                    var result = _master.ReadHoldingRegisters(pinNumber, 1);
-                    return (T)(object)result[0];
+                    return default;
                 }
-                else return default;
             }
-            else
-            {
-                return default;
-            }
+            catch { return default; }
         }
     }
 }

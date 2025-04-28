@@ -10,6 +10,7 @@ namespace Oratoria36.Models.Modules.Module2
     public class Module2Signals
     {
         NetContext _netContext;
+        NetConfig _netConfig;
         public Module2DI DISignals { get; }
         public Module2DO DOSignals { get; }
         public Module2AI AISignals { get; }
@@ -17,10 +18,11 @@ namespace Oratoria36.Models.Modules.Module2
         public Module2Signals()
         {
             _netContext = NetContext.Instance;
-            DISignals = new(_netContext.Module2.Master);
-            DOSignals = new(_netContext.Module2.Master);
-            AISignals = new(_netContext.Module2.Master);
-            AOSignals = new(_netContext.Module2.Master);
+            _netConfig = _netContext.Module2;
+            DISignals = new(_netConfig);
+            DOSignals = new(_netConfig);
+            AISignals = new(_netConfig);
+            AOSignals = new(_netConfig);
         }
     }
 }

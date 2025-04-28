@@ -60,6 +60,8 @@ namespace Oratoria36.UI.ModulePages.Module2
                 null,
                 FK_KN_DU_63Command);
 
+            
+
             RRG1Command = new RelayCommand(
                 (object obj) => { },
                 (object obj) => { return true; });
