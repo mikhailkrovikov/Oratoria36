@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using NLog;
+using Oratoria36.Service;
 
 namespace Oratoria36.Models.Connection
 {
@@ -52,15 +53,15 @@ namespace Oratoria36.Models.Connection
         public int TransportModulePort { get; set; } = 502;
 
         [JsonIgnore]
-        public NetConfig Module1 { get; private set; } = new NetConfig();
+        public NetConfig Module1 { get; private set; } = new NetConfig(Locker.Module1PollerLocker);
         [JsonIgnore]
-        public NetConfig Module2 { get; private set; } = new NetConfig();
+        public NetConfig Module2 { get; private set; } = new NetConfig(Locker.Module2PollerLocker);
         [JsonIgnore]
-        public NetConfig Module3 { get; private set; } = new NetConfig();
+        public NetConfig Module3 { get; private set; } = new NetConfig(Locker.Module3PollerLocker);
         [JsonIgnore]
-        public NetConfig Module4 { get; private set; } = new NetConfig();
+        public NetConfig Module4 { get; private set; } = new NetConfig(Locker.Module4PollerLocker);
         [JsonIgnore]
-        public NetConfig TransportModule { get; private set; } = new NetConfig();
+        public NetConfig TransportModule { get; private set; } = new NetConfig(Locker.TransportPollerLocker);
 
         public event EventHandler ConnectionStatusChanged;
 

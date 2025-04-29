@@ -19,6 +19,8 @@ namespace Oratoria36.Models.Connection
         private int _port = 502;
         private bool _isConnected;
 
+        private object _locker;
+
         public string IP
         {
             get => _ip;
@@ -58,6 +60,11 @@ namespace Oratoria36.Models.Connection
             }
         }
 
+        public NetConfig(object locker)
+        {
+            _locker = locker;
+        }
+
         public async Task Connect(string ip)
         {
             try
@@ -85,9 +92,11 @@ namespace Oratoria36.Models.Connection
         {
             try
             {
-
-                Master?.Dispose();
-                Master = null;
+                lock (_locker)
+                {
+                    Master?.Dispose();
+                    Master = null;
+                }
                 _tcpClient?.Close();
                 _tcpClient?.Dispose();
                 IsConnected = false;

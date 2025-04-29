@@ -63,7 +63,7 @@ namespace Oratoria36.UI.ModulePages.Module2
             
 
             RRG1Command = new RelayCommand(
-                (object obj) => { },
+                (object obj) => { RRGWindow rRGWindow = new(RRG1); },
                 (object obj) => { return true; });
 
             RRG1 = new RRG(_signals.AISignals.Raskhod_gasa_tekushchee,

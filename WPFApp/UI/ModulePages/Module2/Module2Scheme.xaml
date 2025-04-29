@@ -29,6 +29,7 @@
 
         <UserElements:RRGUe RRGRealValue="{Binding RRG1.RRGRealValue}"
                             RRGSetPoint="{Binding RRG1.RRGSetPointValue}"
+                            Command="{Binding RRG1.Command}"
                             State="{Binding RRG1.State}"
             HorizontalAlignment="Left" Margin="266,398,0,0" VerticalAlignment="Top" Height="100" Width="140"/>
 

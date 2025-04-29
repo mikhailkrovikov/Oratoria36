@@ -15,14 +15,15 @@ namespace Oratoria36.Models.Devices
     public class RRG : Device, INotifyPropertyChanged
     {
         public InputSignal<ushort> RRGRealValueSignal { get; }
-        public OutputSignal<ushort> RRGSetPointSignal { get; }
+        public OutputSignal<ushort> RRGSetPointSignal { get; set; }
         public double RRGRealValue
         {
             get => RRGRealValueSignal.Value;
         }
+
         public double RRGSetPointValue
         {
-            get => RRGSetPointSignal.Value / 10.0;
+            get => RRGSetPointSignal.Value;
         }
         public Setting<ushort> RRGDifference { get; }
         public ICommand Command { get; }
@@ -42,7 +43,8 @@ namespace Oratoria36.Models.Devices
                     RRGRealValueSignal.Value == 0)
                     return State.Off;
 
-                else if (RRGSetPointSignal.Value - RRGRealValueSignal.Value < RRGDifference.Value &&
+                else if ((RRGSetPointSignal.Value - RRGRealValueSignal.Value < RRGDifference.Value ||
+                    RRGRealValueSignal.Value - RRGSetPointSignal.Value < RRGDifference.Value) &&
                     RRGRealValueSignal.Value != 0)
                     return State.On;
 

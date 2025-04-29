@@ -9,17 +9,30 @@
              d:DesignHeight="100" d:DesignWidth="140">
     <UserControl.Resources>
         <local1:StateToColorConverter x:Key="StateConverter"/>
+
         <Style TargetType="Rectangle" x:Key="RectangleRRGStyle">
             <Setter Property="Stroke" Value="Black"/>
             <Setter Property="StrokeThickness" Value="2"/>
             <Style.Triggers>
-                <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=UserControl}}" Value="True">
+                <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="StrokeThickness" Value="4"/>
-                </DataTrigger>
+                </Trigger>
             </Style.Triggers>
         </Style>
+
+        <Style x:Key="InvisibleButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <ContentPresenter/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="3*"/>
@@ -31,14 +44,27 @@
             <ColumnDefinition/>
             <ColumnDefinition Width="0.5*"/>
         </Grid.ColumnDefinitions>
-        <Rectangle Grid.Row="0" Grid.ColumnSpan="3" Style="{DynamicResource RectangleRRGStyle}" 
-                   Fill="{Binding State, Converter={StaticResource StateConverter}, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
-        <TextBlock Grid.Row="0" Grid.ColumnSpan="3" Text="РРГ-9" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" Foreground="Black"/>
+
+        <!-- Основной контейнер для кликабельной области -->
+        <Button Grid.Row="0" Grid.ColumnSpan="3"
+                Command="{Binding Command, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                CommandParameter="{Binding CommandParameter, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Style="{StaticResource InvisibleButtonStyle}"
+                Padding="0">
+            <Grid>
+                <Rectangle Style="{StaticResource RectangleRRGStyle}" 
+                         Fill="{Binding State, Converter={StaticResource StateConverter}, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                <TextBlock Text="РРГ-9" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                          FontSize="30" Foreground="Black"/>
+            </Grid>
+        </Button>
+
+        <!-- Остальные элементы -->
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Уставка:" FontSize="12" Foreground="#3F3F3F" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
         <TextBlock Grid.Row="2" Grid.Column="0" Text="Текущее:" FontSize="12" Foreground="#3F3F3F" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
         <TextBlock Grid.Row="1" Grid.Column="2" Text="л/ч" FontSize="12" Foreground="#3F3F3F" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
         <TextBlock Grid.Row="2" Grid.Column="2" Text="л/ч" FontSize="12" Foreground="#3F3F3F" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
-        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding  RRGSetPoint, RelativeSource={RelativeSource AncestorType=UserControl}}" Style="{DynamicResource AnalogBlueValueTextBlock}" VerticalAlignment="Bottom" FontSize="14" FontWeight="Bold"/>
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding RRGSetPoint, RelativeSource={RelativeSource AncestorType=UserControl}}" Style="{DynamicResource AnalogBlueValueTextBlock}" VerticalAlignment="Bottom" FontSize="14" FontWeight="Bold"/>
         <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding RRGRealValue, RelativeSource={RelativeSource AncestorType=UserControl}}" Style="{DynamicResource AnalogBlueValueTextBlock}" VerticalAlignment="Bottom" FontSize="14" FontWeight="Bold"/>
     </Grid>
 </UserControl>

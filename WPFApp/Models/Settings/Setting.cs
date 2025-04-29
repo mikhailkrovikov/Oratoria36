@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,6 +21,12 @@ namespace Oratoria36.Models.Settings
             Device = device;
             MaxValue = maxValue;
             MinValue = minValue;
+        }
+        public Setting(string name, string device, T value)
+        {
+            Name = name;
+            Device = device;
+            Value = value;
         }
         public Setting(string name, string device)
         {

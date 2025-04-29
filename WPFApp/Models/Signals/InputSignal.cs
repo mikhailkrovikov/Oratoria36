@@ -32,7 +32,9 @@ namespace Oratoria36.Models.Signals
                     var oldValue = _value;
                     _value = value;
                     OnSignalChanged?.Invoke(_value);
-                    _logger.Info($"{Name}; Пин {PinNumber} изменил значение с {oldValue} на {_value}");
+
+                    if (oldValue.GetType() == typeof(bool) && _value.GetType() == typeof(bool))
+                        _logger.Info($"{Name}; Пин {PinNumber} изменил значение с {oldValue} на {_value}");
                 }
             }
         }
@@ -61,7 +63,7 @@ namespace Oratoria36.Models.Signals
                     }
                     else if (typeof(T) == typeof(ushort))
                     {
-                        var result = _master.ReadHoldingRegisters( (ushort)(pinNumber + 2), 1);
+                        var result = _master.ReadHoldingRegisters((ushort)(pinNumber + 2), 1);
                         return (T)(object)result[0];
                     }
                     else return default;
@@ -73,5 +75,13 @@ namespace Oratoria36.Models.Signals
             }
             catch { return default; }
         }
+    }
+
+    public abstract class InputSignal
+    {
+        //public event Action<T> OnSignalChanged;
+        public string Name { get; set; }
+        public ushort PinNumber { get; set; }
+        
     }
 }

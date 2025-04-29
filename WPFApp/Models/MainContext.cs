@@ -49,20 +49,23 @@ namespace Oratoria36.Models
 
             while (true)
             {
-                if (Net.Module2.IsConnected)
+                lock (Locker.Module2PollerLocker)
                 {
-                    foreach (var diSignal in di.DigitalInputs)
+                    if (Net.Module2.IsConnected)
                     {
-                        var a = diSignal.Value;
-                    }
+                        foreach (var diSignal in di.DigitalInputs)
+                        {
+                            var a = diSignal.Value;
+                        }
 
-                    foreach (var aiSignal in ai.AnalogInputs)
-                    {
-                        var a = aiSignal.Value;
+                        foreach (var aiSignal in ai.AnalogInputs)
+                        {
+                            var a = aiSignal.Value;
+                        }
                     }
                 }
 
-                Thread.Sleep(100);
+                Thread.Sleep(20);
             }
         }
 
