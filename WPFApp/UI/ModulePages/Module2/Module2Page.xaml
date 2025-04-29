@@ -22,7 +22,7 @@
         <local:Module2Scheme Grid.Column="1" Grid.Row="1"  
                              FK_KN_DU_63="{Binding FK_KN_DU_63}"
                              Pipeline1="{Binding Pipeline1}"
-                             RRG="{Binding RRG1}"/>
+                             RRG1="{Binding RRG1}"/>
 
 
     </Grid>

@@ -31,8 +31,8 @@ namespace Oratoria36.UI.ModulePages.Module2
             typeof(Pipeline),
             typeof(Module2Scheme));
 
-        public static DependencyProperty RRGProperty =
-            DependencyProperty.Register("RRG",
+        public static DependencyProperty RRG1Property =
+            DependencyProperty.Register("RRG1",
             typeof(RRG),
             typeof(Module2Scheme));
 
@@ -48,10 +48,10 @@ namespace Oratoria36.UI.ModulePages.Module2
             set { SetValue(Pipeline1Property, value); }
         }
 
-        public RRG RRG
+        public RRG RRG1
         {
-            get { return (RRG)GetValue(RRGProperty); }
-            set { SetValue(RRGProperty, value); }
+            get { return (RRG)GetValue(RRG1Property); }
+            set { SetValue(RRG1Property, value); }
         }
         public Module2Scheme()
         {

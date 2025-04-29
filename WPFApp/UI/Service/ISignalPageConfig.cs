@@ -1,4 +1,5 @@
-﻿using Oratoria36.Models.Signals;
+﻿using Oratoria36.Models.Connection;
+using Oratoria36.Models.Signals;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,9 +10,61 @@ namespace Oratoria36.UI.Service
 {
     public interface ISignalPageConfig
     {
-        public static void ConfigureDISignalGrid(Grid grid, ObservableCollection<InputSignal<bool>> signals)
+        public NetConfig NetConfig { get; }
+        public void ConfigureDISignalGrid(Grid grid, ObservableCollection<InputSignal<bool>> signals)
         {
-            
+            for (int i = 0; i < signals.Count; i++)
+            {
+                grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(30) });
+            }
+
+            int rowIndex = 1;
+            foreach (var signal in signals)
+            {
+                var pinTextBlock = new TextBlock()
+                {
+                    Text = signal.PinNumber.ToString(),
+                    Foreground = new SolidColorBrush(Color.FromRgb(63, 63, 63)),
+                };
+                Grid.SetRow(pinTextBlock, rowIndex);
+                Grid.SetColumn(pinTextBlock, 0);
+                grid.Children.Add(pinTextBlock);
+
+                var nameTextBlock = new TextBlock()
+                {
+                    Text = signal.Name,
+                    Foreground = new SolidColorBrush(Color.FromRgb(63, 63, 63)),
+                };
+                Grid.SetRow(nameTextBlock, rowIndex);
+                Grid.SetColumn(nameTextBlock, 1);
+                grid.Children.Add(nameTextBlock);
+
+                var valueCheckBox = new CheckBox()
+                {
+                    Style = (Style)Application.Current.FindResource("ToggleSwitchStyle"),
+                    IsChecked = signal.Value,
+                    IsEnabled = !NetConfig.IsConnected,
+                };
+
+                valueCheckBox.Checked += (sender, e) => signal.Value = true;
+                valueCheckBox.Unchecked += (sender, e) => signal.Value = false;
+
+                signal.OnSignalChanged += newValue =>
+                {
+                    valueCheckBox.Dispatcher.Invoke(() => valueCheckBox.IsChecked = newValue);
+                };
+
+                Grid.SetRow(valueCheckBox, rowIndex);
+                Grid.SetColumn(valueCheckBox, 2);
+                grid.Children.Add(valueCheckBox);
+
+                rowIndex++;
+            }
+        }
+
+        public void ConfigureDOSignalGrid(Grid grid, ObservableCollection<OutputSignal<bool>> signals)
+        {
+
             for (int i = 0; i < signals.Count; i++)
             {
                 grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(30) });
@@ -60,58 +113,7 @@ namespace Oratoria36.UI.Service
             }
         }
 
-        public static void ConfigureDOSignalGrid(Grid grid, ObservableCollection<OutputSignal<bool>> signals)
-        {
-
-            for (int i = 0; i < signals.Count; i++)
-            {
-                grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(30) });
-            }
-
-            int rowIndex = 1;
-            foreach (var signal in signals)
-            {
-                var pinTextBlock = new TextBlock()
-                {
-                    Text = signal.PinNumber.ToString(),
-                    Foreground = new SolidColorBrush(Color.FromRgb(63, 63, 63)),
-                };
-                Grid.SetRow(pinTextBlock, rowIndex);
-                Grid.SetColumn(pinTextBlock, 0);
-                grid.Children.Add(pinTextBlock);
-
-                var nameTextBlock = new TextBlock()
-                {
-                    Text = signal.Name,
-                    Foreground = new SolidColorBrush(Color.FromRgb(63, 63, 63)),
-                };
-                Grid.SetRow(nameTextBlock, rowIndex);
-                Grid.SetColumn(nameTextBlock, 1);
-                grid.Children.Add(nameTextBlock);
-
-                var valueCheckBox = new CheckBox()
-                {
-                    Style = (Style)Application.Current.FindResource("ToggleSwitchStyle"),
-                    IsChecked = signal.Value
-                };
-
-                valueCheckBox.Checked += (sender, e) => signal.Value = true;
-                valueCheckBox.Unchecked += (sender, e) => signal.Value = false;
-
-                signal.OnSignalChanged += newValue =>
-                {
-                    valueCheckBox.Dispatcher.Invoke(() => valueCheckBox.IsChecked = newValue);
-                };
-
-                Grid.SetRow(valueCheckBox, rowIndex);
-                Grid.SetColumn(valueCheckBox, 2);
-                grid.Children.Add(valueCheckBox);
-
-                rowIndex++;
-            }
-        }
-
-        public static void ConfigureAISignalGrid(Grid grid, ObservableCollection<InputSignal<ushort>> signals)
+        public void ConfigureAISignalGrid(Grid grid, ObservableCollection<InputSignal<ushort>> signals)
         {
             for (int i = 0; i < signals.Count; i++)
             {
@@ -168,7 +170,7 @@ namespace Oratoria36.UI.Service
             }
         }
 
-        public static void ConfigureAOSignalGrid(Grid grid, ObservableCollection<OutputSignal<ushort>> signals)
+        public void ConfigureAOSignalGrid(Grid grid, ObservableCollection<OutputSignal<ushort>> signals)
         {
 
             for (int i = 0; i < signals.Count; i++)

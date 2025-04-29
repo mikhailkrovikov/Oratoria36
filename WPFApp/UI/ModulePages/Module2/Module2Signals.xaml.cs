@@ -1,4 +1,5 @@
 ﻿using Oratoria36.Models;
+using Oratoria36.Models.Connection;
 using Oratoria36.Models.Modules.Module2;
 using Oratoria36.UI.Service;
 using System.ComponentModel;
@@ -11,6 +12,7 @@ namespace Oratoria36.UI.Signals
 {
     public partial class Module2SignalsPage : Page,  ISignalPageConfig
     {
+        public NetConfig NetConfig => NetContext.Instance.Module2;
         Module2SignalsVM _vm;
         Module2Signals _signals;
 
@@ -22,12 +24,13 @@ namespace Oratoria36.UI.Signals
             DataContext = _vm;
             Initialize();
         }
+
         private void Initialize()
         {
-            ISignalPageConfig.ConfigureDISignalGrid(DigitalInputGrid, _signals.DISignals.DigitalInputs);
-            ISignalPageConfig.ConfigureDOSignalGrid(DigitalOutputGrid, _signals.DOSignals.DigitalOutputs);
-            ISignalPageConfig.ConfigureAISignalGrid(AnalogInputGrid, _signals.AISignals.AnalogInputs);
-            ISignalPageConfig.ConfigureAOSignalGrid(AnalogOutputGrid, _signals.AOSignals.AnalogOutputs);
+            ((ISignalPageConfig)this).ConfigureDISignalGrid(DigitalInputGrid, _signals.DISignals.DigitalInputs);
+            ((ISignalPageConfig)this).ConfigureDOSignalGrid(DigitalOutputGrid, _signals.DOSignals.DigitalOutputs);
+            ((ISignalPageConfig)this).ConfigureAISignalGrid(AnalogInputGrid, _signals.AISignals.AnalogInputs);
+            ((ISignalPageConfig)this).ConfigureAOSignalGrid(AnalogOutputGrid, _signals.AOSignals.AnalogOutputs);
         }
     }
 

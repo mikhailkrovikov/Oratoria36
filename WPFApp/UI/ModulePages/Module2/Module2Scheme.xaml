@@ -26,10 +26,10 @@
                               State="{Binding FK_KN_DU_63.State}"
                               Command="{Binding FK_KN_DU_63.Command}"
                 Margin="528,351,386,149" Height="100" Width="85"/>
-        
-        <UserElements:RRGUe RRGRealValue="{Binding RRG.RRGRealValue}"
-                            RRGSetPoint="{Binding RRG.RRGSetPoint}"
-                            State="{Binding RRG.State}"
+
+        <UserElements:RRGUe RRGRealValue="{Binding RRG1.RRGRealValue}"
+                            RRGSetPoint="{Binding RRG1.RRGSetPointValue}"
+                            State="{Binding RRG1.State}"
             HorizontalAlignment="Left" Margin="266,398,0,0" VerticalAlignment="Top" Height="100" Width="140"/>
 
     </Grid>

@@ -33,7 +33,7 @@ namespace Oratoria36.Models
         {
             Net = NetContext.Instance;
 
-            Net.Module2.Connect("192.168.0.100");
+            Net.Module2.Connect(Net.Module2IP);
             Module2Signals = new();
 
             var thread = new Thread(new ThreadStart(() => ReadInputs()));
@@ -44,28 +44,26 @@ namespace Oratoria36.Models
         private void ReadInputs()
         {
             Module2DI di = Module2Signals.DISignals;
+            Module2AI ai = Module2Signals.AISignals;
 
 
             while (true)
             {
                 if (Net.Module2.IsConnected)
                 {
-                    foreach (var signal in di.DigitalInputs)
+                    foreach (var diSignal in di.DigitalInputs)
                     {
-                        var a = signal.Value;
+                        var a = diSignal.Value;
+                    }
+
+                    foreach (var aiSignal in ai.AnalogInputs)
+                    {
+                        var a = aiSignal.Value;
                     }
                 }
 
-                //_logger.Info("Чтение заваршено");
-
-
-                Thread.Sleep(10);
+                Thread.Sleep(100);
             }
-        }
-
-        private void DoSmt()
-        {
-
         }
 
         #endregion

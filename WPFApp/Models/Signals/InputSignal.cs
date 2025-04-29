@@ -61,9 +61,8 @@ namespace Oratoria36.Models.Signals
                     }
                     else if (typeof(T) == typeof(ushort))
                     {
-                        //var result = _master.ReadHoldingRegisters(pinNumber, 1);
-                        //return (T)(object)result[0];
-                        return (T)(object)(ushort)0;
+                        var result = _master.ReadHoldingRegisters( (ushort)(pinNumber + 2), 1);
+                        return (T)(object)result[0];
                     }
                     else return default;
                 }
