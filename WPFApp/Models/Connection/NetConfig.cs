@@ -26,9 +26,10 @@ namespace Oratoria36.Models.Connection
             get => _ip;
             set
             {
-                if (_ip != value && _ip != "")
+                if (_ip != value)
                 {
-                    _logger.Info($"IP изменен с {_ip} на {value}");
+                    if (value == "")
+                        _logger.Info($"IP изменен с {_ip} на {value}");
                     _ip = value;
                     OnPropertyChanged();
                 }
@@ -71,12 +72,12 @@ namespace Oratoria36.Models.Connection
             {
                 _tcpClient = new TcpClient();
                 var ret = Task.WaitAll(
-                    new[]
-                    {
+                    [
                         _tcpClient.ConnectAsync(ip, Port)
-                    },
-                    TimeSpan.FromSeconds(5)
-                    );
+                    ],
+                    TimeSpan.FromSeconds(5));
+                if (!ret)
+                    throw new TimeoutException();
                 Master = ModbusIpMaster.CreateIp(_tcpClient);
                 IsConnected = true;
                 _logger.Info($"Подключено к {ip}:{Port}");

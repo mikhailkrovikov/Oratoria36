@@ -24,10 +24,9 @@ namespace Oratoria36.Models.Connection
         {
 
             _settingsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Settings", "ConnectionSettings.json");
-            _logger.Info($"Путь к файлу настроек: {_settingsPath}");
+            _logger.Info($"Путь к файлу сетевых настроек: {_settingsPath}");
 
             LoadConnectionSettings();
-
             InitializeModules();
 
             Module1.PropertyChanged += ModulePropertyChanged;
@@ -108,11 +107,9 @@ namespace Oratoria36.Models.Connection
                     Module4Port = settings.Module4Port > 0 ? settings.Module4Port : Module4Port;
                     TransportModuleIP = settings.TransportModuleIP;
                     TransportModulePort = settings.TransportModulePort > 0 ? settings.TransportModulePort : TransportModulePort;
-                    _logger.Info("Настройки соединения успешно загружены");
                 }
                 else
                 {
-                    _logger.Info("Файл настроек не найден, будут использованы значения по умолчанию");
                     SaveConnectionSettingsAsync().Wait();
                 }
             }
@@ -123,24 +120,19 @@ namespace Oratoria36.Models.Connection
         }
 
         private void InitializeModules()
-        {
-            _logger.Info($"Инициализация Модуля 1: IP={Module1IP}, Port={Module1Port}");
+        {         
             Module1.IP = Module1IP;
             Module1.Port = Module1Port;
 
-            _logger.Info($"Инициализация Модуля 2: IP={Module2IP}, Port={Module2Port}");
             Module2.IP = Module2IP;
             Module2.Port = Module2Port;
 
-            _logger.Info($"Инициализация Модуля 3: IP={Module3IP}, Port={Module3Port}");
             Module3.IP = Module3IP;
             Module3.Port = Module3Port;
 
-            _logger.Info($"Инициализация Модуля 4: IP={Module4IP}, Port={Module4Port}");
             Module4.IP = Module4IP;
             Module4.Port = Module4Port;
 
-            _logger.Info($"Инициализация Транспортного модуля: IP={TransportModuleIP}, Port={TransportModulePort}");
             TransportModule.IP = TransportModuleIP;
             TransportModule.Port = TransportModulePort;
         }

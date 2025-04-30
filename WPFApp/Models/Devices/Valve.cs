@@ -23,6 +23,7 @@ namespace Oratoria36.Models.Devices
         {
             get
             {
+
                 if (IsOpen.Value && !IsClose.Value ||
                    IsOpen.Value && !IsClose.Value)
                     return State.On;
@@ -46,14 +47,15 @@ namespace Oratoria36.Models.Devices
         public Valve(string name, InputSignal<bool> isOpen, InputSignal<bool> isClose,
                     OutputSignal<bool> open, OutputSignal<bool> close, ICommand command)
         {
+            TimeForError = CommonDeviceSettings.ValveTimeForError;
+            TimeForWarning = CommonDeviceSettings.ValveTimeForWarning;
             Name = name;
             IsOpen = isOpen;
             IsClose = isClose;
             Open = open;
             Close = close;
             Command = command;
-            TimeForError = CommonDeviceSettings.ValveTimeForError;
-            TimeForWarning = CommonDeviceSettings.ValveTimeForWarning;
+            
 
             if (IsOpen != null)
                 IsOpen.OnSignalChanged += value => OnPropertyChanged(nameof(State));

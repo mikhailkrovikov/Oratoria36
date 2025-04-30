@@ -1,6 +1,7 @@
 ﻿using Modbus.Device;
 using NLog;
 using Oratoria36.Models.Connection;
+using Oratoria36.Models.Devices;
 using System;
 
 namespace Oratoria36.Models.Signals
@@ -77,11 +78,38 @@ namespace Oratoria36.Models.Signals
         }
     }
 
-    public abstract class InputSignal
-    {
-        //public event Action<T> OnSignalChanged;
-        public string Name { get; set; }
-        public ushort PinNumber { get; set; }
-        
-    }
+    
+
+
+
+
+    //public class DISignal : InputSignalX<bool>
+    //{
+    //    public DISignal(string name, ushort pinNumber, NetConfig netConfig) : base(name, pinNumber, netConfig) { }
+
+    //    public override bool[] Strategy(ushort startAdress, ushort NumberOfPoints) => _master.ReadInputs(startAdress, NumberOfPoints);
+    //}
+
+    //public class AISignal : InputSignalX<ushort>
+    //{
+    //    public AISignal(string name, ushort pinNumber, NetConfig netConfig) : base(name, pinNumber, netConfig) { }
+
+    //    public override ushort[] Strategy(ushort startAdress, ushort NumberOfPoints) => _master.ReadHoldingRegisters((ushort)(startAdress + 2), NumberOfPoints);
+    //}
+
+    //public class DOSignal : OutputSignalX<bool>
+    //{
+    //    public DOSignal(string name, ushort pinNumber, NetConfig netConfig) : base(name, pinNumber, netConfig) { }
+
+    //    public override void Strategy(ushort startAdress, bool value) => _master.WriteSingleCoil(startAdress, value);
+    //}
+
+    //public class AOSignal : OutputSignalX<ushort>
+    //{
+    //    public AOSignal(string name, ushort pinNumber, NetConfig netConfig) : base(name, pinNumber, netConfig)
+    //    {
+    //    }
+
+    //    public override void Strategy(ushort startAdress, ushort value) => _master.WriteSingleRegister((ushort)(startAdress + 2), value);
+    //}
 }

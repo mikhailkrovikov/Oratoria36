@@ -31,25 +31,33 @@ namespace Oratoria36.Models.Devices
         {
             get
             {
-                if (RRGSetPointSignal.Value - RRGRealValueSignal.Value >= RRGDifference.Value ||
-                    RRGRealValueSignal.Value - RRGSetPointSignal.Value >= RRGDifference.Value)
-                    return State.Warning;
+                //if ((RRGSetPointSignal.Value - RRGRealValueSignal.Value >= RRGDifference.Value ||
+                //    RRGRealValueSignal.Value - RRGSetPointSignal.Value >= RRGDifference.Value) &&
+                //    RRGSetPointSignal.Value != 0)
+                //    return State.Warning;
 
-                else if (RRGSetPointSignal.Value - RRGRealValueSignal.Value >= RRGDifference.Value * 2 ||
-                    RRGRealValueSignal.Value - RRGSetPointSignal.Value >= RRGDifference.Value * 2)
-                    return State.Error;
+                //else if ((RRGSetPointSignal.Value - RRGRealValueSignal.Value >= RRGDifference.Value * 2 ||
+                //    RRGRealValueSignal.Value - RRGSetPointSignal.Value >= RRGDifference.Value * 2) &&
+                //    RRGSetPointSignal.Value != 0)
+                //    return State.Error;
 
-                else if (RRGSetPointSignal.Value - RRGRealValueSignal.Value < RRGDifference.Value &&
-                    RRGRealValueSignal.Value == 0)
+                //else if (RRGSetPointSignal.Value - RRGRealValueSignal.Value < RRGDifference.Value &&
+                //    RRGSetPointSignal.Value == 0)
+                //    return State.Off;
+
+                //else if ((RRGSetPointSignal.Value - RRGRealValueSignal.Value < RRGDifference.Value ||
+                //    RRGRealValueSignal.Value - RRGSetPointSignal.Value < RRGDifference.Value) &&
+                //    RRGRealValueSignal.Value != 0)
+                //    return State.On;
+
+                //else return State.Transition;
+                if (RRGSetPointSignal.Value == 0 && RRGRealValueSignal.Value <= 2)
                     return State.Off;
-
-                else if ((RRGSetPointSignal.Value - RRGRealValueSignal.Value < RRGDifference.Value ||
-                    RRGRealValueSignal.Value - RRGSetPointSignal.Value < RRGDifference.Value) &&
-                    RRGRealValueSignal.Value != 0)
+                else if (RRGSetPointSignal.Value > 0 && RRGRealValueSignal.Value > 0)
                     return State.On;
-
                 else return State.Transition;
             }
+
         }
         public RRG(InputSignal<ushort> rrgRealValue, OutputSignal<ushort> rrgSetPoint, ICommand command)
         {

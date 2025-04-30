@@ -2,6 +2,7 @@
 using NLog;
 using Oratoria36.Models.Connection;
 using Oratoria36.Models.Modules.Module2;
+using Oratoria36.Models.Settings;
 using Oratoria36.Service;
 using System;
 using System.Collections.Generic;
@@ -32,7 +33,6 @@ namespace Oratoria36.Models
         private MainContext()
         {
             Net = NetContext.Instance;
-
             Net.Module2.Connect(Net.Module2IP);
             Module2Signals = new();
 

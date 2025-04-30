@@ -18,7 +18,7 @@ namespace Oratoria36.UI.Service
                 grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(30) });
             }
 
-            int rowIndex = 1;
+            int rowIndex = 0;
             foreach (var signal in signals)
             {
                 var pinTextBlock = new TextBlock()
@@ -44,6 +44,7 @@ namespace Oratoria36.UI.Service
                     Style = (Style)Application.Current.FindResource("ToggleSwitchStyle"),
                     IsChecked = signal.Value,
                     IsEnabled = !NetConfig.IsConnected,
+
                 };
 
                 valueCheckBox.Checked += (sender, e) => signal.Value = true;
@@ -70,7 +71,7 @@ namespace Oratoria36.UI.Service
                 grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(30) });
             }
 
-            int rowIndex = 1;
+            int rowIndex = 0;
             foreach (var signal in signals)
             {
                 var pinTextBlock = new TextBlock()
@@ -120,7 +121,7 @@ namespace Oratoria36.UI.Service
                 grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(30) });
             }
 
-            int rowIndex = 1;
+            int rowIndex = 0;
             foreach (var signal in signals)
             {
                 var pinTextBlock = new TextBlock()
@@ -178,7 +179,7 @@ namespace Oratoria36.UI.Service
                 grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(30) });
             }
 
-            int rowIndex = 1;
+            int rowIndex = 0;
             foreach (var signal in signals)
             {
                 var pinTextBlock = new TextBlock()

@@ -45,7 +45,6 @@
             <ColumnDefinition Width="0.5*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Основной контейнер для кликабельной области -->
         <Button Grid.Row="0" Grid.ColumnSpan="3"
                 Command="{Binding Command, RelativeSource={RelativeSource AncestorType=UserControl}}"
                 CommandParameter="{Binding CommandParameter, RelativeSource={RelativeSource AncestorType=UserControl}}"
@@ -59,12 +58,11 @@
             </Grid>
         </Button>
 
-        <!-- Остальные элементы -->
         <TextBlock Grid.Row="1" Grid.Column="0" Text="Уставка:" FontSize="12" Foreground="#3F3F3F" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
         <TextBlock Grid.Row="2" Grid.Column="0" Text="Текущее:" FontSize="12" Foreground="#3F3F3F" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
         <TextBlock Grid.Row="1" Grid.Column="2" Text="л/ч" FontSize="12" Foreground="#3F3F3F" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
         <TextBlock Grid.Row="2" Grid.Column="2" Text="л/ч" FontSize="12" Foreground="#3F3F3F" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
         <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding RRGSetPoint, RelativeSource={RelativeSource AncestorType=UserControl}}" Style="{DynamicResource AnalogBlueValueTextBlock}" VerticalAlignment="Bottom" FontSize="14" FontWeight="Bold"/>
-        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding RRGRealValue, RelativeSource={RelativeSource AncestorType=UserControl}}" Style="{DynamicResource AnalogBlueValueTextBlock}" VerticalAlignment="Bottom" FontSize="14" FontWeight="Bold"/>
+        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding RRGRealValue, RelativeSource={RelativeSource AncestorType=UserControl}}" Style="{DynamicResource AnalogBlueValueTextBlock}"  VerticalAlignment="Bottom" FontSize="14" FontWeight="Bold"/>
     </Grid>
 </UserControl>

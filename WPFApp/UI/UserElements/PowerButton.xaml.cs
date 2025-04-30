@@ -8,31 +8,31 @@ namespace Oratoria36.UI.UserElements
     public partial class PowerButton : UserControl
     {
         public static readonly DependencyProperty PathStrokeThicknessProperty =
-        DependencyProperty.Register("PathStrokeThickness", typeof(double), typeof(PowerButton),
-            new PropertyMetadata(2.0));
+            DependencyProperty.Register("PathStrokeThickness", typeof(double), typeof(PowerButton),
+                new PropertyMetadata(2.0));
 
-        public double PathStrokeThickness
-        {                                 
-            get { return (double)GetValue(PathStrokeThicknessProperty); }
-            set { SetValue(PathStrokeThicknessProperty, value); }
-        }
-
-        public static DependencyProperty CommandProperty =
+        public static readonly DependencyProperty CommandProperty =
             DependencyProperty.Register("Command", typeof(ICommand), typeof(PowerButton));
 
-        public ICommand Command
-        {                       
-            get { return (ICommand)GetValue(CommandProperty); }
-            set { SetValue(CommandProperty, value); }
+        public static readonly DependencyProperty CommandParameterProperty =
+            DependencyProperty.Register("CommandParameter", typeof(object), typeof(PowerButton));
+
+        public double PathStrokeThickness
+        {
+            get => (double)GetValue(PathStrokeThicknessProperty);
+            set => SetValue(PathStrokeThicknessProperty, value);
         }
 
-        public static DependencyProperty CommandParameterProperty =
-            DependencyProperty.Register("CommandParameter", typeof(object), typeof(PowerButton));
+        public ICommand Command
+        {
+            get => (ICommand)GetValue(CommandProperty);
+            set => SetValue(CommandProperty, value);
+        }
 
         public object CommandParameter
         {
-            get { return GetValue(CommandParameterProperty); }
-            set { SetValue(CommandParameterProperty, value); }
+            get => GetValue(CommandParameterProperty);
+            set => SetValue(CommandParameterProperty, value);
         }
 
         public PowerButton()
@@ -48,4 +48,3 @@ namespace Oratoria36.UI.UserElements
         }
     }
 }
-

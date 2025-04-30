@@ -42,7 +42,7 @@
         <Label Content="Транспортный модуль" Grid.Column="9" Grid.Row="1" 
                FontSize="16" Style="{DynamicResource HeaderLabel}" HorizontalAlignment="Center"/>
 
-        <Border Grid.Column="1" Grid.Row="2" Style="{StaticResource SoftGroupContainer}">
+        <Border Grid.Row="1" Style="{StaticResource SoftGroupContainer}" Grid.ColumnSpan="2" Margin="20,38,0,500" Grid.RowSpan="2">
             <StackPanel>
                 <Grid Margin="0,0,0,5">
                     <Grid.ColumnDefinitions>
@@ -54,7 +54,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="26"/>
                         <RowDefinition Height="26"/>
-                        <RowDefinition Height="26"/>
+                        <RowDefinition Height="30"/>
                         <RowDefinition Height="26"/>
                     </Grid.RowDefinitions>
 
@@ -62,25 +62,44 @@
                     <Label Content="IP:" Grid.Column="1" Grid.Row="1" Style="{DynamicResource BaseTextLabel}"/>
                     <Label Content="Порт:" Grid.Column="1" Grid.Row="2" Style="{DynamicResource BaseTextLabel}"/>
 
-                    <Label Grid.Column="2" Grid.Row="0" Content="{Binding Module1Status}" 
-                           Style="{DynamicResource BaseTextLabel}" FontWeight="Bold"/>
+                    <Label Grid.Column="2" Grid.Row="0" Style="{DynamicResource BaseTextLabel}" FontWeight="Bold">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Ellipse Width="10" Height="10" Margin="0,0,5,0">
+                                <Ellipse.Style>
+                                    <Style TargetType="Ellipse">
+                                        <Setter Property="Fill" Value="Red"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Module1.IsConnected}" Value="True">
+                                                <Setter Property="Fill" Value="Green"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Ellipse.Style>
+                            </Ellipse>
+                            <TextBlock Text="{Binding Module1Status}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Label>
+
                     <Label Grid.Column="2" Grid.Row="1" Content="{Binding Module1CurrentIP}" 
                            Style="{DynamicResource StaticValueLabel}"/>
+
                     <Label Grid.Column="2" Grid.Row="2" Content="{Binding Module1CurrentPort}" 
                            Style="{DynamicResource StaticValueLabel}"/>
 
                     <StackPanel Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="3" 
                                 Orientation="Horizontal" HorizontalAlignment="Center"/>
-                    <Button Content="Подключиться" Style="{DynamicResource BaseEnableButton}" 
-                                Command="{Binding ConnectCommandModule1}" Margin="0,5,0,-5" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" Width="120"/>
+                    
                     <Button Content="Отключиться" Style="{DynamicResource BaseEnableButton}" 
-                                Command="{Binding DisconnectCommandModule1}" Grid.Column="2" Margin="0,5,6,-5" Grid.Row="3"/>
+                                Command="{Binding DisconnectCommandModule1}" Grid.Column="1" Grid.Row="3" Width="120" HorizontalAlignment="Left"/>
+
+                    <Button Content="Подключиться" Style="{DynamicResource BaseEnableButton}" 
+                                Command="{Binding ConnectCommandModule1}" Grid.Row="3" Grid.Column="2" Width="120" HorizontalAlignment="Right"/>
                 </Grid>
 
 
                 <Border Style="{StaticResource SectionDivider}"/>
 
-                <Grid Margin="0,5,0,0">
+                <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="0.1*"/>
                         <ColumnDefinition Width="1.5*"/>
@@ -112,7 +131,7 @@
             </StackPanel>
         </Border>
 
-        <Border Grid.Column="3" Grid.Row="2" Style="{StaticResource SoftGroupContainer}">
+        <Border Grid.Column="2" Grid.Row="1" Style="{StaticResource SoftGroupContainer}" Grid.ColumnSpan="3" Margin="18,38,18,500" Grid.RowSpan="2" >
             <StackPanel>
                 <Grid Margin="0,0,0,5">
                     <Grid.ColumnDefinitions>
@@ -124,7 +143,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="26"/>
                         <RowDefinition Height="26"/>
-                        <RowDefinition Height="26"/>
+                        <RowDefinition Height="30"/>
                         <RowDefinition Height="26"/>
                     </Grid.RowDefinitions>
 
@@ -132,8 +151,24 @@
                     <Label Content="IP:" Grid.Column="1" Grid.Row="1" Style="{DynamicResource BaseTextLabel}"/>
                     <Label Content="Порт:" Grid.Column="1" Grid.Row="2" Style="{DynamicResource BaseTextLabel}"/>
 
-                    <Label Grid.Column="2" Grid.Row="0" Content="{Binding Module2Status}" 
-                           Style="{DynamicResource BaseTextLabel}" FontWeight="Bold"/>
+                    <Label Grid.Column="2" Grid.Row="0" Style="{DynamicResource BaseTextLabel}" FontWeight="Bold">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Ellipse Width="10" Height="10" Margin="0,0,5,0">
+                                <Ellipse.Style>
+                                    <Style TargetType="Ellipse">
+                                        <Setter Property="Fill" Value="Red"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Module2.IsConnected}" Value="True">
+                                                <Setter Property="Fill" Value="Green"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Ellipse.Style>
+                            </Ellipse>
+                            <TextBlock Text="{Binding Module2Status}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Label>
+
                     <Label Grid.Column="2" Grid.Row="1" Content="{Binding Module2CurrentIP}" 
                            Style="{DynamicResource StaticValueLabel}"/>
                     <Label Grid.Column="2" Grid.Row="2" Content="{Binding Module2CurrentPort}" 
@@ -142,15 +177,15 @@
                     <StackPanel Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="3" 
                                 Orientation="Horizontal" HorizontalAlignment="Center"/>
                     <Button Content="Подключиться" Style="{DynamicResource BaseEnableButton}" 
-                                Command="{Binding ConnectCommandModule2}" Margin="0,5,71,-5" Grid.Row="3" Grid.Column="1"/>
+                                Command="{Binding ConnectCommandModule2}" Grid.Column="2" Grid.Row="3" Width="120" HorizontalAlignment="Right"/>
 
                     <Button Content="Отключиться" Style="{DynamicResource BaseEnableButton}" 
-                        Command="{Binding DisconnectCommandModule2}" Grid.Column="2" Margin="0,5,6,-5" Grid.Row="3" RenderTransformOrigin="0.47,0.534"/>
+                        Command="{Binding DisconnectCommandModule2}" Grid.Column="1" Grid.Row="3" Width="120" HorizontalAlignment="Left"/>
                 </Grid>
 
                 <Border Style="{StaticResource SectionDivider}"/>
 
-                <Grid Margin="0,5,0,0">
+                <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="0.1*"/>
                         <ColumnDefinition Width="1.5*"/>

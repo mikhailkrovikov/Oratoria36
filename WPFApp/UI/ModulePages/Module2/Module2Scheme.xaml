@@ -6,7 +6,7 @@
                  xmlns:local="clr-namespace:Oratoria36.UI.ModulePages.Module2"
                  xmlns:UserElements="clr-namespace:Oratoria36.UI.UserElements" x:Class="Oratoria36.UI.ModulePages.Module2.Module2Scheme"
                  mc:Ignorable="d" 
-                 d:DesignHeight="600" d:DesignWidth="1000">
+                 d:DesignHeight="700" d:DesignWidth="1300">
     <Grid>
 
         <UserElements:PipelineUE State="{Binding Pipeline1.State}"
@@ -25,7 +25,7 @@
         <UserElements:ValveUE Label="{Binding FK_KN_DU_63.Name}"
                               State="{Binding FK_KN_DU_63.State}"
                               Command="{Binding FK_KN_DU_63.Command}"
-                Margin="528,351,386,149" Height="100" Width="85"/>
+                Margin="538,350,677,250" Height="100" Width="85"/>
 
         <UserElements:RRGUe RRGRealValue="{Binding RRG1.RRGRealValue}"
                             RRGSetPoint="{Binding RRG1.RRGSetPointValue}"

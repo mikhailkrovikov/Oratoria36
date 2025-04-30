@@ -4,7 +4,9 @@ using Oratoria36.Service;
 using Oratoria36.Service.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -38,7 +40,7 @@ namespace Oratoria36.UI.DialogWindows
             this.Close();
         }
     }
-    public class ValveWindowVM
+    public class ValveWindowVM : INotifyPropertyChanged
     {
         Logger _logger = LogManager.GetLogger("UI");
         public Valve Valve { get; set; }
@@ -81,6 +83,24 @@ namespace Oratoria36.UI.DialogWindows
             {
                 return Valve.Open.Value;
             });
+
+            Valve.IsOpen.OnSignalChanged += value =>
+            {
+                OnPropertyChanged(nameof(Status));
+            };
+            Valve.IsClose.OnSignalChanged += value =>
+            {
+                OnPropertyChanged(nameof(Status));
+            };
+            Valve.Open.OnSignalChanged += value =>
+            {
+                OnPropertyChanged(nameof(Status));
+            };
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

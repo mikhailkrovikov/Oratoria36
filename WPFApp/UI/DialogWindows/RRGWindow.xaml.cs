@@ -4,7 +4,9 @@ using Oratoria36.Service;
 using Oratoria36.Service.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -37,16 +39,16 @@ namespace Oratoria36.UI.DialogWindows
             this.Close();
         }
     }
-    public class RRGWindowVM
+    public class RRGWindowVM : INotifyPropertyChanged
     {
         Logger _logger = LogManager.GetLogger("UI");
         public RRG RRG { get; set; }
 
-        private string _newSetpoint;
+        private string _newSetPoint;
         public string NewSetPoint
         {
-            get => _newSetpoint;
-            set => _newSetpoint = value;
+            get => _newSetPoint;
+            set => _newSetPoint = value;
         }
         public ICommand SetNewPoint { get; set; }
         public ICommand Reset { get; set; }
@@ -72,7 +74,8 @@ namespace Oratoria36.UI.DialogWindows
             {
                 try
                 {
-                    RRG.RRGSetPointSignal.Value = ushort.Parse(NewSetPoint);
+                    RRG.RRGSetPointSignal.Value = ushort.Parse(NewSetPoint);                
+                    _logger.Info($"Задана новая уставка РРГ: {RRG.RRGRealValueSignal.Value}");
                 }
                 catch { }
             },
@@ -84,11 +87,30 @@ namespace Oratoria36.UI.DialogWindows
             Reset = new RelayCommand((object obj) =>
             {
                 RRG.RRGSetPointSignal.Value = 0;
+                NewSetPoint = "0";
+                _logger.Info("Уставка РРГ обнулена");
             },
             (object obj) =>
             {
                 return true;
             });
+
+            RRG.RRGSetPointSignal.OnSignalChanged += value =>
+            {
+                OnPropertyChanged(nameof(Status));
+                OnPropertyChanged(nameof(NewSetPoint));
+            };
+
+            RRG.RRGRealValueSignal.OnSignalChanged += value =>
+            {
+                OnPropertyChanged(nameof(Status));
+                OnPropertyChanged(nameof(NewSetPoint));
+            };
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
