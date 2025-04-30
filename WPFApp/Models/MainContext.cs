@@ -1,4 +1,5 @@
-﻿using Modbus.Message;
+﻿using Modbus.Device;
+using Modbus.Message;
 using NLog;
 using Oratoria36.Models.Connection;
 using Oratoria36.Models.Modules.Module2;
@@ -45,6 +46,39 @@ namespace Oratoria36.Models
         {
             Module2DI di = Module2Signals.DISignals;
             Module2AI ai = Module2Signals.AISignals;
+            ModbusIpMaster m2Master;
+
+
+            lock (Locker.Module2PollerLocker)
+            {
+                if (Net.Module2.IsConnected)
+                {
+                    m2Master = Net.Module2.Master;
+
+                    var numberOfDevices = m2Master.ReadHoldingRegisters(0x1110, 1);
+
+                    var ids = m2Master.ReadHoldingRegisters(0x110e, (ushort)(numberOfDevices[0] + 1));
+
+                    var name = m2Master.ReadHoldingRegisters(0x1005, 17);
+
+
+                    string name1 = "";
+                    foreach(var cr in name)
+                    {
+                        var a1 = cr / 256;
+                        var a2 = cr % 256;
+                        name1 += (char)a1;
+                        name1 += (char)a2;
+                    }
+
+                    var inputRegSize = m2Master.ReadHoldingRegisters(0x1104, 1);
+                    var outputRegSize = m2Master.ReadHoldingRegisters(0x1105, 1);
+                    var inputBitsSize = m2Master.ReadHoldingRegisters(0x1108, 1);
+                    var outputBitsSize = m2Master.ReadHoldingRegisters(0x1109, 1);
+
+
+                }
+            }
 
 
             while (true)
