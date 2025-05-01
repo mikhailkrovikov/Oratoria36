@@ -16,45 +16,21 @@ namespace Oratoria36.UI
 {
     public partial class MainWindow : Window
     {
-        private MainWindowVM _vm;
-        
-        private MainContext _context;
+        private readonly MainWindowVM _vm;
+        private readonly MainContext _context;
+
         public MainWindow()
         {
             InitializeComponent();
             _vm = new MainWindowVM();
             DataContext = _vm;
-
             _vm.StartClock();
-            NavigationBarControl.PageChanged += NavigateToPage;
-            MainFrame.NavigationService.Navigate(new MainPage());
+            NavigationBarControl.HostFrame = MainFrame;
             _context = MainContext.Instance;
+            MainFrame.Navigate(new MainPage());
         }
 
         public MainWindowVM ViewModel => _vm;
-        private void NavigateToPage(string pageName)
-        {
-            switch (pageName)
-            {
-                case "MainPage":
-                    MainFrame.Navigate(new MainPage());
-                    break;
-                case "Module2SignalsPage":
-                    MainFrame.Navigate(new Module2SignalsPage());
-                    break;
-                case "ConnectionSettings":
-                    MainFrame.Navigate(new ConnectionSettings());
-                    break;
-                case "LogPage":
-                    MainFrame.Navigate(new LogPage());
-                    break;
-                case "Module2Page":
-                    MainFrame.Navigate(new Module2Page());
-                    break;
-                default:
-                    throw new ArgumentException($"Unknown page: {pageName}");
-            }
-        }
     }
 
     public class MainWindowVM : INotifyPropertyChanged

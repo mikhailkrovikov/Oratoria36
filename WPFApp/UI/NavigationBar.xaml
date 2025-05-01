@@ -1,43 +1,22 @@
 ﻿<UserControl x:Class="Oratoria36.UI.NavigationBar"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Height="80" Background="#FFE0E0E0" BorderThickness="1" BorderBrush="#A0A0A4">
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Height="80" Background="#FFE0E0E0" BorderThickness="1" BorderBrush="#A0A0A4">
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="1"/>
-            <!-- Высота границы -->
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-
-        <!-- Первый ряд -->
         <DockPanel LastChildFill="True" Height="40" Width="1920">
-            <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
-                <Button 
-                Content="Главная" 
-                Click="MainPage_Click"
-                Style="{DynamicResource NavigationButton}"/>
-                <Button 
-                Content="Модуль 2" 
-                Click="Module2page_Click"
-                Style="{DynamicResource NavigationButton}"/>
-                <Button 
-                Content="Сигналы" 
-                Click="SignalsPage_Click" 
-                Style="{DynamicResource NavigationButton}"/>
-                <Button 
-                Content="Сеть" 
-                Click="ConnectionSettings_Click" 
-                Style="{DynamicResource NavigationButton}"/>
-                <Button 
-                Content="Логи" 
-                Click="LogPage_Click" 
-                Style="{DynamicResource NavigationButton}"/>
-            </StackPanel>
+            <StackPanel x:Name="StaticPanel" 
+                      Orientation="Horizontal" 
+                      DockPanel.Dock="Left"/>
         </DockPanel>
-
-        <!-- Граница между рядами -->
         <Border Grid.Row="1" Background="#A0A0A4" HorizontalAlignment="Stretch"/>
+        <StackPanel x:Name="DynamicPanel"
+                  Grid.Row="2"
+                  Orientation="Horizontal"/>
     </Grid>
 </UserControl>

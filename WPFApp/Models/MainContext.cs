@@ -34,14 +34,14 @@ namespace Oratoria36.Models
         private MainContext()
         {
             Net = NetContext.Instance;
-            Net.Module2.Connect(Net.Module2IP);
+            //Net.Module2.Connect(Net.Module2IP);
             Module2Signals = new();
 
-            var thread = new Thread(new ThreadStart(() => ReadInputs()));
+            var thread = new Thread(new ThreadStart(ReadInputs));
             thread.IsBackground = true;
             thread.Start();
         }
-
+        #endregion
         private void ReadInputs()
         {
             Module2DI di = Module2Signals.DISignals;
@@ -103,7 +103,7 @@ namespace Oratoria36.Models
             }
         }
 
-        #endregion
+       
         public NetContext Net { get; }
         public Module2Signals Module2Signals { get; }
 
