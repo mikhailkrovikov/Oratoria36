@@ -11,7 +11,7 @@
 
         <UserElements:PipelineUE State="{Binding Pipeline1.State}"
                                  Direction="180"
-            HorizontalAlignment="Left" Margin="406,417,0,0" VerticalAlignment="Top" Height="14" Width="132"/>
+                                 HorizontalAlignment="Left" Margin="406,417,0,0" VerticalAlignment="Top" Height="14" Width="132"/>
 
         <UserElements:PipelineUE State="{Binding Pipeline2.State}"
                                  Direction="180"
@@ -25,13 +25,22 @@
         <UserElements:ValveUE Label="{Binding FK_KN_DU_63.Name}"
                               State="{Binding FK_KN_DU_63.State}"
                               Command="{Binding FK_KN_DU_63.Command}"
-                Margin="538,350,677,250" Height="100" Width="85"/>
+                              Margin="538,344,677,0" Width="85" Height="111" VerticalAlignment="Top"/>
 
         <UserElements:RRGUe RRGRealValue="{Binding RRG1.RRGRealValue}"
                             RRGSetPoint="{Binding RRG1.RRGSetPointValue}"
                             Command="{Binding RRG1.Command}"
                             State="{Binding RRG1.State}"
-            HorizontalAlignment="Left" Margin="266,398,0,0" VerticalAlignment="Top" Height="100" Width="140"/>
+                            HorizontalAlignment="Left" Margin="266,398,0,0" VerticalAlignment="Top" Height="100" Width="140"/>
+
+        <UserElements:ManipulatorUE Position="{Binding ManipulatorModule2.Position}"
+                                    State="{Binding ManipulatorModule2.State}"
+                                    HorizontalAlignment="Left" Margin="742,377,0,0" VerticalAlignment="Top"/>
+
+        <UserElements:ZatvorUE Label="{Binding ZatvorModule2.Name}"
+                               State="{Binding ZatvorModule2.State}"
+                               Command="{Binding ZatvorModule2.Command}"
+                                HorizontalAlignment="Left" Margin="662,121,0,0" VerticalAlignment="Top" Height="206"/>
 
     </Grid>
 </UserControl>

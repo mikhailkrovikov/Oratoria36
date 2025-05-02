@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Oratoria36.Models.Modules.Module2
 {
-    public class Module2DI /*IModbusStrategy*/
+    public class Module2DI
     {
         public ObservableCollection<InputSignal<bool>> DigitalInputs;
         public InputSignal<bool> Nakal_est { get; set; }

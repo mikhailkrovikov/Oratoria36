@@ -23,11 +23,11 @@ namespace Oratoria36.UI.UserElements
     {
         public static readonly DependencyProperty PositionProperty =
             DependencyProperty.Register("Position", typeof(ManipulatorPosition), typeof(ManipulatorUE),
-                new PropertyMetadata(ManipulatorPosition.Transport, OnPositionChanged));
+                new PropertyMetadata(ManipulatorPosition.Home, OnPositionChanged));
 
         public static readonly DependencyProperty StateProperty =
-            DependencyProperty.Register("State", typeof(ManipulatorPosition), typeof(ManipulatorUE),
-                new PropertyMetadata(ManipulatorPosition.Home));
+            DependencyProperty.Register("State", typeof(State), typeof(ManipulatorUE),
+                new PropertyMetadata(State.Transition));
 
         public ManipulatorPosition Position
         {

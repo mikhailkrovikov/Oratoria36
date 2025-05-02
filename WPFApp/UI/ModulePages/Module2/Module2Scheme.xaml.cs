@@ -36,6 +36,10 @@ namespace Oratoria36.UI.ModulePages.Module2
             typeof(RRG),
             typeof(Module2Scheme));
 
+        public static DependencyProperty ZatvorModule2Property =
+            DependencyProperty.Register("ZatvorModule2",
+                typeof(Zatvor),
+                typeof(Module2Scheme));
 
         public Valve FK_KN_DU_63
         {
@@ -47,11 +51,15 @@ namespace Oratoria36.UI.ModulePages.Module2
             get { return (Pipeline)GetValue(Pipeline1Property); }
             set { SetValue(Pipeline1Property, value); }
         }
-
         public RRG RRG1
         {
             get { return (RRG)GetValue(RRG1Property); }
             set { SetValue(RRG1Property, value); }
+        }
+        public Zatvor ZatvorModule2
+        {
+            get { return (Zatvor)GetValue(ZatvorModule2Property); }
+            set { SetValue(ZatvorModule2Property, value); }
         }
         public Module2Scheme()
         {

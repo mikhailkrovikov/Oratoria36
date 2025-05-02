@@ -9,18 +9,18 @@
              Width="135" Height="100">
     <UserControl.Resources>
         <service:StateToColorConverter x:Key="StateConverter"/>
+        <service:EnumToStringConverter x:Key="EnumToStringConverter"/>
     </UserControl.Resources>
     <Grid>
-        <Canvas x:Name="MainCanvas" Height="100">
-            <Canvas x:Name="ManipulatorCanvas" Canvas.Left="60" Canvas.Top="50" RenderTransformOrigin="0,0.5">
+        <Canvas x:Name="MainCanvas" Height="100" Width="135">
+            <!-- Центрируем ManipulatorCanvas по горизонтали (67.5 = 135/2) -->
+            <Canvas x:Name="ManipulatorCanvas" Canvas.Left="67.5" Canvas.Top="50" RenderTransformOrigin="0,0.5">
                 <Canvas.RenderTransform>
                     <RotateTransform x:Name="ManipulatorRotation" Angle="0" />
                 </Canvas.RenderTransform>
 
                 <Rectangle x:Name="Arm" Width="50" Height="4" Fill="{Binding State, Converter={StaticResource StateConverter}, RelativeSource={RelativeSource AncestorType=UserControl}}" Stroke="Black" StrokeThickness="1" Canvas.Left="5" Canvas.Top="-2" />
                 <Ellipse x:Name="Joint" Width="10" Height="10" Fill="{Binding State, Converter={StaticResource StateConverter}, RelativeSource={RelativeSource AncestorType=UserControl}}" Stroke="Black" StrokeThickness="1" Canvas.Left="0" Canvas.Top="-5" />
-
-
 
                 <Path x:Name="Claw" Stroke="Black" StrokeThickness="4" Fill="Transparent" Canvas.Left="51" Canvas.Top="-17.5" Height="35" Stretch="Fill" Width="22" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.292,0.54">
                     <Path.Data>
@@ -32,8 +32,10 @@
                     </Path.Data>
                 </Path>
             </Canvas>
-            <Label Content="{Binding Position}" Canvas.Bottom="0" FontSize="14"/>
+            <Label Content="{Binding Position, Converter={StaticResource EnumToStringConverter}, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                   Canvas.Bottom="20" FontSize="14" 
+                   HorizontalAlignment="Center" Width="135" Foreground="#3F3F3F" 
+                   HorizontalContentAlignment="Center" VerticalAlignment="Center"/>
         </Canvas>
-        
     </Grid>
 </UserControl>

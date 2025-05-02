@@ -21,17 +21,17 @@ using System.Windows.Shapes;
 namespace Oratoria36.UI.DialogWindows
 {
     /// <summary>
-    /// Логика взаимодействия для ValveWindow.xaml
+    /// Логика взаимодействия для ZatvorWindow.xaml
     /// </summary>
-    public partial class ValveWindow : Window
-    {   
-        ValveWindowVM _vm;
-        public ValveWindow(Valve valve)
+    public partial class ZatvorWindow : Window
+    {
+        ZatvorWindowVM _vm;
+        public ZatvorWindow(Zatvor zatvor)
         {
             InitializeComponent();
-            _vm = new ValveWindowVM(valve);
+            _vm = new ZatvorWindowVM(zatvor);
             DataContext = _vm;
-            _vm.Valve = valve;
+            _vm.Zatvor = zatvor;
             this.ShowDialog();
         }
         private void CloseButton_Click(object sender, RoutedEventArgs e)
@@ -39,59 +39,59 @@ namespace Oratoria36.UI.DialogWindows
             this.Close();
         }
     }
-    public class ValveWindowVM : INotifyPropertyChanged
+    public class ZatvorWindowVM : INotifyPropertyChanged
     {
         Logger _logger = LogManager.GetLogger("UI");
-        public Valve Valve { get; set; }
+        public Zatvor Zatvor { get; set; }
         public string Status
         {
             get
             {
-                if (Valve.State == State.On)
+                if (Zatvor.State == State.On)
                     return "открыт";
-                else if (Valve.State == State.Off)
+                else if (Zatvor.State == State.Off)
                     return "закрыт";
-                else if (Valve.State == State.Transition)
+                else if (Zatvor.State == State.Transition)
                     return "переходное";
-                else if (Valve.State == State.Warning)
+                else if (Zatvor.State == State.Warning)
                     return "предупреждение";
                 else return "ошибка";
             }
         }
-        public ICommand OpenValveCommand { get; set; }
-        public ICommand CloseValveCommand { get; set; }
-        public ValveWindowVM(Valve valve)
+        public ICommand OpenZatvorCommand { get; set; }
+        public ICommand CloseZatvorCommand { get; set; }
+        public ZatvorWindowVM(Zatvor zatvor)
         {
-            Valve = valve;
-            OpenValveCommand = new RelayCommand((object obj) =>
+            Zatvor = zatvor;
+            OpenZatvorCommand = new RelayCommand((object obj) =>
             {
-                Valve.Open.Value = true;
-                _logger.Info($"Открытие клапана {Valve.Name}");
+                Zatvor.Open.Value = true;
+                _logger.Info($"Открытие затвора {Zatvor.Name}");
+            },
+            (object obj) => 
+            { 
+                return !Zatvor.Open.Value; 
+            });
+
+            CloseZatvorCommand = new RelayCommand((object obj) => 
+            {
+                Zatvor.Open.Value = false;
+                _logger.Info($"зкрытие затвора {Zatvor.Name}");
             },
             (object obj) =>
             {
-                return !Valve.Open.Value;
+                return Zatvor.Open.Value;
             });
 
-            CloseValveCommand = new RelayCommand((object obj) =>
-            {
-                Valve.Open.Value = false;
-                _logger.Info($"Закрытие клапана {Valve.Name}");
-            },
-            (object obj) =>
-            {
-                return Valve.Open.Value;
-            });
-
-            Valve.IsOpen.OnSignalChanged += value =>
+            Zatvor.IsOpen.OnSignalChanged += value =>
             {
                 OnPropertyChanged(nameof(Status));
             };
-            Valve.IsClose.OnSignalChanged += value =>
+            Zatvor.IsClose.OnSignalChanged += value =>
             {
                 OnPropertyChanged(nameof(Status));
             };
-            Valve.Open.OnSignalChanged += value =>
+            Zatvor.Open.OnSignalChanged += value =>
             {
                 OnPropertyChanged(nameof(Status));
             };

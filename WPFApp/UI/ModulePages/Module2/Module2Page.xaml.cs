@@ -39,9 +39,12 @@ namespace Oratoria36.UI.ModulePages.Module2
         Module2Signals _signals;
 
         public Valve FK_KN_DU_63 { get; set; }
+        public Zatvor ZatvorModule2 { get; set; }
         public RRG RRG1 { get; set; }
+        public Manipulator ManipulatorModule2 { get; set; }
         public ICommand FK_KN_DU_63Command { get; set; }
         public ICommand RRG1Command { get; set; }
+        public ICommand ZatvorModule2Command { get; set; }
         public Pipeline Pipeline1 { get; set; }
         public Pipeline Pipeline2 { get; set; }
 
@@ -60,7 +63,16 @@ namespace Oratoria36.UI.ModulePages.Module2
                 null,
                 FK_KN_DU_63Command);
 
-            
+            ZatvorModule2Command= new RelayCommand(
+                (object obj) => { ZatvorWindow zatvorWindow = new(ZatvorModule2); },
+                (object obj) => { return true; });
+
+            ZatvorModule2 = new Zatvor("ЩЗ Модуля 2",
+                _signals.DISignals.SHCHZ_otkryt,
+                _signals.DISignals.SHCHZ_zakryt,
+                _signals.DOSignals.ShZ_otkryt,
+                null,
+                ZatvorModule2Command);
 
             RRG1Command = new RelayCommand(
                 (object obj) => { RRGWindow rRGWindow = new(RRG1); },
@@ -72,6 +84,8 @@ namespace Oratoria36.UI.ModulePages.Module2
 
             Pipeline1 = new Pipeline(FK_KN_DU_63);
             Pipeline2 = new Pipeline(FK_KN_DU_63, Pipeline1);
+
+
 
         }
 
