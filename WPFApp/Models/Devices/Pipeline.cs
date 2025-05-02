@@ -29,6 +29,7 @@ namespace Oratoria36.Models.Devices
                 }
                 return _deviceToPipeline.State;
             }
+            protected set;
         }
         public Pipeline(Valve deviceToPipeline, Pipeline lineBefore = null)
         {

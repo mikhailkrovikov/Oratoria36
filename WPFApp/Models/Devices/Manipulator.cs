@@ -20,12 +20,6 @@ namespace Oratoria36.Models.Devices
         //Положение манипулятора не определено
         //Неоднозначное положение манипулятора
 
-        //Команды
-        //1-2 с без
-        //2-1 с без
-        //2-3 с без
-        //3-2 с без
-
         readonly OutputSignal<bool> ManipulatorPrivod1;
         readonly OutputSignal<bool> PlatePrivod3;
         readonly OutputSignal<bool> TormosOut;
@@ -33,7 +27,6 @@ namespace Oratoria36.Models.Devices
         readonly OutputSignal<bool> Position1Out;
         readonly OutputSignal<bool> Position2Out;
         readonly OutputSignal<bool> Position3Out;
-
 
         readonly InputSignal<bool> Position1In;
         readonly InputSignal<bool> Position2In;
@@ -44,74 +37,34 @@ namespace Oratoria36.Models.Devices
         public Setting<int> ManipulatorActionTime;
 
         Logger _logger = LogManager.GetLogger("Манипулятор");
-        private CancellationTokenSource _cts = new CancellationTokenSource();
-
-        public ManipulatorPosition Position { get; set; }
-        public enum ManipulatorErrors
-        {
-            /// <summary>
-            /// Нет ошибок
-            /// </summary>
-            None,
-
-            /// <summary>
-            /// Манипулятор не в исходном положении
-            /// </summary>
-            Error1_1,
-
-            /// <summary>
-            /// Манипулятор не опустился к ложементу
-            /// </summary>
-            Error1_4,
-
-            /// <summary>
-            /// Манипулятор не поднялся от ложемента к исходному
-            /// </summary>
-            Error1_5,
-
-            /// <summary>
-            /// Манипулятор не опустился к каретке
-            /// </summary>
-            Error1_6,
-
-            /// <summary>
-            /// Манипулятор не поднялся от каретки к исходному
-            /// </summary>
-            Error1_7,
-
-            /// <summary>
-            /// наличие пластины в манипуляторе
-            /// </summary>
-            Error1_8,
-
-            /// <summary>
-            /// Манипулятор не поставил пластину в каретку
-            /// </summary>
-            Error1_9,
-
-            /// <summary>
-            /// Манипулятор не взял пластину из каретки
-            /// </summary>
-            Error1_10,
-
-            /// <summary>
-            /// Манипулятор не постаавил пластину в ложемент
-            /// </summary>
-            Error1_11,
-
-            /// <summary>
-            /// Манипулятор не взял пластину из ложемента
-            /// </summary>
-            Error1_12,
-        }
+        private CancellationTokenSource token = new CancellationTokenSource();
         public ManipulatorErrors ErrorState { get; private set; } = ManipulatorErrors.None;
+
+        private ManipulatorPosition _position;
+        public ManipulatorPosition Position
+        {
+            get => _position;
+            set
+            {
+                if (_position != value)
+                {
+                    _position = value;
+                    OnPropertyChanged(nameof(Position));
+                }
+            }
+        }
+    
+        private State _state = State.On;
         public override State State
         {
-            get
+            get => _state;
+            protected set
             {
-                if (ErrorState != ManipulatorErrors.None)
-                    return State.Warning;
-                return State.On;
+                if (_state != value)
+                {
+                    _state = value;
+                    OnPropertyChanged(nameof(State));
+                }
             }
         }
         public Manipulator(OutputSignal<bool> manipulatorPrivod1,
@@ -142,16 +95,118 @@ namespace Oratoria36.Models.Devices
             TormosIn = tormosIn;
             ReversIn = reversIn;
             ManipulatorActionTime = CommonDeviceSettings.ManipulatorActionTime;
+
+            ManipulatorPrivod1.OnSignalChanged += value =>
+            {
+                OnPropertyChanged(nameof(State));
+                OnPropertyChanged(nameof(Position));
+            };
+            PlatePrivod3.OnSignalChanged += value =>
+            {
+                OnPropertyChanged(nameof(State));
+                OnPropertyChanged(nameof(Position));
+            };
+            TormosOut.OnSignalChanged += value =>
+            {
+                OnPropertyChanged(nameof(State));
+                OnPropertyChanged(nameof(Position));
+            };
+            ReversOut.OnSignalChanged += value =>
+            {
+                OnPropertyChanged(nameof(State));
+                OnPropertyChanged(nameof(Position));
+            };
+            Position1Out.OnSignalChanged += value =>
+            {
+                OnPropertyChanged(nameof(State));
+                OnPropertyChanged(nameof(Position));
+            };
+            Position2Out.OnSignalChanged += value =>
+            {
+                OnPropertyChanged(nameof(State));
+                OnPropertyChanged(nameof(Position));
+            };
+            Position3Out.OnSignalChanged += value =>
+            {
+                OnPropertyChanged(nameof(State));
+                OnPropertyChanged(nameof(Position));
+            };
+            Position1In.OnSignalChanged += value =>
+            {
+                OnPropertyChanged(nameof(State));
+                OnPropertyChanged(nameof(Position));
+            };
+            Position2In.OnSignalChanged += value =>
+            {
+                OnPropertyChanged(nameof(State));
+                OnPropertyChanged(nameof(Position));
+            };
+            Position3In.OnSignalChanged += value =>
+            {
+                OnPropertyChanged(nameof(State));
+                OnPropertyChanged(nameof(Position));
+            };
+            TormosIn.OnSignalChanged += value =>
+            {
+                OnPropertyChanged(nameof(State));
+                OnPropertyChanged(nameof(Position));
+            };
+            ReversIn.OnSignalChanged += value =>
+            {
+                OnPropertyChanged(nameof(State));
+                OnPropertyChanged(nameof(Position));
+            };
+        }
+
+        public async Task<bool> Load()
+        {
+            try
+            {
+                if (!await FromHomeToTransportNoPlate())
+                    return false;
+                if (!await FromTransportToHomeWithPlate())
+                    return false;
+                if (!await FromHomeToModuleWithPlate())
+                    return false;
+                if (!await FromModuleToHomeNoPlate())
+                    return false;
+                return true;
+            }
+            catch
+            {
+                EmergencyStop();
+                return false;
+            } 
+        }
+
+        public async Task<bool> UnLoad()
+        {
+            try
+            {
+                if(!await FromHomeToModuleNoPlate())
+                    return false;
+                if (!await FromModuleToHomeWithPlate())
+                    return false;
+                if (!await FromHomeToTransportWithPlate())
+                    return false;
+                if (!await FromTransportToHomeNoPlate())
+                    return false;
+                return true;
+            }
+            catch
+            {
+                EmergencyStop();
+                return false;
+            }
         }
 
         public void EmergencyStop()
         {
-            _cts.Cancel();
+            token.Cancel();
             StopAllMechanisms();
             _logger.Info("Стоп манипулятора");
-            _cts = new CancellationTokenSource();
+            token = new CancellationTokenSource();
         }
-
         private void StopAllMechanisms()
         {
             ManipulatorPrivod1.Value = false;
@@ -162,11 +217,12 @@ namespace Oratoria36.Models.Devices
             Position2Out.Value = false;
             Position3Out.Value = false;
         }
+
         private async Task<bool> ExecuteWithCancellation(Func<CancellationToken, Task<bool>> operation)
         {
             try
             {
-                return await operation(_cts.Token);
+                return await operation(token.Token);
             }
             catch (OperationCanceledException)
             {
@@ -178,7 +234,7 @@ namespace Oratoria36.Models.Devices
         /// <summary>
         /// Манипулятор из 2 в 1 без пластины
         /// </summary>
-        public async Task<bool> FromHomeToTransportNoPlate()
+        private async Task<bool> FromHomeToTransportNoPlate()
         {
             return await ExecuteWithCancellation(async (token) =>
             {
@@ -207,6 +263,8 @@ namespace Oratoria36.Models.Devices
                     return false;
 
                 ManipulatorPrivod1.Value = false;
+                State = State.On;
+                Position = ManipulatorPosition.Transport;
                 return true;
             });
         }
@@ -214,7 +272,7 @@ namespace Oratoria36.Models.Devices
         /// <summary>
         /// Манипулятор из 1 в 2 с пластиной
         /// </summary>
-        public async Task<bool> FromTransportToHomeWithPlate()
+        private async Task<bool> FromTransportToHomeWithPlate()
         {
             return await ExecuteWithCancellation(async (token) =>
             {
@@ -239,6 +297,8 @@ namespace Oratoria36.Models.Devices
                 if (!IsManipulatorHasPlateFromTransport())
                     return false;
 
+                State = State.On;
+                Position = ManipulatorPosition.Home;
                 return true;
             });
         }
@@ -246,7 +306,7 @@ namespace Oratoria36.Models.Devices
         /// <summary>
         /// Манипулятор из 2 в 3 с пластиной
         /// </summary>
-        public async Task<bool> FromHomeToModuleWithPlate()
+        private async Task<bool> FromHomeToModuleWithPlate()
         {
             return await ExecuteWithCancellation(async (token) =>
             {
@@ -276,6 +336,8 @@ namespace Oratoria36.Models.Devices
                     return false;
 
                 ManipulatorPrivod1.Value = false;
+                State = State.On;
+                Position = ManipulatorPosition.Module;
                 return true;
             });
         }
@@ -283,7 +345,7 @@ namespace Oratoria36.Models.Devices
         /// <summary>
         /// Манипулятор из 3 в 2 без пластины
         /// </summary>
-        public async Task<bool> FromModuleToHomeNoPlate()
+        private async Task<bool> FromModuleToHomeNoPlate()
         {
             return await ExecuteWithCancellation(async (token) =>
             {
@@ -308,6 +370,7 @@ namespace Oratoria36.Models.Devices
                 if (Position2In.Value)
                 {
                     ErrorState = ManipulatorErrors.Error1_5;
+                    State = State.Warning;
                     _logger.Warn("Манипулятор не поднялся от ложемента к исходному");
                     return false;
                 }
@@ -316,6 +379,8 @@ namespace Oratoria36.Models.Devices
                 if (!IsManipulatorPlacedPlateInModule())
                     return false;
 
+                State = State.On;
+                Position = ManipulatorPosition.Home;
                 return true;
             });
         }
@@ -323,7 +388,7 @@ namespace Oratoria36.Models.Devices
         /// <summary>
         /// Манипулятор из 2 в 3 без пластины
         /// </summary>
-        public async Task<bool> FromHomeToModuleNoPlate()
+        private async Task<bool> FromHomeToModuleNoPlate()
         {
             return await ExecuteWithCancellation(async (token) =>
             {
@@ -352,6 +417,8 @@ namespace Oratoria36.Models.Devices
                     return false;
 
                 ManipulatorPrivod1.Value = false;
+                State = State.On;
+                Position = ManipulatorPosition.Module;
                 return true;
             });
         }
@@ -359,7 +426,7 @@ namespace Oratoria36.Models.Devices
         /// <summary>
         /// Манипулятор из 3 в 2 с пластиной
         /// </summary>
-        public async Task<bool> FromModuleToHomeWithPlate()
+        private async Task<bool> FromModuleToHomeWithPlate()
         {
             return await ExecuteWithCancellation(async (token) =>
             {
@@ -384,6 +451,7 @@ namespace Oratoria36.Models.Devices
                 if (!Position2In.Value)
                 {
                     ErrorState = ManipulatorErrors.Error1_5;
+                    State = State.Warning;
                     _logger.Warn("Манипулятор не поднялся от ложемента к исходному");
                     return false;
                 }
@@ -392,6 +460,8 @@ namespace Oratoria36.Models.Devices
                 if (!IsManipulatorHasPlateFromModule())
                     return false;
 
+                State = State.On;
+                Position = ManipulatorPosition.Home;
                 return true;
             });
         }
@@ -399,7 +469,7 @@ namespace Oratoria36.Models.Devices
         /// <summary>
         /// Манипулятор из 2 в 1 с пластиной
         /// </summary>
-        public async Task<bool> FromHomeToTransportWithPlate()
+        private async Task<bool> FromHomeToTransportWithPlate()
         {
             return await ExecuteWithCancellation(async (token) =>
             {
@@ -428,6 +498,8 @@ namespace Oratoria36.Models.Devices
                     return false;
 
                 ManipulatorPrivod1.Value = false;
+                State = State.On;
+                Position = ManipulatorPosition.Transport;
                 return true;
             });
         }
@@ -435,7 +507,7 @@ namespace Oratoria36.Models.Devices
         /// <summary>
         /// Манипулятор из 1 в 2 без пластины
         /// </summary>
-        public async Task<bool> FromTransportToHomeNoPlate()
+        private async Task<bool> FromTransportToHomeNoPlate()
         {
             return await ExecuteWithCancellation(async (token) =>
             {
@@ -460,6 +532,7 @@ namespace Oratoria36.Models.Devices
                 if (!Position2In.Value)
                 {
                     ErrorState = ManipulatorErrors.Error1_7;
+                    State = State.Warning;
                     _logger.Warn("Манипулятор не поднялся от каретки к исходному");
                     return false;
                 }
@@ -467,7 +540,8 @@ namespace Oratoria36.Models.Devices
                 ManipulatorPrivod1.Value = false;
                 if (!IsManipulatorPlacedPlateInTransport())
                     return false;
-
+                State = State.On;
+                Position = ManipulatorPosition.Home;
                 return true;
             });
         }
@@ -482,6 +556,9 @@ namespace Oratoria36.Models.Devices
         {
             if (signal.Value)
                 return true;
+
+            State = State.Transition;
+
 
             var tcs = new TaskCompletionSource<bool>();
             using var registration = cancellationToken.Register(() => tcs.TrySetCanceled());
@@ -553,6 +630,7 @@ namespace Oratoria36.Models.Devices
             {
                 ErrorState = ManipulatorErrors.Error1_1;
                 _logger.Warn("Манипулятор: не в исходном положении");
+                State = State.Warning;
                 return false;
             }
         }
@@ -572,6 +650,7 @@ namespace Oratoria36.Models.Devices
             {
                 ErrorState = ManipulatorErrors.Error1_10;
                 _logger.Warn("Манипулятор не взял пластину из каретки");
+                State = State.Warning;
                 return false;
             }
         }
@@ -591,6 +670,7 @@ namespace Oratoria36.Models.Devices
             {
                 ErrorState = ManipulatorErrors.Error1_12;
                 _logger.Warn("Манипулятор не взял пластину из ложемента");
+                State = State.Warning;
                 return false;
             }
         }
@@ -610,6 +690,7 @@ namespace Oratoria36.Models.Devices
             {
                 ErrorState = ManipulatorErrors.Error1_11;
                 _logger.Warn("Манипулятор не поставил пластину в ложемент");
+                State = State.Warning;
                 return false;
             }
         }
@@ -629,6 +710,7 @@ namespace Oratoria36.Models.Devices
             {
                 ErrorState = ManipulatorErrors.Error1_4;
                 _logger.Warn("Манипулятор не опустился к ложементу");
+                State = State.Warning;
                 return false;
             }
         }
@@ -648,6 +730,7 @@ namespace Oratoria36.Models.Devices
             {
                 ErrorState = ManipulatorErrors.Error1_6;
                 _logger.Warn("Манипулятор не опустился к каретке");
+                State = State.Warning;
                 return false;
             }
         }
@@ -667,6 +750,7 @@ namespace Oratoria36.Models.Devices
             {
                 ErrorState = ManipulatorErrors.Error1_8;
                 _logger.Warn("Наличие пластины в Манипуляторе");
+                State = State.Warning;
                 return false;
             }
         }
@@ -686,7 +770,9 @@ namespace Oratoria36.Models.Devices
             {
                 ErrorState = ManipulatorErrors.Error1_9;
                 _logger.Warn("Манипулятор не поставил пластину в каретку");
+                State = State.Warning;
                 return false;
+                
             }
         }
 

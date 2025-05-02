@@ -10,7 +10,7 @@ namespace Oratoria36.Models.Devices
 {
     public abstract class Device
     {
-        public abstract State State { get; }
+        public abstract State State { get; protected set; }
         public InputSignal<bool>? IsOn { get; }
         public InputSignal<bool>? IsOff { get; }
         public OutputSignal<bool>? On { get; }

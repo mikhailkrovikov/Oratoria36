@@ -42,6 +42,7 @@ namespace Oratoria36.Models.Devices
 
                 else return State.Transition;
             }
+            protected set;
         }
 
         public Valve(string name, InputSignal<bool> isOpen, InputSignal<bool> isClose,
