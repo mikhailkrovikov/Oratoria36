@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.Windows;
 using System.Collections.Generic;
 using Oratoria36.UI.Signals;
+using System.Reflection;
 
 namespace Oratoria36.UI
 {
@@ -34,7 +35,8 @@ namespace Oratoria36.UI
             {
                 { "Мнемосхема", new Module2Page() },
                 { "Сигналы", new Module2SignalsPage() },
-                { "Логи", new LogPage() }
+                { "Логи", new LogPage() },
+                { "Настройки", new Module2Settings() },
             };
         }
 
@@ -106,17 +108,14 @@ namespace Oratoria36.UI
                         Tag = page.Value
                     };
 
-                    btn.Click += DynamicButton_Click;
+                    btn.Click += (object sender, RoutedEventArgs e) =>
+                    {
+                        if (sender is Button button && button.Tag is Page page)
+                            HostFrame.Navigate(page);                     
+                    };
+                    
                     DynamicPanel.Children.Add(btn);
                 }
-            }
-        }
-
-        private void DynamicButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is Button button && button.Tag is Page page)
-            {
-                HostFrame.Navigate(page);
             }
         }
     }
