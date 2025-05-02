@@ -44,6 +44,7 @@ namespace Oratoria36.Models.Devices
         public Setting<int> ManipulatorActionTime;
 
         Logger _logger = LogManager.GetLogger("Манипулятор");
+        private CancellationTokenSource _cts = new CancellationTokenSource();
 
         public ManipulatorPosition Position { get; set; }
         public enum ManipulatorErrors
@@ -140,39 +141,74 @@ namespace Oratoria36.Models.Devices
             Position3In = position3In;
             TormosIn = tormosIn;
             ReversIn = reversIn;
+            ManipulatorActionTime = CommonDeviceSettings.ManipulatorActionTime;
         }
 
+        public void EmergencyStop()
+        {
+            _cts.Cancel();
+            StopAllMechanisms();
+            _logger.Info("Стоп манипулятора");
+            _cts = new CancellationTokenSource();
+        }
 
+        private void StopAllMechanisms()
+        {
+            ManipulatorPrivod1.Value = false;
+            PlatePrivod3.Value = false;
+            TormosOut.Value = false;
+            ReversOut.Value = false;
+            Position1Out.Value = false;
+            Position2Out.Value = false;
+            Position3Out.Value = false;
+        }
+        private async Task<bool> ExecuteWithCancellation(Func<CancellationToken, Task<bool>> operation)
+        {
+            try
+            {
+                return await operation(_cts.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                StopAllMechanisms();
+                return false;
+            }
+        }
 
         /// <summary>
         /// Манипулятор из 2 в 1 без пластины
         /// </summary>
         public async Task<bool> FromHomeToTransportNoPlate()
         {
-            if (!IsManipulatorInHomePosition())
-                return false;
+            return await ExecuteWithCancellation(async (token) =>
+            {
+                if (!IsManipulatorInHomePosition())
+                    return false;
 
-            if (!IsPlateInManipulator())
-                return false;
+                if (!IsPlateInManipulator())
+                    return false;
 
-            ManipulatorPrivod1.Value = true;
-            ReversCommand(true);
-            TormosCommand(true);
-            Position1Out.Value = true;
+                ManipulatorPrivod1.Value = true;
+                ReversCommand(true);
+                TormosCommand(true);
+                Position1Out.Value = true;
 
-            bool positionReached = await WaitForSignal(Position1In, ManipulatorActionTime.Value);
-            if (!positionReached)
-                _logger.Warn("Манипулятор: превышено время движения");
+                bool positionReached = await WaitForSignal(Position1In, ManipulatorActionTime.Value, token);
+                token.ThrowIfCancellationRequested();
 
-            ReversCommand(false);
-            TormosCommand(false);
-            Position1Out.Value = false;
+                if (!positionReached)
+                    _logger.Warn("Манипулятор: превышено время движения");
 
-            if (!IsManipulatorInTransport())
-                return false;
+                ReversCommand(false);
+                TormosCommand(false);
+                Position1Out.Value = false;
 
-            ManipulatorPrivod1.Value = false;
-            return true;
+                if (!IsManipulatorInTransport())
+                    return false;
+
+                ManipulatorPrivod1.Value = false;
+                return true;
+            });
         }
 
         /// <summary>
@@ -180,26 +216,31 @@ namespace Oratoria36.Models.Devices
         /// </summary>
         public async Task<bool> FromTransportToHomeWithPlate()
         {
-            if (!IsManipulatorInTransport())
-                return false;
+            return await ExecuteWithCancellation(async (token) =>
+            {
+                if (!IsManipulatorInTransport())
+                    return false;
 
-            ManipulatorPrivod1.Value = true;
-            TormosCommand(true);
-            ReversCommand(false);
-            Position2Out.Value = true;
+                ManipulatorPrivod1.Value = true;
+                TormosCommand(true);
+                ReversCommand(false);
+                Position2Out.Value = true;
 
-            bool positionReached = await WaitForSignal(Position2In, ManipulatorActionTime.Value);
-            if (!positionReached)
-                _logger.Warn("Манипулятор: превышено время движения");
+                bool positionReached = await WaitForSignal(Position2In, ManipulatorActionTime.Value, token);
+                token.ThrowIfCancellationRequested();
 
-            ManipulatorPrivod1.Value = false;
-            TormosCommand(false);
-            Position2Out.Value = false;
+                if (!positionReached)
+                    _logger.Warn("Манипулятор: превышено время движения");
 
-            if (!IsManipulatorHasPlateFromTransport())
-                return false;
+                ManipulatorPrivod1.Value = false;
+                TormosCommand(false);
+                Position2Out.Value = false;
 
-            return true;
+                if (!IsManipulatorHasPlateFromTransport())
+                    return false;
+
+                return true;
+            });
         }
 
         /// <summary>
@@ -207,31 +248,36 @@ namespace Oratoria36.Models.Devices
         /// </summary>
         public async Task<bool> FromHomeToModuleWithPlate()
         {
-            if (!IsManipulatorInHomePosition())
-                return false;
+            return await ExecuteWithCancellation(async (token) =>
+            {
+                if (!IsManipulatorInHomePosition())
+                    return false;
 
-            if (!IsManipulatorHasPlateFromTransport())
-                return false;
+                if (!IsManipulatorHasPlateFromTransport())
+                    return false;
 
-            ManipulatorPrivod1.Value = true;
-            TormosCommand(true);
-            ReversCommand(false);
-            Position3Out.Value = true;
+                ManipulatorPrivod1.Value = true;
+                TormosCommand(true);
+                ReversCommand(false);
+                Position3Out.Value = true;
 
-            bool positionReached = await WaitForSignal(Position3In, ManipulatorActionTime.Value);
-            if (!positionReached)
-                _logger.Warn("Манипулятор: превышено время движения");
+                bool positionReached = await WaitForSignal(Position3In, ManipulatorActionTime.Value, token);
+                token.ThrowIfCancellationRequested();
 
-            ManipulatorPrivod1.Value = false;
-            TormosCommand(false);
-            ReversCommand(false);
-            Position3Out.Value = false;
+                if (!positionReached)
+                    _logger.Warn("Манипулятор: превышено время движения");
 
-            if (!IsManipulatorInModule())
-                return false;
+                ManipulatorPrivod1.Value = false;
+                TormosCommand(false);
+                ReversCommand(false);
+                Position3Out.Value = false;
 
-            ManipulatorPrivod1.Value = false;
-            return true;
+                if (!IsManipulatorInModule())
+                    return false;
+
+                ManipulatorPrivod1.Value = false;
+                return true;
+            });
         }
 
         /// <summary>
@@ -239,34 +285,39 @@ namespace Oratoria36.Models.Devices
         /// </summary>
         public async Task<bool> FromModuleToHomeNoPlate()
         {
-            if (!IsManipulatorInModule())
-                return false;
-
-            ManipulatorPrivod1.Value = true;
-            ReversCommand(true);
-            TormosCommand(true);
-            Position2Out.Value = true;
-
-            bool positionReached = await WaitForSignal(Position2In, ManipulatorActionTime.Value);
-            if (!positionReached)
-                _logger.Warn("Манипулятор: превышено время движения");
-
-            ReversCommand(false);
-            TormosCommand(false);
-            Position2Out.Value = false;
-
-            if (Position2In.Value)
+            return await ExecuteWithCancellation(async (token) =>
             {
-                ErrorState = ManipulatorErrors.Error1_5;
-                _logger.Warn("Манипулятор не поднялся от ложемента к исходному");
-                return false;
-            }
+                if (!IsManipulatorInModule())
+                    return false;
 
-            ManipulatorPrivod1.Value = false;
-            if (!IsManipulatorPlacedPlateInModule())
-                return false;
+                ManipulatorPrivod1.Value = true;
+                ReversCommand(true);
+                TormosCommand(true);
+                Position2Out.Value = true;
 
-            return true;
+                bool positionReached = await WaitForSignal(Position2In, ManipulatorActionTime.Value, token);
+                token.ThrowIfCancellationRequested();
+
+                if (!positionReached)
+                    _logger.Warn("Манипулятор: превышено время движения");
+
+                ReversCommand(false);
+                TormosCommand(false);
+                Position2Out.Value = false;
+
+                if (Position2In.Value)
+                {
+                    ErrorState = ManipulatorErrors.Error1_5;
+                    _logger.Warn("Манипулятор не поднялся от ложемента к исходному");
+                    return false;
+                }
+
+                ManipulatorPrivod1.Value = false;
+                if (!IsManipulatorPlacedPlateInModule())
+                    return false;
+
+                return true;
+            });
         }
 
         /// <summary>
@@ -274,30 +325,35 @@ namespace Oratoria36.Models.Devices
         /// </summary>
         public async Task<bool> FromHomeToModuleNoPlate()
         {
-            if (!IsManipulatorInHomePosition())
-                return false;
+            return await ExecuteWithCancellation(async (token) =>
+            {
+                if (!IsManipulatorInHomePosition())
+                    return false;
 
-            if (!IsPlateInManipulator())
-                return false;
+                if (!IsPlateInManipulator())
+                    return false;
 
-            ManipulatorPrivod1.Value = true;
-            ReversCommand(false);
-            TormosCommand(true);
-            Position3Out.Value = true;
+                ManipulatorPrivod1.Value = true;
+                ReversCommand(false);
+                TormosCommand(true);
+                Position3Out.Value = true;
 
-            bool positionReached = await WaitForSignal(Position3In, ManipulatorActionTime.Value);
-            if (!positionReached)
-                _logger.Warn("Манипулятор: превышено время движения");
+                bool positionReached = await WaitForSignal(Position3In, ManipulatorActionTime.Value, token);
+                token.ThrowIfCancellationRequested();
 
-            ReversCommand(false);
-            TormosCommand(false);
-            Position3Out.Value = false;
+                if (!positionReached)
+                    _logger.Warn("Манипулятор: превышено время движения");
 
-            if (!IsManipulatorInModule())
-                return false;
+                ReversCommand(false);
+                TormosCommand(false);
+                Position3Out.Value = false;
 
-            ManipulatorPrivod1.Value = false;
-            return true;
+                if (!IsManipulatorInModule())
+                    return false;
+
+                ManipulatorPrivod1.Value = false;
+                return true;
+            });
         }
 
         /// <summary>
@@ -305,35 +361,39 @@ namespace Oratoria36.Models.Devices
         /// </summary>
         public async Task<bool> FromModuleToHomeWithPlate()
         {
-            if(!IsManipulatorInModule())
-                return false;
-
-            ManipulatorPrivod1.Value = true;
-            ReversCommand(true);
-            TormosCommand(true);
-            Position2Out.Value = true;
-
-            bool positionReached = await WaitForSignal(Position2In, ManipulatorActionTime.Value);
-            if (!positionReached)
-                _logger.Warn("Манипулятор: превышено время движения");
-
-            ReversCommand(false);
-            TormosCommand(false);
-            Position2Out.Value = false;
-
-            if (!Position2In.Value)
+            return await ExecuteWithCancellation(async (token) =>
             {
-                ErrorState = ManipulatorErrors.Error1_5;
-                _logger.Warn("Манипулятор не поднялся от ложемента к исходному");
-                return false;
-            }
+                if (!IsManipulatorInModule())
+                    return false;
 
-            ManipulatorPrivod1.Value = true;
+                ManipulatorPrivod1.Value = true;
+                ReversCommand(true);
+                TormosCommand(true);
+                Position2Out.Value = true;
 
-            if(!IsManipulatorHasPlateFromModule())
-                return false;
+                bool positionReached = await WaitForSignal(Position2In, ManipulatorActionTime.Value, token);
+                token.ThrowIfCancellationRequested();
 
-            return true;
+                if (!positionReached)
+                    _logger.Warn("Манипулятор: превышено время движения");
+
+                ReversCommand(false);
+                TormosCommand(false);
+                Position2Out.Value = false;
+
+                if (!Position2In.Value)
+                {
+                    ErrorState = ManipulatorErrors.Error1_5;
+                    _logger.Warn("Манипулятор не поднялся от ложемента к исходному");
+                    return false;
+                }
+
+                ManipulatorPrivod1.Value = true;
+                if (!IsManipulatorHasPlateFromModule())
+                    return false;
+
+                return true;
+            });
         }
 
         /// <summary>
@@ -341,89 +401,119 @@ namespace Oratoria36.Models.Devices
         /// </summary>
         public async Task<bool> FromHomeToTransportWithPlate()
         {
-            if (!IsManipulatorInHomePosition())
-                return false;
+            return await ExecuteWithCancellation(async (token) =>
+            {
+                if (!IsManipulatorInHomePosition())
+                    return false;
 
-            if (!IsManipulatorHasPlateFromModule())
-                return false;
+                if (!IsManipulatorHasPlateFromModule())
+                    return false;
 
-            ManipulatorPrivod1.Value = true;
-            ReversCommand(true);
-            TormosCommand(true);
-            Position1Out.Value = true;
-            bool positionReached = await WaitForSignal(Position1In, ManipulatorActionTime.Value);
-            if (!positionReached)
-                _logger.Warn("Манипулятор: превышено время движения");
-            ReversCommand(false);
-            TormosCommand(false);
-            Position1Out.Value = false;
+                ManipulatorPrivod1.Value = true;
+                ReversCommand(true);
+                TormosCommand(true);
+                Position1Out.Value = true;
 
-            if (!IsManipulatorInTransport())
-                return false;
+                bool positionReached = await WaitForSignal(Position1In, ManipulatorActionTime.Value, token);
+                token.ThrowIfCancellationRequested();
 
-            ManipulatorPrivod1.Value = false;
-            return true;
+                if (!positionReached)
+                    _logger.Warn("Манипулятор: превышено время движения");
+
+                ReversCommand(false);
+                TormosCommand(false);
+                Position1Out.Value = false;
+
+                if (!IsManipulatorInTransport())
+                    return false;
+
+                ManipulatorPrivod1.Value = false;
+                return true;
+            });
         }
 
         /// <summary>
         /// Манипулятор из 1 в 2 без пластины
-        /// <returns></returns>
+        /// </summary>
         public async Task<bool> FromTransportToHomeNoPlate()
         {
-            if (!IsManipulatorInTransport())
-                return false;
-
-            ManipulatorPrivod1.Value = true;
-            ReversCommand(false);
-            TormosCommand(true);
-            Position2Out.Value = true;
-
-            bool positionReached = await WaitForSignal(Position2In, ManipulatorActionTime.Value);
-            if (!positionReached)
-                _logger.Warn("Манипулятор: превышено время движения");
-
-            ReversCommand(false);
-            TormosCommand(false);
-            Position2Out.Value = false;
-            if (!Position2In.Value)
+            return await ExecuteWithCancellation(async (token) =>
             {
-                ErrorState = ManipulatorErrors.Error1_7;
-                _logger.Warn("Манипулятор не поднялся от каретки к исходному");
-                return false;
-            }
-            ManipulatorPrivod1.Value = false;
+                if (!IsManipulatorInTransport())
+                    return false;
 
-            if (!IsManipulatorPlacedPlateInTransport())
-                return false;
+                ManipulatorPrivod1.Value = true;
+                ReversCommand(false);
+                TormosCommand(true);
+                Position2Out.Value = true;
 
-            return true;
+                bool positionReached = await WaitForSignal(Position2In, ManipulatorActionTime.Value, token);
+                token.ThrowIfCancellationRequested();
+
+                if (!positionReached)
+                    _logger.Warn("Манипулятор: превышено время движения");
+
+                ReversCommand(false);
+                TormosCommand(false);
+                Position2Out.Value = false;
+
+                if (!Position2In.Value)
+                {
+                    ErrorState = ManipulatorErrors.Error1_7;
+                    _logger.Warn("Манипулятор не поднялся от каретки к исходному");
+                    return false;
+                }
+
+                ManipulatorPrivod1.Value = false;
+                if (!IsManipulatorPlacedPlateInTransport())
+                    return false;
+
+                return true;
+            });
         }
+
 
         #region Manipulator Error Check
 
         /// <summary>
         /// Ожидание приезда в позицию
         /// </summary>
-        private async Task<bool> WaitForSignal(InputSignal<bool> signal, int timeout)
+        private async Task<bool> WaitForSignal(InputSignal<bool> signal, int timeout, CancellationToken cancellationToken)
         {
             if (signal.Value)
                 return true;
-            var waitHandler = new AutoResetEvent(false);
-            Action<bool> handler = (value) =>
+
+            var tcs = new TaskCompletionSource<bool>();
+            using var registration = cancellationToken.Register(() => tcs.TrySetCanceled());
+
+            Action<bool> handler = null;
+            handler = (value) =>
             {
                 if (value)
-                    waitHandler.Set();
+                {
+                    signal.OnSignalChanged -= handler;
+                    tcs.TrySetResult(true);
+                }
             };
+
             signal.OnSignalChanged += handler;
+
             try
             {
-                return await Task.Run(() =>
-                    waitHandler.WaitOne(TimeSpan.FromMilliseconds(timeout * 1000)));
+                var timeoutTask = Task.Delay(timeout * 1000, cancellationToken);
+                var completedTask = await Task.WhenAny(tcs.Task, timeoutTask);
+
+                if (completedTask == timeoutTask)
+                {
+                    _logger.Warn("Превышено время ожидания сигнала");
+                    return false;
+                }
+
+                return await tcs.Task;
             }
             finally
             {
                 signal.OnSignalChanged -= handler;
-                waitHandler.Dispose();
             }
         }
 
