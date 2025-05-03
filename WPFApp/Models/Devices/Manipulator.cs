@@ -172,7 +172,12 @@ namespace Oratoria36.Models.Devices
                 return false;
             }
         }
-
+        public void ResetErrors()
+        {
+            ErrorState = ManipulatorErrors.None;
+            State = State.On;
+            _logger.Info("Сброс ошибок манипулятора");
+        }
         public void EmergencyStop()
         {
             token.Cancel();
@@ -340,7 +345,7 @@ namespace Oratoria36.Models.Devices
                 TormosCommand(false);
                 Position2Out.Value = false;
 
-                if (Position2In.Value)
+                if (!Position2In.Value)
                 {
                     ErrorState = ManipulatorErrors.Error1_5;
                     State = State.Warning;

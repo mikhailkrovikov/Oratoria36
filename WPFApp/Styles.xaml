@@ -95,8 +95,8 @@
             </DataTrigger>
         </Style.Triggers>
     </Style>
-    
-    
+
+
     <Style x:Key="ToggleSwitchStyle" TargetType="CheckBox">
         <Setter Property="Template">
             <Setter.Value>
@@ -107,48 +107,46 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <Border Grid.Column="0"
-                            CornerRadius="10"
-                            Width="50"
-                            Height="35"
-                            Margin="0,0,5,0">
+                        CornerRadius="8"
+                        Width="46"
+                        Height="30"
+                        Margin="0,0,5,0">
                             <Grid>
                                 <Rectangle x:Name="BackgroundRect"
-                                   Fill="#FFCCCCCC"
-                                   Stroke="#FFA0A0A4"
-                                   RadiusX="8"
-                                   RadiusY="8"
-                                   Height="16"/>
+                               Fill="#FFCCCCCC"
+                               Stroke="#FFA0A0A4"
+                               RadiusX="7"
+                               RadiusY="7"
+                               Height="14"/>
                                 <Ellipse x:Name="SwitchThumb"
-                                 Width="22"
-                                 Height="22"
-                                 HorizontalAlignment="Left"
-                                 VerticalAlignment="Center"
-                                 Margin="2"
-                                 Fill="White"
-                                 Stroke="#FFA0A0A4"
-                                 StrokeThickness="1"/>
+                             Width="20"
+                             Height="20"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Center"
+                             Margin="2"
+                             Fill="White"
+                             Stroke="#FFA0A0A4"
+                             StrokeThickness="1"/>
                             </Grid>
                         </Border>
                     </Grid>
-
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="True">
                             <Setter TargetName="SwitchThumb" Property="HorizontalAlignment" Value="Right"/>
                             <Setter TargetName="BackgroundRect" Property="Fill" Value="White"/>
                             <Setter TargetName="SwitchThumb" Property="Fill" Value="White"/>
-                            
                         </Trigger>
                         <Trigger Property="IsChecked" Value="False">
                             <Setter TargetName="SwitchThumb" Property="HorizontalAlignment" Value="Left"/>
                             <Setter TargetName="BackgroundRect" Property="Fill" Value="#808080"/>
                             <Setter TargetName="SwitchThumb" Property="Fill" Value="#606060"/>
-                           
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
+
 
     <Style x:Key="SoftGroupContainer" TargetType="Border">
         <Setter Property="Background" Value="#E8E8E8"/>

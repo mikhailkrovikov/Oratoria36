@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Oratoria36.UI.DialogWindows" 
+        xmlns:local="clr-namespace:Oratoria36.UI.DialogWindows" xmlns:service="clr-namespace:Oratoria36.Service"
         d:DataContext="{d:DesignInstance Type=local:MechanicWindowVM}"
         mc:Ignorable="d"
         WindowStyle="None"
@@ -14,8 +14,40 @@
         Background="#E0E0E0"
         BorderBrush="#A0A0A4"
         BorderThickness="2"
-        Height="570" 
+        Height="580" 
         Width="1200">
+
+    <!-- Определяем стили для кнопок -->
+    <Window.Resources>
+        <service:EnumToStringConverter x:Key="EnumToStringConverter"/>
+        <!-- Стиль для основных кнопок управления -->
+        <Style x:Key="ManipulatorActionButton" TargetType="Button" BasedOn="{StaticResource BaseEnableButton}">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Opacity" Value="1"/>
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="0.5"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Стиль для больших кнопок (Загрузить/Выгрузить) -->
+        <Style x:Key="LargeActionButton" TargetType="Button" BasedOn="{StaticResource NavigationButton}">
+            <Setter Property="Width" Value="150"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Background" Value="#4F81BD"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Opacity" Value="1"/>
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="0.8"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -59,36 +91,50 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="Манипулятор" 
-                                   Grid.Column="0"
-                                   Style="{StaticResource HeaderTextBlock}" 
-                                   FontSize="18" 
-                                   VerticalAlignment="Center"/>
+                   Grid.Column="0"
+                   Style="{StaticResource HeaderTextBlock}" 
+                   FontSize="18" 
+                   VerticalAlignment="Center"/>
+                        <Button Content="Сброс ошибок" 
+                Grid.Column="1"
+                Command="{Binding ResetErrorsCommand}"
+                Width="120" 
+                Height="30" 
+                Background="#FFD700" 
+                Foreground="#3F3F3F" 
+                FontWeight="Bold"
+                BorderBrush="#DAA520"
+                Margin="0,0,10,0"/>
                         <Button Content="СТОП" 
-                                Grid.Column="1"
-                                Command="{Binding StopCommand}"
-                                Width="80" 
-                                Height="30" 
-                                Background="#FF4040" 
-                                Foreground="White" 
-                                FontWeight="Bold"
-                                BorderBrush="#8B0000"/>
+                Grid.Column="2"
+                Command="{Binding StopCommand}"
+                Width="80" 
+                Height="30" 
+                Background="#FF4040" 
+                Foreground="White" 
+                FontWeight="Bold"
+                BorderBrush="#8B0000"/>
                     </Grid>
                 </Border>
 
                 <Border Grid.Row="1" Padding="5" BorderBrush="#AAAAAA">
                     <StackPanel>
-                        <Label Content="{Binding Status}" ContentStringFormat="Состояние: {0}" 
-                               Style="{DynamicResource AnalogBlueValueLabel}" 
-                               FontWeight="Bold" FontSize="14" Height="30"/>
-                        <Label Content="{Binding PositionText}" ContentStringFormat="Позиция: {0}" 
-                               Style="{StaticResource AnalogBlueValueLabel}" 
-                               FontWeight="Bold" FontSize="14" Height="30"/>
-                        <Label Content="{Binding ErrorText}" ContentStringFormat="Ошибка: {0}" 
-                               Style="{StaticResource AnalogBlueValueLabel}" 
-                               FontWeight="Bold" FontSize="14" Height="30" 
-                               Visibility="{Binding IsErrorVisible}"/>
+                        <Label Content="{Binding Manipulator.State, Converter={StaticResource EnumToStringConverter}}" 
+                   ContentStringFormat="Состояние: {0}" 
+                   Style="{DynamicResource AnalogBlueValueLabel}" 
+                   FontWeight="Bold" FontSize="14" Height="30"/>
+                        <Label Content="{Binding Manipulator.Position, Converter={StaticResource EnumToStringConverter}}" 
+                   ContentStringFormat="Позиция: {0}" 
+                   Style="{StaticResource AnalogBlueValueLabel}" 
+                   FontWeight="Bold" FontSize="14" Height="30"/>
+                        <Label Content="{Binding Manipulator.ErrorState, Converter={StaticResource EnumToStringConverter}}" 
+                   ContentStringFormat="Ошибка: {0}" 
+                   Style="{StaticResource AnalogBlueValueLabel}" 
+                   FontWeight="Bold" FontSize="14" Height="30" 
+                   Visibility="{Binding IsErrorVisible}"/>
                     </StackPanel>
                 </Border>
 
@@ -101,22 +147,12 @@
                     <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,15,0,15">
                         <Button Content="Загрузить" 
                                 Command="{Binding Load}"
-                                Style="{StaticResource NavigationButton}"
-                                Width="150" 
-                                Height="40"
-                                Margin="0,0,10,0"
-                                Background="#4F81BD"
-                                Foreground="White"
-                                FontSize="14"/>
+                                Style="{StaticResource LargeActionButton}"
+                                Margin="0,0,10,0"/>
                         <Button Content="Выгрузить" 
                                 Command="{Binding Unload}"
-                                Style="{StaticResource NavigationButton}"
-                                Width="150" 
-                                Height="40"
-                                Margin="30,0,0,0"
-                                Background="#4F81BD"
-                                Foreground="White"
-                                FontSize="14"/>
+                                Style="{StaticResource LargeActionButton}"
+                                Margin="30,0,0,0"/>
                     </StackPanel>
 
                     <Border Grid.Row="1" Style="{StaticResource CardContainer}" Margin="15,0,15,15">
@@ -155,23 +191,19 @@
                                 <Button Grid.Row="0" Grid.Column="0" 
                                         Content="Исходная ⟶ Транспорт" 
                                         Command="{Binding HomeToTransportCommand}"
-                                        Style="{StaticResource BaseEnableButton}" 
-                                        Margin="5" Height="30"/>
+                                        Style="{StaticResource ManipulatorActionButton}"/>
                                 <Button Grid.Row="0" Grid.Column="1" 
                                         Content="Транспорт ⟶ Исходная" 
                                         Command="{Binding TransportToHomeCommand}"
-                                        Style="{StaticResource BaseEnableButton}" 
-                                        Margin="5" Height="30"/>
+                                        Style="{StaticResource ManipulatorActionButton}"/>
                                 <Button Grid.Row="1" Grid.Column="0" 
                                         Content="Исходная ⟶ Модуль" 
                                         Command="{Binding HomeToModuleCommand}"
-                                        Style="{StaticResource BaseEnableButton}" 
-                                        Margin="5" Height="30"/>
+                                        Style="{StaticResource ManipulatorActionButton}"/>
                                 <Button Grid.Row="1" Grid.Column="1" 
                                         Content="Модуль ⟶ Исходная" 
                                         Command="{Binding ModuleToHomeCommand}"
-                                        Style="{StaticResource BaseEnableButton}" 
-                                        Margin="5" Height="30"/>
+                                        Style="{StaticResource ManipulatorActionButton}"/>
                             </Grid>
                         </Grid>
                     </Border>

@@ -43,8 +43,37 @@ namespace Oratoria36.Service
                         return value.ToString();
                 }
             }
-
-            return value.ToString();
+            else if(value is ManipulatorErrors)
+            {
+                switch((ManipulatorErrors)value)
+                    {
+                    case ManipulatorErrors.None:
+                        return "";
+                    case ManipulatorErrors.Error1_1:
+                        return "Манипулятор не в исходном положении";
+                    case ManipulatorErrors.Error1_4:
+                        return "Манипулятор не опустился к ложементу";
+                    case ManipulatorErrors.Error1_5:
+                        return "Манипулятор не поднялся от ложемента к исходному";
+                    case ManipulatorErrors.Error1_6:
+                        return "Манипулятор не опустился к каретке";
+                    case ManipulatorErrors.Error1_7:
+                        return "Манипулятор не поднялся от каретки к исходному";
+                    case ManipulatorErrors.Error1_8:
+                        return "Наличие пластины в манипуляторе";
+                    case ManipulatorErrors.Error1_9:
+                        return "Манипулятор не поставил пластину в каретку";
+                    case ManipulatorErrors.Error1_10:
+                        return "Манипулятор не взял пластину из каретки";
+                    case ManipulatorErrors.Error1_11:
+                        return "Манипулятор не постаавил пластину в ложемент";
+                    case ManipulatorErrors.Error1_12:
+                        return "Манипулятор не взял пластину из ложемента";
+                    default:
+                        return value.ToString();
+                    }
+                }
+                return value.ToString();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

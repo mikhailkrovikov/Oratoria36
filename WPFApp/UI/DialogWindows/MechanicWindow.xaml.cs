@@ -30,6 +30,7 @@ namespace Oratoria36.UI.DialogWindows
             InitializeComponent();
             this.Show();
             _vm = new MechanicWindowVM(zatvor, manipulator);
+            DataContext = _vm;
             _vm.Manipulator = manipulator;
             _vm.Zatvor = zatvor;
         }
@@ -44,6 +45,7 @@ namespace Oratoria36.UI.DialogWindows
         public ICommand Load { get; set; }
         public ICommand Unload { get; set; }
         public ICommand StopCommand { get; set; }
+        public ICommand ResetErrorsCommand { get; set; }
         public ICommand HomeToTransportCommand { get; set; }
         public ICommand TransportToHomeCommand { get; set; }
         public ICommand HomeToModuleCommand { get; set; }
@@ -213,6 +215,17 @@ namespace Oratoria36.UI.DialogWindows
                 manipulator.EmergencyStop();
             });
 
+            ResetErrorsCommand = new RelayCommand((object obj) =>
+            {
+                manipulator.ResetErrors();
+            },
+            (object obj) =>
+            {
+                return manipulator.ErrorState != ManipulatorErrors.None ||
+                       manipulator.State == State.Warning ||
+                       manipulator.State == State.Error;
+            });
+
             // Команды для отдельных перемещений
             HomeToTransportCommand = new RelayCommand(async (object obj) =>
             {
@@ -297,6 +310,7 @@ namespace Oratoria36.UI.DialogWindows
             (TransportToHomeCommand as RelayCommand)?.RaiseCanExecuteChanged();
             (HomeToModuleCommand as RelayCommand)?.RaiseCanExecuteChanged();
             (ModuleToHomeCommand as RelayCommand)?.RaiseCanExecuteChanged();
+            (ResetErrorsCommand as RelayCommand)?.RaiseCanExecuteChanged();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

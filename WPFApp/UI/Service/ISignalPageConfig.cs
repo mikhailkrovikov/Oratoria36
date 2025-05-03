@@ -1,255 +1,321 @@
 ﻿using Oratoria36.Models.Connection;
 using Oratoria36.Models.Signals;
 using System.Collections.ObjectModel;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows;
+using System.Windows.Input;
 
-namespace Oratoria36.UI.Service
+public interface ISignalPageConfig
 {
-    public interface ISignalPageConfig
+    public NetConfig NetConfig { get; }
+
+    private static Border CreateRowContainer(int rowIndex)
     {
-        public NetConfig NetConfig { get; }
-        public void ConfigureDISignalGrid(Grid grid, ObservableCollection<InputSignal<bool>> signals)
+        var rowContainer = new Border
         {
-            for (int i = 0; i < signals.Count; i++)
-            {
-                grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(30) });
-            }
+            Background = rowIndex % 2 == 0
+                ? new SolidColorBrush(Colors.White)
+                : new SolidColorBrush(Color.FromRgb(245, 245, 245)),
+            BorderBrush = new SolidColorBrush(Color.FromRgb(230, 230, 230)),
+            BorderThickness = new Thickness(0, 0, 0, 1),
+            Margin = new Thickness(2, 1, 2, 1),
+            CornerRadius = new CornerRadius(3),
+            Padding = new Thickness(2)
+        };
 
-            int rowIndex = 0;
-            foreach (var signal in signals)
-            {
-                var pinTextBlock = new TextBlock()
-                {
-                    Text = signal.PinNumber.ToString(),
-                    Foreground = new SolidColorBrush(Color.FromRgb(63, 63, 63)),
-                };
-                Grid.SetRow(pinTextBlock, rowIndex);
-                Grid.SetColumn(pinTextBlock, 0);
-                grid.Children.Add(pinTextBlock);
+        return rowContainer;
+    }
 
-                var nameTextBlock = new TextBlock()
-                {
-                    Text = signal.Name,
-                    Foreground = new SolidColorBrush(Color.FromRgb(63, 63, 63)),
-                };
-                Grid.SetRow(nameTextBlock, rowIndex);
-                Grid.SetColumn(nameTextBlock, 1);
-                grid.Children.Add(nameTextBlock);
-
-                var valueCheckBox = new CheckBox()
-                {
-                    Style = (Style)Application.Current.FindResource("ToggleSwitchStyle"),
-                    IsChecked = signal.Value,
-                    IsEnabled = !NetConfig.IsConnected,
-
-                };
-
-                valueCheckBox.Checked += (sender, e) => signal.Value = true;
-                valueCheckBox.Unchecked += (sender, e) => signal.Value = false;
-
-                signal.OnSignalChanged += newValue =>
-                {
-                    valueCheckBox.Dispatcher.Invoke(() => valueCheckBox.IsChecked = newValue);
-                };
-
-                Grid.SetRow(valueCheckBox, rowIndex);
-                Grid.SetColumn(valueCheckBox, 2);
-                grid.Children.Add(valueCheckBox);
-
-                rowIndex++;
-            }
+    public void ConfigureDISignalGrid(Grid grid, ObservableCollection<InputSignal<bool>> signals)
+    {
+        for (int i = 0; i < signals.Count; i++)
+        {
+            grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(32) });
         }
 
-        public void ConfigureDOSignalGrid(Grid grid, ObservableCollection<OutputSignal<bool>> signals)
+        int rowIndex = 0;
+        foreach (var signal in signals)
         {
+            var rowContainer = CreateRowContainer(rowIndex);
+            Grid.SetRow(rowContainer, rowIndex);
+            Grid.SetColumnSpan(rowContainer, 3);
+            grid.Children.Add(rowContainer);
 
-            for (int i = 0; i < signals.Count; i++)
+            var contentGrid = new Grid();
+            contentGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(40) });
+            contentGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
+            contentGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(120) });
+            rowContainer.Child = contentGrid;
+
+            var pinTextBlock = new TextBlock()
             {
-                grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(30) });
-            }
+                Text = signal.PinNumber.ToString(),
+                VerticalAlignment = VerticalAlignment.Center,
+                Foreground = new SolidColorBrush(Color.FromRgb(63, 63, 63)),
+                Margin = new Thickness(5, 0, 0, 0)
+            };
+            Grid.SetColumn(pinTextBlock, 0);
+            contentGrid.Children.Add(pinTextBlock);
 
-            int rowIndex = 0;
-            foreach (var signal in signals)
+            var nameTextBlock = new TextBlock()
             {
-                var pinTextBlock = new TextBlock()
-                {
-                    Text = signal.PinNumber.ToString(),
-                    Foreground = new SolidColorBrush(Color.FromRgb(63, 63, 63)),
-                };
-                Grid.SetRow(pinTextBlock, rowIndex);
-                Grid.SetColumn(pinTextBlock, 0);
-                grid.Children.Add(pinTextBlock);
+                Text = signal.Name,
+                VerticalAlignment = VerticalAlignment.Center,
+                Foreground = new SolidColorBrush(Color.FromRgb(63, 63, 63)),
+            };
+            Grid.SetColumn(nameTextBlock, 1);
+            contentGrid.Children.Add(nameTextBlock);
 
-                var nameTextBlock = new TextBlock()
-                {
-                    Text = signal.Name,
-                    Foreground = new SolidColorBrush(Color.FromRgb(63, 63, 63)),
-                };
-                Grid.SetRow(nameTextBlock, rowIndex);
-                Grid.SetColumn(nameTextBlock, 1);
-                grid.Children.Add(nameTextBlock);
+            var valueCheckBox = new CheckBox()
+            {
+                Style = (Style)Application.Current.FindResource("ToggleSwitchStyle"),
+                VerticalAlignment = VerticalAlignment.Center,
+                IsChecked = signal.Value,
+                IsEnabled = !NetConfig.IsConnected,
+                Margin = new Thickness(0, 0, 5, 0)
+            };
 
-                var valueCheckBox = new CheckBox()
-                {
-                    Style = (Style)Application.Current.FindResource("ToggleSwitchStyle"),
-                    IsChecked = signal.Value
-                };
+            valueCheckBox.Checked += (sender, e) => signal.Value = true;
+            valueCheckBox.Unchecked += (sender, e) => signal.Value = false;
 
-                valueCheckBox.Checked += (sender, e) => signal.Value = true;
-                valueCheckBox.Unchecked += (sender, e) => signal.Value = false;
+            signal.OnSignalChanged += newValue =>
+            {
+                valueCheckBox.Dispatcher.Invoke(() => valueCheckBox.IsChecked = newValue);
+            };
 
-                signal.OnSignalChanged += newValue =>
-                {
-                    valueCheckBox.Dispatcher.Invoke(() => valueCheckBox.IsChecked = newValue);
-                };
+            Grid.SetColumn(valueCheckBox, 2);
+            contentGrid.Children.Add(valueCheckBox);
 
-                Grid.SetRow(valueCheckBox, rowIndex);
-                Grid.SetColumn(valueCheckBox, 2);
-                grid.Children.Add(valueCheckBox);
+            rowIndex++;
+        }
+    }
 
-                rowIndex++;
-            }
+    public void ConfigureDOSignalGrid(Grid grid, ObservableCollection<OutputSignal<bool>> signals)
+    {
+        for (int i = 0; i < signals.Count; i++)
+        {
+            grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(32) });
         }
 
-        public void ConfigureAISignalGrid(Grid grid, ObservableCollection<InputSignal<ushort>> signals)
+        int rowIndex = 0;
+        foreach (var signal in signals)
         {
-            for (int i = 0; i < signals.Count; i++)
+            var rowContainer = CreateRowContainer(rowIndex);
+            Grid.SetRow(rowContainer, rowIndex);
+            Grid.SetColumnSpan(rowContainer, 3);
+            grid.Children.Add(rowContainer);
+
+            var contentGrid = new Grid();
+            contentGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(40) });
+            contentGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
+            contentGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(120) });
+            rowContainer.Child = contentGrid;
+
+            var pinTextBlock = new TextBlock()
             {
-                grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(30) });
-            }
+                Text = signal.PinNumber.ToString(),
+                VerticalAlignment = VerticalAlignment.Center,
+                Foreground = new SolidColorBrush(Color.FromRgb(63, 63, 63)),
+                Margin = new Thickness(5, 0, 0, 0)
+            };
+            Grid.SetColumn(pinTextBlock, 0);
+            contentGrid.Children.Add(pinTextBlock);
 
-            int rowIndex = 0;
-            foreach (var signal in signals)
+            var nameTextBlock = new TextBlock()
             {
-                var pinTextBlock = new TextBlock()
-                {
-                    Text = signal.PinNumber.ToString(),
-                    Foreground = new SolidColorBrush(Color.FromRgb(63, 63, 63)),
-                };
-                Grid.SetRow(pinTextBlock, rowIndex);
-                Grid.SetColumn(pinTextBlock, 0);
-                grid.Children.Add(pinTextBlock);
+                Text = signal.Name,
+                VerticalAlignment = VerticalAlignment.Center,
+                Foreground = new SolidColorBrush(Color.FromRgb(63, 63, 63)),
+            };
+            Grid.SetColumn(nameTextBlock, 1);
+            contentGrid.Children.Add(nameTextBlock);
 
-                var nameTextBlock = new TextBlock()
-                {
-                    Text = signal.Name,
-                    Foreground = new SolidColorBrush(Color.FromRgb(63, 63, 63)),
-                };
-                Grid.SetRow(nameTextBlock, rowIndex);
-                Grid.SetColumn(nameTextBlock, 1);
-                grid.Children.Add(nameTextBlock);
+            var valueCheckBox = new CheckBox()
+            {
+                Style = (Style)Application.Current.FindResource("ToggleSwitchStyle"),
+                VerticalAlignment = VerticalAlignment.Center,
+                IsChecked = signal.Value,
+                Margin = new Thickness(0, 0, 5, 0)
+            };
 
-                var valueTextBlock = new TextBlock()
-                {
-                    Text = signal.Value.ToString(),
-                    FontWeight = FontWeights.Bold,
-                    Style = (Style)Application.Current.FindResource("AnalogBlueValueTextBlock"),
-                };
-                Grid.SetRow(valueTextBlock, rowIndex);
-                Grid.SetColumn(valueTextBlock, 2);
-                grid.Children.Add(valueTextBlock);
+            valueCheckBox.Checked += (sender, e) => signal.Value = true;
+            valueCheckBox.Unchecked += (sender, e) => signal.Value = false;
 
-                var realValueTextBlock = new TextBlock()
-                {
-                    Text = signal.Value.ToString(),
-                    Style = (Style)Application.Current.FindResource("AnalogGreyValueTextBlock"),
-                };
-                Grid.SetRow(realValueTextBlock, rowIndex);
-                Grid.SetColumn(realValueTextBlock, 3);
-                grid.Children.Add(realValueTextBlock);
+            signal.OnSignalChanged += newValue =>
+            {
+                valueCheckBox.Dispatcher.Invoke(() => valueCheckBox.IsChecked = newValue);
+            };
 
-                signal.OnSignalChanged += newValue =>
-                {
-                    valueTextBlock.Dispatcher.Invoke(() => valueTextBlock.Text = newValue.ToString());
-                    realValueTextBlock.Dispatcher.Invoke(() => realValueTextBlock.Text = newValue.ToString());
-                };
+            Grid.SetColumn(valueCheckBox, 2);
+            contentGrid.Children.Add(valueCheckBox);
 
-                rowIndex++;
-            }
+            rowIndex++;
+        }
+    }
+
+    public void ConfigureAISignalGrid(Grid grid, ObservableCollection<InputSignal<ushort>> signals)
+    {
+        for (int i = 0; i < signals.Count; i++)
+        {
+            grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(32) });
         }
 
-        public void ConfigureAOSignalGrid(Grid grid, ObservableCollection<OutputSignal<ushort>> signals)
+        int rowIndex = 0;
+        foreach (var signal in signals)
         {
+            var rowContainer = CreateRowContainer(rowIndex);
+            Grid.SetRow(rowContainer, rowIndex);
+            Grid.SetColumnSpan(rowContainer, 4);
+            grid.Children.Add(rowContainer);
 
-            for (int i = 0; i < signals.Count; i++)
+            var contentGrid = new Grid();
+            contentGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(40) });
+            contentGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
+            contentGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(80) });
+            contentGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(80) });
+            rowContainer.Child = contentGrid;
+
+            var pinTextBlock = new TextBlock()
             {
-                grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(30) });
-            }
+                Text = signal.PinNumber.ToString(),
+                VerticalAlignment = VerticalAlignment.Center,
+                Foreground = new SolidColorBrush(Color.FromRgb(63, 63, 63)),
+                Margin = new Thickness(5, 0, 0, 0)
+            };
+            Grid.SetColumn(pinTextBlock, 0);
+            contentGrid.Children.Add(pinTextBlock);
 
-            int rowIndex = 0;
-            foreach (var signal in signals)
+            var nameTextBlock = new TextBlock()
             {
-                var pinTextBlock = new TextBlock()
-                {
-                    Text = signal.PinNumber.ToString(),
-                    Foreground = new SolidColorBrush(Color.FromRgb(63, 63, 63)),
-                };
-                Grid.SetRow(pinTextBlock, rowIndex);
-                Grid.SetColumn(pinTextBlock, 0);
-                grid.Children.Add(pinTextBlock);
+                Text = signal.Name,
+                VerticalAlignment = VerticalAlignment.Center,
+                Foreground = new SolidColorBrush(Color.FromRgb(63, 63, 63)),
+            };
+            Grid.SetColumn(nameTextBlock, 1);
+            contentGrid.Children.Add(nameTextBlock);
 
-                var nameTextBlock = new TextBlock()
-                {
-                    Text = signal.Name,
-                    Foreground = new SolidColorBrush(Color.FromRgb(63, 63, 63)),
-                };
-                Grid.SetRow(nameTextBlock, rowIndex);
-                Grid.SetColumn(nameTextBlock, 1);
-                grid.Children.Add(nameTextBlock);
+            var valueTextBlock = new TextBlock()
+            {
+                Text = signal.Value.ToString(),
+                FontWeight = FontWeights.Bold,
+                VerticalAlignment = VerticalAlignment.Center,
+                Style = (Style)Application.Current.FindResource("AnalogBlueValueTextBlock"),
+                Margin = new Thickness(0, 0, 5, 0)
+            };
+            Grid.SetColumn(valueTextBlock, 2);
+            contentGrid.Children.Add(valueTextBlock);
 
-                var valueTextBlock = new TextBlock()
-                {
-                    Text = signal.Value.ToString(),
-                    FontWeight = FontWeights.Bold,
-                    Style = (Style)Application.Current.FindResource("AnalogBlueValueTextBlock"),
-                };
-                Grid.SetRow(valueTextBlock, rowIndex);
-                Grid.SetColumn(valueTextBlock, 2);
-                grid.Children.Add(valueTextBlock);
+            var realValueTextBlock = new TextBlock()
+            {
+                Text = signal.Value.ToString(),
+                VerticalAlignment = VerticalAlignment.Center,
+                Style = (Style)Application.Current.FindResource("AnalogGreyValueTextBlock"),
+                Margin = new Thickness(0, 0, 5, 0)
+            };
+            Grid.SetColumn(realValueTextBlock, 3);
+            contentGrid.Children.Add(realValueTextBlock);
 
-                var textBox = new TextBox()
-                {
-                    Style = (Style)Application.Current.FindResource("TextBoxInput"),
-                    Height = 20,
-                    Text = signal.Value.ToString(),
-                    VerticalAlignment = VerticalAlignment.Top,
-                };
-                Grid.SetRow(textBox, rowIndex);
-                Grid.SetColumn(textBox, 3);
-                grid.Children.Add(textBox);
+            signal.OnSignalChanged += newValue =>
+            {
+                valueTextBlock.Dispatcher.Invoke(() => valueTextBlock.Text = newValue.ToString());
+                realValueTextBlock.Dispatcher.Invoke(() => realValueTextBlock.Text = newValue.ToString());
+            };
 
-                textBox.KeyDown += (sender, e) =>
-                {
-                    if (e.Key == Key.Enter)
-                    {
-                        if (ushort.TryParse(textBox.Text, out ushort newValue))
-                            signal.Value = newValue;
-                        else
-                            textBox.Text = signal.Value.ToString();
-                        Keyboard.ClearFocus();
-                        FocusManager.SetFocusedElement(grid, null);
-                    }
-                };
+            rowIndex++;
+        }
+    }
 
-                textBox.LostFocus += (sender, e) =>
+    public void ConfigureAOSignalGrid(Grid grid, ObservableCollection<OutputSignal<ushort>> signals)
+    {
+        for (int i = 0; i < signals.Count; i++)
+        {
+            grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(32) });
+        }
+
+        int rowIndex = 0;
+        foreach (var signal in signals)
+        {
+            var rowContainer = CreateRowContainer(rowIndex);
+            Grid.SetRow(rowContainer, rowIndex);
+            Grid.SetColumnSpan(rowContainer, 4);
+            grid.Children.Add(rowContainer);
+
+            var contentGrid = new Grid();
+            contentGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(40) });
+            contentGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star) });
+            contentGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(80) });
+            contentGrid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(80) });
+            rowContainer.Child = contentGrid;
+
+            var pinTextBlock = new TextBlock()
+            {
+                Text = signal.PinNumber.ToString(),
+                VerticalAlignment = VerticalAlignment.Center,
+                Foreground = new SolidColorBrush(Color.FromRgb(63, 63, 63)),
+                Margin = new Thickness(5, 0, 0, 0)
+            };
+            Grid.SetColumn(pinTextBlock, 0);
+            contentGrid.Children.Add(pinTextBlock);
+
+            var nameTextBlock = new TextBlock()
+            {
+                Text = signal.Name,
+                VerticalAlignment = VerticalAlignment.Center,
+                Foreground = new SolidColorBrush(Color.FromRgb(63, 63, 63)),
+            };
+            Grid.SetColumn(nameTextBlock, 1);
+            contentGrid.Children.Add(nameTextBlock);
+
+            var valueTextBlock = new TextBlock()
+            {
+                Text = signal.Value.ToString(),
+                VerticalAlignment = VerticalAlignment.Center,
+                FontWeight = FontWeights.Bold,
+                Style = (Style)Application.Current.FindResource("AnalogBlueValueTextBlock"),
+            };
+            Grid.SetColumn(valueTextBlock, 2);
+            contentGrid.Children.Add(valueTextBlock);
+
+            var textBox = new TextBox()
+            {
+                Style = (Style)Application.Current.FindResource("TextBoxInput"),
+                Height = 20,
+                Text = signal.Value.ToString(),
+                VerticalAlignment = VerticalAlignment.Center,
+                Margin = new Thickness(0, 0, 5, 0)
+            };
+            Grid.SetColumn(textBox, 3);
+            contentGrid.Children.Add(textBox);
+
+            textBox.KeyDown += (sender, e) =>
+            {
+                if (e.Key == Key.Enter)
                 {
                     if (ushort.TryParse(textBox.Text, out ushort newValue))
                         signal.Value = newValue;
                     else
                         textBox.Text = signal.Value.ToString();
-                };
+                    Keyboard.ClearFocus();
+                    FocusManager.SetFocusedElement(grid, null);
+                }
+            };
 
-                signal.OnSignalChanged += newValue =>
-                {
-                    valueTextBlock.Dispatcher.Invoke(() => valueTextBlock.Text = newValue.ToString());
-                    textBox.Dispatcher.Invoke(() => textBox.Text = newValue.ToString());
-                };
+            textBox.LostFocus += (sender, e) =>
+            {
+                if (ushort.TryParse(textBox.Text, out ushort newValue))
+                    signal.Value = newValue;
+                else
+                    textBox.Text = signal.Value.ToString();
+            };
 
-                rowIndex++;
-            }
+            signal.OnSignalChanged += newValue =>
+            {
+                valueTextBlock.Dispatcher.Invoke(() => valueTextBlock.Text = newValue.ToString());
+                textBox.Dispatcher.Invoke(() => textBox.Text = newValue.ToString());
+            };
+
+            rowIndex++;
         }
     }
 }
