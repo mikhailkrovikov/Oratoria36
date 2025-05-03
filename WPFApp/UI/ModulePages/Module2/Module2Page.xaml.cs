@@ -28,10 +28,17 @@ namespace Oratoria36.UI.ModulePages.Module2
     /// </summary>
     public partial class Module2Page : Page
     {
+        Module2PageVM _vm;
         public Module2Page()
         {
             InitializeComponent();
-            this.DataContext = new Module2PageVM();
+            _vm = new Module2PageVM();
+            DataContext = _vm;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var wn = new MechanicWindow(_vm.ZatvorModule2, _vm.ManipulatorModule2);
         }
     }
     public class Module2PageVM : INotifyPropertyChanged
@@ -63,6 +70,7 @@ namespace Oratoria36.UI.ModulePages.Module2
                 null,
                 FK_KN_DU_63Command);
 
+
             ZatvorModule2Command= new RelayCommand(
                 (object obj) => { ZatvorWindow zatvorWindow = new(ZatvorModule2); },
                 (object obj) => { return true; });
@@ -74,6 +82,7 @@ namespace Oratoria36.UI.ModulePages.Module2
                 null,
                 ZatvorModule2Command);
 
+
             RRG1Command = new RelayCommand(
                 (object obj) => { RRGWindow rRGWindow = new(RRG1); },
                 (object obj) => { return true; });
@@ -81,6 +90,21 @@ namespace Oratoria36.UI.ModulePages.Module2
             RRG1 = new RRG(_signals.AISignals.Raskhod_gasa_tekushchee,
                            _signals.AOSignals.Raskhod_gasa_ustavka,
                            RRG1Command);
+
+
+            ManipulatorModule2 = new Manipulator(_signals.DOSignals.Privod_1_vklyuchit,
+                                                 _signals.DOSignals.Privod_3_vklyuchit,
+                                                 _signals.DOSignals.Tormoz_vklyuchit,
+                                                 _signals.DOSignals.Revers_vklyuchit,
+                                                 _signals.DOSignals.Poziciya_1,
+                                                 _signals.DOSignals.Poziciya_2,
+                                                 _signals.DOSignals.Poziciya_3,
+                                                 _signals.DISignals.Poziciya_1,
+                                                 _signals.DISignals.Poziciya_2,
+                                                 _signals.DISignals.Poziciya_3,
+                                                 _signals.DISignals.Tormoz_vklyuchen,
+                                                 _signals.DISignals.Revers_vklyuchen);
+
 
             Pipeline1 = new Pipeline(FK_KN_DU_63);
             Pipeline2 = new Pipeline(FK_KN_DU_63, Pipeline1);

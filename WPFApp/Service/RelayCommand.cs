@@ -28,7 +28,10 @@ namespace Oratoria36.Service
         {
             return this.canExecute == null || this.canExecute(parameter);
         }
-
+        public void RaiseCanExecuteChanged()
+        {
+            CommandManager.InvalidateRequerySuggested();
+        }
         public void Execute(object parameter)
         {
             this.execute(parameter);

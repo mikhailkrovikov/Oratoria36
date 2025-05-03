@@ -34,11 +34,28 @@ namespace Oratoria36.Models.Devices
         readonly InputSignal<bool> TormosIn;
         readonly InputSignal<bool> ReversIn;
 
+        public event EventHandler<State> StateChanged;
+        public event EventHandler<ManipulatorErrors> ErrorStateChanged;
+
         public Setting<int> ManipulatorActionTime;
 
         Logger _logger = LogManager.GetLogger("Манипулятор");
         private CancellationTokenSource token = new CancellationTokenSource();
-        public ManipulatorErrors ErrorState { get; private set; } = ManipulatorErrors.None;
+
+        private ManipulatorErrors _errorState = ManipulatorErrors.None;
+        public ManipulatorErrors ErrorState
+        {
+            get => _errorState;
+            private set
+            {
+                if (_errorState != value)
+                {
+                    _errorState = value;
+                    OnPropertyChanged(nameof(ErrorState));
+                    ErrorStateChanged?.Invoke(this, value);
+                }
+            }
+        }
 
         private ManipulatorPosition _position;
         public ManipulatorPosition Position
@@ -64,6 +81,7 @@ namespace Oratoria36.Models.Devices
                 {
                     _state = value;
                     OnPropertyChanged(nameof(State));
+                    StateChanged?.Invoke(this, value);
                 }
             }
         }
@@ -96,41 +114,6 @@ namespace Oratoria36.Models.Devices
             ReversIn = reversIn;
             ManipulatorActionTime = CommonDeviceSettings.ManipulatorActionTime;
 
-            ManipulatorPrivod1.OnSignalChanged += value =>
-            {
-                OnPropertyChanged(nameof(State));
-                OnPropertyChanged(nameof(Position));
-            };
-            PlatePrivod3.OnSignalChanged += value =>
-            {
-                OnPropertyChanged(nameof(State));
-                OnPropertyChanged(nameof(Position));
-            };
-            TormosOut.OnSignalChanged += value =>
-            {
-                OnPropertyChanged(nameof(State));
-                OnPropertyChanged(nameof(Position));
-            };
-            ReversOut.OnSignalChanged += value =>
-            {
-                OnPropertyChanged(nameof(State));
-                OnPropertyChanged(nameof(Position));
-            };
-            Position1Out.OnSignalChanged += value =>
-            {
-                OnPropertyChanged(nameof(State));
-                OnPropertyChanged(nameof(Position));
-            };
-            Position2Out.OnSignalChanged += value =>
-            {
-                OnPropertyChanged(nameof(State));
-                OnPropertyChanged(nameof(Position));
-            };
-            Position3Out.OnSignalChanged += value =>
-            {
-                OnPropertyChanged(nameof(State));
-                OnPropertyChanged(nameof(Position));
-            };
             Position1In.OnSignalChanged += value =>
             {
                 OnPropertyChanged(nameof(State));
@@ -142,16 +125,6 @@ namespace Oratoria36.Models.Devices
                 OnPropertyChanged(nameof(Position));
             };
             Position3In.OnSignalChanged += value =>
-            {
-                OnPropertyChanged(nameof(State));
-                OnPropertyChanged(nameof(Position));
-            };
-            TormosIn.OnSignalChanged += value =>
-            {
-                OnPropertyChanged(nameof(State));
-                OnPropertyChanged(nameof(Position));
-            };
-            ReversIn.OnSignalChanged += value =>
             {
                 OnPropertyChanged(nameof(State));
                 OnPropertyChanged(nameof(Position));
@@ -234,7 +207,7 @@ namespace Oratoria36.Models.Devices
         /// <summary>
         /// Манипулятор из 2 в 1 без пластины
         /// </summary>
-        private async Task<bool> FromHomeToTransportNoPlate()
+        public async Task<bool> FromHomeToTransportNoPlate()
         {
             return await ExecuteWithCancellation(async (token) =>
             {
@@ -272,7 +245,7 @@ namespace Oratoria36.Models.Devices
         /// <summary>
         /// Манипулятор из 1 в 2 с пластиной
         /// </summary>
-        private async Task<bool> FromTransportToHomeWithPlate()
+        public async Task<bool> FromTransportToHomeWithPlate()
         {
             return await ExecuteWithCancellation(async (token) =>
             {
@@ -306,7 +279,7 @@ namespace Oratoria36.Models.Devices
         /// <summary>
         /// Манипулятор из 2 в 3 с пластиной
         /// </summary>
-        private async Task<bool> FromHomeToModuleWithPlate()
+        public async Task<bool> FromHomeToModuleWithPlate()
         {
             return await ExecuteWithCancellation(async (token) =>
             {
@@ -345,7 +318,7 @@ namespace Oratoria36.Models.Devices
         /// <summary>
         /// Манипулятор из 3 в 2 без пластины
         /// </summary>
-        private async Task<bool> FromModuleToHomeNoPlate()
+        public async Task<bool> FromModuleToHomeNoPlate()
         {
             return await ExecuteWithCancellation(async (token) =>
             {
@@ -388,7 +361,7 @@ namespace Oratoria36.Models.Devices
         /// <summary>
         /// Манипулятор из 2 в 3 без пластины
         /// </summary>
-        private async Task<bool> FromHomeToModuleNoPlate()
+        public async Task<bool> FromHomeToModuleNoPlate()
         {
             return await ExecuteWithCancellation(async (token) =>
             {
@@ -426,7 +399,7 @@ namespace Oratoria36.Models.Devices
         /// <summary>
         /// Манипулятор из 3 в 2 с пластиной
         /// </summary>
-        private async Task<bool> FromModuleToHomeWithPlate()
+        public async Task<bool> FromModuleToHomeWithPlate()
         {
             return await ExecuteWithCancellation(async (token) =>
             {
@@ -469,7 +442,7 @@ namespace Oratoria36.Models.Devices
         /// <summary>
         /// Манипулятор из 2 в 1 с пластиной
         /// </summary>
-        private async Task<bool> FromHomeToTransportWithPlate()
+        public async Task<bool> FromHomeToTransportWithPlate()
         {
             return await ExecuteWithCancellation(async (token) =>
             {
@@ -507,7 +480,7 @@ namespace Oratoria36.Models.Devices
         /// <summary>
         /// Манипулятор из 1 в 2 без пластины
         /// </summary>
-        private async Task<bool> FromTransportToHomeNoPlate()
+        public async Task<bool> FromTransportToHomeNoPlate()
         {
             return await ExecuteWithCancellation(async (token) =>
             {

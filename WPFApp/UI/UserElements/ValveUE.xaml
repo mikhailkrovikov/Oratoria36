@@ -73,7 +73,6 @@
         <Style TargetType="TextBlock" x:Key="StateTextStyle">
             <Setter Property="Foreground" Value="#3F3F3F"/>
             <Setter Property="FontSize" Value="12"/>
-            <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="TextWrapping" Value="NoWrap"/>
         </Style>
     </UserControl.Resources>

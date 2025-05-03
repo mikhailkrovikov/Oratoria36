@@ -41,6 +41,12 @@ namespace Oratoria36.UI.ModulePages.Module2
                 typeof(Zatvor),
                 typeof(Module2Scheme));
 
+        public static DependencyProperty ManipulatorModule2Property =
+            DependencyProperty.Register("ManipulatorModule2",
+                typeof(Manipulator),
+                typeof(Module2Scheme));
+
+        
         public Valve FK_KN_DU_63
         {
             get { return (Valve)GetValue(FK_KN_DU_63Property); }
@@ -60,6 +66,11 @@ namespace Oratoria36.UI.ModulePages.Module2
         {
             get { return (Zatvor)GetValue(ZatvorModule2Property); }
             set { SetValue(ZatvorModule2Property, value); }
+        }
+        public Manipulator ManipulatorModule2
+        {
+            get { return (Manipulator)GetValue(ManipulatorModule2Property); }
+            set { SetValue(ManipulatorModule2Property, value); }
         }
         public Module2Scheme()
         {
