@@ -35,12 +35,18 @@
 
         <UserElements:ManipulatorUE Position="{Binding ManipulatorModule2.Position}"
                                     State="{Binding ManipulatorModule2.State}"
-                                    HorizontalAlignment="Left" Margin="742,377,0,0" VerticalAlignment="Top"/>
+                                    HorizontalAlignment="Left" Margin="768,178,0,0" VerticalAlignment="Top"/>
 
         <UserElements:ZatvorUE Label="{Binding ZatvorModule2.Name}"
                                State="{Binding ZatvorModule2.State}"
                                Command="{Binding ZatvorModule2.Command}"
                                 HorizontalAlignment="Left" Margin="662,121,0,0" VerticalAlignment="Top" Height="206"/>
+
+        <UserElements:MagnetronsUE HorizontalAlignment="Left" Margin="281,133,0,0" VerticalAlignment="Top" Height="125" Width="125" RenderTransformOrigin="0.615,0.515"/>
+        <UserElements:HeaterUE HorizontalAlignment="Left" Margin="438,272,0,0" VerticalAlignment="Top" Width="100" RenderTransformOrigin="1.97,0.86"/>
+        <UserElements:TableUE HorizontalAlignment="Left" Margin="435,168,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.211,0.275" Width="220" Height="90">
+
+        </UserElements:TableUE>
 
     </Grid>
 </UserControl>

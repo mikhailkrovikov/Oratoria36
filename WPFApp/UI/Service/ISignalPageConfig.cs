@@ -31,7 +31,7 @@ public interface ISignalPageConfig
     {
         for (int i = 0; i < signals.Count; i++)
         {
-            grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(32) });
+            grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(33) });
         }
 
         int rowIndex = 0;
@@ -95,7 +95,7 @@ public interface ISignalPageConfig
     {
         for (int i = 0; i < signals.Count; i++)
         {
-            grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(32) });
+            grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(33) });
         }
 
         int rowIndex = 0;
@@ -158,7 +158,7 @@ public interface ISignalPageConfig
     {
         for (int i = 0; i < signals.Count; i++)
         {
-            grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(32) });
+            grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(33) });
         }
 
         int rowIndex = 0;
@@ -230,7 +230,7 @@ public interface ISignalPageConfig
     {
         for (int i = 0; i < signals.Count; i++)
         {
-            grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(32) });
+            grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(33) });
         }
 
         int rowIndex = 0;
@@ -280,9 +280,10 @@ public interface ISignalPageConfig
             var textBox = new TextBox()
             {
                 Style = (Style)Application.Current.FindResource("TextBoxInput"),
-                Height = 20,
+                Height = 25,
                 Text = signal.Value.ToString(),
                 VerticalAlignment = VerticalAlignment.Center,
+                VerticalContentAlignment = VerticalAlignment.Center,
                 Margin = new Thickness(0, 0, 5, 0)
             };
             Grid.SetColumn(textBox, 3);
