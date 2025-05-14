@@ -57,7 +57,10 @@ namespace Oratoria36.Models.Devices
                     return State.On;
                 else return State.Transition;
             }
-            protected set;
+            protected set
+            {
+
+            }
         }
         public RRG(InputSignal<ushort> rrgRealValue, OutputSignal<ushort> rrgSetPoint, ICommand command)
         {
