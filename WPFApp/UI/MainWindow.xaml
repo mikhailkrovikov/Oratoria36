@@ -80,7 +80,6 @@
                 <TextBlock Text="{Binding Date}" FontSize="14" Foreground="#3F3F3F" Grid.Row="0" VerticalAlignment="Bottom"/>
                 <TextBlock Text="{Binding Time}" FontSize="14" Foreground="#3F3F3F" Grid.Row="1" VerticalAlignment="Top"/>
             </Grid>
-            <Button Content="Время обэда" HorizontalAlignment="Left" Margin="130,50,0,0" VerticalAlignment="Top" Click="Button_Click"/>
         </Grid>
     </Grid>
 </Window>
