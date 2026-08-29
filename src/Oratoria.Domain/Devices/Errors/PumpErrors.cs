@@ -15,5 +15,13 @@ namespace Oratoria.Domain.Devices.Errors
         [DeviceErrorCategory(DeviceErrorCategory.Error)]
         [Description("не удалось выключить")]
         CannotTurnOff,
+
+        [DeviceErrorCategory(DeviceErrorCategory.Error)]
+        [Description("пропал сигнал масляного насоса")]
+        UnexpectedOilShutDown,
+
+        [DeviceErrorCategory(DeviceErrorCategory.Error)]
+        [Description("пропал сигнал насоса Рутса")]
+        UnexpectedRutsShutDown,
     }
 }
