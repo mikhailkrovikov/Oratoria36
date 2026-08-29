@@ -1,4 +1,6 @@
+using Oratoria.Application.VacuumModule.DeviceCollection;
 using Oratoria.Domain.Connection;
+using Oratoria.Domain.Devices.PressureSensor.PressureSensorAttributes;
 using Oratoria.Domain.Signals;
 using Oratoria.Domain.Signals.Abstractions;
 using Oratoria.Domain.Signals.Strategies;
@@ -9,7 +11,7 @@ namespace Oratoria.Application.VacuumModule.Signals
 {
     public  class VacuumAI : IEnumerable<InputSignal<double>>
     {
-        IInputStrategy<double> _strategy;
+        private readonly IInputStrategy<double> _strategy;
 
         public ObservableCollection<InputSignal<double>> AnalogInputs;
 
@@ -18,9 +20,20 @@ namespace Oratoria.Application.VacuumModule.Signals
         public InputSignal<double> Shl2_NV {  get; set; }
         public InputSignal<double> Transport_NV {  get; set; }
         public InputSignal<double> Transport_VV {  get; set; }
+
+        [PressureSensorSignal<PressureSensors>(PressureSensors.Module1LowPressure)]
         public InputSignal<double> Module1_NV {  get; set; }
+
+
+        [PressureSensorSignal<PressureSensors>(PressureSensors.Module2LowPressure)]
         public InputSignal<double> Module2_NV {  get; set; }
+
+
+        [PressureSensorSignal<PressureSensors>(PressureSensors.Module3LowPressure)]
         public InputSignal<double> Module3_NV {  get; set; }
+
+
+        [PressureSensorSignal<PressureSensors>(PressureSensors.Module4LowPressure)]
         public InputSignal<double> Module4_NV {  get; set; }
         public InputSignal<double> KN1_NV {  get; set; }
         public InputSignal<double> KN1_VV {  get; set; }

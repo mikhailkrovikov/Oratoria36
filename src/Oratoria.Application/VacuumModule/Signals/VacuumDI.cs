@@ -1,4 +1,6 @@
+using Oratoria.Application.VacuumModule.DeviceCollection;
 using Oratoria.Domain.Connection;
+using Oratoria.Domain.Devices.Valve.ValveAttributes;
 using Oratoria.Domain.Signals;
 using Oratoria.Domain.Signals.Abstractions;
 using Oratoria.Domain.Signals.Strategies;
@@ -8,11 +10,16 @@ namespace Oratoria.Application.VacuumModule.Signals
 {
     public class VacuumDI: IEnumerable<InputSignal<bool>>
     {
-        private IInputStrategy<bool> _strategy;
+        private readonly IInputStrategy<bool> _strategy;
 
         public ObservableCollection<InputSignal<bool>> DigitalInputs;
 
+
+        [ValveIsOpenSignal<Valves>(Valves.FK_AVR)]
         public InputSignal<bool> FK_AVR_Opened {  get; set; }
+
+
+        [ValveIsCloseSignal<Valves>(Valves.FK_AVR)]
         public InputSignal<bool> FK_AVR_Closed {  get; set; }
         public InputSignal<bool> FK_AP_Opened {  get; set; }
         public InputSignal<bool> FK_AP_Closed {  get; set; }

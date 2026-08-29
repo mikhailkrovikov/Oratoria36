@@ -9,7 +9,7 @@ namespace Oratoria.Application.VacuumModule.Signals
 {
     public class VacuumAO : IEnumerable<OutputSignal<double>>
     {
-        IOutputStrategy<double> _strategy;
+        private readonly IOutputStrategy<double> _strategy;
 
         public ObservableCollection<OutputSignal<double>> AnalogOutputs;
 
