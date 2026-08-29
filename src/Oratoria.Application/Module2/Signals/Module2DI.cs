@@ -26,8 +26,19 @@ namespace Oratoria.Application.Module2.Signals
         [MagnetronIsRotatingSignal<Magnetrons>(Magnetrons.Magnetrn2)]
         [MagnetronIsRotatingSignal<Magnetrons>(Magnetrons.Magnetrn3)]
         public InputSignal<bool> Rotation_BPM { get; set; }
+
+
+        [MagnetronOverheatSignal<Magnetrons>(Magnetrons.Magnetrn1)]
+        [MagnetronOverheatSignal<Magnetrons>(Magnetrons.Magnetrn2)]
+        [MagnetronOverheatSignal<Magnetrons>(Magnetrons.Magnetrn3)]
         public InputSignal<bool> BPMOverHeat { get; set; }
+
+
+        [MagnetronOverloadSignal<Magnetrons>(Magnetrons.Magnetrn1)]
+        [MagnetronOverloadSignal<Magnetrons>(Magnetrons.Magnetrn2)]
+        [MagnetronOverloadSignal<Magnetrons>(Magnetrons.Magnetrn3)]
         public InputSignal<bool> BPMNoOverload { get; set; }
+
 
         [HeaterIsPowerOnSignal<Heaters>(Heaters.Heater)]
         public InputSignal<bool> BPNIsOn { get; set; }
