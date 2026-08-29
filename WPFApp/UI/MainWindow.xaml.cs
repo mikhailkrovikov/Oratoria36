@@ -1,65 +1,52 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Threading;
+using NLog;
 using Oratoria36.Models;
+using Oratoria36.Models.Connection;
+using Oratoria36.Service;
+using Oratoria36.UI.ModulePages.Module2;
+using Oratoria36.UI.Signals;
 
 namespace Oratoria36.UI
 {
     public partial class MainWindow : Window
     {
-        private readonly ModuleConfig _modbusDevice;
         private readonly MainWindowVM _vm;
+        private readonly MainContext _context;
 
         public MainWindow()
         {
             InitializeComponent();
             _vm = new MainWindowVM();
-            _modbusDevice = new ModuleConfig();
-            DataContext = this;
+            DataContext = _vm;
             _vm.StartClock();
-            NavigationBarControl.PageChanged += NavigateToPage;
-            MainFrame.NavigationService.Navigate(new MainPage());
+            NavigationBarControl.HostFrame = MainFrame;
+            _context = MainContext.Instance;
+            MainFrame.Navigate(new MainPage());
         }
 
-        public ModuleConfig ModbusDevice => _modbusDevice;
         public MainWindowVM ViewModel => _vm;
-
-        private void NavigateToPage(string pageName)
-        {
-            switch (pageName)
-            {
-                case "MainPage":
-                    MainFrame.Navigate(new MainPage());
-                    break;
-                case "SignalsPage":
-                    MainFrame.Navigate(new SignalsPage());
-                    break;
-                case "ConnectionSettings":
-                    MainFrame.Navigate(new ConnectionSettings());
-                    break;
-                case "LogPage":
-                    MainFrame.Navigate(new LogPage());
-                    break;
-                default:
-                    throw new ArgumentException($"Unknown page: {pageName}");
-            }
-        }
-
-        private void Window_Closed(object sender, EventArgs e)
-        {
-            NavigationBarControl.PageChanged -= NavigateToPage;
-            _modbusDevice?.CloseConnection();
-        }
     }
 
     public class MainWindowVM : INotifyPropertyChanged
     {
+        public ObservableCollection<LogEntry> Logs => DataGridTarget.LogEntries;
+        public MainWindowVM()
+        {
+            CloseButtonCommand = new RelayCommand(_ => Application.Current.Shutdown());
+        }
+        public ICommand CloseButtonCommand { get; }
+
         private DispatcherTimer _timer;
         private string _date;
         private string _time;
 
+        
         public string Date
         {
             get => _date;
@@ -94,6 +81,7 @@ namespace Oratoria36.UI
             };
             _timer.Tick += UpdateDateTime;
             _timer.Start();
+            UpdateDateTime(null, null);
         }
 
         private void UpdateDateTime(object sender, EventArgs e)
@@ -103,10 +91,10 @@ namespace Oratoria36.UI
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string prop = "")
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string prop = "")
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
     }
 }
