@@ -1,0 +1,331 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <BorderGapMaskConverter x:Key="BorderGapMaskConverter"/>
+    <Style TargetType="{x:Type GroupBox}">
+        <Setter Property="BorderBrush" Value="#D5DFE5" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type GroupBox}">
+                    <Grid SnapsToDevicePixels="true">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="6" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="6" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="6" />
+                        </Grid.RowDefinitions>
+                        <Border CornerRadius="4" Grid.Row="1" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="4" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="Transparent" Background="{TemplateBinding Background}" />
+                        <Border Name="Header" Padding="3,1,3,0" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1">
+                            <ContentPresenter ContentSource="Header" RecognizesAccessKey="true" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </Border>
+                        <ContentPresenter Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        <Border Grid.Row="1" Grid.RowSpan="3" Grid.ColumnSpan="4"  BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" CornerRadius="3">
+                            <Border.OpacityMask>
+                                <MultiBinding Converter="{StaticResource BorderGapMaskConverter}" ConverterParameter="7">
+                                    <Binding ElementName="Header" Path="ActualWidth" />
+                                    <Binding Path="ActualWidth" RelativeSource="{RelativeSource Self}" />
+                                    <Binding Path="ActualHeight" RelativeSource="{RelativeSource Self}" />
+                                </MultiBinding>
+                            </Border.OpacityMask>
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="RotatingImageStyle" TargetType="Image">
+        <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+        <Setter Property="RenderTransform">
+            <Setter.Value>
+                <RotateTransform/>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding RotationVisible}" Value="Visible">
+                <DataTrigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard RepeatBehavior="Forever">
+                            <DoubleAnimation
+                                Storyboard.TargetProperty="(Image.RenderTransform).(RotateTransform.Angle)"
+                                From="360" To="0" Duration="0:0:3"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.EnterActions>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="NavigationButton" TargetType="Button">
+        <Setter Property="Background" Value="#FFC6C6C6"/>
+        <Setter Property="Foreground" Value="#FF3F3F3F"/>
+        <Setter Property="BorderBrush" Value="#FFAAAAAA"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Width" Value="140"/>
+    </Style>
+
+    <Style x:Key="StopRedButtton" TargetType="Button">
+        <Setter Property="Background" Value="#CC0000"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="BorderBrush" Value="#CC0000"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+    </Style>
+
+    <Style x:Key="MainActionBlueButton" TargetType="Button">
+        <Setter Property="Background" Value="#FFC6C6C6"/>
+        <Setter Property="Foreground" Value="#FF3F3F3F"/>
+        <Setter Property="BorderBrush" Value="#FFAAAAAA"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+    </Style>
+
+    <Style x:Key="FrameButton" TargetType="Button">
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Background" Value="#E8E8E8"/>
+        <Setter Property="Foreground" Value="#FF3F3F3F"/>
+        <Setter Property="BorderThickness" Value="0.5,0,0.5,0.5"/>
+        <Setter Property="BorderBrush" Value="#A0A0A4"/>
+    </Style>
+    
+    
+    <!--для названия UE-->
+    <Style TargetType="TextBlock" x:Key="LabelStyle">
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="#3F3F3F"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Setter Property="Margin" Value="0,10,0,0"/>
+        <Setter Property="FontSize" Value="12"/>
+    </Style>
+
+    <Style TargetType="TextBlock" x:Key="ErrorLabelStyle">
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="#EC8629 "/>
+    </Style>
+
+    <Style x:Key="BaseEnableButton" TargetType="Button">
+        <Setter Property="Background" Value="#FFC6C6C6"/>
+        <Setter Property="Foreground" Value="#FF3F3F3F"/>
+        <Setter Property="BorderBrush" Value="#FFAAAAAA"/>
+    </Style>
+
+    <Style x:Key="HeaderLabel" TargetType="Label">
+        <Setter Property="Foreground" Value="#FF3F3F3F"/>
+        <Setter Property="BorderBrush" Value="#FFAAAAAA"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+    </Style>
+
+    <Style x:Key="HeaderTextBlock" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="#FF3F3F3F"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+    </Style>
+
+    <Style x:Key="BaseTextTextBlock" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="#FF3F3F3F"/>
+        <Setter Property="FontSize" Value="12"/>
+    </Style>
+    <Style x:Key="BaseTextLabel" TargetType="Label">
+        <Setter Property="Foreground" Value="#FF3F3F3F"/>
+        <Setter Property="FontSize" Value="12"/>
+    </Style>
+
+    <Style x:Key="RealValueHeaderLabel" TargetType="Label">
+        <Setter Property="Foreground" Value="#FF3F3F3F"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
+
+    <Style x:Key="DynamicRealValueLabel" TargetType="Label">
+        <Setter Property="Foreground" Value="#475CA7"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="BorderThickness" Value="0,0.5,0,0"/>
+        <Setter Property="BorderBrush" Value="#A0A0A4"/>
+        <Setter Property="Padding" Value="20,0,0,0"/>
+        <Setter Property="Height" Value="40"/>
+    </Style>
+
+    <Style x:Key="RealValueLabel" TargetType="Label">
+        <Setter Property="Foreground" Value="#FF3F3F3F"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="BorderThickness" Value="0,0.5,0,0"/>
+        <Setter Property="BorderBrush" Value="#A0A0A4"/>
+        <Setter Property="Padding" Value="20,0,0,0"/>
+        <Setter Property="Height" Value="40"/>
+    </Style>
+
+    <Style TargetType="Label" x:Key="ErrorStyle">
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="#EC8629 "/>
+    </Style>
+
+
+    <Style x:Key="AnalogBlueValueLabel" TargetType="Label">
+        <Setter Property="Foreground" Value="#475CA7"/>
+    </Style>
+    
+    <Style x:Key="AnalogBlueValueTextBlock" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="#475CA7"/>
+    </Style>
+
+    <Style x:Key="AnalogGreyValueTextBlock" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="#AAAAAA"/>
+    </Style>
+    
+    <Style x:Key="AnalogGreyValueLabel" TargetType="Label">
+        <Setter Property="Foreground" Value="#AAAAAA"/>
+    </Style>
+
+    <Style x:Key="StaticValueTextBlock" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="#919191"/>
+        <Setter Property="FontSize" Value="12"/>
+    </Style>
+
+    
+
+    <Style x:Key="TextBoxInput" TargetType="TextBox">
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="Foreground" Value="#3F3F3F"/>
+        <Setter Property="Background" Value="#FFF0F0F0"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Style.Triggers>
+            <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter Property="Background" Value="White"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    
+    <Style x:Key="ContureRectangleStyle" TargetType="Rectangle">
+        <Setter Property="Fill" Value="#00000000" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="Stroke" Value="#FFA0A0A4" />
+    </Style>
+
+    <Style x:Key="LogDataGridStyle" TargetType="DataGrid">
+        <Setter Property="AutoGenerateColumns" Value="False"/>
+        <Setter Property="IsReadOnly" Value="True"/>
+        <Setter Property="SelectionUnit" Value="Cell"/>
+        <Setter Property="SelectionMode" Value="Extended"/>
+        <Setter Property="ClipboardCopyMode" Value="IncludeHeader"/>
+    </Style>
+
+    <Style x:Key="LogDataGridRowStyle" TargetType="DataGridRow">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Level}" Value="Ошибка">
+                <Setter Property="Background" Value="#FFE74C3C"/>
+                <Setter Property="Foreground" Value="White"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Level}" Value="Предупреждение">
+                <Setter Property="Background" Value="Yellow"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Level}" Value="Инфо">
+                <Setter Property="Background" Value="White"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Level}" Value="Отладка">
+                <Setter Property="Background" Value="#FF2ECC71"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Level}" Value="Трассировка">
+                <Setter Property="Background" Value="#FFECF0F1"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Level}" Value="Критическая">
+                <Setter Property="Background" Value="#FF8B0000"/>
+                <Setter Property="Foreground" Value="White"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+
+    <Style x:Key="ToggleSwitchStyle" TargetType="CheckBox">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="CheckBox">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0"
+                        CornerRadius="8"
+                        Width="46"
+                        Height="30"
+                        Margin="0,0,5,0">
+                            <Grid>
+                                <Rectangle x:Name="BackgroundRect"
+                               Fill="#FFCCCCCC"
+                               Stroke="#FFA0A0A4"
+                               RadiusX="7"
+                               RadiusY="7"
+                               Height="14"/>
+                                <Ellipse x:Name="SwitchThumb"
+                             Width="20"
+                             Height="20"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Center"
+                             Margin="2"
+                             Fill="White"
+                             Stroke="#FFA0A0A4"
+                             StrokeThickness="1"/>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="SwitchThumb" Property="HorizontalAlignment" Value="Right"/>
+                            <Setter TargetName="BackgroundRect" Property="Fill" Value="#3399FF"/>
+                            <Setter TargetName="SwitchThumb" Property="Fill" Value="White"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="False">
+                            <Setter TargetName="SwitchThumb" Property="HorizontalAlignment" Value="Left"/>
+                            <Setter TargetName="BackgroundRect" Property="Fill" Value="#808080"/>
+                            <Setter TargetName="SwitchThumb" Property="Fill" Value="#606060"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style x:Key="SoftGroupContainer" TargetType="Border">
+        <Setter Property="Background" Value="#E8E8E8"/>
+        <Setter Property="BorderBrush" Value="#D8D8D8"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="10"/>
+        <Setter Property="Margin" Value="0,0,0,15"/>
+    </Style>
+
+    <Style x:Key="SectionDivider" TargetType="Border">
+        <Setter Property="BorderBrush" Value="#FFD3D3D3"/>
+        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+        <Setter Property="Margin" Value="0,10,0,15"/>
+    </Style>
+
+    <Style x:Key="CardContainer" TargetType="Border">
+        <Setter Property="CornerRadius" Value="16"/>
+        <Setter Property="Background" Value="#FFF5F5F5"/>
+        <Setter Property="Padding" Value="20"/>
+        <Setter Property="BorderBrush" Value="#FFAAAAAA"/>
+        <Setter Property="BorderThickness" Value="1"/>
+    </Style>
+
+    <Style x:Key="SectionTitle" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="#3F3F3F"/>
+        <Setter Property="Margin" Value="0,0,0,20"/>
+    </Style>
+
+</ResourceDictionary>
+    
