@@ -8,6 +8,7 @@ using System.Collections;
 using System.Collections.ObjectModel;
 using Oratoria.Domain.Devices.Flap.FlapAttributes;
 using Oratoria.Domain.Devices.Leaker.LeakerAttributes;
+using Oratoria.Domain.Devices.Abstractions.MechanicAttributes;
 
 namespace Oratoria.Application.Module2.Signals
 {
@@ -27,12 +28,48 @@ namespace Oratoria.Application.Module2.Signals
         public InputSignal<bool> BPMIsOn { get; set; }
 
 
+        [MechanicPosition1InputSignal<Mechanics>(Mechanics.Table)]
+        [MechanicPosition1InputSignal<Mechanics>(Mechanics.Manipulator)]
+        [MechanicPosition1InputSignal<Mechanics>(Mechanics.Throttle)]
         public InputSignal<bool> Position1 { get; set; }
+
+
+        [MechanicPosition2InputSignal<Mechanics>(Mechanics.Table)]
+        [MechanicPosition2InputSignal<Mechanics>(Mechanics.Manipulator)]
+        [MechanicPosition2InputSignal<Mechanics>(Mechanics.Throttle)]
         public InputSignal<bool> Position2 { get; set; }
+
+
+        [MechanicPosition3InputSignal<Mechanics>(Mechanics.Table)]
+        [MechanicPosition3InputSignal<Mechanics>(Mechanics.Manipulator)]
+        [MechanicPosition3InputSignal<Mechanics>(Mechanics.Throttle)]
         public InputSignal<bool> Position3 { get; set; }
+
+
         public InputSignal<bool> BPM3IsOn { get; set; }
+
+
+        [MechanicReversInputSignal<Mechanics>(Mechanics.Table)]
+        [MechanicReversInputSignal<Mechanics>(Mechanics.Manipulator)]
+        [MechanicReversInputSignal<Mechanics>(Mechanics.Throttle)]
         public InputSignal<bool> Revers { get; set; }
+
+
+        [MechanicTormosInputSignal<Mechanics>(Mechanics.Table)]
+        [MechanicTormosInputSignal<Mechanics>(Mechanics.Manipulator)]
+        [MechanicTormosInputSignal<Mechanics>(Mechanics.Throttle)]
+        public InputSignal<bool> Tormos { get; set; }
+
+
+        [MechanicDriverOverloadInputSignal<Mechanics>(Mechanics.Table)]
+        [MechanicDriverOverloadInputSignal<Mechanics>(Mechanics.Manipulator)]
+        [MechanicDriverOverloadInputSignal<Mechanics>(Mechanics.Throttle)]
+        public InputSignal<bool> DriverOverload { get; set; }
+
+
         public InputSignal<bool> CryoPumpIsOn { get; set; }
+
+
 
         [LeakerIsOpenSignal<Leakers>(Leakers.ArgonLeaker)]
         public InputSignal<bool> Leaker1IsOn { get; set; }
@@ -70,8 +107,9 @@ namespace Oratoria.Application.Module2.Signals
 
         public InputSignal<bool> WaterNoOverheat { get; set; }
         public InputSignal<bool> IsWater { get; set; }
-        public InputSignal<bool> Tormos { get; set; }
-        public InputSignal<bool> DriverOverload { get; set; }
+
+
+
 
         public Module2DI(ModbusTCPConfig netConfig, IInputStrategy<bool> strategy)
         {

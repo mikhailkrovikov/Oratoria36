@@ -8,9 +8,8 @@ namespace UI
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow(Module2Context context)
+        public MainWindow()
         {
-            var v = context.FK_KN_DU_63;
             InitializeComponent();
         }
     }

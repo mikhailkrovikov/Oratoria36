@@ -1,6 +1,6 @@
 ﻿namespace Oratoria.Domain.Devices
 {
-    [AttributeUsage(AttributeTargets.Property)]
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
     public class DeviceSignalAttribute<TDevice> : Attribute
     {
         public readonly TDevice DeviceId;

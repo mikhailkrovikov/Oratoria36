@@ -80,11 +80,13 @@ namespace Oratoria.Domain.Devices.Abstractions
             TormosIn = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(MechanicTormosInputSignalAttribute<>))!;
             ReversIn = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(MechanicReversInputSignalAttribute<>))!;
             DriverOverload = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(MechanicDriverOverloadInputSignalAttribute<>))!;
+
             Position1Out = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(MechanicPosition1OutputSignalAttribute<>))!;
             Position2Out = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(MechanicPosition2OutputSignalAttribute<>))!;
             Position3Out = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(MechanicPosition3OutputSignalAttribute<>))!;
             TormosOut = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(MechanicTormosOutputSignalAttribute<>))!;
             ReversOut = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(MechanicReversOutputSignalAttribute<>))!;
+            Actuator = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(MechanicDriverOutputSignalAttribute<>))!;
 
             DriverOverload.OnSignalChanged += DriverOverloadHandler;
             Position1In.OnSignalChanged += _ => OnPositionChanged();

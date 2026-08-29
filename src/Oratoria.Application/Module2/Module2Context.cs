@@ -6,26 +6,23 @@ using Oratoria.Application.Module2.Signals;
 using Oratoria.Domain.Devices.Flap;
 using Oratoria.Domain.Devices.Leaker;
 using Oratoria.Domain.Devices.Manipulator;
+using Oratoria.Domain.Devices.Table;
+using Oratoria.Domain.Devices.Throttle;
 
 namespace Oratoria.Application.Module2
 {
-    public class Module2Context : ITechModuleContext
+    public class Module2Context : TechnologyModuleContext
     {
-        public Valve FK_KN_DU_63 { get; set; }
-        public Shutter Shutter { get; set; }
-        public Flap Flap { get; set; }
-        public Leaker ArgonLeaker { get; set; }
-        public Leaker NitrogenLeaker { get; set; }
-        public Manipulator Manipulator { get; set; }
-
-        public Module2Context(Module2Signals signals, ILoggerFactory loggerFactory)
+        public Module2Context(Module2Signals signals, ILoggerFactory loggerFactory) : base(signals, loggerFactory)
         {
-            FK_KN_DU_63 = new Valve(Valves.ForValveCryoPump, signals, loggerFactory);
-            Shutter = new Shutter(Shutters.Shutter, signals, loggerFactory);
-            Flap = new Flap(Flaps.Flap, signals, loggerFactory);
-            ArgonLeaker = new Leaker(Leakers.ArgonLeaker, signals, loggerFactory);
-            NitrogenLeaker = new Leaker(Leakers.NitrogenLeaker, signals, loggerFactory);
-            Manipulator = new Manipulator(Mechanics.Manipulator, signals, loggerFactory);
+            FK_KN_DU_63 = Factory.CreateDevice<Valve>(Valves.ForValveCryoPump);
+            Shutter = Factory.CreateDevice<Shutter>(Shutters.Shutter);
+            Flap = Factory.CreateDevice<Flap>(Flaps.Flap);
+            ArgonLeaker = Factory.CreateDevice<Leaker>(Leakers.ArgonLeaker);
+            NitrogenLeaker = Factory.CreateDevice<Leaker>(Leakers.NitrogenLeaker);
+            Manipulator = Factory.CreateDevice<Manipulator>(Mechanics.Manipulator);
+            Throttle = Factory.CreateDevice<Throttle>(Mechanics.Throttle);
+            Table = Factory.CreateDevice<Table>(Mechanics.Table);
         }
     }
 }

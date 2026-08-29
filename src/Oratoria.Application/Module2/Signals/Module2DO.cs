@@ -1,13 +1,14 @@
+using Oratoria.Application.Module2.DeviceCollection;
 using Oratoria.Domain.Connection;
+using Oratoria.Domain.Devices.Abstractions.MechanicAttributes;
+using Oratoria.Domain.Devices.Flap.FlapAttributes;
+using Oratoria.Domain.Devices.Leaker.LeakerAttributes;
 using Oratoria.Domain.Devices.Shutter.ShutterAttributes;
 using Oratoria.Domain.Devices.Valve.ValveAttributes;
 using Oratoria.Domain.Signals;
 using Oratoria.Domain.Signals.Abstractions;
-using Oratoria.Application.Module2.DeviceCollection;
 using System.Collections;
 using System.Collections.ObjectModel;
-using Oratoria.Domain.Devices.Flap.FlapAttributes;
-using Oratoria.Domain.Devices.Leaker.LeakerAttributes;
 
 namespace Oratoria.Application.Module2.Signals
 {
@@ -51,13 +52,47 @@ namespace Oratoria.Application.Module2.Signals
 
 
         public OutputSignal<bool> PodduvOn { get; set; }
+
+
+        [MechanicDriverOutputSignal<Mechanics>(Mechanics.Manipulator)]
         public OutputSignal<bool> Driver1On { get; set; }
+
+
+        [MechanicDriverOutputSignal<Mechanics>(Mechanics.Table)]
         public OutputSignal<bool> Driver2On { get; set; }
+
+
+        [MechanicDriverOutputSignal<Mechanics>(Mechanics.Throttle)]
         public OutputSignal<bool> Driver4On { get; set; }
+
+
+        [MechanicPosition1OutputSignal<Mechanics>(Mechanics.Table)]
+        [MechanicPosition1OutputSignal<Mechanics>(Mechanics.Manipulator)]
+        [MechanicPosition1OutputSignal<Mechanics>(Mechanics.Throttle)]
         public OutputSignal<bool> Position1 { get; set; }
+
+
+        [MechanicPosition2OutputSignal<Mechanics>(Mechanics.Table)]
+        [MechanicPosition2OutputSignal<Mechanics>(Mechanics.Manipulator)]
+        [MechanicPosition2OutputSignal<Mechanics>(Mechanics.Throttle)]
         public OutputSignal<bool> Position2 { get; set; }
+
+
+        [MechanicPosition3OutputSignal<Mechanics>(Mechanics.Table)]
+        [MechanicPosition3OutputSignal<Mechanics>(Mechanics.Manipulator)]
+        [MechanicPosition3OutputSignal<Mechanics>(Mechanics.Throttle)]
         public OutputSignal<bool> Position3 { get; set; }
+
+
+        [MechanicReversOutputSignal<Mechanics>(Mechanics.Table)]
+        [MechanicReversOutputSignal<Mechanics>(Mechanics.Manipulator)]
+        [MechanicReversOutputSignal<Mechanics>(Mechanics.Throttle)]
         public OutputSignal<bool> ReversOn { get; set; }
+
+
+        [MechanicTormosOutputSignal<Mechanics>(Mechanics.Table)]
+        [MechanicTormosOutputSignal<Mechanics>(Mechanics.Manipulator)]
+        [MechanicTormosOutputSignal<Mechanics>(Mechanics.Throttle)]
         public OutputSignal<bool> TormosOn { get; set; }
         public OutputSignal<bool> CryoPumpOn { get; set; }
 

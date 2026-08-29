@@ -15,6 +15,7 @@ using NLog;
 using NLog.Extensions.Logging;
 using System.IO;
 using System.Windows;
+using Oratoria.Application;
 namespace UI
 {
     /// <summary>
