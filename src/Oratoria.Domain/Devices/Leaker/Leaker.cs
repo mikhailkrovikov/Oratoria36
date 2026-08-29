@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Oratoria.Domain.Devices.Abstractions;
-using Oratoria.Domain.Devices.Flap.FlapAttributes;
+using Oratoria.Domain.Devices.Leaker.LeakerAttributes;
 using Oratoria.Domain.Devices.Statuses;
 using Oratoria.Domain.Signals;
 using Oratoria.Domain.Signals.Abstractions;
@@ -14,11 +14,11 @@ namespace Oratoria.Domain.Devices.Leaker
 
         public Leaker(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory) : base(deviceId, loggerFactory)
         {
-            IsOpen = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(FlapIsOpenSignalAttribute<>));
-            IsClose = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(FlapIsCloseSignalAttribute<>));
-            Open = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(FlapOpenSignalAttribute<>));
-            Close = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(FlapCloseSignalAttribute<>));
-            LeakerSetpoint = SignalHelper<OutputSignal<double>>.GetSignal(deviceId, signals.AOSignals, typeof(FlapSetpointSignalAttribute<>));
+            IsOpen = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(LeakerIsOpenSignalAttribute<>));
+            IsClose = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(LeakerIsCloseSignalAttribute<>));
+            Open = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(LeakerOpenSignalAttribute<>));
+            Close = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(LeakerCloseSignalAttribute<>));
+            LeakerSetpoint = SignalHelper<OutputSignal<double>>.GetSignal(deviceId, signals.AOSignals, typeof(LeakerSetpointSignalAttribute<>));
 
             IsOpen?.OnSignalChanged += _ => OnStateChanged();
             IsClose?.OnSignalChanged += _ => OnStateChanged();

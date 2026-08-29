@@ -5,7 +5,7 @@ namespace Oratoria.Domain.Abstractions
 {
     public abstract class ModuleContext
     {
-        protected DeviceFactory Factory { get; set; }
+        protected DeviceFactory Factory { get; }
 
         protected ModuleContext(IModuleSignals signals, ILoggerFactory loggerFactory)
         {

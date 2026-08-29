@@ -1,7 +1,9 @@
+using Oratoria.Application.Module2.DeviceCollection;
 using Oratoria.Domain.Connection;
+using Oratoria.Domain.Devices.Flap.FlapAttributes;
+using Oratoria.Domain.Devices.Leaker.LeakerAttributes;
 using Oratoria.Domain.Signals;
 using Oratoria.Domain.Signals.Abstractions;
-using Oratoria.Domain.Signals.Strategies;
 using System.Collections;
 using System.Collections.ObjectModel;
 
@@ -16,7 +18,12 @@ namespace Oratoria.Application.Module2.Signals
         public OutputSignal<double> BPM1Power { get; set; }
         public OutputSignal<double> BPM2Power { get; set; }
         public OutputSignal<double> BPM3Power { get; set; }
+
+
+        [LeakerSetpointSignal<Leakers>(Leakers.ArgonLeaker)]
         public OutputSignal<double> LeakerControl { get; set; }
+
+
         public OutputSignal<double> RRGSetpoint { get; set; }
 
         public Module2AO(ModbusTCPConfig netConfig, IOutputStrategy<double> strategy)
