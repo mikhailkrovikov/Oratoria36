@@ -11,6 +11,7 @@ using Oratoria.Domain.Devices.Throttle;
 using Oratoria.Domain.Devices.Magnetron;
 using Oratoria.Domain.Devices.Heater;
 using Oratoria.Domain.Devices.ManualPump;
+using Oratoria.Domain.Devices.RRG;
 
 namespace Oratoria.Application.Module2
 {
@@ -23,6 +24,7 @@ namespace Oratoria.Application.Module2
             Flap = Factory.CreateDevice<Flap>(Flaps.Flap);
             ArgonLeaker = Factory.CreateDevice<Leaker>(Leakers.ArgonLeaker);
             NitrogenLeaker = Factory.CreateDevice<Leaker>(Leakers.NitrogenLeaker);
+            RRG = Factory.CreateDevice<RRG>(RRGs.RRG);
             Manipulator = Factory.CreateDevice<Manipulator>(Mechanics.Manipulator);
             Throttle = Factory.CreateDevice<Throttle>(Mechanics.Throttle);
             Table = Factory.CreateDevice<Table>(Mechanics.Table);

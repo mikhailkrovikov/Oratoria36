@@ -97,7 +97,6 @@ namespace Oratoria.Application.Module2.Signals
         public InputSignal<bool> CryoPumpIsOn { get; set; }
 
 
-
         [LeakerIsOpenSignal<Leakers>(Leakers.ArgonLeaker)]
         public InputSignal<bool> Leaker1IsOn { get; set; }
 

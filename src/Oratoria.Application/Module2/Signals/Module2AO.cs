@@ -4,6 +4,7 @@ using Oratoria.Domain.Devices.Flap.FlapAttributes;
 using Oratoria.Domain.Devices.Heater.HeaterAttributes;
 using Oratoria.Domain.Devices.Leaker.LeakerAttributes;
 using Oratoria.Domain.Devices.Magnetron.MagnetronAttributes;
+using Oratoria.Domain.Devices.RRG;
 using Oratoria.Domain.Signals;
 using Oratoria.Domain.Signals.Abstractions;
 using System.Collections;
@@ -37,6 +38,7 @@ namespace Oratoria.Application.Module2.Signals
         public OutputSignal<double> LeakerControl { get; set; }
 
 
+        [RRGSetpointSignal<RRGs>(RRGs.RRG)]
         public OutputSignal<double> RRGSetpoint { get; set; }
 
         public Module2AO(ModbusTCPConfig netConfig, IOutputStrategy<double> strategy)

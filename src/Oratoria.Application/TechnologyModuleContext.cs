@@ -6,6 +6,7 @@ using Oratoria.Domain.Devices.Leaker;
 using Oratoria.Domain.Devices.Magnetron;
 using Oratoria.Domain.Devices.Manipulator;
 using Oratoria.Domain.Devices.ManualPump;
+using Oratoria.Domain.Devices.RRG;
 using Oratoria.Domain.Devices.Shutter;
 using Oratoria.Domain.Devices.Table;
 using Oratoria.Domain.Devices.Throttle;
@@ -25,6 +26,8 @@ namespace Oratoria.Application
         public Leaker ArgonLeaker { get; set; }
 
         public Leaker NitrogenLeaker { get; set; }
+
+        public RRG RRG{ get; set; }
 
         public Manipulator Manipulator { get; set; }
 
