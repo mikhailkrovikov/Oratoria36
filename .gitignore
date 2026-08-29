@@ -32,3 +32,6 @@ $RECYCLE.BIN/
 /.vs/Oratoria36/FileContentIndex
 /.vs/Oratoria36/DesignTimeBuild
 /.vs/Oratoria36/CopilotIndices/17.12.38.29086
+/.vs/Oratoria36
+/src/.vs
+/tests/Oratoria.Tests/.vs
