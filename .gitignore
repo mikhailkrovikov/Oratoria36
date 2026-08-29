@@ -1,34 +1,45 @@
-﻿# Build artifacts
-bin/
-obj/
+﻿################################################################################
+# Данный GITIGNORE-файл был автоматически создан Microsoft(R) Visual Studio.
+################################################################################
 
-# User-specific files
-*.rsuser
-*.suo
-*.user
-*.userosscache
-*.sln.docstates
-
-# Mono Auto Generated Files
-mono_crash.*
-
-# Windows image file caches
-Thumbs.db
-ehthumbs.db
-
-# Folder config file
-Desktop.ini
-
-# Recycle Bin used on file shares
-$RECYCLE.BIN/
-
-# VS Code directories
-.vscode/
-/.vs/UnitronicsTester/v17
-/.vs/UnitronicsTester
-/.vs/ProjectEvaluation
-/.vs/Oratoria36/v17
-/Oratoria36/.vs/UnitronicsConfig
-/.vs/Oratoria36/FileContentIndex
-/.vs/Oratoria36/DesignTimeBuild
-/.vs/Oratoria36/CopilotIndices/17.12.38.29086
+/src/.vs/Oratoria36.slnx
+/src/Application/.vs
+/src/Application/bin/Debug/net10.0
+/src/Application/obj
+/src/Domain/.vs
+/src/Domain/bin/Debug/net10.0
+/src/Domain/obj
+/src/Infrastructure/.vs
+/src/Infrastructure/bin/Debug/net10.0
+/src/Infrastructure/obj
+/src/UI/.vs
+/src/UI/bin/Debug/net10.0-windows
+/src/UI/obj
+/libs/digitaltwin/.vs
+/libs/digitaltwin/bin/Debug/net9.0
+/libs/digitaltwin/obj
+/libs/digitaltwin/bin/Release/net9.0
+/src/Application/bin/Release/net10.0
+/src/Domain/bin/Release/net10.0
+/src/Infrastructure/bin/Release/net10.0
+/src/UI/bin/Release/net10.0-windows
+*.props
+/src/.vs/Oratoria36/CopilotIndices/17.14.1577.30250
+/src/Application/bin/Debug/net9.0
+/src/Application/bin/Debug/net9.0/Application.deps.json
+/src/Domain/bin/Debug/net9.0
+/src/Infrastructure/bin/Debug/net9.0
+/src/UI/bin/Debug/net9.0-windows7.0
+/tests/Oratoria.Tests/.vs
+/tests/Oratoria.Tests/bin/Debug/net9.0
+/tests/Oratoria.Tests/obj
+/.vs/Oratoria36
+/src/.vs/Oratoria36/CopilotIndices/17.14.1706.11463
+/src/Oratoria.Application/bin/Debug
+/src/Oratoria.Application/obj
+/src/Oratoria.Domain/bin/Debug
+/src/Oratoria.Domain/obj
+/src/Oratoria.Infrastructure/bin/Debug
+/src/Oratoria.Infrastructure/obj
+/src/Oratoria.UI/bin/Debug
+/src/Oratoria.UI/obj
