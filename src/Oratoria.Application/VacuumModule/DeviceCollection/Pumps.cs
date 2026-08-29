@@ -2,7 +2,7 @@
 
 namespace Oratoria.Application.VacuumModule.DeviceCollection
 {
-    public enum ManualPumps
+    public enum Pumps
     {
         [Description("КН1 (транспорт)")]
         KN1_TM,

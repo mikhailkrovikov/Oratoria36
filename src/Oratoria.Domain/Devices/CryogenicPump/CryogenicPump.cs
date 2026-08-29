@@ -6,15 +6,15 @@ using Oratoria.Domain.Signals;
 using Oratoria.Domain.Signals.Abstractions;
 using Oratoria.Infrastructure;
 
-namespace Oratoria.Domain.Devices.ManualPump
+namespace Oratoria.Domain.Devices.CryogenicPump
 {
-    public class ManualPump : Device<PumpStatus, PumpErrors>
+    public class CryogenicPump : Device<PumpStatus, PumpErrors>
     {
         public InputSignal<bool> IsPumpOn { get; set; }
 
-        public ManualPump(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory) : base(deviceId, signals, loggerFactory)
+        public CryogenicPump(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory) : base(deviceId, signals, loggerFactory)
         {
-            IsPumpOn = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(ManualPumpIsOnSignalAttribute<>))!;
+            IsPumpOn = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(CryogenicPumpIsOnSignalAttribute<>))!;
             IsPumpOn?.OnSignalChanged += value => 
             {
                 HandleInput(value);

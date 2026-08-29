@@ -1,4 +1,5 @@
 using Oratoria.Application.Module2;
+using Oratoria.Application.VacuumModule;
 using System.Windows;
 
 namespace UI
@@ -8,7 +9,7 @@ namespace UI
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow(Module2Context module2Context)
+        public MainWindow(Module2Context module2Context, VacuumContext vacuumContext)
         {
             InitializeComponent();
         }

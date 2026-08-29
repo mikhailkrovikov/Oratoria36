@@ -10,9 +10,9 @@ using Oratoria.Domain.Devices.Table;
 using Oratoria.Domain.Devices.Throttle;
 using Oratoria.Domain.Devices.Magnetron;
 using Oratoria.Domain.Devices.Heater;
-using Oratoria.Domain.Devices.ManualPump;
 using Oratoria.Domain.Devices.RRG;
 using Oratoria.Domain.Devices.PressureSensor;
+using Oratoria.Domain.Devices.CryogenicPump;
 
 namespace Oratoria.Application.Module2
 {
@@ -33,7 +33,7 @@ namespace Oratoria.Application.Module2
             Magnetron1 = Factory.CreateDevice<Magnetron>(Magnetrons.Magnetrn1);
             Magnetron2 = Factory.CreateDevice<Magnetron>(Magnetrons.Magnetrn2);
             Magnetron3 = Factory.CreateDevice<Magnetron>(Magnetrons.Magnetrn3);
-            CryogenicPump = Factory.CreateDevice<CryogenicPump>(ManualPumps.CryogenicPump);
+            CryogenicPump = Factory.CreateDevice<CryogenicPump>(Pumps.CryogenicPump);
             VICB = Factory.CreateDevice<HighVacuumSensor>(PressureSensors.VICB);
         }
     }

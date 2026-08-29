@@ -1,4 +1,8 @@
+using Oratoria.Application.VacuumModule.DeviceCollection;
 using Oratoria.Domain.Connection;
+using Oratoria.Domain.Devices.AVRPump.AVRPumpAttributes;
+using Oratoria.Domain.Devices.NitrogenFeeder.NitrogenFeederAttributes;
+using Oratoria.Domain.Devices.Valve.ValveAttributes;
 using Oratoria.Domain.Signals;
 using Oratoria.Domain.Signals.Abstractions;
 using Oratoria.Domain.Signals.Strategies;
@@ -13,27 +17,86 @@ namespace Oratoria.Application.VacuumModule.Signals
 
         public ObservableCollection<OutputSignal<bool>> DigitalOutputs;
 
+        [ValveOpenSignal<Valves>(Valves.FK_AVR)]
         public OutputSignal<bool> FK_AVR { get; set; }
+
+
+        [ValveOpenSignal<Valves>(Valves.FK_AP)]
         public OutputSignal<bool> FK_AP { get; set; }
+
+
+        [ValveOpenSignal<Valves>(Valves.FK_OK)]
         public OutputSignal<bool> FK_OK { get; set; }
+
+
+        [ValveOpenSignal<Valves>(Valves.FK_KN1)]
         public OutputSignal<bool> FK_KN1 { get; set; }
+
+
+        [ValveOpenSignal<Valves>(Valves.KN2_Zatvor)]
         public OutputSignal<bool> FK_KN2 { get; set; }
+
+
+        [ValveOpenSignal<Valves>(Valves.KN_Zatvor_TM)]
         public OutputSignal<bool> KN_Zatvor_TM { get; set; }
+
+
+        [ValveOpenSignal<Valves>(Valves.FK_TM)]
         public OutputSignal<bool> FK_TM { get; set; }
+
+
+        [ValveOpenSignal<Valves>(Valves.FK_Shl1)]
         public OutputSignal<bool> FK_Shl1 { get; set; }
+
+
+        [ValveOpenSignal<Valves>(Valves.FK_Shl2)]
         public OutputSignal<bool> FK_Shl2 { get; set; }
+
+
+        [AVROilOnSignal<Pumps>(Pumps.AVR)]
         public OutputSignal<bool> OilPump { get; set; }
+
+
+        [AVRRutsOnSignal<Pumps>(Pumps.AVR)]
         public OutputSignal<bool> RUTSPump { get; set; }
+
+
+        [ValveOpenSignal<Valves>(Valves.FK_M1)]
         public OutputSignal<bool> FK_M1 { get; set; }
+
+
+        [ValveOpenSignal<Valves>(Valves.FK_M2)]
         public OutputSignal<bool> FK_M2 { get; set; }
+
+
+        [ValveOpenSignal<Valves>(Valves.FK_M3)]
         public OutputSignal<bool> FK_M3 { get; set; }
+
+
+        [ValveOpenSignal<Valves>(Valves.FK_M4)]
         public OutputSignal<bool> FK_M4 { get; set; }
-        public OutputSignal<bool> KN1 { get; set; }
-        public OutputSignal<bool> KN2 { get; set; }
-        public OutputSignal<bool> AP1 { get; set; }
-        public OutputSignal<bool> AP2 { get; set; }
-        public OutputSignal<bool> AlarmStop { get; set; }
+
+
+        [ValveOpenSignal<Valves>(Valves.FK_Trb)]
         public OutputSignal<bool> FK_Trb { get; set; }
+
+
+        [NitrogenFeederPowerOnSignal<NitrogenFeeders>(NitrogenFeeders.NitrogenFeeder1)]
+        public OutputSignal<bool> AP1 { get; set; }
+
+
+        [NitrogenFeederPowerOnSignal<NitrogenFeeders>(NitrogenFeeders.NitrogenFeeder2)]
+        public OutputSignal<bool> AP2 { get; set; }
+
+
+        public OutputSignal<bool> AlarmStop { get; set; }
+
+
+        [Obsolete]
+        public OutputSignal<bool> KN1 { get; set; }
+
+        [Obsolete]
+        public OutputSignal<bool> KN2 { get; set; }
 
         public VacuumDO(ModbusTCPConfig netConfig, IOutputStrategy<bool> strategy)
         {

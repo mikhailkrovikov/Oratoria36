@@ -84,11 +84,11 @@ namespace Oratoria.Application.Algorithms
             {
                 var token = _source.Token;
 
-
-                _context.Magnetron1.TurnOff();
-                _context.Magnetron2.TurnOff();
-                _context.Magnetron3.TurnOff();
-
+                await Task.WhenAll(
+                    _context.Magnetron1.TurnOff(), 
+                    _context.Magnetron2.TurnOff(), 
+                    _context.Magnetron3.TurnOff());
+    
                 _context.Magnetron1.RotationOn.Value = false;
                 token.ThrowIfCancellationRequested();
 

@@ -1,11 +1,11 @@
 using Microsoft.Extensions.Logging;
 using Oratoria.Domain.Abstractions;
+using Oratoria.Domain.Devices.CryogenicPump;
 using Oratoria.Domain.Devices.Flap;
 using Oratoria.Domain.Devices.Heater;
 using Oratoria.Domain.Devices.Leaker;
 using Oratoria.Domain.Devices.Magnetron;
 using Oratoria.Domain.Devices.Manipulator;
-using Oratoria.Domain.Devices.ManualPump;
 using Oratoria.Domain.Devices.PressureSensor;
 using Oratoria.Domain.Devices.RRG;
 using Oratoria.Domain.Devices.Shutter;
@@ -18,35 +18,35 @@ namespace Oratoria.Application
 {
     public abstract class TechnologyModuleContext : ModuleContext
     {
-        public Valve FK_KN_DU_63 { get; set; }
+        public Valve FK_KN_DU_63 { get; set; } = null!;
 
-        public Shutter Shutter { get; set; }
+        public Shutter Shutter { get; set; } = null!;
 
-        public Flap Flap { get; set; }
+        public Flap Flap { get; set; } = null!;
 
-        public Leaker ArgonLeaker { get; set; }
+        public Leaker ArgonLeaker { get; set; } = null!;
 
-        public Leaker NitrogenLeaker { get; set; }
+        public Leaker NitrogenLeaker { get; set; } = null!;
 
-        public RRG RRG{ get; set; }
+        public RRG RRG{ get; set; } = null!;
 
-        public Manipulator Manipulator { get; set; }
+        public Manipulator Manipulator { get; set; } = null!;
 
-        public Throttle Throttle { get; set; }
+        public Throttle Throttle { get; set; } = null!;
 
-        public Table Table { get; set; }
+        public Table Table { get; set; } = null!;
 
-        public Heater Heater { get; set; }
+        public Heater Heater { get; set; } = null!;
 
-        public Magnetron Magnetron1 { get; set; }
+        public Magnetron Magnetron1 { get; set; } = null!;
 
-        public Magnetron Magnetron2 { get; set; }
+        public Magnetron Magnetron2 { get; set; } = null!;
 
-        public Magnetron Magnetron3 { get; set; }
+        public Magnetron Magnetron3 { get; set; } = null!;
 
-        public CryogenicPump CryogenicPump { get; set; }
+        public CryogenicPump CryogenicPump { get; set; } = null!;
 
-        public HighVacuumSensor VICB { get; set; }
+        public HighVacuumSensor VICB { get; set; } = null!;
 
         protected TechnologyModuleContext(IModuleSignals signals, ILoggerFactory loggerFactory) : base(signals, loggerFactory)
         {

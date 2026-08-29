@@ -1,9 +1,11 @@
 using Oratoria.Application.VacuumModule.DeviceCollection;
 using Oratoria.Domain.Connection;
+using Oratoria.Domain.Devices.AVRPump.AVRPumpAttributes;
+using Oratoria.Domain.Devices.CryogenicPump;
+using Oratoria.Domain.Devices.NitrogenFeeder.NitrogenFeederAttributes;
 using Oratoria.Domain.Devices.Valve.ValveAttributes;
 using Oratoria.Domain.Signals;
 using Oratoria.Domain.Signals.Abstractions;
-using Oratoria.Domain.Signals.Strategies;
 using System.Collections;
 using System.Collections.ObjectModel;
 namespace Oratoria.Application.VacuumModule.Signals
@@ -16,43 +18,140 @@ namespace Oratoria.Application.VacuumModule.Signals
 
 
         [ValveIsOpenSignal<Valves>(Valves.FK_AVR)]
-        public InputSignal<bool> FK_AVR_Opened {  get; set; }
+        public InputSignal<bool> FK_AVR_Opened { get; set; }
 
 
         [ValveIsCloseSignal<Valves>(Valves.FK_AVR)]
-        public InputSignal<bool> FK_AVR_Closed {  get; set; }
-        public InputSignal<bool> FK_AP_Opened {  get; set; }
-        public InputSignal<bool> FK_AP_Closed {  get; set; }
-        public InputSignal<bool> FK_OK_Opened {  get; set; }
-        public InputSignal<bool> FK_OK_Closed {  get; set; }
-        public InputSignal<bool> FK_KN1_Opened {  get; set; }
-        public InputSignal<bool> FK_KN1_Closed {  get; set; }
+        public InputSignal<bool> FK_AVR_Closed { get; set; }
+
+
+        [ValveIsOpenSignal<Valves>(Valves.FK_AP)]
+        public InputSignal<bool> FK_AP_Opened { get; set; }
+
+
+        [ValveIsCloseSignal<Valves>(Valves.FK_AP)]
+        public InputSignal<bool> FK_AP_Closed { get; set; }
+
+
+        [ValveIsOpenSignal<Valves>(Valves.FK_OK)]
+        public InputSignal<bool> FK_OK_Opened { get; set; }
+
+
+        [ValveIsCloseSignal<Valves>(Valves.FK_OK)]
+        public InputSignal<bool> FK_OK_Closed { get; set; }
+
+
+        [ValveIsOpenSignal<Valves>(Valves.FK_KN1)]
+        public InputSignal<bool> FK_KN1_Opened { get; set; }
+
+
+        [ValveIsCloseSignal<Valves>(Valves.FK_KN1)]
+        public InputSignal<bool> FK_KN1_Closed { get; set; }
+
+
+        [ValveIsOpenSignal<Valves>(Valves.KN2_Zatvor)]
         public InputSignal<bool> FK_KN2_Opened { get; set; }
+
+
+        [ValveIsCloseSignal<Valves>(Valves.KN2_Zatvor)]
         public InputSignal<bool> FK_KN2_Closed { get; set; }
+
+
+        [AVRIsOilOnSignal<Pumps>(Pumps.AVR)]
         public InputSignal<bool> OilPump_On { get; set; }
+
+
+        [AVRIsRutsOnSignal<Pumps>(Pumps.AVR)]
         public InputSignal<bool> RUTSPump_On { get; set; }
+
+
+        [ValveIsOpenSignal<Valves>(Valves.FK_M1)]
         public InputSignal<bool> FK_M1_Opened { get; set; }
+
+
+        [ValveIsCloseSignal<Valves>(Valves.FK_M1)]
         public InputSignal<bool> FK_M1_Closed { get; set; }
+
+
+        [ValveIsOpenSignal<Valves>(Valves.FK_M2)]
         public InputSignal<bool> FK_M2_Opened { get; set; }
+
+
+        [ValveIsCloseSignal<Valves>(Valves.FK_M2)]
         public InputSignal<bool> FK_M2_Closed { get; set; }
+
+
+        [ValveIsOpenSignal<Valves>(Valves.FK_M3)]
         public InputSignal<bool> FK_M3_Opened { get; set; }
+
+
+        [ValveIsCloseSignal<Valves>(Valves.FK_M3)]
         public InputSignal<bool> FK_M3_Closed { get; set; }
+
+
+        [ValveIsOpenSignal<Valves>(Valves.FK_M4)]
         public InputSignal<bool> FK_M4_Opened { get; set; }
+
+
+        [ValveIsCloseSignal<Valves>(Valves.FK_M4)]
         public InputSignal<bool> FK_M4_Closed { get; set; }
+
+
+        [ValveIsOpenSignal<Valves>(Valves.FK_TM)]
         public InputSignal<bool> FK_TM_Opened { get; set; }
+
+
+        [ValveIsCloseSignal<Valves>(Valves.FK_TM)]
         public InputSignal<bool> FK_TM_Closed { get; set; }
+
+
+        [ValveIsOpenSignal<Valves>(Valves.FK_Shl1)]
         public InputSignal<bool> FK_Shl1_Opened { get; set; }
+
+
+        [ValveIsCloseSignal<Valves>(Valves.FK_Shl1)]
         public InputSignal<bool> FK_Shl1_Closed { get; set; }
+
+
+        [ValveIsOpenSignal<Valves>(Valves.FK_Shl2)]
         public InputSignal<bool> FK_Shl2_Opened { get; set; }
+
+
+        [ValveIsCloseSignal<Valves>(Valves.FK_Shl2)]
         public InputSignal<bool> FK_Shl2_Closed { get; set; }
+
+
+        [ValveIsOpenSignal<Valves>(Valves.KN_Zatvor_TM)]
         public InputSignal<bool> KN_Zatvor_TM_Opened { get; set; }
+
+
+        [ValveIsCloseSignal<Valves>(Valves.KN_Zatvor_TM)]
         public InputSignal<bool> KN_Zatvor_TM_Closed { get; set; }
+
+
+        [CryogenicPumpIsOnSignal<Pumps>(Pumps.KN1_TM)]
         public InputSignal<bool> KN1_On { get; set; }
+
+
+        [CryogenicPumpIsOnSignal<Pumps>(Pumps.KN2_Shl)]
         public InputSignal<bool> KN2_On { get; set; }
+
+
+        [NitrogenFeederIsPowerOnSignal<NitrogenFeeders>(NitrogenFeeders.NitrogenFeeder1)]
         public InputSignal<bool> AP1_On { get; set; }
+
+
+        [NitrogenFeederIsPowerOnSignal<NitrogenFeeders>(NitrogenFeeders.NitrogenFeeder2)]
         public InputSignal<bool> AP2_On { get; set; }
+
+
+        [ValveIsOpenSignal<Valves>(Valves.FK_Trb)]
         public InputSignal<bool> FK_Trb_Opened { get; set; }
+
+
+        [ValveIsCloseSignal<Valves>(Valves.FK_Trb)]
         public InputSignal<bool> FK_Trb_Closed { get; set; }
+
         public VacuumDI(ModbusTCPConfig netConfig, IInputStrategy<bool> strategy)
         {
 #if RELEASE

@@ -2,16 +2,11 @@
 using Oratoria.Application.VacuumModule.DeviceCollection;
 using Oratoria.Application.VacuumModule.Signals;
 using Oratoria.Domain.Abstractions;
-using Oratoria.Domain.Devices.ManualPump;
+using Oratoria.Domain.Devices.AVRPump;
+using Oratoria.Domain.Devices.CryogenicPump;
 using Oratoria.Domain.Devices.NitrogenFeeder;
 using Oratoria.Domain.Devices.PressureSensor;
 using Oratoria.Domain.Devices.Valve;
-using Oratoria.Domain.Signals.Abstractions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Oratoria.Application.VacuumModule
 {
@@ -61,6 +56,26 @@ namespace Oratoria.Application.VacuumModule
 
         public PressureSensor Module4LowPressure { get; set; }
 
+        public PressureSensor TransportLowVacuum { get; set; }
+
+        public PressureSensor TransportHighVacuum { get; set; }
+
+        public PressureSensor Gateway1LowVacuum { get; set; }
+
+        public PressureSensor Gateway2LowVacuum { get; set; }
+
+        public PressureSensor KNTransportLowVacuum { get; set; }
+
+        public PressureSensor KNTransportHighVacuum { get; set; }
+
+        public PressureSensor KNGatewaytLowVacuum { get; set; }
+
+        public PressureSensor KNGatewayHighVacuum { get; set; }
+
+        public PressureSensor TrupoprovodLowVacuum { get; set; }
+
+        public PressureSensor AVRLowVacuum { get; set; }
+
         public VacuumContext(VacuumSignals signals, ILoggerFactory loggerFactory) : base(signals, loggerFactory)
         {
             FK_M1 = Factory.CreateDevice<Valve>(Valves.FK_M1);
@@ -75,15 +90,28 @@ namespace Oratoria.Application.VacuumModule
             FK_Shl1 = Factory.CreateDevice<Valve>(Valves.FK_Shl1);
             FK_Shl2 = Factory.CreateDevice<Valve>(Valves.FK_Shl2);
             KN_Zatvor_TM = Factory.CreateDevice<Valve>(Valves.KN_Zatvor_TM);
+            FK_TM = Factory.CreateDevice<Valve>(Valves.FK_TM);
             FK_Trb = Factory.CreateDevice<Valve>(Valves.FK_Trb);
-            AVR = Factory.CreateDevice<AVRPump>(ManualPumps.AVR);
-            KN1_TM = Factory.CreateDevice<CryogenicPump>(ManualPumps.KN1_TM);
-            KN2_Shl = Factory.CreateDevice<CryogenicPump>(ManualPumps.KN2_Shl);
-            AP1 = Factory.CreateDevice<NitrogenFeeder>(NitrogenFeeders.NitrogenFeeder);
+
+            AVR = Factory.CreateDevice<AVRPump>(Pumps.AVR);
+            KN1_TM = Factory.CreateDevice<CryogenicPump>(Pumps.KN1_TM);
+            KN2_Shl = Factory.CreateDevice<CryogenicPump>(Pumps.KN2_Shl);
+            AP1 = Factory.CreateDevice<NitrogenFeeder>(NitrogenFeeders.NitrogenFeeder1);
+
             Module1LowPressure = Factory.CreateDevice<LowVacuumSensor>(PressureSensors.Module1LowPressure);
             Module2LowPressure = Factory.CreateDevice<LowVacuumSensor>(PressureSensors.Module2LowPressure);
             Module3LowPressure = Factory.CreateDevice<LowVacuumSensor>(PressureSensors.Module3LowPressure);
             Module4LowPressure = Factory.CreateDevice<LowVacuumSensor>(PressureSensors.Module4LowPressure);
+            TransportLowVacuum = Factory.CreateDevice<LowVacuumSensor>(PressureSensors.TransportLowVacuum);
+            TransportHighVacuum = Factory.CreateDevice<HighVacuumSensor>(PressureSensors.TransportHighVacuum);
+            Gateway1LowVacuum = Factory.CreateDevice<LowVacuumSensor>(PressureSensors.Gateway1LowVacuum);
+            Gateway2LowVacuum = Factory.CreateDevice<LowVacuumSensor>(PressureSensors.Gateway2LowVacuum);
+            KNTransportLowVacuum = Factory.CreateDevice<LowVacuumSensor>(PressureSensors.KNTransportLowVacuum);
+            KNTransportHighVacuum = Factory.CreateDevice<HighVacuumSensor>(PressureSensors.KNTransportHighVacuum);
+            KNGatewaytLowVacuum = Factory.CreateDevice<LowVacuumSensor>(PressureSensors.KNGatewaytLowVacuum);
+            KNGatewayHighVacuum = Factory.CreateDevice<HighVacuumSensor>(PressureSensors.KNGatewayHighVacuum);
+            TrupoprovodLowVacuum = Factory.CreateDevice <LowVacuumSensor>(PressureSensors.TrupoprovodLowVacuum);
+            AVRLowVacuum = Factory.CreateDevice <LowVacuumSensor>(PressureSensors.AVRLowVacuum);
         }
     }
 }

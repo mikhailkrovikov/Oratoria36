@@ -15,11 +15,26 @@ namespace Oratoria.Application.VacuumModule.Signals
 
         public ObservableCollection<InputSignal<double>> AnalogInputs;
 
+
+        [PressureSensorSignal<PressureSensors>(PressureSensors.AVRLowVacuum)]
         public InputSignal<double> AVR_NV {  get; set; }
+
+
+        [PressureSensorSignal<PressureSensors>(PressureSensors.Gateway1LowVacuum)]
         public InputSignal<double> Shl1_NV {  get; set; }
+
+
+        [PressureSensorSignal<PressureSensors>(PressureSensors.Gateway2LowVacuum)]
         public InputSignal<double> Shl2_NV {  get; set; }
+
+
+        [PressureSensorSignal<PressureSensors>(PressureSensors.TransportLowVacuum)]
         public InputSignal<double> Transport_NV {  get; set; }
+
+
+        [PressureSensorSignal<PressureSensors>(PressureSensors.TransportHighVacuum)]
         public InputSignal<double> Transport_VV {  get; set; }
+
 
         [PressureSensorSignal<PressureSensors>(PressureSensors.Module1LowPressure)]
         public InputSignal<double> Module1_NV {  get; set; }
@@ -35,11 +50,27 @@ namespace Oratoria.Application.VacuumModule.Signals
 
         [PressureSensorSignal<PressureSensors>(PressureSensors.Module4LowPressure)]
         public InputSignal<double> Module4_NV {  get; set; }
+
+
+        [PressureSensorSignal<PressureSensors>(PressureSensors.KNTransportLowVacuum)]
         public InputSignal<double> KN1_NV {  get; set; }
+
+
+        [PressureSensorSignal<PressureSensors>(PressureSensors.KNTransportHighVacuum)]
         public InputSignal<double> KN1_VV {  get; set; }
+
+
+        [PressureSensorSignal<PressureSensors>(PressureSensors.KNGatewaytLowVacuum)]
         public InputSignal<double> KN2_NV {  get; set; }
+
+
+        [PressureSensorSignal<PressureSensors>(PressureSensors.KNGatewayHighVacuum)]
         public InputSignal<double> KN2_VV {  get; set; }
+
+
+        [PressureSensorSignal<PressureSensors>(PressureSensors.TrupoprovodLowVacuum)]
         public InputSignal<double> Trupoprovod_NV {  get; set; }
+
         public VacuumAI(ModbusTCPConfig netConfig, IInputStrategy<double> strategy)
         {
 #if RELEASE
