@@ -32,7 +32,7 @@ namespace Oratoria.Domain.Devices.Magnetron
             get => Math.Round(MagnetronCurrent.Value * MagnetronVoltage.Value, 2);
         }
 
-        public Magnetron(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory) : base(deviceId, loggerFactory)
+        public Magnetron(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory) : base(deviceId, signals, loggerFactory)
         {
             IsPowerOff = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(MagnetronIsPowerOffSignalAttribute<>));
             IsPowerOn = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(MagnetronIsPowerOnSignalAttribute<>));

@@ -9,7 +9,7 @@ namespace Oratoria.Domain.Devices.Valve
 {
     public class Valve : OpenableDevice
     {
-        public Valve(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory) : base(deviceId, loggerFactory)
+        public Valve(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory) : base(deviceId, signals, loggerFactory)
         {
             IsOpen = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(ValveIsOpenSignalAttribute<>));
             IsClose = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(ValveIsCloseSignalAttribute<>));

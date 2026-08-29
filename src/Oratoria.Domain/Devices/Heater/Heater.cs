@@ -27,7 +27,7 @@ namespace Oratoria.Domain.Devices.Heater
             get => Math.Round(HeaterTemp.Value / 10 * 400, 2);
         }
 
-        public Heater(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory) : base(deviceId, loggerFactory)
+        public Heater(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory) : base(deviceId, signals, loggerFactory)
         {
             IsPowerOff = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(HeaterIsPowerOffSignalAttribute<>));
             IsPowerOn = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(HeaterIsPowerOnSignalAttribute<>));

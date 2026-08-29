@@ -12,7 +12,7 @@ namespace Oratoria.Domain.Devices.ManualPump
     {
         public InputSignal<bool> IsPumpOn { get; set; }
 
-        public ManualPump(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory) : base(deviceId, loggerFactory)
+        public ManualPump(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory) : base(deviceId, signals, loggerFactory)
         {
             IsPumpOn = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(ManualPumpIsOnSignalAttribute<>))!;
             IsPumpOn?.OnSignalChanged += value => 

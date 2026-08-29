@@ -1,9 +1,10 @@
-﻿using Oratoria.Infrastructure;
-using Microsoft.Extensions.Logging;
-using Oratoria.Domain.Settings;
-using Oratoria.Domain.Signals;
+﻿using Microsoft.Extensions.Logging;
 using Oratoria.Domain.Devices.Errors;
 using Oratoria.Domain.Devices.Statuses;
+using Oratoria.Domain.Settings;
+using Oratoria.Domain.Signals;
+using Oratoria.Domain.Signals.Abstractions;
+using Oratoria.Infrastructure;
 
 namespace Oratoria.Domain.Devices.Abstractions
 {
@@ -63,7 +64,7 @@ namespace Oratoria.Domain.Devices.Abstractions
             }
         }
 
-        protected OpenableDevice(Enum deviceId, ILoggerFactory loggerFactory) : base(deviceId, loggerFactory)
+        protected OpenableDevice(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory) : base(deviceId, signals, loggerFactory)
         {
             TimeForError = new(DeviceId, "Время до ошибки", "сек");
             TimeForWarning = new(DeviceId, "Время до предупреждения", "сек");

@@ -12,7 +12,7 @@ namespace Oratoria.Domain.Devices.Leaker
     {
         public OutputSignal<double>? LeakerSetpoint { get; set; }
 
-        public Leaker(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory) : base(deviceId, loggerFactory)
+        public Leaker(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory) : base(deviceId, signals, loggerFactory)
         {
             IsOpen = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(LeakerIsOpenSignalAttribute<>));
             IsClose = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(LeakerIsCloseSignalAttribute<>));

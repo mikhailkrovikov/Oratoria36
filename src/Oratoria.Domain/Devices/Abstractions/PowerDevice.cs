@@ -4,6 +4,7 @@ using Oratoria.Domain.Settings;
 using Oratoria.Domain.Signals;
 using Oratoria.Domain.Devices.Statuses;
 using Oratoria.Domain.Devices.Errors;
+using Oratoria.Domain.Signals.Abstractions;
 
 namespace Oratoria.Domain.Devices.Abstractions
 {
@@ -61,7 +62,7 @@ namespace Oratoria.Domain.Devices.Abstractions
             }
         }
 
-        protected PowerDevice(Enum deviceId, ILoggerFactory loggerFactory) : base(deviceId, loggerFactory)
+        protected PowerDevice(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory) : base(deviceId, signals, loggerFactory)
         {
             TimeForError = new(DeviceId, "Время до ошибки", "сек");
         }

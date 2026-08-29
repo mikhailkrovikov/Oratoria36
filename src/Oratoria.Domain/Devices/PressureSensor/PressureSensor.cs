@@ -22,7 +22,7 @@ namespace Oratoria.Domain.Devices.PressureSensor
         public abstract override PressureStatus State { get; }
 
         protected PressureSensor(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory)
-            : base(deviceId, loggerFactory)
+            : base(deviceId, signals, loggerFactory)
         {
             PressureSignal = SignalHelper<InputSignal<double>>.GetSignal(deviceId, signals.AISignals, typeof(PressureSensorSignalAttribute<>))!;
             PressureSignal?.OnSignalChanged += _ => OnStateChanged();

@@ -72,7 +72,7 @@ namespace Oratoria.Domain.Devices.Abstractions
 
         public Setting<int> ActionTime;
 
-        public MechanicDevice(Enum deviceId,IModuleSignals signals, ILoggerFactory loggerFactory) : base(deviceId, loggerFactory)
+        public MechanicDevice(Enum deviceId,IModuleSignals signals, ILoggerFactory loggerFactory) : base(deviceId, signals, loggerFactory)
         {
             Position1In = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(MechanicPosition1InputSignalAttribute<>))!;
             Position2In = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(MechanicPosition2InputSignalAttribute<>))!;

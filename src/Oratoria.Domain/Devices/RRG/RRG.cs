@@ -50,7 +50,7 @@ namespace Oratoria.Domain.Devices.RRG
             }
         }
 
-        public RRG(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory) : base(deviceId, loggerFactory)
+        public RRG(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory) : base(deviceId, signals, loggerFactory)
         {
             RRGRealValueSignal = SignalHelper<InputSignal<double>>.GetSignal(deviceId, signals.AISignals, typeof(RRGRealValueSignalAttribute<>));
             RRGSetpointSignal = SignalHelper<OutputSignal<double>>.GetSignal(deviceId, signals.AOSignals, typeof(RRGSetpointSignalAttribute<>));

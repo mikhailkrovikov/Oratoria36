@@ -1,5 +1,6 @@
 ﻿using Oratoria.Infrastructure;
 using Microsoft.Extensions.Logging;
+using Oratoria.Domain.Signals.Abstractions;
 
 namespace Oratoria.Domain.Devices.Abstractions
 {
@@ -21,7 +22,7 @@ namespace Oratoria.Domain.Devices.Abstractions
 
         protected CancellationTokenSource CTSource { get; private set; } = new();
 
-        protected Device(Enum deviceId, ILoggerFactory loggerFactory)
+        protected Device(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory)
         {
             DeviceId = deviceId;
             DeviceErrors = new DeviceError<TError>();
