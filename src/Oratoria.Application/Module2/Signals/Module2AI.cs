@@ -2,7 +2,10 @@ using Oratoria.Application.Module2.DeviceCollection;
 using Oratoria.Domain.Connection;
 using Oratoria.Domain.Devices.Heater.HeaterAttributes;
 using Oratoria.Domain.Devices.Magnetron.MagnetronAttributes;
+using Oratoria.Domain.Devices.PressureSensor;
+using Oratoria.Domain.Devices.PressureSensor.PressureSensorAttributes;
 using Oratoria.Domain.Devices.RRG;
+using Oratoria.Domain.Devices.RRG.RRGAttributes;
 using Oratoria.Domain.Signals;
 using Oratoria.Domain.Signals.Abstractions;
 using Oratoria.Domain.Signals.Strategies;
@@ -51,6 +54,9 @@ namespace Oratoria.Application.Module2.Signals
 
         [HeaterTemperatureSignal<Heaters>(Heaters.Heater)]
         public InputSignal<double> BPNTemperature { get; set; }
+
+
+        [PressureSensorSignal<PressureSensors>(PressureSensors.VICB)]
         public InputSignal<double> VICB { get; set; }
 
 

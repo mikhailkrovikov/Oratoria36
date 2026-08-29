@@ -5,6 +5,7 @@ using Oratoria.Domain.Devices.Heater.HeaterAttributes;
 using Oratoria.Domain.Devices.Leaker.LeakerAttributes;
 using Oratoria.Domain.Devices.Magnetron.MagnetronAttributes;
 using Oratoria.Domain.Devices.RRG;
+using Oratoria.Domain.Devices.RRG.RRGAttributes;
 using Oratoria.Domain.Signals;
 using Oratoria.Domain.Signals.Abstractions;
 using System.Collections;

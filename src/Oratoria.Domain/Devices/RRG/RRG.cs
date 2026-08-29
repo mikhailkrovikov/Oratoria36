@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Oratoria.Domain.Devices.Abstractions;
 using Oratoria.Domain.Devices.Errors;
+using Oratoria.Domain.Devices.RRG.RRGAttributes;
 using Oratoria.Domain.Devices.Statuses;
 using Oratoria.Domain.Settings;
 using Oratoria.Domain.Signals;
@@ -9,12 +10,6 @@ using Oratoria.Infrastructure;
 
 namespace Oratoria.Domain.Devices.RRG
 {
-    public class RRGRealValueSignalAttribute<TDevice>(TDevice deviceId) : DeviceSignalAttribute<TDevice>(deviceId)
-    {
-    }
-    public class RRGSetpointSignalAttribute<TDevice>(TDevice deviceId) : DeviceSignalAttribute<TDevice>(deviceId)
-    {
-    }
     public class RRG : Device<RRGStatus, RRGErrors>
     {
         public InputSignal<double> RRGRealValueSignal { get; set; }

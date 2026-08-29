@@ -17,8 +17,4 @@
     <ProjectReference Include="..\Oratoria.Infrastructure\Oratoria.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Devices\RRG\RRGAttributes\" />
-  </ItemGroup>
-
 </Project>

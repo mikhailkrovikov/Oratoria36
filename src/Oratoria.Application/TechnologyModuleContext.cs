@@ -6,6 +6,7 @@ using Oratoria.Domain.Devices.Leaker;
 using Oratoria.Domain.Devices.Magnetron;
 using Oratoria.Domain.Devices.Manipulator;
 using Oratoria.Domain.Devices.ManualPump;
+using Oratoria.Domain.Devices.PressureSensor;
 using Oratoria.Domain.Devices.RRG;
 using Oratoria.Domain.Devices.Shutter;
 using Oratoria.Domain.Devices.Table;
@@ -44,6 +45,8 @@ namespace Oratoria.Application
         public Magnetron Magnetron3 { get; set; }
 
         public CryogenicPump CryogenicPump { get; set; }
+
+        public HighVacuumSensor VICB { get; set; }
 
         protected TechnologyModuleContext(IModuleSignals signals, ILoggerFactory loggerFactory) : base(signals, loggerFactory)
         {
