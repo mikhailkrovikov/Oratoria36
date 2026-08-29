@@ -2,16 +2,14 @@
 {
     public abstract class BusketSignal<T> : Signal <T>
     {
-        private ushort _pinNumber;
-        
         public ushort PinNumber
         {
-            get => _pinNumber;
+            get => field;
             set
             {
-                if (value != _pinNumber)
+                if (value != field)
                 {
-                    _pinNumber = value;
+                    field = value;
                     OnPropertyChanged();
                 }
             }

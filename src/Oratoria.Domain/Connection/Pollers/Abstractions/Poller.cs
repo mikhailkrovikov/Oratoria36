@@ -9,7 +9,6 @@ namespace Oratoria.Domain.Connection.Pollers.Abstractions
         protected readonly Stopwatch sw = new();
 
         private readonly IConnectionConfig _netConfig;
-        private bool _isEnabled;
 
         public string PollerName { get; }
 
@@ -19,12 +18,12 @@ namespace Oratoria.Domain.Connection.Pollers.Abstractions
 
         public bool IsEnabled
         {
-            get => _isEnabled;
+            get => field;
             private set
             {
-                if (_isEnabled == value)
+                if (field == value)
                     return;
-                _isEnabled = value;
+                field = value;
                 OnPropertyChanged();
             }
         }
