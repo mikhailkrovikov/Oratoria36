@@ -47,7 +47,10 @@ namespace Oratoria36.Models.Devices
 
                 else return State.Transition;
             }
-            protected set;
+            protected set
+            {
+
+            }
         }
         public Zatvor(string name, InputSignal<bool> isOpen, InputSignal<bool> isClose,
                     OutputSignal<bool> open, OutputSignal<bool> close, ICommand command)
