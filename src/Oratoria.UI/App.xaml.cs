@@ -15,6 +15,7 @@ using NLog.Extensions.Logging;
 using System.IO;
 using System.Windows;
 using Oratoria.Application.VacuumModule;
+using Oratoria.Application.TransportModule;
 namespace UI;
 
 /// <summary>
@@ -60,6 +61,7 @@ public partial class App : Application
         services.AddSingleton<VacuumSignals>();
 
         services.AddSingleton<VacuumContext>();
+        services.AddSingleton<TransportContext>();
         services.AddSingleton<Module2Context>();
 
         services.AddSingleton<MainWindow>();
