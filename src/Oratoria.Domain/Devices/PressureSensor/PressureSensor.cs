@@ -28,7 +28,7 @@ namespace Oratoria.Domain.Devices.PressureSensor
             PressureSignal?.OnSignalChanged += _ => OnStateChanged();
         }
 
-        protected static string FormatScientific(double value)
+        public static string FormatScientific(double value)
         {
             if (double.IsNaN(value) || double.IsInfinity(value))
                 return "1.00 E+5";
