@@ -15,7 +15,7 @@ namespace Oratoria.Domain.Signals.Strategies
             try
             {
                 var outValue = (ushort)(value * 4095 / 10);
-                _netConfig.Master.WriteSingleRegister((ushort)(0x0800 + 2 + pinNumber), outValue);
+                _netConfig?.Master?.WriteSingleRegister((ushort)(0x0800 + 2 + pinNumber), outValue);
             }
             catch { }  
         }

@@ -10,7 +10,6 @@ using Oratoria.Application.TransportModule;
 using Oratoria.Application.TransportModule.Signals;
 using Oratoria.Application.VacuumModule;
 using Oratoria.Application.VacuumModule.Signals;
-using Oratoria.Domain.Connection.Pollers;
 using DigitalTwin;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +18,7 @@ using NLog;
 using NLog.Extensions.Logging;
 using System.IO;
 using System.Windows;
+using Oratoria.Domain.Connection.Pollers.Abstractions;
 namespace UI;
 
 /// <summary>

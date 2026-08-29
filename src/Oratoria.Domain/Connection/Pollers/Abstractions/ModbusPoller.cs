@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Oratoria.Domain.Signals.Abstractions;
 
-namespace Oratoria.Domain.Connection.Pollers
+namespace Oratoria.Domain.Connection.Pollers.Abstractions
 {
     public class ModbusPoller : Poller
     {

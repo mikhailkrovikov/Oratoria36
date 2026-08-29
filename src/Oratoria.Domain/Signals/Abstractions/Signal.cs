@@ -21,7 +21,7 @@ namespace Oratoria.Domain.Signals.Abstractions
         public abstract void ResetSignal();
 
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {

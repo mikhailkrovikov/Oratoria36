@@ -4,10 +4,9 @@ namespace Oratoria.Domain.Signals
 {
     public class OutputSignal<T> : BusketSignal<T>
     {
-
-        IOutputStrategy<T> _strategy;
+        private readonly IOutputStrategy<T> _strategy;
         
-        public override event SignalChangedHandler OnSignalChanged;
+        public override event SignalChangedHandler? OnSignalChanged;
 
         T _value;
         public override T Value
@@ -17,7 +16,6 @@ namespace Oratoria.Domain.Signals
             {
                 if (!Equals(_value, value))
                 {
-                    var oldValue = _value;
                     _value = value;
                     SetOutput(PinNumber, _value);
                     RaiseEventParallel(_value);
@@ -44,12 +42,9 @@ namespace Oratoria.Domain.Signals
 
             var tasks = new List<Task>();
 
-            foreach (SignalChangedHandler handler in handlers)
-            {
+            foreach (SignalChangedHandler handler in handlers.Cast<SignalChangedHandler>())
                 tasks.Add(Task.Run(() => handler.Invoke(value)));
-            }
-
-            //Task.WaitAll(tasks.ToArray());
+            
         }
 
         public override void ResetSignal()

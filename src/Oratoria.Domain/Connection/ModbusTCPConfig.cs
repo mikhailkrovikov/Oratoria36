@@ -9,12 +9,12 @@ namespace Oratoria.Domain.Connection
     public class ModbusTCPConfig : IConnectionConfig
     {
         private readonly ILogger _logger;
-        private TcpClient _tcpClient;
+        private TcpClient? _tcpClient;
         private readonly object _locker;
 
-        public ModbusIpMaster Master { get; set; }
+        public ModbusIpMaster? Master { get; set; }
 
-        public string IP
+        public string? IP
         {
             get => field;
             set
@@ -52,6 +52,12 @@ namespace Oratoria.Domain.Connection
         {
             try
             {
+                if(IP == null)
+                {
+                    _logger.LogWarning("IP не задан, сбой подключения");
+                    return false;
+                }
+
                 _logger.LogInformation($"Подключение к {IP}:{Port}");
                 _tcpClient = new TcpClient();
 
@@ -99,7 +105,7 @@ namespace Oratoria.Domain.Connection
         }
 
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {

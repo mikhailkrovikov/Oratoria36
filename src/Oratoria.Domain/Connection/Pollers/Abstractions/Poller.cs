@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
-namespace Oratoria.Domain.Connection.Pollers
+namespace Oratoria.Domain.Connection.Pollers.Abstractions
 {
     public abstract class Poller : IDisposable, INotifyPropertyChanged
     {

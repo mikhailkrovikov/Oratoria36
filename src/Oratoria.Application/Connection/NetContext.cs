@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Oratoria.Application.Connection;
 
-public sealed class NetContext
+public class NetContext
 {
     public ModbusTCPConfig Module1 { get; }
     public ModbusTCPConfig Module2 { get; }

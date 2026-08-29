@@ -12,7 +12,7 @@
                 if (value != _pinNumber)
                 {
                     _pinNumber = value;
-                    OnPropertyChanged("PinNumber");
+                    OnPropertyChanged();
                 }
             }
         }

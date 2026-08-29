@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.Logging;
-using Oratoria.Domain.Connection.Pollers;
+using Oratoria.Domain.Connection.Pollers.Abstractions;
 using Timer = System.Timers.Timer;
 
 namespace Oratoria.Application.Connection.Pollers

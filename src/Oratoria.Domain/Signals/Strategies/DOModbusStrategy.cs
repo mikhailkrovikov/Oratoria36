@@ -15,7 +15,7 @@ namespace Oratoria.Domain.Signals.Strategies
         {
             try
             {
-                _netConfig.Master.WriteSingleCoil((ushort)(0x1000 + pinNumber), value);
+                _netConfig?.Master?.WriteSingleCoil((ushort)(0x1000 + pinNumber), value);
             }
             catch { }
         }

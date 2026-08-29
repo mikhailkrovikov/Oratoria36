@@ -96,7 +96,7 @@ namespace Oratoria.Domain.Settings
             DeviceId = deviceId;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {

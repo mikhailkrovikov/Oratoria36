@@ -12,7 +12,7 @@ namespace Oratoria.Domain.Signals.Strategies
         }
         public bool GetInput(ushort pinNumber)
         {
-            var result = _netConfig.Master.ReadInputs(pinNumber, 1);
+            var result = _netConfig?.Master?.ReadInputs(pinNumber, 1);
             return result[0];
         }
     }

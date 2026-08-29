@@ -12,7 +12,7 @@ public class AIModbusStrategy : IInputStrategy<double>
     }
     public double GetInput(ushort pinNumber)
     {
-        var result = _netConfig.Master.ReadHoldingRegisters((ushort)(pinNumber + 2), 1);
+        var result = _netConfig?.Master?.ReadHoldingRegisters((ushort)(pinNumber + 2), 1);
         return (double)result[0] * 10 / 4096;
     }
 }
