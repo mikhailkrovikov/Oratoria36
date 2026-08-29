@@ -36,3 +36,4 @@ $RECYCLE.BIN/
 /src/.vs
 /tests/Oratoria.Tests/.vs
 /.vs
+/libs/digitaltwin/.vs
