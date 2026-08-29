@@ -6,7 +6,7 @@ using Modbus.Device;
 
 namespace Oratoria.Domain.Connection
 {
-    public class ModbusTCPConfig : INotifyPropertyChanged, IDisposable
+    public class ModbusTCPConfig : IConnectionConfig
     {
         private readonly ILogger _logger;
         private TcpClient _tcpClient;
@@ -40,18 +40,7 @@ namespace Oratoria.Domain.Connection
                 }
             }
         }
-        public bool IsConnected
-        {
-            get => field;
-            private set
-            {
-                if (field != value)
-                {
-                    field = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+        public bool IsConnected { get; set; }
 
         public ModbusTCPConfig(object locker, ILogger logger)
         {
@@ -59,27 +48,27 @@ namespace Oratoria.Domain.Connection
             _logger = logger;
         }
 
-        public async Task<bool> Connect(string ip)
+        public async Task<bool> Connect()
         {
             try
             {
-                _logger.LogInformation($"Подключение к {ip}:{Port}");
+                _logger.LogInformation($"Подключение к {IP}:{Port}");
                 _tcpClient = new TcpClient();
 
                 await _tcpClient
-                    .ConnectAsync(ip, Port)
+                    .ConnectAsync(IP, Port)
                     .WaitAsync(TimeSpan.FromSeconds(3));
 
                 Master = ModbusIpMaster.CreateIp(_tcpClient);
                 IsConnected = true;
-                _logger.LogInformation($"Подключено к {ip}:{Port}");
+                _logger.LogInformation($"Подключено к {IP}:{Port}");
 
                 return true;
             }
             catch (TimeoutException)
             {
                 IsConnected = false;
-                _logger.LogError($"Не удалось подключиться к {ip}:{Port}");
+                _logger.LogError($"Не удалось подключиться к {IP}:{Port}");
                 return false;
             }
             catch (Exception ex)

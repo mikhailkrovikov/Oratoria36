@@ -1,21 +1,24 @@
 using Oratoria.Application.Connection;
+using Oratoria.Application.Connection.Pollers;
 using Oratoria.Application.Module1.Signals;
 using Oratoria.Application.Module2;
 using Oratoria.Application.Module2.Signals;
 using Oratoria.Application.Module3.Signals;
 using Oratoria.Application.Module4.Signals;
 using Oratoria.Application.Strategies;
+using Oratoria.Application.TransportModule;
 using Oratoria.Application.TransportModule.Signals;
+using Oratoria.Application.VacuumModule;
 using Oratoria.Application.VacuumModule.Signals;
+using Oratoria.Domain.Connection.Pollers;
 using DigitalTwin;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Extensions.Logging;
 using System.IO;
 using System.Windows;
-using Oratoria.Application.VacuumModule;
-using Oratoria.Application.TransportModule;
 namespace UI;
 
 /// <summary>
@@ -42,7 +45,15 @@ public partial class App : Application
         ConfigurateServices(services);
 
         _services = services.BuildServiceProvider();
+        _services.GetRequiredService<GeneralPoller>().StartPoller();
         _services.GetRequiredService<MainWindow>().Show();
+    }
+
+    protected override void OnExit(ExitEventArgs e)
+    {
+        if (_services is IDisposable disposable)
+            disposable.Dispose();
+        base.OnExit(e);
     }
 
     private static void ConfigurateServices(IServiceCollection services)
@@ -63,6 +74,22 @@ public partial class App : Application
         services.AddSingleton<VacuumContext>();
         services.AddSingleton<TransportContext>();
         services.AddSingleton<Module2Context>();
+
+        services.AddSingleton<GeneralPoller>(sp =>
+        {
+            var net = sp.GetRequiredService<NetContext>();
+            var loggers = sp.GetRequiredService<ILoggerFactory>();
+            var pollers = new Poller[]
+            {
+                new ModbusPoller(net.Module2, sp.GetRequiredService<Module2Signals>(), loggers, PollerNames.Module1),
+                new ModbusPoller(net.Module2, sp.GetRequiredService<Module2Signals>(), loggers, PollerNames.Module2),
+                new ModbusPoller(net.Module2, sp.GetRequiredService<Module2Signals>(), loggers, PollerNames.Module3),
+                new ModbusPoller(net.Module2, sp.GetRequiredService<Module2Signals>(), loggers, PollerNames.Module4),
+                new ModbusPoller(net.TransportModule, sp.GetRequiredService<VacuumSignals>(), loggers, PollerNames.Vacuum),
+                new ModbusPoller(net.TransportModule, sp.GetRequiredService<TransportSignals>(), loggers, PollerNames.Transport),
+            };
+            return new GeneralPoller(pollers, sp.GetRequiredService<ILogger<GeneralPoller>>());
+        });
 
         services.AddSingleton<MainWindow>();
     }
