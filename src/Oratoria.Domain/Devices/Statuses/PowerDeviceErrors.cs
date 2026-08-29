@@ -23,5 +23,17 @@ namespace Oratoria.Domain.Devices.Statuses
         [DeviceErrorCategory(DeviceErrorCategory.Error)]
         [Description("не удалось сбросить мощность")]
         CannotResetValue,
+
+        [DeviceErrorCategory(DeviceErrorCategory.Error)]
+        [Description("неожиданное выключение")]
+        UnexpectedShutDown,
+
+        [DeviceErrorCategory(DeviceErrorCategory.Warn)]
+        [Description("перегрев")]
+        Overheat,
+
+        [DeviceErrorCategory(DeviceErrorCategory.Warn)]
+        [Description("перегруз")]
+        Overload,
     }
 }

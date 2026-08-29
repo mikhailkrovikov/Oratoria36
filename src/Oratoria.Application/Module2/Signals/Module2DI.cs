@@ -9,23 +9,40 @@ using System.Collections.ObjectModel;
 using Oratoria.Domain.Devices.Flap.FlapAttributes;
 using Oratoria.Domain.Devices.Leaker.LeakerAttributes;
 using Oratoria.Domain.Devices.Abstractions.MechanicAttributes;
+using Oratoria.Domain.Devices.Heater.HeaterAttributes;
+using Oratoria.Domain.Devices.Magnetron.MagnetronAttributes;
 
 namespace Oratoria.Application.Module2.Signals
 {
     public class Module2DI : IEnumerable<InputSignal<bool>>
-    {
-        
-        private IInputStrategy<bool> _strategy;
+    {   
+        private readonly IInputStrategy<bool> _strategy;
 
         public ObservableCollection<InputSignal<bool>> DigitalInputs;
 
-        public InputSignal<bool> Rotation_BPM { get; set; }
         public InputSignal<bool> UurgIsOn { get; set; }
-        public InputSignal<bool> BPNIsOn { get; set; }
-        public InputSignal<bool> BPM1IsOn { get; set; }
+
+        [MagnetronIsRotatingSignal<Magnetrons>(Magnetrons.Magnetrn1)]
+        [MagnetronIsRotatingSignal<Magnetrons>(Magnetrons.Magnetrn2)]
+        [MagnetronIsRotatingSignal<Magnetrons>(Magnetrons.Magnetrn3)]
+        public InputSignal<bool> Rotation_BPM { get; set; }
         public InputSignal<bool> BPMOverHeat { get; set; }
         public InputSignal<bool> BPMNoOverload { get; set; }
-        public InputSignal<bool> BPMIsOn { get; set; }
+
+        [HeaterIsPowerOnSignal<Heaters>(Heaters.Heater)]
+        public InputSignal<bool> BPNIsOn { get; set; }
+
+
+        [MagnetronIsPowerOnSignal<Magnetrons>(Magnetrons.Magnetrn1)]
+        public InputSignal<bool> BPM1IsOn { get; set; }
+
+
+        [MagnetronIsPowerOnSignal<Magnetrons>(Magnetrons.Magnetrn2)]
+        public InputSignal<bool> BPM2IsOn { get; set; }
+
+
+        [MagnetronIsPowerOnSignal<Magnetrons>(Magnetrons.Magnetrn3)]
+        public InputSignal<bool> BPM3IsOn { get; set; }
 
 
         [MechanicPosition1InputSignal<Mechanics>(Mechanics.Table)]
@@ -44,9 +61,6 @@ namespace Oratoria.Application.Module2.Signals
         [MechanicPosition3InputSignal<Mechanics>(Mechanics.Manipulator)]
         [MechanicPosition3InputSignal<Mechanics>(Mechanics.Throttle)]
         public InputSignal<bool> Position3 { get; set; }
-
-
-        public InputSignal<bool> BPM3IsOn { get; set; }
 
 
         [MechanicReversInputSignal<Mechanics>(Mechanics.Table)]
@@ -125,7 +139,7 @@ namespace Oratoria.Application.Module2.Signals
             BPM1IsOn = new InputSignal<bool>("БПМ1 включен", 9, _strategy);
             BPMOverHeat = new InputSignal<bool>("Перегрев БПМ есть", 10, _strategy);
             BPMNoOverload = new InputSignal<bool>("Нет перегруза БПМ", 11, _strategy);
-            BPMIsOn = new InputSignal<bool>("БПМ2 включен", 12, _strategy);
+            BPM2IsOn = new InputSignal<bool>("БПМ2 включен", 12, _strategy);
             Position1 = new InputSignal<bool>("Позиция 1", 13, _strategy);
             Position2 = new InputSignal<bool>("Позиция 2", 14, _strategy);
             Position3 = new InputSignal<bool>("Позиция 3", 15, _strategy);
@@ -154,7 +168,7 @@ namespace Oratoria.Application.Module2.Signals
                 BPM1IsOn,
                 BPMOverHeat,
                 BPMNoOverload,
-                BPMIsOn,
+                BPM2IsOn,
                 Position1,
                 Position2,
                 Position3,

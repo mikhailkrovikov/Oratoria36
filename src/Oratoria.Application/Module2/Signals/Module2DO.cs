@@ -2,6 +2,7 @@ using Oratoria.Application.Module2.DeviceCollection;
 using Oratoria.Domain.Connection;
 using Oratoria.Domain.Devices.Abstractions.MechanicAttributes;
 using Oratoria.Domain.Devices.Flap.FlapAttributes;
+using Oratoria.Domain.Devices.Heater.HeaterAttributes;
 using Oratoria.Domain.Devices.Leaker.LeakerAttributes;
 using Oratoria.Domain.Devices.Shutter.ShutterAttributes;
 using Oratoria.Domain.Devices.Valve.ValveAttributes;
@@ -23,6 +24,8 @@ namespace Oratoria.Application.Module2.Signals
         public OutputSignal<bool> ControlOfVacuum { get; set; }
         public OutputSignal<bool> VacuumDecontamination { get; set; }
         public OutputSignal<bool> Termopara_vklyuchit { get; set; }
+
+        [HeaterPowerOnSignal<Heaters>(Heaters.Heater)]
         public OutputSignal<bool> BPNOn { get; set; }
         public OutputSignal<bool> BPM1On { get; set; }
         public OutputSignal<bool> BPM2On { get; set; }

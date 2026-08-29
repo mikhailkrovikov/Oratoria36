@@ -1,7 +1,9 @@
 using Microsoft.Extensions.Logging;
 using Oratoria.Domain.Abstractions;
 using Oratoria.Domain.Devices.Flap;
+using Oratoria.Domain.Devices.Heater;
 using Oratoria.Domain.Devices.Leaker;
+using Oratoria.Domain.Devices.Magnetron;
 using Oratoria.Domain.Devices.Manipulator;
 using Oratoria.Domain.Devices.Shutter;
 using Oratoria.Domain.Devices.Table;
@@ -28,6 +30,14 @@ namespace Oratoria.Application
         public Throttle Throttle { get; set; }
 
         public Table Table { get; set; }
+
+        public Heater Heater { get; set; }
+
+        public Magnetron Magnetron1 { get; set; }
+
+        public Magnetron Magnetron2 { get; set; }
+
+        public Magnetron Magnetron3 { get; set; }
 
         protected TechnologyModuleContext(IModuleSignals signals, ILoggerFactory loggerFactory) : base(signals, loggerFactory)
         {

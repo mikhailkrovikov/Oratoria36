@@ -1,4 +1,7 @@
+using Oratoria.Application.Module2.DeviceCollection;
 using Oratoria.Domain.Connection;
+using Oratoria.Domain.Devices.Heater.HeaterAttributes;
+using Oratoria.Domain.Devices.Magnetron.MagnetronAttributes;
 using Oratoria.Domain.Signals;
 using Oratoria.Domain.Signals.Abstractions;
 using Oratoria.Domain.Signals.Strategies;
@@ -9,17 +12,43 @@ namespace Oratoria.Application.Module2.Signals
 {
     public class Module2AI : IEnumerable<InputSignal<double>>
     {
-        IInputStrategy<double> _strategy;
-
+        private readonly IInputStrategy<double> _strategy;
         public ObservableCollection<InputSignal<double>> AnalogInputs;
+
+
+        [HeaterVoltageSignal<Heaters>(Heaters.Heater)]
         public InputSignal<double> BPNVoltage { get; set; }
+
+
+        [HeaterCurrentSignal<Heaters>(Heaters.Heater)]
         public InputSignal<double> BPNCurrent { get; set; }
+
+
+        [MagnetronCurrentSignal<Magnetrons>(Magnetrons.Magnetrn1)]
         public InputSignal<double> BPM1Current { get; set; }
+
+
+        [MagnetronVoltageSignal<Magnetrons>(Magnetrons.Magnetrn1)]
         public InputSignal<double> BPM1Voltage { get; set; }
+
+
+        [MagnetronCurrentSignal<Magnetrons>(Magnetrons.Magnetrn2)]
         public InputSignal<double> BPM2Current { get; set; }
+
+
+        [MagnetronVoltageSignal<Magnetrons>(Magnetrons.Magnetrn2)]
         public InputSignal<double> BPM2Voltage { get; set; }
+
+
+        [MagnetronCurrentSignal<Magnetrons>(Magnetrons.Magnetrn3)]
         public InputSignal<double> BPM3Current { get; set; }
+
+
+        [MagnetronVoltageSignal<Magnetrons>(Magnetrons.Magnetrn3)]
         public InputSignal<double> BPM3Voltage { get; set; }
+
+
+        [HeaterTemperatureSignal<Heaters>(Heaters.Heater)]
         public InputSignal<double> BPNTemperature { get; set; }
         public InputSignal<double> VICB { get; set; }
         public InputSignal<double> RRGRealvalue { get; set; }

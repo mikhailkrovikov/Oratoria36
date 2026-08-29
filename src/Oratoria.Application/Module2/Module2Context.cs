@@ -8,6 +8,8 @@ using Oratoria.Domain.Devices.Leaker;
 using Oratoria.Domain.Devices.Manipulator;
 using Oratoria.Domain.Devices.Table;
 using Oratoria.Domain.Devices.Throttle;
+using Oratoria.Domain.Devices.Magnetron;
+using Oratoria.Domain.Devices.Heater;
 
 namespace Oratoria.Application.Module2
 {
@@ -23,6 +25,10 @@ namespace Oratoria.Application.Module2
             Manipulator = Factory.CreateDevice<Manipulator>(Mechanics.Manipulator);
             Throttle = Factory.CreateDevice<Throttle>(Mechanics.Throttle);
             Table = Factory.CreateDevice<Table>(Mechanics.Table);
+            Heater = Factory.CreateDevice<Heater>(Heaters.Heater);
+            Magnetron1 = Factory.CreateDevice<Magnetron>(Magnetrons.Magnetrn1);
+            Magnetron2 = Factory.CreateDevice<Magnetron>(Magnetrons.Magnetrn2);
+            Magnetron3 = Factory.CreateDevice<Magnetron>(Magnetrons.Magnetrn3);
         }
     }
 }

@@ -1,7 +1,9 @@
 using Oratoria.Application.Module2.DeviceCollection;
 using Oratoria.Domain.Connection;
 using Oratoria.Domain.Devices.Flap.FlapAttributes;
+using Oratoria.Domain.Devices.Heater.HeaterAttributes;
 using Oratoria.Domain.Devices.Leaker.LeakerAttributes;
+using Oratoria.Domain.Devices.Magnetron.MagnetronAttributes;
 using Oratoria.Domain.Signals;
 using Oratoria.Domain.Signals.Abstractions;
 using System.Collections;
@@ -11,12 +13,23 @@ namespace Oratoria.Application.Module2.Signals
 {
     public class Module2AO : IEnumerable<OutputSignal<double>>
     {
-        IOutputStrategy<double> _strategy;
-
+        private readonly IOutputStrategy<double> _strategy;
         public ObservableCollection<OutputSignal<double>> AnalogOutputs;
+
+
+        [HeaterSetpointSignal<Heaters>(Heaters.Heater)]
         public OutputSignal<double> BPNPower { get; set; }
+
+
+        [MagnetronSetpointSignal<Magnetrons>(Magnetrons.Magnetrn1)]
         public OutputSignal<double> BPM1Power { get; set; }
+
+
+        [MagnetronSetpointSignal<Magnetrons>(Magnetrons.Magnetrn2)]
         public OutputSignal<double> BPM2Power { get; set; }
+        
+
+        [MagnetronSetpointSignal<Magnetrons>(Magnetrons.Magnetrn3)]
         public OutputSignal<double> BPM3Power { get; set; }
 
 
