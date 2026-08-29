@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\libs\digitaltwin\DigitalTwin.csproj" />
+    <ProjectReference Include="..\Oratoria.Domain\Oratoria.Domain.csproj" />
+    <ProjectReference Include="..\Oratoria.Infrastructure\Oratoria.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
