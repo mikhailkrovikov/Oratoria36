@@ -9,7 +9,7 @@ namespace Oratoria.Application.TransportModule.Signals
 {
     public class TransportAO : IEnumerable<OutputSignal<double>>
     {
-        IOutputStrategy<double> _strategy;
+        private readonly IOutputStrategy<double> _strategy;
 
         public ObservableCollection<OutputSignal<double>> AnalogOutputs;
 

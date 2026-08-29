@@ -1,4 +1,7 @@
+using Oratoria.Application.TransportModule.DeviceCollection;
 using Oratoria.Domain.Connection;
+using Oratoria.Domain.Devices.Door.DoorAttributes;
+using Oratoria.Domain.Devices.Shutter.ShutterAttributes;
 using Oratoria.Domain.Signals;
 using Oratoria.Domain.Signals.Abstractions;
 using Oratoria.Domain.Signals.Strategies;
@@ -9,7 +12,7 @@ namespace Oratoria.Application.TransportModule.Signals
 {
     public class TransportDI : IEnumerable<InputSignal<bool>>
     {
-        private IInputStrategy<bool> _strategy;
+        private readonly IInputStrategy<bool> _strategy;
 
         public ObservableCollection<InputSignal<bool>> DigitalInputs;
 
@@ -29,12 +32,31 @@ namespace Oratoria.Application.TransportModule.Signals
         public InputSignal<bool> Shl2_Tormos { get; set; }
         public InputSignal<bool> Shl2_Peregruz { get; set; }
         public InputSignal<bool> Shl2_UURG2 { get; set; }
+
+
+        [ShutterIsOpenSignal<Shutters>(Shutters.Shl1Shutter)]
         public InputSignal<bool> Zatvor_Shl1_Open { get; set; }
+
+
+        [ShutterIsCloseSignal<Shutters>(Shutters.Shl1Shutter)]
         public InputSignal<bool> Zatvor_Shl1_Closed { get; set; }
+
+
+        [DoorIsCloseSignal<Doors>(Doors.Door1)]
         public InputSignal<bool> Door_Shl1_Closed { get; set; }
+
+
+        [ShutterIsOpenSignal<Shutters>(Shutters.Shl2Shutter)]
         public InputSignal<bool> Zatvor_Shl2_Open { get; set; }
+
+
+        [ShutterIsCloseSignal<Shutters>(Shutters.Shl2Shutter)]
         public InputSignal<bool> Zatvor_Shl2_Closed { get; set; }
+
+        [DoorIsCloseSignal<Doors>(Doors.Door2)]
         public InputSignal<bool> Door_Shl2_Closed { get; set; }
+
+
         public InputSignal<bool> Position5 { get; set; }
         public InputSignal<bool> Position6 { get; set; }
 

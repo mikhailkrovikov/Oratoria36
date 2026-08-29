@@ -1,4 +1,6 @@
+using Oratoria.Application.TransportModule.DeviceCollection;
 using Oratoria.Domain.Connection;
+using Oratoria.Domain.Devices.Shutter.ShutterAttributes;
 using Oratoria.Domain.Signals;
 using Oratoria.Domain.Signals.Abstractions;
 using Oratoria.Domain.Signals.Strategies;
@@ -9,7 +11,7 @@ namespace Oratoria.Application.TransportModule.Signals
 {
     public class TransportDO : IEnumerable<OutputSignal<bool>>
     {
-        private IOutputStrategy<bool> _strategy;
+        private readonly IOutputStrategy<bool> _strategy;
 
         public ObservableCollection<OutputSignal<bool>> DigitalOutputs;
 
@@ -31,13 +33,21 @@ namespace Oratoria.Application.TransportModule.Signals
         public OutputSignal<bool> Shl2_Pos4 { get; set; }
         public OutputSignal<bool> Shl1_Revers { get; set; }
         public OutputSignal<bool> Shl1_Tormos { get; set; }
+
+
+        [ShutterOpenSignal<Shutters>(Shutters.Shl1Shutter)]
         public OutputSignal<bool> Shl1_Zatvor { get; set; }
+
         public OutputSignal<bool> Shl1_Podduv { get; set; }
         public OutputSignal<bool> Shl1_Napusk { get; set; }
         public OutputSignal<bool> Shl1_UURG1 { get; set; }
         public OutputSignal<bool> Shl2_Revers { get; set; }
         public OutputSignal<bool> Shl2_Tormos { get; set; }
+
+
+        [ShutterOpenSignal<Shutters>(Shutters.Shl2Shutter)]
         public OutputSignal<bool> Shl2_Zatvor { get; set; }
+
         public OutputSignal<bool> Shl2_Podduv { get; set; }
         public OutputSignal<bool> Shl2_Napusk { get; set; }
         public OutputSignal<bool> Shl2_UURG2 { get; set; }

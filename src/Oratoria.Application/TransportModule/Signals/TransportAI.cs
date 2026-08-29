@@ -8,7 +8,7 @@ namespace Oratoria.Application.TransportModule.Signals
 {
     public class TransportAI : IEnumerable<InputSignal<double>>
     {
-        IInputStrategy<double> _strategy;
+        private readonly IInputStrategy<double> _strategy;
 
         public ObservableCollection<InputSignal<double>> AnalogInputs;
 
