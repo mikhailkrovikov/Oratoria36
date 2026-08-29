@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Oratoria.Domain.Devices.Statuses
+namespace Oratoria.Domain.Devices.Errors
 {
     public enum PowerDeviceErrors
     {

@@ -11,6 +11,7 @@ using Oratoria.Domain.Devices.Leaker.LeakerAttributes;
 using Oratoria.Domain.Devices.Abstractions.MechanicAttributes;
 using Oratoria.Domain.Devices.Heater.HeaterAttributes;
 using Oratoria.Domain.Devices.Magnetron.MagnetronAttributes;
+using Oratoria.Domain.Devices.ManualPump;
 
 namespace Oratoria.Application.Module2.Signals
 {
@@ -92,6 +93,7 @@ namespace Oratoria.Application.Module2.Signals
         public InputSignal<bool> DriverOverload { get; set; }
 
 
+        [ManualPumpIsOnSignal<ManualPumps>(ManualPumps.CryogenicPump)]
         public InputSignal<bool> CryoPumpIsOn { get; set; }
 
 

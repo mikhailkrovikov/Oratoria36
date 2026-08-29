@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Oratoria.Domain.Settings;
 using Oratoria.Domain.Signals;
 using Oratoria.Domain.Devices.Statuses;
+using Oratoria.Domain.Devices.Errors;
 
 namespace Oratoria.Domain.Devices.Abstractions
 {

@@ -8,7 +8,7 @@ namespace UI
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        public MainWindow(Module2Context module2Context)
         {
             InitializeComponent();
         }

@@ -1,8 +1,9 @@
-﻿using Oratoria.Domain.Devices;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
 namespace Oratoria.Domain.Devices.Errors
 {
+
+
     public enum ManipulatorErrors
     {
         [DeviceErrorCategory(DeviceErrorCategory.Error)]
