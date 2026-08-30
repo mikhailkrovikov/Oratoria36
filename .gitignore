@@ -37,3 +37,4 @@ $RECYCLE.BIN/
 /tests/Oratoria.Tests/.vs
 /.vs
 /libs/digitaltwin/.vs
+/src/Oratoria.Persistence/.vs/Oratoria.Persistence.slnx
