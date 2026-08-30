@@ -1,8 +1,0 @@
-<Solution>
-  <Project Path="../libs/digitaltwin/DigitalTwin.csproj" />
-  <Project Path="../tests/Oratoria.Tests/Oratoria.Tests.csproj" />
-  <Project Path="Oratoria.Application/Oratoria.Application.csproj" />
-  <Project Path="Oratoria.Domain/Oratoria.Domain.csproj" />
-  <Project Path="Oratoria.Infrastructure/Oratoria.Infrastructure.csproj" />
-  <Project Path="Oratoria.UI/Oratoria.UI.csproj" />
-</Solution>
