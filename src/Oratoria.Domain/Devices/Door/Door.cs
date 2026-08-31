@@ -27,5 +27,17 @@ namespace Oratoria.Domain.Devices.Door
             Open?.OnSignalChanged += _ => OnStateChanged();
             Close?.OnSignalChanged += _ => OnStateChanged();
         }
+
+        [Obsolete("В данном устройстве закрытие не предусмотрено")]
+        public override Task<bool> CloseValve()
+        {
+            throw new NotSupportedException("В данном устройстве закрытие не предусмотрено");
+        }
+
+        [Obsolete("В данном устройстве открытие не предусмотрено")]
+        public override Task<bool> OpenValve()
+        {
+            throw new NotSupportedException("В данном устройстве открытие не предусмотрено");
+        }
     }
 }
