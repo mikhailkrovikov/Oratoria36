@@ -91,7 +91,7 @@ namespace Oratoria.Domain.Connection
             catch (Exception ex)
             {
                 IsConnected = false;
-                _logger.LogError($"{ex}");
+                _logger.LogError($"{ex.Message}");
                 return false;
             }
         }
