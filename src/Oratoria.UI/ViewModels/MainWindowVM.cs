@@ -1,4 +1,6 @@
+using Oratoria.UI.Controls.Controls.Navigation;
 using Oratoria.UI.Helpers;
+using Oratoria.UI.Views.Pages;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -10,7 +12,17 @@ namespace Oratoria.UI.ViewModels;
 
 public class MainWindowVM : INotifyPropertyChanged
 {
+    public MainWindowVM()
+    {
+        Navigation = new NavigationBuilder()
+       .Item<MainPage>("Главная")
+       .Build();
+    }
+
+    public IReadOnlyList<NavigationItem> Navigation { get; }
+
     public ObservableCollection<object> Logs { get; } = new();
+
     public ObservableCollection<object> Alarms { get; } = new();
 
     public ICommand CloseButtonCommand { get; } = new RelayCommand(_ =>
@@ -21,7 +33,7 @@ public class MainWindowVM : INotifyPropertyChanged
             MessageBoxButton.OKCancel,
             MessageBoxImage.Question);
         if (result == MessageBoxResult.OK)
-            Application.Current.Shutdown();
+            System.Windows.Application.Current.Shutdown();
     });
 
     public ICommand AutorizationCommand { get; } = new RelayCommand(_ => { });

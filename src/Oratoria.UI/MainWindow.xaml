@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:nav="clr-namespace:Oratoria.UI.Controls.Navigation;assembly=Oratoria.UI.Controls"
         mc:Ignorable="d"
         Title="MainWindow"
         Width="1920" Height="1080"
@@ -20,52 +21,28 @@
             <RowDefinition Height="150"/>
         </Grid.RowDefinitions>
 
-        <Border Grid.Row="0"
-                Height="80"
-                Background="{StaticResource Brush.Window}"
-                BorderThickness="1"
-                BorderBrush="{StaticResource Brush.BorderLight}">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="1"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-
-                <DockPanel Grid.Row="0" LastChildFill="True">
-                    <Button DockPanel.Dock="Right"
-                            Command="{Binding CloseButtonCommand}"
-                            CommandParameter="CustomParam"
-                            Style="{StaticResource Button.Base}"
-                            Width="38" Height="38"
-                            Margin="0,2,3,0"
-                            VerticalAlignment="Top"
-                            Content="✕"
-                            FontSize="16"
-                            FontWeight="Bold"/>
-                    <Button DockPanel.Dock="Right"
-                            Content="{Binding ServiceModeButtonText, UpdateSourceTrigger=PropertyChanged}"
-                            Style="{StaticResource Button.Nav}"
-                            Command="{Binding ServiceModeCommand}"
-                            Width="200" Height="38"
-                            Margin="0,2,8,0"
-                            VerticalAlignment="Top"/>
-                    <StackPanel Orientation="Horizontal">
-                        <Button Content="Главная" Style="{StaticResource Button.Nav}"/>
-                        <Button Content="Транспорт" Style="{StaticResource Button.Nav}"/>
-                        <Button Content="Вакуумная система" Style="{StaticResource Button.Nav}"/>
-                        <Button Content="Модуль 1" Style="{StaticResource Button.Nav}"/>
-                        <Button Content="Модуль 2" Style="{StaticResource Button.Nav}"/>
-                        <Button Content="Модуль 3" Style="{StaticResource Button.Nav}"/>
-                        <Button Content="Модуль 4" Style="{StaticResource Button.Nav}"/>
-                        <Button Content="Сеть" Style="{StaticResource Button.Nav}"/>
-                        <Button Content="Архив логов" Style="{StaticResource Button.Nav}"/>
-                    </StackPanel>
-                </DockPanel>
-
-                <Border Grid.Row="1" Background="{StaticResource Brush.BorderLight}"/>
-            </Grid>
-        </Border>
+        <Grid Grid.Row="0" Height="80">
+            <nav:NavigationBar x:Name="NavigationBarControl"/>
+            <DockPanel VerticalAlignment="Top" Height="40" LastChildFill="False">
+                <Button DockPanel.Dock="Right"
+                        Command="{Binding CloseButtonCommand}"
+                        CommandParameter="CustomParam"
+                        Style="{StaticResource Button.Base}"
+                        Width="38" Height="38"
+                        Margin="0,2,3,0"
+                        VerticalAlignment="Top"
+                        Content="✕"
+                        FontSize="16"
+                        FontWeight="Bold"/>
+                <Button DockPanel.Dock="Right"
+                        Content="{Binding ServiceModeButtonText, UpdateSourceTrigger=PropertyChanged}"
+                        Style="{StaticResource Button.Nav}"
+                        Command="{Binding ServiceModeCommand}"
+                        Width="200" Height="38"
+                        Margin="0,2,8,0"
+                        VerticalAlignment="Top"/>
+            </DockPanel>
+        </Grid>
 
         <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" Grid.Row="1"/>
 

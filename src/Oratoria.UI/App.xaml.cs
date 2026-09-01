@@ -20,6 +20,7 @@ using Oratoria.Application.VacuumModule.Signals;
 using Oratoria.Domain.Connection.Pollers.Abstractions;
 using Oratoria.Persistence;
 using Oratoria.Persistence.Services;
+using Oratoria.UI.ViewModels;
 using System.IO;
 using System.Windows;
 namespace UI;
@@ -102,6 +103,7 @@ public partial class App : Application
             return new GeneralPoller(pollers, sp.GetRequiredService<ILogger<GeneralPoller>>());
         });
 
+        services.AddSingleton<MainWindowVM>();
         services.AddSingleton<MainWindow>();
     }
 

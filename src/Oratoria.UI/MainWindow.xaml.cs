@@ -10,12 +10,15 @@ public partial class MainWindow : Window
 {
     private readonly MainWindowVM _vm;
 
-    public MainWindow(Module2Context module2Context, VacuumContext vacuumContext, TransportContext context)
+    public MainWindow(MainWindowVM maimwindowVM, Module2Context module2Context, VacuumContext vacuumContext, TransportContext context)
     {
         InitializeComponent();
-        _vm = new MainWindowVM();
+        _vm = maimwindowVM;
         DataContext = _vm;
         _vm.StartClock();
+        NavigationBarControl.HostFrame = MainFrame;
+        NavigationBarControl.Apply(_vm.Navigation);
+
     }
 
     private void ShowLogs_Click(object sender, RoutedEventArgs e)
