@@ -19,6 +19,7 @@ using Oratoria.Application.VacuumModule;
 using Oratoria.Application.VacuumModule.Signals;
 using Oratoria.Domain.Connection.Pollers.Abstractions;
 using Oratoria.Domain.Settings;
+using Oratoria.Infrastructure;
 using Oratoria.Persistence;
 using Oratoria.Persistence.Services;
 using Oratoria.UI.Logging;
@@ -79,6 +80,8 @@ public partial class App : Application
 
     private static void ConfigurateServices(IServiceCollection services)
     {
+        var settingPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "connection.json");
+        services.AddSingleton(_ => new JsonFileStore<ConnectionFile>(settingPath));
         services.AddSingleton<NetContext>();
 #if !RELEASE
         services.AddSingleton<TwinContext>();

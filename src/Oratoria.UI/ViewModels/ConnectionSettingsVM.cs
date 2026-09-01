@@ -11,6 +11,7 @@ namespace Oratoria.UI.ViewModels;
 
 public sealed class ConnectionSettingsVM : INotifyPropertyChanged
 {
+    private readonly NetContext _net;
     private bool _busy1;
     private bool _busy2;
     private bool _busy3;
@@ -19,6 +20,7 @@ public sealed class ConnectionSettingsVM : INotifyPropertyChanged
 
     public ConnectionSettingsVM(NetContext net)
     {
+        _net = net;
         Module1 = net.Module1;
         Module2 = net.Module2;
         Module3 = net.Module3;
@@ -142,6 +144,7 @@ public sealed class ConnectionSettingsVM : INotifyPropertyChanged
                 return;
             config.IP = ip;
             config.Port = port;
+            _net.Save();
             setIp(string.Empty);
             setPort(string.Empty);
             UpdateStatus();
