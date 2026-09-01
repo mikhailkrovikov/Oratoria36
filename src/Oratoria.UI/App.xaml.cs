@@ -19,6 +19,7 @@ using NLog.Extensions.Logging;
 using System.IO;
 using System.Windows;
 using Oratoria.Domain.Connection.Pollers.Abstractions;
+using Oratoria.Persistence.Services;
 namespace UI;
 
 /// <summary>
@@ -43,6 +44,7 @@ public partial class App : Application
         services.AddLogging(b => b.AddNLog());
 
         ConfigurateServices(services);
+        ConfigurateDB(services);
 
         _services = services.BuildServiceProvider();
         _services.GetRequiredService<GeneralPoller>().StartPoller();
@@ -92,6 +94,12 @@ public partial class App : Application
         });
 
         services.AddSingleton<MainWindow>();
+    }
+
+
+    private static void ConfigurateDB(IServiceCollection services)
+    {
+        services.AddScoped<IUserService, UserService>();
     }
 
     private static void EnsureLogDatabase()

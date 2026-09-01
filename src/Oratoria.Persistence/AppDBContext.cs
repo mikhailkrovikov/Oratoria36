@@ -10,8 +10,8 @@ namespace Oratoria.Persistence
 
         public AppDBContext()
         {
-            Database.EnsureCreated();
         }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite("Data Source=app.db");

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Oratoria.Persistence.Entities;
+using Oratoria.Persistence.ValueTypes;
 using System.Security.Cryptography;
 
 namespace Oratoria.Persistence.Services
@@ -9,15 +10,15 @@ namespace Oratoria.Persistence.Services
     public class UserService : IUserService
     {
         private readonly AppDBContext _dbContext;
-        private readonly ILogger _logger;
+        private readonly ILogger<UserService> _logger;
 
-        public UserService(AppDBContext dbContext, ILogger logger)
+        public UserService(AppDBContext dbContext, ILogger<UserService> logger)
         {
             _dbContext = dbContext;
             _logger = logger;
         }
 
-        public async Task<bool> AddUser(string name, string login, string password, int roleId)
+        public async Task<bool> AddUser(string name, string login, string password, Role role)
         {
             try
             {
@@ -30,7 +31,7 @@ namespace Oratoria.Persistence.Services
                     Name = name,
                     Login = login,
                     Password = HashPassword(password),
-                    RoleId = roleId
+                    RoleId = role
                 });
                 await _dbContext.SaveChangesAsync();
                 return true;

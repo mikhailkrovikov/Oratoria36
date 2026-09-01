@@ -19,6 +19,7 @@
 		<ProjectReference Include="..\Oratoria.Application\Oratoria.Application.csproj" />
 		<ProjectReference Include="..\Oratoria.Domain\Oratoria.Domain.csproj" />
 		<ProjectReference Include="..\Oratoria.Infrastructure\Oratoria.Infrastructure.csproj" />
+		<ProjectReference Include="..\Oratoria.Persistence\Oratoria.Persistence.csproj" />
 	</ItemGroup>
 	
 	<ItemGroup>

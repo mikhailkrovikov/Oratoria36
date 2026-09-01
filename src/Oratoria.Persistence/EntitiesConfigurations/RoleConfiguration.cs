@@ -5,18 +5,22 @@ using Oratoria.Persistence.ValueTypes;
 
 namespace Oratoria.Persistence.EntitiesConfigurations
 {
-    public class RoleConfiguration : IEntityTypeConfiguration<UserEntity>
+    public class RoleConfiguration : IEntityTypeConfiguration<RoleEntity>
     {
-        public void Configure(EntityTypeBuilder<UserEntity> builder)
+        public void Configure(EntityTypeBuilder<RoleEntity> builder)
         {
-            builder.HasKey(u => u.Id);
+            builder.HasKey(r => r.Role);
+
+            builder.Property(r => r.Role)
+                .HasConversion<int>()
+                .ValueGeneratedNever();
 
             builder.HasData
-                (new RoleEntity { Id = 0, RoleE = Role.None },
-                new RoleEntity { Id = 1, RoleE = Role.Operator },
-                new RoleEntity { Id = 2, RoleE = Role.Technologist },
-                new RoleEntity { Id = 3, RoleE = Role.Servicer },
-                new RoleEntity { Id = 4, RoleE = Role.Admin });
+                (new RoleEntity { Role = Role.None },
+                new RoleEntity { Role = Role.Operator },
+                new RoleEntity { Role = Role.Technologist },
+                new RoleEntity { Role = Role.Servicer },
+                new RoleEntity { Role = Role.Admin });
         }
     }
 }

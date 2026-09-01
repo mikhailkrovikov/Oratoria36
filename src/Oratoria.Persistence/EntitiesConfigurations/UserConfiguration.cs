@@ -13,12 +13,15 @@ namespace Oratoria.Persistence.EntitiesConfigurations
             builder.Property(u => u.Name).IsRequired();
             builder.Property(u => u.Login).IsRequired();
             builder.Property(u => u.Password).IsRequired();
+            builder.Property(u => u.RoleId).HasConversion<int>();
 
             builder
                 .HasOne<RoleEntity>()
-                .WithMany(r => r.Users)
-                .HasForeignKey(u => u.Id)
-                .OnDelete(DeleteBehavior.Cascade);
+                .WithMany()
+                .HasForeignKey(u => u.RoleId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasIndex(u => u.Login).IsUnique();
         }
     }
 }
