@@ -15,8 +15,14 @@ public class MainWindowVM : INotifyPropertyChanged
     public MainWindowVM()
     {
         Navigation = new NavigationBuilder()
-       .Item<MainPage>("Главная")
-       .Build();
+        .Item<MainPage>("Главная")
+        .Group("Модуль 2", m2 => m2
+            .Item<Module2MnemoPage>("Мнемосхема")
+            .Item<Module2RecipePage>("Рецепт")
+            .Item<Module2SignalsPage>("Сигналы")
+            .Item<Module2SettingsPage>("Настройки")
+            .Item<Module2LogsPage>("Журнал"))
+        .Build();
     }
 
     public IReadOnlyList<NavigationItem> Navigation { get; }
