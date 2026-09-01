@@ -14,9 +14,14 @@
             var method = typeof(Waiter).GetMethod("Wait");
             Delegate del = Delegate.CreateDelegate(t, waiter, method);
             eventInfo.AddEventHandler(source, del);
-            var ret = WaitHandle.WaitAny(new WaitHandle[] { wh, token.WaitHandle }, timeout) == 0;
-            eventInfo.RemoveEventHandler(source, del);
-            return ret;
+            try
+            {
+                return await Task.Run(() => WaitHandle.WaitAny([wh, token.WaitHandle], timeout) == 0);
+            }
+            finally
+            {
+                eventInfo.RemoveEventHandler(source, del);
+            }
         }
 
         public static async Task<bool> WaitEvent<T>(string eventName, object source, Predicate<T> predict, int timeout, CancellationToken token)
@@ -31,9 +36,14 @@
             var method = typeof(WaiterT<T>).GetMethod("Wait");
             Delegate del = Delegate.CreateDelegate(t, waiter, method);
             eventInfo.AddEventHandler(source, del);
-            var ret = WaitHandle.WaitAny(new WaitHandle[] { wh, token.WaitHandle }, timeout) == 0;
-            eventInfo.RemoveEventHandler(source, del);
-            return ret;
+            try
+            {
+                return await Task.Run(() => WaitHandle.WaitAny([wh, token.WaitHandle], timeout) == 0);
+            }
+            finally
+            {
+                eventInfo.RemoveEventHandler(source, del);
+            }
         }
     }
 
@@ -63,11 +73,13 @@
             _predicate = predicate;
         }
 
-
         public void Wait(T obj)
         {
-            if (_predicate(obj))
-                _wh.Set();
+            Task.Run(() =>
+            {
+                if (_predicate(obj))
+                    _wh.Set();
+            });
         }
     }
 }
