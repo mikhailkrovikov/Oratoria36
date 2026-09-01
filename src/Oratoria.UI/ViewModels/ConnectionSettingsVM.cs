@@ -1,9 +1,8 @@
 using System.Net;
-using System.Net.Sockets;
 using System.Windows.Input;
 using Oratoria.Application.Connection;
 using Oratoria.Domain.Connection;
-using Oratoria.UI.Helpers;
+using Oratoria.UI.Services;
 
 namespace Oratoria.UI.ViewModels;
 

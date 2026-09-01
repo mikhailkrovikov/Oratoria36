@@ -1,6 +1,6 @@
 using System.Windows.Input;
 
-namespace Oratoria.UI.Helpers;
+namespace Oratoria.UI.Services;
 
 public class RelayCommand : ICommand
 {
