@@ -33,10 +33,10 @@ namespace Oratoria.Domain.Devices.Heater
             IsPowerOn = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(HeaterIsPowerOnSignalAttribute<>));
             PowerOff = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(HeaterPowerOffSignalAttribute<>));
             PowerOn = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(HeaterPowerOnSignalAttribute<>));
-            HeaterCurrent = SignalHelper<InputSignal<double>>.GetSignal(deviceId, signals.AISignals, typeof(HeaterCurrentSignalAttribute<>));
-            HeaterVoltage = SignalHelper<InputSignal<double>>.GetSignal(deviceId, signals.AISignals, typeof(HeaterVoltageSignalAttribute<>));
-            HeaterTemp = SignalHelper<InputSignal<double>>.GetSignal(deviceId, signals.AISignals, typeof(HeaterTemperatureSignalAttribute<>));
-            HeaterPowerSetPoint = SignalHelper<OutputSignal<double>>.GetSignal(deviceId, signals.AOSignals, typeof(HeaterSetpointSignalAttribute<>));
+            HeaterCurrent = SignalHelper<InputSignal<double>>.GetSignal(deviceId, signals.AISignals, typeof(HeaterCurrentSignalAttribute<>))!;
+            HeaterVoltage = SignalHelper<InputSignal<double>>.GetSignal(deviceId, signals.AISignals, typeof(HeaterVoltageSignalAttribute<>))!;
+            HeaterTemp = SignalHelper<InputSignal<double>>.GetSignal(deviceId, signals.AISignals, typeof(HeaterTemperatureSignalAttribute<>))!;
+            HeaterPowerSetPoint = SignalHelper<OutputSignal<double>>.GetSignal(deviceId, signals.AOSignals, typeof(HeaterSetpointSignalAttribute<>))!;
 
             IsPowerOff?.OnSignalChanged += _ => OnStateChanged();
             IsPowerOn?.OnSignalChanged += _ => OnStateChanged();

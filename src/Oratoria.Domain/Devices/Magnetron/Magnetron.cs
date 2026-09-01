@@ -33,23 +33,23 @@ namespace Oratoria.Domain.Devices.Magnetron
         {
             IsPowerOff = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(MagnetronIsPowerOffSignalAttribute<>));
             IsPowerOn = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(MagnetronIsPowerOnSignalAttribute<>));
-            IsRotating = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(MagnetronIsRotatingSignalAttribute<>));
-            MagnetronOverheat = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(MagnetronOverheatSignalAttribute<>));
-            MagnetronOverload = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(MagnetronOverloadSignalAttribute<>));
+            IsRotating = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(MagnetronIsRotatingSignalAttribute<>))!;
+            MagnetronOverheat = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(MagnetronOverheatSignalAttribute<>))!;
+            MagnetronOverload = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(MagnetronOverloadSignalAttribute<>))!;
             PowerOff = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(MagnetronPowerOffSignalAttribute<>));
             PowerOn = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(MagnetronPowerOnSignalAttribute<>));
-            RotationOn = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(MagnetronRotatingSignalAttribute<>));
-            MagnetronCurrent = SignalHelper<InputSignal<double>>.GetSignal(deviceId, signals.AISignals, typeof(MagnetronCurrentSignalAttribute<>));
-            MagnetronVoltage = SignalHelper<InputSignal<double>>.GetSignal(deviceId, signals.AISignals, typeof(MagnetronVoltageSignalAttribute<>));
-            MagnetronPowerSetPoint = SignalHelper<OutputSignal<double>>.GetSignal(deviceId, signals.AOSignals, typeof(MagnetronSetpointSignalAttribute<>));
+            RotationOn = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(MagnetronRotatingSignalAttribute<>))!;
+            MagnetronCurrent = SignalHelper<InputSignal<double>>.GetSignal(deviceId, signals.AISignals, typeof(MagnetronCurrentSignalAttribute<>))!;
+            MagnetronVoltage = SignalHelper<InputSignal<double>>.GetSignal(deviceId, signals.AISignals, typeof(MagnetronVoltageSignalAttribute<>))!;
+            MagnetronPowerSetPoint = SignalHelper<OutputSignal<double>>.GetSignal(deviceId, signals.AOSignals, typeof(MagnetronSetpointSignalAttribute<>))!;
 
             IsPowerOff?.OnSignalChanged += _ => OnStateChanged();
             IsPowerOn?.OnSignalChanged += _ => OnStateChanged();
             PowerOff?.OnSignalChanged += _ => OnStateChanged();
             PowerOn?.OnSignalChanged += _ => OnStateChanged();
 
-            MagnetronOverheat?.OnSignalChanged += (x) => Magnetron_OnSignalChanged(x, PowerDeviceErrors.Overheat);
-            MagnetronOverload?.OnSignalChanged += (x) => Magnetron_OnSignalChanged(x, PowerDeviceErrors.Overload);
+            MagnetronOverheat?.OnSignalChanged += value => Magnetron_OnSignalChanged(value, PowerDeviceErrors.Overheat);
+            MagnetronOverload?.OnSignalChanged += value => Magnetron_OnSignalChanged(!value, PowerDeviceErrors.Overload);
         }
 
         private void Magnetron_OnSignalChanged(bool value, PowerDeviceErrors error)
