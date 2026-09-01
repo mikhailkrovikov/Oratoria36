@@ -46,7 +46,7 @@ namespace Oratoria.Domain.Devices.Heater
 
         public virtual async Task<bool> TurnOn(double setpoint)
         {
-            var result = await TurnOn();
+            var result = await base.TurnOn();
             if (result)
                 HeaterPowerSetPoint.Value = setpoint;
             return result;
@@ -54,7 +54,7 @@ namespace Oratoria.Domain.Devices.Heater
         public virtual async Task<bool> ResetSetpoint()
         {
             HeaterPowerSetPoint.Value = 0;
-            return await TurnOff();
+            return await base.TurnOff();
         }
     }
 }

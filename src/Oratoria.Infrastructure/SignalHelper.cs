@@ -16,8 +16,7 @@ namespace Oratoria.Infrastructure
                     a.GetType().IsGenericType &&
                     a.GetType().GetGenericTypeDefinition() == signalAttribute &&
                     Equals(
-                        a.GetType().GetField(_field, BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy)!.GetValue(a),
-                        id)));
+                        a.GetType().GetField(_field, BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy)!.GetValue(a), id)));
             return property?.GetValue(collection) as T;
         }
     }

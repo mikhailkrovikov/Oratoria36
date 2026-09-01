@@ -1,7 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using Microsoft.VisualBasic;
-using NLog;
-using Oratoria.Domain.Abstractions;
 using Oratoria.Domain.Devices.Abstractions;
 using Oratoria.Domain.Devices.Errors;
 using Oratoria.Domain.Devices.Magnetron.MagnetronAttributes;
@@ -69,7 +66,7 @@ namespace Oratoria.Domain.Devices.Magnetron
 
         public virtual async Task<bool> TurnOn(double setpoint)
         {
-            var result = await TurnOn();
+            var result = await base.TurnOn();
             if (result)
                 MagnetronPowerSetPoint.Value = setpoint;
             return result;
@@ -78,7 +75,7 @@ namespace Oratoria.Domain.Devices.Magnetron
         public virtual async Task<bool> ResetSetpoint()
         {
             MagnetronPowerSetPoint.Value = 0;
-            return await TurnOff();
+            return await base.TurnOff();
         }
     }
 

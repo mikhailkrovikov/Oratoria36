@@ -16,6 +16,8 @@ namespace Oratoria.Domain.Abstractions
         public TDevice CreateDevice<TDevice>(Enum deviceId) where TDevice : class
         {
             var device = Activator.CreateInstance(typeof(TDevice), deviceId, _signals, _loggerFactory);
+            if (device == null)
+                throw new Exception("Unable to create device, check enums");        
             return (TDevice)device;
         }
     }
