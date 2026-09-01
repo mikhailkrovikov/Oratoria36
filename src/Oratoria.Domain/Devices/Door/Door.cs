@@ -20,9 +20,6 @@ namespace Oratoria.Domain.Devices.Door
             IsClose?.OnSignalChanged += _ => OnStateChanged();
             Open?.OnSignalChanged += _ => OnStateChanged();
             Close?.OnSignalChanged += _ => OnStateChanged();
-
-            this.CloseValve();
-            this.OpenValve();
         }
 
         [Obsolete]
