@@ -29,9 +29,5 @@
 		</None>
 	</ItemGroup>
 	
-	<ItemGroup>
-	  <Folder Include="Views\Pages\VacuumPages\" />
-	  <Folder Include="Views\Pages\TransportPages\" />
-	</ItemGroup>
 
 </Project>

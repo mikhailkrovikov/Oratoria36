@@ -17,6 +17,10 @@ public class MainWindowVM : INotifyPropertyChanged
     {
         Navigation = new NavigationBuilder()
         .Item<MainPage>("Главная")
+        .Group("Транспорт", transport => transport
+            .Item<TransportSignalsPage>("Сигналы"))
+        .Group("Вакуумная система", vacuum => vacuum
+            .Item<VacuumSignalsPage>("Сигналы"))
         .Group("Модуль 2", m2 => m2
             .Item<Module2MnemoPage>("Мнемосхема")
             .Item<Module2RecipePage>("Рецепт")

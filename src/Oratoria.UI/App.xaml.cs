@@ -118,6 +118,8 @@ public partial class App : Application
         services.AddTransient<ConnectionSettingsVM>();
         services.AddTransient<ConnectionSettingsPage>();
         services.AddTransient<Module2SignalsPage>();
+        services.AddTransient<TransportSignalsPage>();
+        services.AddTransient<VacuumSignalsPage>();
         services.AddSingleton<MainWindowVM>();
         services.AddSingleton<MainWindow>();
     }

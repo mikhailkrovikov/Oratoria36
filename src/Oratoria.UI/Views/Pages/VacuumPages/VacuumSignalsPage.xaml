@@ -1,0 +1,140 @@
+<Page x:Class="Oratoria.UI.Views.Pages.VacuumSignalsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      mc:Ignorable="d"
+      d:DesignHeight="850" d:DesignWidth="1920"
+      Title="VacuumSignalsPage"
+      Background="{DynamicResource Brush.Window}">
+
+    <Grid Margin="16,12">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="10" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="10" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="10" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" Style="{StaticResource SoftGroupContainer}">
+            <DockPanel>
+                <TextBlock Text="ДИСКРЕТНЫЕ ВХОДЫ"
+                           Style="{StaticResource SectionTitle}"
+                           DockPanel.Dock="Top"/>
+                <Grid DockPanel.Dock="Top">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" MinWidth="40"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto" MinWidth="120"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text=" №" Grid.Column="0" Style="{StaticResource HeaderTextBlock}" Height="30"/>
+                    <TextBlock Text="Наименование сигнала" Grid.Column="1" Style="{StaticResource HeaderTextBlock}" Height="30"/>
+                    <TextBlock Text="Состояние" Grid.Column="2" Style="{StaticResource HeaderTextBlock}" Height="30"/>
+                </Grid>
+
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Grid x:Name="DigitalInputGrid">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" MinWidth="40"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto" MinWidth="120"/>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ScrollViewer>
+            </DockPanel>
+        </Border>
+
+        <Border Grid.Column="2" Style="{StaticResource SoftGroupContainer}">
+            <DockPanel>
+                <TextBlock Text="ДИСКРЕТНЫЕ ВЫХОДЫ"
+                           Style="{StaticResource SectionTitle}"
+                           DockPanel.Dock="Top"/>
+                <Grid DockPanel.Dock="Top">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" MinWidth="40"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto" MinWidth="120"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text=" №" Grid.Column="0" Style="{StaticResource HeaderTextBlock}" Height="30"/>
+                    <TextBlock Text="Наименование сигнала" Grid.Column="1" Style="{StaticResource HeaderTextBlock}" Height="30"/>
+                    <TextBlock Text="Состояние" Grid.Column="2" Style="{StaticResource HeaderTextBlock}" Height="30"/>
+                </Grid>
+
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Grid x:Name="DigitalOutputGrid">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" MinWidth="40"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto" MinWidth="120"/>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ScrollViewer>
+            </DockPanel>
+        </Border>
+
+        <Border Grid.Column="4" Style="{StaticResource SoftGroupContainer}">
+            <DockPanel>
+                <TextBlock Text="АНАЛОГОВЫЕ ВХОДЫ"
+                           Style="{StaticResource SectionTitle}"
+                           DockPanel.Dock="Top"/>
+                <Grid DockPanel.Dock="Top" x:Name="AnalogInputHeaders">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" MinWidth="40"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto" MinWidth="80"/>
+                        <ColumnDefinition Width="Auto" MinWidth="80"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text=" №" Grid.Column="0" Style="{StaticResource HeaderTextBlock}" Height="30"/>
+                    <TextBlock Text="Наименование сигнала" Grid.Column="1" Style="{StaticResource HeaderTextBlock}" Height="30"/>
+                    <TextBlock Text="Значение" Grid.Column="2" Style="{StaticResource HeaderTextBlock}" Height="30"/>
+                    <TextBlock Text="Разряд" Grid.Column="3" Style="{StaticResource HeaderTextBlock}" Height="30"/>
+                </Grid>
+
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Grid x:Name="AnalogInputGrid">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" MinWidth="40"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto" MinWidth="80"/>
+                            <ColumnDefinition Width="Auto" MinWidth="80"/>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ScrollViewer>
+            </DockPanel>
+        </Border>
+
+        <Border Grid.Column="6" Style="{StaticResource SoftGroupContainer}">
+            <DockPanel>
+                <TextBlock Text="АНАЛОГОВЫЕ ВЫХОДЫ"
+                           Style="{StaticResource SectionTitle}"
+                           DockPanel.Dock="Top"/>
+                <Grid DockPanel.Dock="Top" x:Name="AnalogOutputHeaders">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" MinWidth="40"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto" MinWidth="80"/>
+                        <ColumnDefinition Width="Auto" MinWidth="80"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text=" №" Grid.Column="0" Style="{StaticResource HeaderTextBlock}" Height="30"/>
+                    <TextBlock Text="Наименование сигнала" Grid.Column="1" Style="{StaticResource HeaderTextBlock}" Height="30"/>
+                    <TextBlock Text="Значение" Grid.Column="2" Style="{StaticResource HeaderTextBlock}" Height="30"/>
+                    <TextBlock Text="Разряд" Grid.Column="3" Style="{StaticResource HeaderTextBlock}" Height="30"/>
+                </Grid>
+
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Grid x:Name="AnalogOutputGrid">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" MinWidth="40"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto" MinWidth="80"/>
+                            <ColumnDefinition Width="Auto" MinWidth="80"/>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ScrollViewer>
+            </DockPanel>
+        </Border>
+    </Grid>
+</Page>
