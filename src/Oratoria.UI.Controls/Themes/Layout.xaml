@@ -1,0 +1,98 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Colors.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+    <BorderGapMaskConverter x:Key="BorderGapMaskConverter"/>
+
+    <Style TargetType="{x:Type GroupBox}">
+        <Setter Property="BorderBrush" Value="{StaticResource Brush.GroupBox.Border}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type GroupBox}">
+                    <Grid SnapsToDevicePixels="true">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="6"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="6"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="6"/>
+                        </Grid.RowDefinitions>
+                        <Border CornerRadius="4"
+                                Grid.Row="1" Grid.RowSpan="3"
+                                Grid.Column="0" Grid.ColumnSpan="4"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="Transparent"
+                                Background="{TemplateBinding Background}"/>
+                        <Border Name="Header"
+                                Padding="3,1,3,0"
+                                Grid.Row="0" Grid.RowSpan="2"
+                                Grid.Column="1">
+                            <ContentPresenter ContentSource="Header"
+                                              RecognizesAccessKey="true"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                        </Border>
+                        <ContentPresenter Grid.Row="2"
+                                          Grid.Column="1" Grid.ColumnSpan="2"
+                                          Margin="{TemplateBinding Padding}"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                        <Border Grid.Row="1" Grid.RowSpan="3"
+                                Grid.ColumnSpan="4"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                CornerRadius="3">
+                            <Border.OpacityMask>
+                                <MultiBinding Converter="{StaticResource BorderGapMaskConverter}" ConverterParameter="7">
+                                    <Binding ElementName="Header" Path="ActualWidth"/>
+                                    <Binding Path="ActualWidth" RelativeSource="{RelativeSource Self}"/>
+                                    <Binding Path="ActualHeight" RelativeSource="{RelativeSource Self}"/>
+                                </MultiBinding>
+                            </Border.OpacityMask>
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="Container.SoftGroup" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource Brush.Surface}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Brush.SurfaceBorder}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="10"/>
+        <Setter Property="Margin" Value="0,0,0,15"/>
+    </Style>
+
+    <Style x:Key="Container.Divider" TargetType="Border">
+        <Setter Property="BorderBrush" Value="{StaticResource Brush.Divider}"/>
+        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+        <Setter Property="Margin" Value="0,10,0,15"/>
+    </Style>
+
+    <Style x:Key="Container.Card" TargetType="Border">
+        <Setter Property="CornerRadius" Value="16"/>
+        <Setter Property="Background" Value="{StaticResource Brush.Card}"/>
+        <Setter Property="Padding" Value="20"/>
+        <Setter Property="BorderBrush" Value="{StaticResource Brush.Button.Border}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+    </Style>
+
+    <Style x:Key="Shape.Contour" TargetType="Rectangle">
+        <Setter Property="Fill" Value="{StaticResource Brush.Transparent}"/>
+        <Setter Property="StrokeThickness" Value="1"/>
+        <Setter Property="Stroke" Value="{StaticResource Brush.BorderLight}"/>
+    </Style>
+
+    <Style x:Key="SoftGroupContainer" TargetType="Border" BasedOn="{StaticResource Container.SoftGroup}"/>
+    <Style x:Key="SectionDivider" TargetType="Border" BasedOn="{StaticResource Container.Divider}"/>
+    <Style x:Key="CardContainer" TargetType="Border" BasedOn="{StaticResource Container.Card}"/>
+    <Style x:Key="ContureRectangleStyle" TargetType="Rectangle" BasedOn="{StaticResource Shape.Contour}"/>
+
+</ResourceDictionary>

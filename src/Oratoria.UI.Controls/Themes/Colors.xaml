@@ -1,0 +1,47 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Color x:Key="Color.Window">#E0E0E0</Color>
+    <Color x:Key="Color.Text">#3F3F3F</Color>
+    <Color x:Key="Color.TextMuted">#919191</Color>
+    <Color x:Key="Color.TextSubtle">#AAAAAA</Color>
+    <Color x:Key="Color.Accent">#475CA7</Color>
+    <Color x:Key="Color.Danger">#CC0000</Color>
+    <Color x:Key="Color.Warning">#EC8629</Color>
+    <Color x:Key="Color.Button.Background">#C6C6C6</Color>
+    <Color x:Key="Color.Button.Border">#AAAAAA</Color>
+    <Color x:Key="Color.Surface">#E8E8E8</Color>
+    <Color x:Key="Color.SurfaceBorder">#D8D8D8</Color>
+    <Color x:Key="Color.Card">#F5F5F5</Color>
+    <Color x:Key="Color.Input.Background">#F0F0F0</Color>
+    <Color x:Key="Color.BorderLight">#A0A0A4</Color>
+    <Color x:Key="Color.GroupBox.Border">#D5DFE5</Color>
+    <Color x:Key="Color.Divider">#D3D3D3</Color>
+    <Color x:Key="Color.Toggle.On">#3399FF</Color>
+    <Color x:Key="Color.Toggle.Off">#808080</Color>
+    <Color x:Key="Color.Toggle.OffThumb">#606060</Color>
+    <Color x:Key="Color.Toggle.Track">#CCCCCC</Color>
+
+    <SolidColorBrush x:Key="Brush.Window" Color="{StaticResource Color.Window}"/>
+    <SolidColorBrush x:Key="Brush.Text" Color="{StaticResource Color.Text}"/>
+    <SolidColorBrush x:Key="Brush.TextMuted" Color="{StaticResource Color.TextMuted}"/>
+    <SolidColorBrush x:Key="Brush.TextSubtle" Color="{StaticResource Color.TextSubtle}"/>
+    <SolidColorBrush x:Key="Brush.Accent" Color="{StaticResource Color.Accent}"/>
+    <SolidColorBrush x:Key="Brush.Danger" Color="{StaticResource Color.Danger}"/>
+    <SolidColorBrush x:Key="Brush.Warning" Color="{StaticResource Color.Warning}"/>
+    <SolidColorBrush x:Key="Brush.Button.Background" Color="{StaticResource Color.Button.Background}"/>
+    <SolidColorBrush x:Key="Brush.Button.Border" Color="{StaticResource Color.Button.Border}"/>
+    <SolidColorBrush x:Key="Brush.Surface" Color="{StaticResource Color.Surface}"/>
+    <SolidColorBrush x:Key="Brush.SurfaceBorder" Color="{StaticResource Color.SurfaceBorder}"/>
+    <SolidColorBrush x:Key="Brush.Card" Color="{StaticResource Color.Card}"/>
+    <SolidColorBrush x:Key="Brush.Input.Background" Color="{StaticResource Color.Input.Background}"/>
+    <SolidColorBrush x:Key="Brush.BorderLight" Color="{StaticResource Color.BorderLight}"/>
+    <SolidColorBrush x:Key="Brush.GroupBox.Border" Color="{StaticResource Color.GroupBox.Border}"/>
+    <SolidColorBrush x:Key="Brush.Divider" Color="{StaticResource Color.Divider}"/>
+    <SolidColorBrush x:Key="Brush.Toggle.On" Color="{StaticResource Color.Toggle.On}"/>
+    <SolidColorBrush x:Key="Brush.Toggle.Off" Color="{StaticResource Color.Toggle.Off}"/>
+    <SolidColorBrush x:Key="Brush.Toggle.OffThumb" Color="{StaticResource Color.Toggle.OffThumb}"/>
+    <SolidColorBrush x:Key="Brush.Toggle.Track" Color="{StaticResource Color.Toggle.Track}"/>
+    <SolidColorBrush x:Key="Brush.Transparent" Color="#00000000"/>
+
+</ResourceDictionary>

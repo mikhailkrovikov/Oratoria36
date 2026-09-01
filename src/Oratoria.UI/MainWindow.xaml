@@ -3,10 +3,175 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:UI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="MainWindow"
+        Width="1920" Height="1080"
+        MinWidth="1280" MinHeight="720"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        ResizeMode="NoResize"
+        Background="{StaticResource Brush.Window}"
+        WindowStyle="None">
 
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="150"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0"
+                Height="80"
+                Background="{StaticResource Brush.Window}"
+                BorderThickness="1"
+                BorderBrush="{StaticResource Brush.BorderLight}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="1"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <DockPanel Grid.Row="0" LastChildFill="True">
+                    <Button DockPanel.Dock="Right"
+                            Command="{Binding CloseButtonCommand}"
+                            CommandParameter="CustomParam"
+                            Style="{StaticResource Button.Base}"
+                            Width="38" Height="38"
+                            Margin="0,2,3,0"
+                            VerticalAlignment="Top"
+                            Content="✕"
+                            FontSize="16"
+                            FontWeight="Bold"/>
+                    <Button DockPanel.Dock="Right"
+                            Content="{Binding ServiceModeButtonText, UpdateSourceTrigger=PropertyChanged}"
+                            Style="{StaticResource Button.Nav}"
+                            Command="{Binding ServiceModeCommand}"
+                            Width="200" Height="38"
+                            Margin="0,2,8,0"
+                            VerticalAlignment="Top"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Главная" Style="{StaticResource Button.Nav}"/>
+                        <Button Content="Транспорт" Style="{StaticResource Button.Nav}"/>
+                        <Button Content="Вакуумная система" Style="{StaticResource Button.Nav}"/>
+                        <Button Content="Модуль 1" Style="{StaticResource Button.Nav}"/>
+                        <Button Content="Модуль 2" Style="{StaticResource Button.Nav}"/>
+                        <Button Content="Модуль 3" Style="{StaticResource Button.Nav}"/>
+                        <Button Content="Модуль 4" Style="{StaticResource Button.Nav}"/>
+                        <Button Content="Сеть" Style="{StaticResource Button.Nav}"/>
+                        <Button Content="Архив логов" Style="{StaticResource Button.Nav}"/>
+                    </StackPanel>
+                </DockPanel>
+
+                <Border Grid.Row="1" Background="{StaticResource Brush.BorderLight}"/>
+            </Grid>
+        </Border>
+
+        <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" Grid.Row="1"/>
+
+        <Grid Grid.Row="2" Background="{StaticResource Brush.SurfaceBorder}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="130"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0">
+                <Button Style="{StaticResource Button.Base}"
+                        Click="ShowErrors_Click"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        Height="50" Width="50"
+                        Content="Увед"/>
+                <Button Style="{StaticResource Button.Base}"
+                        Click="ShowErrors_Click"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Height="50" Width="50"
+                        Content="Авар"/>
+                <Button Style="{StaticResource Button.Base}"
+                        Click="ShowLogs_Click"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Bottom"
+                        Height="50" Width="50"
+                        Content="Лог"/>
+            </Grid>
+
+            <DataGrid x:Name="LogGrid"
+                      Grid.Column="1"
+                      ItemsSource="{Binding Logs}"
+                      Style="{StaticResource LogDataGridStyle}"
+                      RowStyle="{StaticResource LogDataGridRowStyle}"
+                      Visibility="Collapsed">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Время" Binding="{Binding Timestamp, StringFormat='{}{0:dd-MM-yyyy HH:mm:ss}'}" Width="150"/>
+                    <DataGridTextColumn Header="Уровень" Binding="{Binding Level}" Width="80"/>
+                    <DataGridTextColumn Header="Модуль" Binding="{Binding Module}" Width="100"/>
+                    <DataGridTextColumn Header="Устройство" Binding="{Binding Logger}" Width="100"/>
+                    <DataGridTextColumn Header="Сообщение" Binding="{Binding Message}" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <ListBox x:Name="ErrorsListBox" Grid.Column="1" IsHitTestVisible="False"
+                     ItemsSource="{Binding Alarms}"
+                     Background="Transparent"
+                     Margin="0"
+                     Visibility="Visible"
+                     BorderThickness="1,0,1,0">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Margin" Value="0"/>
+                        <Setter Property="Padding" Value="0"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Category}" Value="Warn">
+                                <Setter Property="Background" Value="Yellow"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Category}" Value="Error">
+                                <Setter Property="Background" Value="Orange"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Category}" Value="Fatal">
+                                <Setter Property="Background" Value="Red"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Text, Mode=OneWay}"
+                                   Style="{StaticResource Text.Header}"
+                                   Margin="0" Padding="5,2"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <Grid Grid.Column="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="{Binding Date}"
+                           Style="{StaticResource Text.Body}"
+                           FontSize="14"
+                           Grid.Row="0"
+                           VerticalAlignment="Bottom"/>
+                <TextBlock Text="{Binding Time}"
+                           Style="{StaticResource Text.Body}"
+                           FontSize="14"
+                           Grid.Row="1"
+                           VerticalAlignment="Top"/>
+                <Button Command="{Binding AutorizationCommand}"
+                        Style="{StaticResource Button.Base}"
+                        Grid.Row="2"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Left"
+                        Height="65"
+                        Width="65"
+                        Margin="0,4,0,0"
+                        Content="User"/>
+            </Grid>
+        </Grid>
     </Grid>
 </Window>

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net10.0-windows</TargetFramework>
+    <TargetFramework>net10.0-windows7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <Folder Include="Controls\" />
-    <Folder Include="Themes\" />
     <Folder Include="Converters\" />
   </ItemGroup>
 
