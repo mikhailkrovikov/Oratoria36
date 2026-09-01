@@ -1,0 +1,114 @@
+<UserControl x:Class="Oratoria.UI.Controls.Mnemo.ValveControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignWidth="85"
+             d:DesignHeight="120">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Oratoria.UI.Controls;component/Themes/Colors.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style x:Key="InvisibleButton" TargetType="Button">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderBrush" Value="Transparent"/>
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <ContentPresenter/>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="ValveShape" TargetType="Shape">
+                <Setter Property="Stroke" Value="{StaticResource Brush.Text}"/>
+                <Setter Property="StrokeThickness" Value="4"/>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Button}}" Value="True">
+                        <Setter Property="StrokeThickness" Value="8"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="{Binding Label, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                   Foreground="{StaticResource Brush.Text}"
+                   FontWeight="Bold"
+                   FontSize="12"
+                   HorizontalAlignment="Center"
+                   Grid.Row="0"/>
+
+        <Button Command="{Binding Command, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                CommandParameter="{Binding CommandParameter, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Style="{StaticResource InvisibleButton}"
+                Cursor="Hand"
+                Grid.Row="1">
+            <Viewbox Stretch="Uniform">
+                <Canvas Width="180" Height="165" Background="Transparent">
+                    <Line X1="90" Y1="55" X2="90" Y2="115"
+                          Style="{StaticResource ValveShape}"/>
+
+                    <Rectangle x:Name="Body"
+                               Canvas.Left="40" Canvas.Top="15"
+                               Width="100" Height="50"
+                               Style="{StaticResource ValveShape}"/>
+
+                    <Line X1="73" Y1="15" X2="73" Y2="65"
+                          Style="{StaticResource ValveShape}"/>
+
+                    <Line X1="107" Y1="15" X2="107" Y2="65"
+                          Style="{StaticResource ValveShape}"/>
+
+                    <Path x:Name="LeftFlap"
+                          Data="M 0,20 L 0,80 L 70,50 Z"
+                          Style="{StaticResource ValveShape}"
+                          Canvas.Left="0" Canvas.Top="75"
+                          Stretch="Fill"
+                          Width="90" Height="80"/>
+
+                    <Path x:Name="RightFlap"
+                          Data="M 100,20 L 100,80 L 30,50 Z"
+                          Style="{StaticResource ValveShape}"
+                          Canvas.Left="90" Canvas.Top="75"
+                          Stretch="Fill"
+                          Width="90" Height="80"/>
+
+                    <Ellipse x:Name="Center"
+                             Canvas.Left="70" Canvas.Top="95"
+                             Width="40" Height="40"
+                             Style="{StaticResource ValveShape}"/>
+
+                    <Canvas x:Name="ErrorOverlay"
+                            Width="50" Height="50"
+                            Canvas.Top="15"
+                            IsHitTestVisible="False"
+                            Visibility="Collapsed">
+                        <Ellipse x:Name="ErrorBadge"
+                                 Width="50" Height="50"
+                                 Stroke="Black"
+                                 StrokeThickness="3"/>
+                        <Rectangle Width="6" Height="20"
+                                   Canvas.Left="22" Canvas.Top="10"
+                                   RadiusX="1" RadiusY="1"
+                                   Fill="Black"/>
+                        <Ellipse Width="6" Height="6"
+                                 Canvas.Left="22" Canvas.Top="34"
+                                 Fill="Black"/>
+                    </Canvas>
+                </Canvas>
+            </Viewbox>
+        </Button>
+    </Grid>
+</UserControl>

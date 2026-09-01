@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Converters\" />
+    <Resource Include="Assets\UC_Error_icon.png" />
   </ItemGroup>
 
 </Project>

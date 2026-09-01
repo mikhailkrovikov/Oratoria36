@@ -89,12 +89,11 @@ public partial class App : Application
         services.AddSingleton<DigitalTwinStrategy>();
 #endif
         services.AddSingleton<Module1Signals>();
-        services.AddSingleton<Module2Signals>();
+        services.AddSingleton<Module2Signals>();      
         services.AddSingleton<Module3Signals>();
         services.AddSingleton<Module4Signals>();
         services.AddSingleton<TransportSignals>();
         services.AddSingleton<VacuumSignals>();
-
         services.AddSingleton<VacuumContext>();
         services.AddSingleton<TransportContext>();
         services.AddSingleton<Module2Context>();
@@ -118,6 +117,8 @@ public partial class App : Application
         services.AddTransient<ConnectionSettingsVM>();
         services.AddTransient<ConnectionSettingsPage>();
         services.AddTransient<Module2SignalsPage>();
+        services.AddSingleton<Module2MnemoPage>();
+        services.AddSingleton<Module2MnemoPageVM>();
         services.AddTransient<TransportSignalsPage>();
         services.AddTransient<VacuumSignalsPage>();
         services.AddSingleton<MainWindowVM>();
