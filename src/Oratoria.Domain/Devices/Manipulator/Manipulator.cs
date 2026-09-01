@@ -2,6 +2,7 @@
 using Oratoria.Domain.Devices.Abstractions;
 using Oratoria.Domain.Devices.Errors;
 using Oratoria.Domain.Devices.Statuses;
+using Oratoria.Domain.Settings;
 using Oratoria.Domain.Signals;
 using Oratoria.Domain.Signals.Abstractions;
 
@@ -9,7 +10,7 @@ namespace Oratoria.Domain.Devices.Manipulator
 {
     public class Manipulator : MechanicDevice<ManipulatorPosition, ManipulatorErrors>
     {
-        public Manipulator(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory) : base(deviceId, signals, loggerFactory)
+        public Manipulator(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory, ISettingsContext settings) : base(deviceId, signals, loggerFactory, settings)
         {         
         }
 

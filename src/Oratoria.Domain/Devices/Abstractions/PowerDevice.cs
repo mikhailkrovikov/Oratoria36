@@ -62,9 +62,9 @@ namespace Oratoria.Domain.Devices.Abstractions
             }
         }
 
-        protected PowerDevice(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory) : base(deviceId, signals, loggerFactory)
+        protected PowerDevice(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory, ISettingsContext settings) : base(deviceId, signals, loggerFactory, settings)
         {
-            TimeForError = new(DeviceId, "Время до ошибки", "сек");
+            TimeForError = Settings.GetSetting(deviceId, nameof(TimeForError), "Время до ошибки", "сек", 10);
         }
 
         public virtual async Task<bool> TurnOn()

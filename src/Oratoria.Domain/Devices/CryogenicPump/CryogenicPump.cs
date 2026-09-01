@@ -2,6 +2,7 @@
 using Oratoria.Domain.Devices.Abstractions;
 using Oratoria.Domain.Devices.Errors;
 using Oratoria.Domain.Devices.Statuses;
+using Oratoria.Domain.Settings;
 using Oratoria.Domain.Signals;
 using Oratoria.Domain.Signals.Abstractions;
 using Oratoria.Infrastructure;
@@ -12,7 +13,7 @@ namespace Oratoria.Domain.Devices.CryogenicPump
     {
         public InputSignal<bool> IsPumpOn { get; set; }
 
-        public CryogenicPump(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory) : base(deviceId, signals, loggerFactory)
+        public CryogenicPump(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory, ISettingsContext settings) : base(deviceId, signals, loggerFactory, settings)
         {
             IsPumpOn = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(CryogenicPumpIsOnSignalAttribute<>))!;
             IsPumpOn?.OnSignalChanged += value => 

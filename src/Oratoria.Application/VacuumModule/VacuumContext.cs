@@ -7,6 +7,7 @@ using Oratoria.Domain.Devices.CryogenicPump;
 using Oratoria.Domain.Devices.NitrogenFeeder;
 using Oratoria.Domain.Devices.PressureSensor;
 using Oratoria.Domain.Devices.Valve;
+using Oratoria.Domain.Settings;
 
 namespace Oratoria.Application.VacuumModule
 {
@@ -76,7 +77,7 @@ namespace Oratoria.Application.VacuumModule
 
         public PressureSensor AVRLowVacuum { get; set; }
 
-        public VacuumContext(VacuumSignals signals, ILoggerFactory loggerFactory) : base(signals, loggerFactory)
+        public VacuumContext(VacuumSignals signals, ILoggerFactory loggerFactory, ISettingsContext settings) : base(signals, loggerFactory, settings)
         {
             FK_M1 = Factory.CreateDevice<Valve>(Valves.FK_M1);
             FK_M2 = Factory.CreateDevice<Valve>(Valves.FK_M2);

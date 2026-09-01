@@ -32,15 +32,15 @@ namespace Oratoria.Domain.Devices.AVRPump
             }
         }
 
-        public AVRPump(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory) : base(deviceId, signals, loggerFactory)
+        public AVRPump(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory, ISettingsContext settings) : base(deviceId, signals, loggerFactory, settings)
         {
             IsOilPumpOn = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(AVRIsOilOnSignalAttribute<>))!;
             IsRutsPumpOn = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(AVRIsRutsOnSignalAttribute<>))!;
             OilPumpOn = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(AVROilOnSignalAttribute<>))!;
             RutsPumpOn = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(AVRRutsOnSignalAttribute<>))!;
 
-            OilPumpTime = new(deviceId, "Время включения маслянного насоса", "сек");
-            RutsPumpTime = new(deviceId, "Время включения насоса РУТС", "сек");
+            OilPumpTime = Settings.GetSetting(deviceId, nameof(OilPumpTime), "Время включения маслянного насоса", "сек", 30);
+            RutsPumpTime = Settings.GetSetting(deviceId, nameof(RutsPumpTime), "Время включения насоса РУТС", "сек", 30);
 
             IsOilPumpOn.OnSignalChanged += _ => OnStateChanged();
             IsRutsPumpOn.OnSignalChanged += _ => OnStateChanged();

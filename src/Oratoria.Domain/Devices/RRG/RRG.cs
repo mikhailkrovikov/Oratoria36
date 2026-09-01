@@ -50,14 +50,14 @@ namespace Oratoria.Domain.Devices.RRG
             }
         }
 
-        public RRG(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory) : base(deviceId, signals, loggerFactory)
+        public RRG(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory, ISettingsContext settings) : base(deviceId, signals, loggerFactory, settings)
         {
             RRGRealValueSignal = SignalHelper<InputSignal<double>>.GetSignal(deviceId, signals.AISignals, typeof(RRGRealValueSignalAttribute<>));
             RRGSetpointSignal = SignalHelper<OutputSignal<double>>.GetSignal(deviceId, signals.AOSignals, typeof(RRGSetpointSignalAttribute<>));
 
-            RRGDifference = new(deviceId, "Предел отклонения", "%");
-            MaxFlowRate = new(deviceId, "Верхний предел", "л/ч");
-            TimeOfAction = new(deviceId, "Время выхода уставку", "сек");
+            RRGDifference = Settings.GetSetting(deviceId, nameof(RRGDifference), "Предел отклонения", "%", 5.0, 0.0, 100.0);
+            MaxFlowRate = Settings.GetSetting(deviceId, nameof(MaxFlowRate), "Верхний предел", "л/ч", 100.0);
+            TimeOfAction = Settings.GetSetting(deviceId, nameof(TimeOfAction), "Время выхода уставку", "сек", 30);
         }
 
         public async Task<bool> SetValue(double value)

@@ -72,7 +72,7 @@ namespace Oratoria.Domain.Devices.Abstractions
 
         public Setting<int> ActionTime;
 
-        public MechanicDevice(Enum deviceId,IModuleSignals signals, ILoggerFactory loggerFactory) : base(deviceId, signals, loggerFactory)
+        public MechanicDevice(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory, ISettingsContext settings) : base(deviceId, signals, loggerFactory, settings)
         {
             Position1In = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(MechanicPosition1InputSignalAttribute<>))!;
             Position2In = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(MechanicPosition2InputSignalAttribute<>))!;
@@ -93,7 +93,7 @@ namespace Oratoria.Domain.Devices.Abstractions
             Position2In.OnSignalChanged += _ => OnPositionChanged();
             Position3In.OnSignalChanged += _ => OnPositionChanged();
 
-            ActionTime = new(DeviceId, "Время движения актуатора", "сек");       
+            ActionTime = Settings.GetSetting(deviceId, nameof(ActionTime), "Время движения актуатора", "сек", 30); 
         }
 
         protected void DriverOverloadHandler(bool value)

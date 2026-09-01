@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Oratoria.Domain.Devices.Statuses;
+using Oratoria.Domain.Settings;
 using Oratoria.Domain.Signals.Abstractions;
 
 namespace Oratoria.Domain.Devices.PressureSensor
@@ -18,8 +19,8 @@ namespace Oratoria.Domain.Devices.PressureSensor
             }
         }
 
-        public LowVacuumSensor(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory)
-            : base(deviceId, signals, loggerFactory) 
+        public LowVacuumSensor(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory, ISettingsContext settings)
+            : base(deviceId, signals, loggerFactory, settings) 
         { 
         }
 

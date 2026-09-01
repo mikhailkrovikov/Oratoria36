@@ -18,9 +18,9 @@ namespace Oratoria.Domain.Devices.Abstractions
 
         protected OutputSignal<bool>? Close { get; set; }
 
-        protected Setting<int> TimeForWarning { get; }
+        public Setting<int> TimeForWarning { get; }
 
-        protected Setting<int> TimeForError { get; }
+        public Setting<int> TimeForError { get; }
 
         public override OpenableStatus State
         {
@@ -64,10 +64,10 @@ namespace Oratoria.Domain.Devices.Abstractions
             }
         }
 
-        protected OpenableDevice(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory) : base(deviceId, signals, loggerFactory)
+        protected OpenableDevice(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory, ISettingsContext settings) : base(deviceId, signals, loggerFactory, settings)
         {
-            TimeForError = new(DeviceId, "Время до ошибки", "сек");
-            TimeForWarning = new(DeviceId, "Время до предупреждения", "сек");
+            TimeForWarning = Settings.GetSetting(deviceId, nameof(TimeForWarning), "Время до предупреждения", "сек", 5, 1, 3600);
+            TimeForError = Settings.GetSetting(deviceId, nameof(TimeForError), "Время до ошибки", "сек", 15, 1, 3600);
         }
 
 
