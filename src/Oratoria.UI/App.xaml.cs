@@ -18,6 +18,7 @@ using Oratoria.Application.TransportModule.Signals;
 using Oratoria.Application.VacuumModule;
 using Oratoria.Application.VacuumModule.Signals;
 using Oratoria.Domain.Connection.Pollers.Abstractions;
+using Oratoria.Domain.Settings;
 using Oratoria.Persistence;
 using Oratoria.Persistence.Services;
 using Oratoria.UI.Logging;
@@ -62,6 +63,8 @@ public partial class App : Application
             var db = scope.ServiceProvider.GetRequiredService<AppDBContext>();
             db.Database.Migrate();
         }
+
+        _services.GetRequiredService<ISettingsContext>();
 
         _services.GetRequiredService<GeneralPoller>().StartPoller();
         _services.GetRequiredService<MainWindow>().Show();
@@ -121,6 +124,8 @@ public partial class App : Application
         var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "app.db");
         services.AddDbContext<AppDBContext>(o => o.UseSqlite($"Data Source={path}"));
         services.AddTransient<IUserService, UserService>();
+        services.AddSingleton<ISettingsService, SettingService>();
+        services.AddSingleton<ISettingsContext, SettingsContext>();
     }
 
     private static void EnsureLogDatabase()

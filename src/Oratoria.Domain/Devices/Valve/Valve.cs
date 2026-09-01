@@ -1,6 +1,7 @@
 ﻿using Oratoria.Infrastructure;
 using Microsoft.Extensions.Logging;
 using Oratoria.Domain.Devices.Valve.ValveAttributes;
+using Oratoria.Domain.Settings;
 using Oratoria.Domain.Signals;
 using Oratoria.Domain.Signals.Abstractions;
 using Oratoria.Domain.Devices.Abstractions;
@@ -9,7 +10,7 @@ namespace Oratoria.Domain.Devices.Valve
 {
     public class Valve : OpenableDevice
     {
-        public Valve(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory) : base(deviceId, signals, loggerFactory)
+        public Valve(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory, ISettingsContext settings) : base(deviceId, signals, loggerFactory, settings)
         {
             IsOpen = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(ValveIsOpenSignalAttribute<>));
             IsClose = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(ValveIsCloseSignalAttribute<>));

@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Oratoria.Infrastructure\Oratoria.Infrastructure.csproj" />
+    <ProjectReference Include="..\Oratoria.Persistence\Oratoria.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

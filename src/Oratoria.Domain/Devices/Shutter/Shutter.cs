@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Oratoria.Domain.Devices.Abstractions;
 using Oratoria.Domain.Devices.Shutter.ShutterAttributes;
+using Oratoria.Domain.Settings;
 using Oratoria.Domain.Signals;
 using Oratoria.Domain.Signals.Abstractions;
 using Oratoria.Infrastructure;
@@ -9,7 +10,7 @@ namespace Oratoria.Domain.Devices.Shutter
 {
     public class Shutter : OpenableDevice
     {
-        public Shutter(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory) : base(deviceId, signals, loggerFactory)
+        public Shutter(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory, ISettingsContext settings) : base(deviceId, signals, loggerFactory, settings)
         {
             IsOpen = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(ShutterIsOpenSignalAttribute<>));
             IsClose = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(ShutterIsCloseSignalAttribute<>));

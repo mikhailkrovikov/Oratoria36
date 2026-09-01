@@ -5,6 +5,7 @@ using Oratoria.Domain.Abstractions;
 using Oratoria.Domain.Devices.Door;
 using Oratoria.Domain.Devices.Shutter;
 using Oratoria.Domain.Devices.Valve;
+using Oratoria.Domain.Settings;
 using Oratoria.Domain.Signals.Abstractions;
 
 namespace Oratoria.Application.TransportModule
@@ -19,7 +20,7 @@ namespace Oratoria.Application.TransportModule
 
         public Shutter Shl2Shutter { get; set; }
 
-        public TransportContext(TransportSignals signals, ILoggerFactory loggerFactory) : base(signals, loggerFactory)
+        public TransportContext(TransportSignals signals, ILoggerFactory loggerFactory, ISettingsContext settings) : base(signals, loggerFactory, settings)
         {
             Shl1Shutter = Factory.CreateDevice<Shutter>(Shutters.Shl1Shutter);
             Shl2Shutter = Factory.CreateDevice<Shutter>(Shutters.Shl2Shutter);

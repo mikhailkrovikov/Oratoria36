@@ -12,6 +12,7 @@ using Oratoria.Domain.Devices.Shutter;
 using Oratoria.Domain.Devices.Table;
 using Oratoria.Domain.Devices.Throttle;
 using Oratoria.Domain.Devices.Valve;
+using Oratoria.Domain.Settings;
 using Oratoria.Domain.Signals.Abstractions;
 
 namespace Oratoria.Application
@@ -48,7 +49,7 @@ namespace Oratoria.Application
 
         public HighVacuumSensor VICB { get; set; } = null!;
 
-        protected TechnologyModuleContext(IModuleSignals signals, ILoggerFactory loggerFactory) : base(signals, loggerFactory)
+        protected TechnologyModuleContext(IModuleSignals signals, ILoggerFactory loggerFactory, ISettingsContext settings) : base(signals, loggerFactory, settings)
         {
         }
     }

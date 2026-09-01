@@ -1,5 +1,6 @@
 ﻿using Oratoria.Infrastructure;
 using Microsoft.Extensions.Logging;
+using Oratoria.Domain.Settings;
 using Oratoria.Domain.Signals.Abstractions;
 
 namespace Oratoria.Domain.Devices.Abstractions
@@ -20,13 +21,16 @@ namespace Oratoria.Domain.Devices.Abstractions
 
         protected ILogger Logger { get; set; }
 
+        protected ISettingsContext Settings { get; }
+
         protected CancellationTokenSource CTSource { get; private set; } = new();
 
-        protected Device(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory)
+        protected Device(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory, ISettingsContext settings)
         {
             DeviceId = deviceId;
             DeviceErrors = new DeviceError<TError>();
             Logger = loggerFactory.CreateLogger(deviceId.GetDescription());
+            Settings = settings;
         }
 
         protected void OnStateChanged()

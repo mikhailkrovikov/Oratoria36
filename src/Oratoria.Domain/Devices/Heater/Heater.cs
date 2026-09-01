@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Oratoria.Domain.Devices.Abstractions;
 using Oratoria.Domain.Devices.Heater.HeaterAttributes;
+using Oratoria.Domain.Settings;
 using Oratoria.Domain.Signals;
 using Oratoria.Domain.Signals.Abstractions;
 using Oratoria.Infrastructure;
@@ -27,7 +28,7 @@ namespace Oratoria.Domain.Devices.Heater
             get => Math.Round(HeaterTemp.Value / 10 * 400, 2);
         }
 
-        public Heater(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory) : base(deviceId, signals, loggerFactory)
+        public Heater(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory, ISettingsContext settings) : base(deviceId, signals, loggerFactory, settings)
         {
             IsPowerOff = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(HeaterIsPowerOffSignalAttribute<>));
             IsPowerOn = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(HeaterIsPowerOnSignalAttribute<>));

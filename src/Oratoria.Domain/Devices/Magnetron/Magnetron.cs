@@ -2,6 +2,7 @@
 using Oratoria.Domain.Devices.Abstractions;
 using Oratoria.Domain.Devices.Errors;
 using Oratoria.Domain.Devices.Magnetron.MagnetronAttributes;
+using Oratoria.Domain.Settings;
 using Oratoria.Domain.Signals;
 using Oratoria.Domain.Signals.Abstractions;
 using Oratoria.Infrastructure;
@@ -29,7 +30,7 @@ namespace Oratoria.Domain.Devices.Magnetron
             get => Math.Round(MagnetronCurrent.Value * MagnetronVoltage.Value, 2);
         }
 
-        public Magnetron(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory) : base(deviceId, signals, loggerFactory)
+        public Magnetron(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory, ISettingsContext settings) : base(deviceId, signals, loggerFactory, settings)
         {
             IsPowerOff = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(MagnetronIsPowerOffSignalAttribute<>));
             IsPowerOn = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(MagnetronIsPowerOnSignalAttribute<>));

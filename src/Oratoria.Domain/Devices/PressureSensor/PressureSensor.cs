@@ -3,6 +3,7 @@ using Oratoria.Domain.Devices.Abstractions;
 using Oratoria.Domain.Devices.Errors;
 using Oratoria.Domain.Devices.PressureSensor.PressureSensorAttributes;
 using Oratoria.Domain.Devices.Statuses;
+using Oratoria.Domain.Settings;
 using Oratoria.Domain.Signals;
 using Oratoria.Domain.Signals.Abstractions;
 using Oratoria.Infrastructure;
@@ -21,8 +22,8 @@ namespace Oratoria.Domain.Devices.PressureSensor
 
         public abstract override PressureStatus State { get; }
 
-        protected PressureSensor(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory)
-            : base(deviceId, signals, loggerFactory)
+        protected PressureSensor(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory, ISettingsContext settings)
+            : base(deviceId, signals, loggerFactory, settings)
         {
             PressureSignal = SignalHelper<InputSignal<double>>.GetSignal(deviceId, signals.AISignals, typeof(PressureSensorSignalAttribute<>))!;
             PressureSignal?.OnSignalChanged += _ => OnStateChanged();

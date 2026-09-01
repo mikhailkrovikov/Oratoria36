@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Oratoria.Domain.Settings;
 using Oratoria.Domain.Signals.Abstractions;
 
 namespace Oratoria.Domain.Abstractions
@@ -7,9 +8,9 @@ namespace Oratoria.Domain.Abstractions
     {
         protected DeviceFactory Factory { get; }
 
-        protected ModuleContext(IModuleSignals signals, ILoggerFactory loggerFactory)
+        protected ModuleContext(IModuleSignals signals, ILoggerFactory loggerFactory, ISettingsContext settings)
         {
-            Factory = new DeviceFactory(signals, loggerFactory);
+            Factory = new DeviceFactory(signals, loggerFactory, settings);
         }
     }
 }

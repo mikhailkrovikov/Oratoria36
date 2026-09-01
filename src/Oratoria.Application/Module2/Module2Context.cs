@@ -13,12 +13,13 @@ using Oratoria.Domain.Devices.Heater;
 using Oratoria.Domain.Devices.RRG;
 using Oratoria.Domain.Devices.PressureSensor;
 using Oratoria.Domain.Devices.CryogenicPump;
+using Oratoria.Domain.Settings;
 
 namespace Oratoria.Application.Module2
 {
     public class Module2Context : TechnologyModuleContext
     {
-        public Module2Context(Module2Signals signals, ILoggerFactory loggerFactory) : base(signals, loggerFactory)
+        public Module2Context(Module2Signals signals, ILoggerFactory loggerFactory, ISettingsContext settings) : base(signals, loggerFactory, settings)
         {
             FK_KN_DU_63 = Factory.CreateDevice<Valve>(Valves.ForValveCryoPump);
             Shutter = Factory.CreateDevice<Shutter>(Shutters.Shutter);
