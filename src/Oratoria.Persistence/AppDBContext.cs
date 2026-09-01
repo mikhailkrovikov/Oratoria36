@@ -8,13 +8,8 @@ namespace Oratoria.Persistence
         public DbSet<UserEntity> Users { get; set; }
         public DbSet<RoleEntity> Roles { get; set; }
 
-        public AppDBContext()
+        public AppDBContext(DbContextOptions<AppDBContext> options) : base(options)
         {
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlite("Data Source=app.db");
         }
     }
 }

@@ -93,6 +93,7 @@ namespace Oratoria.Persistence.Services
                .FirstOrDefaultAsync(u => u.Login == login);
                 if (user == null) return false;
                 user.Password = HashPassword(newPaswword);
+                await _dbContext.SaveChangesAsync();
                 return true;
             }
             catch (Exception ex)

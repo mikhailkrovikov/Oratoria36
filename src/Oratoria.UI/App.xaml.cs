@@ -1,3 +1,10 @@
+using DigitalTwin;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using NLog;
+using NLog.Extensions.Logging;
 using Oratoria.Application.Connection;
 using Oratoria.Application.Connection.Pollers;
 using Oratoria.Application.Module1.Signals;
@@ -10,16 +17,11 @@ using Oratoria.Application.TransportModule;
 using Oratoria.Application.TransportModule.Signals;
 using Oratoria.Application.VacuumModule;
 using Oratoria.Application.VacuumModule.Signals;
-using DigitalTwin;
-using Microsoft.Data.Sqlite;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using NLog;
-using NLog.Extensions.Logging;
+using Oratoria.Domain.Connection.Pollers.Abstractions;
+using Oratoria.Persistence;
+using Oratoria.Persistence.Services;
 using System.IO;
 using System.Windows;
-using Oratoria.Domain.Connection.Pollers.Abstractions;
-using Oratoria.Persistence.Services;
 namespace UI;
 
 /// <summary>
@@ -44,9 +46,16 @@ public partial class App : Application
         services.AddLogging(b => b.AddNLog());
 
         ConfigurateServices(services);
-        ConfigurateDB(services);
+        ConfigurateDataBase(services);
 
         _services = services.BuildServiceProvider();
+
+        using (var scope = _services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<AppDBContext>();
+            db.Database.Migrate();
+        }
+
         _services.GetRequiredService<GeneralPoller>().StartPoller();
         _services.GetRequiredService<MainWindow>().Show();
     }
@@ -77,7 +86,7 @@ public partial class App : Application
         services.AddSingleton<TransportContext>();
         services.AddSingleton<Module2Context>();
 
-        services.AddSingleton<GeneralPoller>(sp =>
+        services.AddSingleton(sp =>
         {
             var net = sp.GetRequiredService<NetContext>();
             var loggers = sp.GetRequiredService<ILoggerFactory>();
@@ -97,9 +106,11 @@ public partial class App : Application
     }
 
 
-    private static void ConfigurateDB(IServiceCollection services)
+    private static void ConfigurateDataBase(IServiceCollection services)
     {
-        services.AddScoped<IUserService, UserService>();
+        var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "app.db");
+        services.AddDbContext<AppDBContext>(o => o.UseSqlite($"Data Source={path}"));
+        services.AddTransient<IUserService, UserService>();
     }
 
     private static void EnsureLogDatabase()
