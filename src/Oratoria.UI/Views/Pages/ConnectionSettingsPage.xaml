@@ -1,0 +1,351 @@
+<Page x:Class="Oratoria.UI.Views.Pages.ConnectionSettingsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:vm="clr-namespace:Oratoria.UI.ViewModels"
+      mc:Ignorable="d"
+      d:DataContext="{d:DesignInstance Type=vm:ConnectionSettingsVM}"
+      Title="Сеть"
+      Background="{DynamicResource Brush.Window}">
+
+    <Grid Margin="16,12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <UniformGrid Grid.Row="0" Columns="5">
+            <!-- Module 1 -->
+            <Border Style="{StaticResource Container.SoftGroup}" Margin="8">
+                <StackPanel>
+                    <Label Content="Модуль 1 ВЧ очистки" Style="{StaticResource Label.Header}" FontSize="16" HorizontalAlignment="Center"/>
+                    <Grid Margin="0,8,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="36"/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Row="0" Content="Статус:" Style="{StaticResource Label.Body}"/>
+                        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                            <Ellipse Width="10" Height="10" Margin="0,0,6,0">
+                                <Ellipse.Style>
+                                    <Style TargetType="Ellipse">
+                                        <Setter Property="Fill" Value="Red"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Module1.IsConnected}" Value="True">
+                                                <Setter Property="Fill" Value="Green"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Ellipse.Style>
+                            </Ellipse>
+                            <TextBlock Text="{Binding Module1Status}" Style="{StaticResource Text.Header}"/>
+                        </StackPanel>
+                        <Label Grid.Row="1" Content="IP:" Style="{StaticResource Label.Body}"/>
+                        <Label Grid.Row="1" Grid.Column="1" Content="{Binding Module1CurrentIP}" Style="{StaticResource Label.Subtle}"/>
+                        <Label Grid.Row="2" Content="Порт:" Style="{StaticResource Label.Body}"/>
+                        <Label Grid.Row="2" Grid.Column="1" Content="{Binding Module1CurrentPort}" Style="{StaticResource Label.Subtle}"/>
+                        <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal">
+                            <Button Content="Отключиться" Style="{StaticResource Button.Base}"
+                                    Command="{Binding DisconnectCommandModule1}" Width="120" Margin="0,0,8,0"/>
+                            <Button Content="Подключиться" Style="{StaticResource Button.Base}"
+                                    Command="{Binding ConnectCommandModule1}" Width="120"/>
+                        </StackPanel>
+                    </Grid>
+                    <Border Style="{StaticResource Container.Divider}"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="36"/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Row="0" Content="Новый IP:" Style="{StaticResource Label.Body}"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" Height="22" Style="{StaticResource Input.TextBox}"
+                                 Text="{Binding NewIPModule1, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Label Grid.Row="1" Content="Новый порт:" Style="{StaticResource Label.Body}"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Height="22" Style="{StaticResource Input.TextBox}"
+                                 Text="{Binding NewPortModule1, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Button Grid.Row="2" Grid.Column="1" Content="Применить" Style="{StaticResource Button.Base}"
+                                Command="{Binding ApplySettingsCommandModule1}" Width="120" HorizontalAlignment="Left"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Module 2 -->
+            <Border Style="{StaticResource Container.SoftGroup}" Margin="8">
+                <StackPanel>
+                    <Label Content="Модуль 2 напыления" Style="{StaticResource Label.Header}" FontSize="16" HorizontalAlignment="Center"/>
+                    <Grid Margin="0,8,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="36"/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Row="0" Content="Статус:" Style="{StaticResource Label.Body}"/>
+                        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                            <Ellipse Width="10" Height="10" Margin="0,0,6,0">
+                                <Ellipse.Style>
+                                    <Style TargetType="Ellipse">
+                                        <Setter Property="Fill" Value="Red"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Module2.IsConnected}" Value="True">
+                                                <Setter Property="Fill" Value="Green"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Ellipse.Style>
+                            </Ellipse>
+                            <TextBlock Text="{Binding Module2Status}" Style="{StaticResource Text.Header}"/>
+                        </StackPanel>
+                        <Label Grid.Row="1" Content="IP:" Style="{StaticResource Label.Body}"/>
+                        <Label Grid.Row="1" Grid.Column="1" Content="{Binding Module2CurrentIP}" Style="{StaticResource Label.Subtle}"/>
+                        <Label Grid.Row="2" Content="Порт:" Style="{StaticResource Label.Body}"/>
+                        <Label Grid.Row="2" Grid.Column="1" Content="{Binding Module2CurrentPort}" Style="{StaticResource Label.Subtle}"/>
+                        <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal">
+                            <Button Content="Отключиться" Style="{StaticResource Button.Base}"
+                                    Command="{Binding DisconnectCommandModule2}" Width="120" Margin="0,0,8,0"/>
+                            <Button Content="Подключиться" Style="{StaticResource Button.Base}"
+                                    Command="{Binding ConnectCommandModule2}" Width="120"/>
+                        </StackPanel>
+                    </Grid>
+                    <Border Style="{StaticResource Container.Divider}"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="36"/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Row="0" Content="Новый IP:" Style="{StaticResource Label.Body}"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" Height="22" Style="{StaticResource Input.TextBox}"
+                                 Text="{Binding NewIPModule2, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Label Grid.Row="1" Content="Новый порт:" Style="{StaticResource Label.Body}"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Height="22" Style="{StaticResource Input.TextBox}"
+                                 Text="{Binding NewPortModule2, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Button Grid.Row="2" Grid.Column="1" Content="Применить" Style="{StaticResource Button.Base}"
+                                Command="{Binding ApplySettingsCommandModule2}" Width="120" HorizontalAlignment="Left"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Module 3 -->
+            <Border Style="{StaticResource Container.SoftGroup}" Margin="8">
+                <StackPanel>
+                    <Label Content="Модуль 3 напыления" Style="{StaticResource Label.Header}" FontSize="16" HorizontalAlignment="Center"/>
+                    <Grid Margin="0,8,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="36"/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Row="0" Content="Статус:" Style="{StaticResource Label.Body}"/>
+                        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                            <Ellipse Width="10" Height="10" Margin="0,0,6,0">
+                                <Ellipse.Style>
+                                    <Style TargetType="Ellipse">
+                                        <Setter Property="Fill" Value="Red"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Module3.IsConnected}" Value="True">
+                                                <Setter Property="Fill" Value="Green"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Ellipse.Style>
+                            </Ellipse>
+                            <TextBlock Text="{Binding Module3Status}" Style="{StaticResource Text.Header}"/>
+                        </StackPanel>
+                        <Label Grid.Row="1" Content="IP:" Style="{StaticResource Label.Body}"/>
+                        <Label Grid.Row="1" Grid.Column="1" Content="{Binding Module3CurrentIP}" Style="{StaticResource Label.Subtle}"/>
+                        <Label Grid.Row="2" Content="Порт:" Style="{StaticResource Label.Body}"/>
+                        <Label Grid.Row="2" Grid.Column="1" Content="{Binding Module3CurrentPort}" Style="{StaticResource Label.Subtle}"/>
+                        <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal">
+                            <Button Content="Отключиться" Style="{StaticResource Button.Base}"
+                                    Command="{Binding DisconnectCommandModule3}" Width="120" Margin="0,0,8,0"/>
+                            <Button Content="Подключиться" Style="{StaticResource Button.Base}"
+                                    Command="{Binding ConnectCommandModule3}" Width="120"/>
+                        </StackPanel>
+                    </Grid>
+                    <Border Style="{StaticResource Container.Divider}"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="36"/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Row="0" Content="Новый IP:" Style="{StaticResource Label.Body}"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" Height="22" Style="{StaticResource Input.TextBox}"
+                                 Text="{Binding NewIPModule3, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Label Grid.Row="1" Content="Новый порт:" Style="{StaticResource Label.Body}"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Height="22" Style="{StaticResource Input.TextBox}"
+                                 Text="{Binding NewPortModule3, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Button Grid.Row="2" Grid.Column="1" Content="Применить" Style="{StaticResource Button.Base}"
+                                Command="{Binding ApplySettingsCommandModule3}" Width="120" HorizontalAlignment="Left"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Module 4 -->
+            <Border Style="{StaticResource Container.SoftGroup}" Margin="8">
+                <StackPanel>
+                    <Label Content="Модуль 4 напыления" Style="{StaticResource Label.Header}" FontSize="16" HorizontalAlignment="Center"/>
+                    <Grid Margin="0,8,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="36"/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Row="0" Content="Статус:" Style="{StaticResource Label.Body}"/>
+                        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                            <Ellipse Width="10" Height="10" Margin="0,0,6,0">
+                                <Ellipse.Style>
+                                    <Style TargetType="Ellipse">
+                                        <Setter Property="Fill" Value="Red"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Module4.IsConnected}" Value="True">
+                                                <Setter Property="Fill" Value="Green"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Ellipse.Style>
+                            </Ellipse>
+                            <TextBlock Text="{Binding Module4Status}" Style="{StaticResource Text.Header}"/>
+                        </StackPanel>
+                        <Label Grid.Row="1" Content="IP:" Style="{StaticResource Label.Body}"/>
+                        <Label Grid.Row="1" Grid.Column="1" Content="{Binding Module4CurrentIP}" Style="{StaticResource Label.Subtle}"/>
+                        <Label Grid.Row="2" Content="Порт:" Style="{StaticResource Label.Body}"/>
+                        <Label Grid.Row="2" Grid.Column="1" Content="{Binding Module4CurrentPort}" Style="{StaticResource Label.Subtle}"/>
+                        <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal">
+                            <Button Content="Отключиться" Style="{StaticResource Button.Base}"
+                                    Command="{Binding DisconnectCommandModule4}" Width="120" Margin="0,0,8,0"/>
+                            <Button Content="Подключиться" Style="{StaticResource Button.Base}"
+                                    Command="{Binding ConnectCommandModule4}" Width="120"/>
+                        </StackPanel>
+                    </Grid>
+                    <Border Style="{StaticResource Container.Divider}"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="36"/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Row="0" Content="Новый IP:" Style="{StaticResource Label.Body}"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" Height="22" Style="{StaticResource Input.TextBox}"
+                                 Text="{Binding NewIPModule4, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Label Grid.Row="1" Content="Новый порт:" Style="{StaticResource Label.Body}"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Height="22" Style="{StaticResource Input.TextBox}"
+                                 Text="{Binding NewPortModule4, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Button Grid.Row="2" Grid.Column="1" Content="Применить" Style="{StaticResource Button.Base}"
+                                Command="{Binding ApplySettingsCommandModule4}" Width="120" HorizontalAlignment="Left"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Transport -->
+            <Border Style="{StaticResource Container.SoftGroup}" Margin="8">
+                <StackPanel>
+                    <Label Content="Транспортный модуль" Style="{StaticResource Label.Header}" FontSize="16" HorizontalAlignment="Center"/>
+                    <Grid Margin="0,8,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="36"/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Row="0" Content="Статус:" Style="{StaticResource Label.Body}"/>
+                        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                            <Ellipse Width="10" Height="10" Margin="0,0,6,0">
+                                <Ellipse.Style>
+                                    <Style TargetType="Ellipse">
+                                        <Setter Property="Fill" Value="Red"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Transport.IsConnected}" Value="True">
+                                                <Setter Property="Fill" Value="Green"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Ellipse.Style>
+                            </Ellipse>
+                            <TextBlock Text="{Binding TransportStatus}" Style="{StaticResource Text.Header}"/>
+                        </StackPanel>
+                        <Label Grid.Row="1" Content="IP:" Style="{StaticResource Label.Body}"/>
+                        <Label Grid.Row="1" Grid.Column="1" Content="{Binding TransportCurrentIP}" Style="{StaticResource Label.Subtle}"/>
+                        <Label Grid.Row="2" Content="Порт:" Style="{StaticResource Label.Body}"/>
+                        <Label Grid.Row="2" Grid.Column="1" Content="{Binding TransportCurrentPort}" Style="{StaticResource Label.Subtle}"/>
+                        <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal">
+                            <Button Content="Отключиться" Style="{StaticResource Button.Base}"
+                                    Command="{Binding DisconnectCommandTransport}" Width="120" Margin="0,0,8,0"/>
+                            <Button Content="Подключиться" Style="{StaticResource Button.Base}"
+                                    Command="{Binding ConnectCommandTransport}" Width="120"/>
+                        </StackPanel>
+                    </Grid>
+                    <Border Style="{StaticResource Container.Divider}"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="28"/>
+                            <RowDefinition Height="36"/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Row="0" Content="Новый IP:" Style="{StaticResource Label.Body}"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" Height="22" Style="{StaticResource Input.TextBox}"
+                                 Text="{Binding NewIPTransport, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Label Grid.Row="1" Content="Новый порт:" Style="{StaticResource Label.Body}"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Height="22" Style="{StaticResource Input.TextBox}"
+                                 Text="{Binding NewPortTransport, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Button Grid.Row="2" Grid.Column="1" Content="Применить" Style="{StaticResource Button.Base}"
+                                Command="{Binding ApplySettingsCommandTransport}" Width="120" HorizontalAlignment="Left"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+        </UniformGrid>
+
+        <Label Grid.Row="1"
+               Content="{Binding CurrentHostIP}"
+               ContentStringFormat="IP хоста: {0}"
+               Style="{StaticResource Label.Body}"
+               Margin="8,8,0,0"/>
+    </Grid>
+</Page>

@@ -1,5 +1,6 @@
 using Oratoria.UI.Controls.Controls.Navigation;
 using Oratoria.UI.Helpers;
+using Oratoria.UI.Logging;
 using Oratoria.UI.Views.Pages;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -22,12 +23,13 @@ public class MainWindowVM : INotifyPropertyChanged
             .Item<Module2SignalsPage>("Сигналы")
             .Item<Module2SettingsPage>("Настройки")
             .Item<Module2LogsPage>("Журнал"))
+        .Item<ConnectionSettingsPage>("Сеть")
         .Build();
     }
 
     public IReadOnlyList<NavigationItem> Navigation { get; }
 
-    public ObservableCollection<object> Logs { get; } = new();
+    public ObservableCollection<LogEntry> Logs => DataGridTarget.LogEntries;
 
     public ObservableCollection<object> Alarms { get; } = new();
 

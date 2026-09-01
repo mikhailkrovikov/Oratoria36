@@ -40,7 +40,18 @@ namespace Oratoria.Domain.Connection
                 }
             }
         }
-        public bool IsConnected { get; set; }
+        public bool IsConnected
+        {
+            get => field;
+            set
+            {
+                if (field != value)
+                {
+                    field = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         public ModbusTCPConfig(object locker, ILogger logger)
         {

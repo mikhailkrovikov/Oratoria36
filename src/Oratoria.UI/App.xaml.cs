@@ -20,7 +20,9 @@ using Oratoria.Application.VacuumModule.Signals;
 using Oratoria.Domain.Connection.Pollers.Abstractions;
 using Oratoria.Persistence;
 using Oratoria.Persistence.Services;
+using Oratoria.UI.Logging;
 using Oratoria.UI.ViewModels;
+using Oratoria.UI.Views.Pages;
 using System.IO;
 using System.Windows;
 namespace UI;
@@ -40,7 +42,11 @@ public partial class App : Application
         EnsureLogDatabase();
         LogManager
             .Setup()
-            .SetupExtensions(ext => ext.RegisterAssembly("NLog.Database"));
+            .SetupExtensions(ext =>
+            {
+                ext.RegisterTarget<DataGridTarget>();
+                ext.RegisterAssembly("NLog.Database");
+            });
         LogManager
             .Setup()
             .LoadConfigurationFromFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "NLog.config"));
@@ -103,6 +109,8 @@ public partial class App : Application
             return new GeneralPoller(pollers, sp.GetRequiredService<ILogger<GeneralPoller>>());
         });
 
+        services.AddTransient<ConnectionSettingsVM>();
+        services.AddTransient<ConnectionSettingsPage>();
         services.AddSingleton<MainWindowVM>();
         services.AddSingleton<MainWindow>();
     }
