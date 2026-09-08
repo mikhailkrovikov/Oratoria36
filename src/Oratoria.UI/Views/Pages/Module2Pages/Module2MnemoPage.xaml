@@ -1,18 +1,279 @@
-﻿<Page x:Class="Oratoria.UI.Views.Pages.Module2MnemoPage"
+﻿<Page x:Class="Oratoria.UI.Views.Pages.Module2Pages.Module2MnemoPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:pages="clr-namespace:Oratoria.UI.Views.Pages"
+      xmlns:converters="clr-namespace:Oratoria.UI.Converters"
+      xmlns:controls="clr-namespace:Oratoria.UI.Views.Controls"
       xmlns:mnemo="clr-namespace:Oratoria.UI.Controls.Mnemo;assembly=Oratoria.UI.Controls"
       mc:Ignorable="d"
-      d:DataContext="{d:DesignInstance Type=pages:Module2MnemoDemo, IsDesignTimeCreatable=True}"
       d:DesignHeight="850" d:DesignWidth="1920"
       Title="Module2Mnemo"
       Background="{DynamicResource Brush.Window}">
 
-    <Grid>
-        <mnemo:ValveControl Color="{Binding FK_KNState}" ErrorIcon="{Binding FK_KNError}" Label="{Binding FK_KNName}" Command="{Binding FK_KNCommand}" HorizontalAlignment="Left" Margin="444,280,0,0" VerticalAlignment="Top" Height="102" Width="100"/>
+    <Page.Resources>
+        <converters:PipeColorToBrushConverter x:Key="PipeColorConverter"/>
+    </Page.Resources>
 
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="5*"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="38.75"/>
+            <ColumnDefinition Width="1260"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="1" VerticalAlignment="Top">
+            <TextBlock Text="{Binding ModuleName}"
+                       Style="{StaticResource Text.Header}"
+                       FontSize="24"/>
+        </StackPanel>
+
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Path Stroke="{StaticResource Brush.BorderLight}"
+              StrokeThickness="2"
+              Data="M982,332 L830,332 830,167 982,167 Z"/>
+
+            <Path Stroke="{Binding Line3, Converter={StaticResource PipeColorConverter}}"
+              StrokeThickness="3"
+              Data="M970,416 L730,416"/>
+
+            <Path Stroke="{Binding ArLine, Converter={StaticResource PipeColorConverter}}"
+              StrokeThickness="3"
+              Data="M1130,416 L1040,416"/>
+
+            <Path Stroke="{Binding N2Line, Converter={StaticResource PipeColorConverter}}"
+              StrokeThickness="3"
+              Data="M1125,535 L1040,535"/>
+
+            <Path Stroke="{Binding Line2, Converter={StaticResource PipeColorConverter}}"
+              StrokeThickness="3"
+              Data="M940,535 L850,535"/>
+
+            <Path Stroke="{Binding Line3, Converter={StaticResource PipeColorConverter}}"
+              StrokeThickness="3"
+              Data="M790,535 L730,535 730,332"/>
+
+            <Path Stroke="{Binding VacLine, Converter={StaticResource PipeColorConverter}}"
+              StrokeThickness="3"
+              Data="M575,486 L540,486"/>
+
+            <Path Stroke="{Binding VacLine, Converter={StaticResource PipeColorConverter}}"
+              StrokeThickness="3"
+              Data="M480,550 L540,550 540,422 480,422"/>
+
+            <Path Stroke="{Binding Line1, Converter={StaticResource PipeColorConverter}}"
+              StrokeThickness="3"
+              Data="M420,422 L300,422 300,310 385,310"/>
+
+            <Path Stroke="{Binding Line4, Converter={StaticResource PipeColorConverter}}"
+              StrokeThickness="3"
+              Data="M420,550 L150,550 150,200"/>
+
+            <Path Stroke="{Binding Line5, Converter={StaticResource PipeColorConverter}}"
+              StrokeThickness="3"
+              Data="M200,150 L260,150"/>
+
+            <Path Stroke="{Binding Line6, Converter={StaticResource PipeColorConverter}}"
+              StrokeThickness="3"
+              Data="M330,150 L385,150"/>
+
+            <mnemo:CameraControl
+            HorizontalAlignment="Left"
+            Margin="295,16,0,0"
+            VerticalAlignment="Top"
+            Height="318"
+            Width="574"/>
+            <mnemo:PressureControl
+            LowVacuum="{Binding LowVacuumDisplay}"
+            HighVacuum="{Binding HighVacuumDisplay}"
+            HorizontalAlignment="Left"
+            Margin="724,28,0,0"
+            VerticalAlignment="Top"/>
+            <mnemo:ValveControl
+            Color="{Binding FK_KNState}"
+            ErrorIcon="{Binding FK_KNError}"
+            Label="{Binding FK_KNName}"
+            Command="{Binding FK_KNCommand}"
+            HorizontalAlignment="Left"
+            Margin="393,473,0,0"
+            VerticalAlignment="Top"
+            Height="100"
+            Width="120"/>
+            <mnemo:ValveControl
+            Color="{Binding FK_M2State}"
+            ErrorIcon="{Binding FK_M2Error}"
+            Label="{Binding FK_M2Name}"
+            Command="{Binding FK_M2Command}"
+            HorizontalAlignment="Left"
+            Margin="393,345,0,0"
+            VerticalAlignment="Top"
+            Width="120"
+            Height="100"/>
+            <mnemo:ValveControl
+            Color="{Binding NitrogenLeakerState}"
+            ErrorIcon="{Binding NitrogenLeakerError}"
+            Label="{Binding NitrogenLeakerName}"
+            Command="{Binding NitrogenLeakerCommand}"
+            HorizontalAlignment="Left"
+            Margin="761,458,0,0"
+            VerticalAlignment="Top"
+            Width="120"
+            Height="100"/>
+            <mnemo:LeakerControl
+            Color="{Binding ArgonLeakerState}"
+            Label="{Binding ArgonLeakerName}"
+            Setpoint="{Binding ArgonLeakerSetpoint}"
+            Command="{Binding ArgonLeakerCommand}"
+            HorizontalAlignment="Left"
+            Margin="937,341,0,0"
+            VerticalAlignment="Top"
+            Width="130"
+            Height="115"/>
+            <mnemo:ShutterControl
+            Color="{Binding ShutterState}"
+            ErrorIcon="{Binding ShutterError}"
+            Label="{Binding ShutterName}"
+            Command="{Binding ShutterCommand}"
+            HorizontalAlignment="Left"
+            Margin="771,150,0,0"
+            VerticalAlignment="Top"
+            Width="66"
+            Height="173"/>
+            <mnemo:RectangleStateControl
+            Color="{Binding FlapState}"
+            ErrorIcon="{Binding FlapError}"
+            Label="{Binding FlapName}"
+            Command="{Binding FlapCommand}"
+            HorizontalAlignment="Left"
+            Margin="521,149,0,0"
+            VerticalAlignment="Top"
+            Width="122"
+            Height="18"/>
+            <mnemo:HeaterControl
+            Color="{Binding HeaterState}"
+            ErrorIcon="{Binding HeaterError}"
+            Label="{Binding HeaterName}"
+            Command="{Binding HeaterCommand}"
+            HorizontalAlignment="Left"
+            Margin="507,265,0,0"
+            VerticalAlignment="Top"
+            Height="55"
+            Width="150"/>
+            <mnemo:MagnetronsControl
+            M1Color="{Binding Magnetron1State}"
+            M1ErrorIcon="{Binding Magnetron1Error}"
+            M1Command="{Binding Magnetron1Command}"
+            M2Color="{Binding Magnetron2State}"
+            M2ErrorIcon="{Binding Magnetron2Error}"
+            M2Command="{Binding Magnetron2Command}"
+            M3Color="{Binding Magnetron3State}"
+            M3ErrorIcon="{Binding Magnetron3Error}"
+            M3Command="{Binding Magnetron3Command}"
+            HorizontalAlignment="Left"
+            Margin="521,19,0,0"
+            VerticalAlignment="Top"
+            Height="122"
+            Width="122"/>
+            <mnemo:RRGControl
+            Color="{Binding RRGState}"
+            ErrorIcon="{Binding RRGError}"
+            Label="{Binding RRGLabel}"
+            RRGSetPoint="{Binding RRGSetPoint}"
+            RRGRealValue="{Binding RRGRealValue}"
+            Command="{Binding RRGCommand}"
+            HorizontalAlignment="Left"
+            Margin="937,494,0,0"
+            VerticalAlignment="Top"
+            Height="100"
+            Width="130"/>
+            <mnemo:CryoPumpControl
+            Color="{Binding CryoPumpState}"
+            ErrorIcon="{Binding CryoPumpError}"
+            Label="{Binding CryoPumpName}"
+            Command="{Binding CryoPumpCommand}"
+            HorizontalAlignment="Left"
+            Margin="76,50,0,0"
+            VerticalAlignment="Top"
+            Height="200"
+            Width="170"/>
+            <mnemo:ManipulatorControl
+            Color="{Binding ManipulatorState}"
+            Position="{Binding ManipulatorPosition}"
+            PositionLabel="{Binding ManipulatorPositionLabel}"
+            ErrorIcon="{Binding ManipulatorError}"
+            Command="{Binding ManipulatorCommand}"
+            HorizontalAlignment="Left"
+            Margin="839,242,0,0"
+            VerticalAlignment="Top"
+            Height="100"
+            Width="135"/>
+            <mnemo:TableControl
+            Color="{Binding TableState}"
+            Position="{Binding TablePosition}"
+            ErrorIcon="{Binding TableError}"
+            Command="{Binding TableCommand}"
+            HorizontalAlignment="Left"
+            Margin="443,170,0,0"
+            VerticalAlignment="Top"
+            Width="200"
+            Height="90"/>
+            <mnemo:ThrottleControl
+            Color="{Binding ThrottleState}"
+            ErrorIcon="{Binding ThrottleError}"
+            Label="{Binding ThrottleName}"
+            Position="{Binding ThrottlePosition}"
+            PositionLabel="{Binding ThrottlePositionLabel}"
+            Command="{Binding ThrottleCommand}"
+            HorizontalAlignment="Left"
+            Margin="238,67,0,0"
+            VerticalAlignment="Top"
+            Height="155"
+            Width="122"/>
+            <mnemo:GasLabelControl
+            Label="Ar"
+            HorizontalAlignment="Left"
+            Margin="1121,397,0,0"
+            VerticalAlignment="Top"/>
+            <mnemo:GasLabelControl
+            Label="N2"
+            HorizontalAlignment="Left"
+            Margin="1121,516,0,0"
+            VerticalAlignment="Top"/>
+            <mnemo:GasLabelControl
+            Label="Vac"
+            HorizontalAlignment="Left"
+            Margin="572,467,0,0"
+            VerticalAlignment="Top"/>
+            <Button Content="каретка" Command="{Binding CarriageCommand}" HorizontalAlignment="Left" Margin="1002,228,0,0" VerticalAlignment="Top" Width="135" Height="55"/>
+        </Grid>
+
+        <Grid Grid.Column="2" Grid.RowSpan="3" Margin="0,16,8,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <controls:ModuleRealValue DataContext="{Binding RealValues}"
+                                      Grid.Row="0"
+                                      Width="600"
+                                      HorizontalAlignment="Left"/>
+
+            <Frame x:Name="DeviceHost"
+                   Grid.Row="1"
+                   NavigationUIVisibility="Hidden"
+                   Width="600"
+                   Margin="0,8,0,0"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Stretch"
+                   Background="{DynamicResource Brush.Surface}"
+                   BorderBrush="{DynamicResource Brush.BorderLight}"
+                   BorderThickness="0.5"/>
+        </Grid>
     </Grid>
 </Page>

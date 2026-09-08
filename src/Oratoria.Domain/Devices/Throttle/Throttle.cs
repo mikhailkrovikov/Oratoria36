@@ -10,51 +10,77 @@ namespace Oratoria.Domain.Devices.Throttle
 {
     public class Throttle : MechanicDevice<ThrottlePosition, ThrottleErrors>
     {
-        public Throttle(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory, ISettingsContext settings) : base(deviceId, signals, loggerFactory, settings)
+        public Throttle(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory, ISettingsContext settings) 
+            : base(deviceId, signals, loggerFactory, settings)
         {
         }
 
-
+        [DeviceAction("Открыть")]
         public async Task<bool> Open()
         {
-            if (MapState(State) == ThrottlePosition.Throttling)
-                return await Move(ThrottlePosition.Throttling, ThrottlePosition.Open) == ThrottlePosition.Open;
-            else if (MapState(State) == ThrottlePosition.Close)
-                return await Move(ThrottlePosition.Close, ThrottlePosition.Open) == ThrottlePosition.Open;
-            else return false;
+            try
+            {
+                if (MapState(State) == ThrottlePosition.Throttling)
+                    return await Move(ThrottlePosition.Throttling, ThrottlePosition.Open) == ThrottlePosition.Open;
+                else if (MapState(State) == ThrottlePosition.Close)
+                    return await Move(ThrottlePosition.Close, ThrottlePosition.Open) == ThrottlePosition.Open;
+                else return false;
+
+            }
+            catch (InvalidOperationException ex)
+            {
+                Logger.LogError(ex.Message);
+                return false;
+            }
         }
 
-
+        [DeviceAction("Закрыть")]
         public async Task<bool> Close()
         {
-            if (MapState(State) == ThrottlePosition.Throttling)
-                return await Move(ThrottlePosition.Throttling, ThrottlePosition.Close) == ThrottlePosition.Close;
-            else if (MapState(State) == ThrottlePosition.Open)
-                return await Move(ThrottlePosition.Open, ThrottlePosition.Close) == ThrottlePosition.Close;
-            else return false;
+            try
+            {
+                if (MapState(State) == ThrottlePosition.Throttling)
+                    return await Move(ThrottlePosition.Throttling, ThrottlePosition.Close) == ThrottlePosition.Close;
+                else if (MapState(State) == ThrottlePosition.Open)
+                    return await Move(ThrottlePosition.Open, ThrottlePosition.Close) == ThrottlePosition.Close;
+                else return false;
+            }
+            catch (InvalidOperationException ex)
+            {
+                Logger.LogError(ex.Message);
+                return false;
+            }
         }
 
-
+        [DeviceAction("Дросселирование")]
         public async Task<bool> Throttling()
         {
-            if (MapState(State) == ThrottlePosition.Close)
-                return await Move(ThrottlePosition.Close, ThrottlePosition.Throttling) == ThrottlePosition.Throttling;
-            else if (MapState(State) == ThrottlePosition.Open)
-                return await Move(ThrottlePosition.Open, ThrottlePosition.Throttling) == ThrottlePosition.Throttling;
-            else return false;
+            try
+            {
+                if (MapState(State) == ThrottlePosition.Close)
+                    return await Move(ThrottlePosition.Close, ThrottlePosition.Throttling) == ThrottlePosition.Throttling;
+                else if (MapState(State) == ThrottlePosition.Open)
+                    return await Move(ThrottlePosition.Open, ThrottlePosition.Throttling) == ThrottlePosition.Throttling;
+                else return false;
+            }
+            catch (InvalidOperationException ex)
+            {
+                Logger.LogError(ex.Message);
+                return false;
+            }
         }
 
         public override MechanicMovingProfile<ThrottleErrors> GetMovingProfile(ThrottlePosition startPos, ThrottlePosition endPos)
         {
             if (startPos == endPos)
-                throw new Exception("позиции перемещения стола совпадают");
+                throw new InvalidOperationException("позиции перемещения стола совпадают");
             var startPosError = ThrottleErrors.IndefinitePosition;
             var revers = endPos - startPos < 0;
             var tormos = true;
-            InputSignal<bool> startPosSignal = GetThrottleInputSignalFromPos(startPos);
-            InputSignal<bool> endPosSignal = GetThrottleInputSignalFromPos(endPos);
-            OutputSignal<bool> endPosOutSignal = GetThrottleOutputSignalFromPos(endPos);
-            ThrottleErrors endPosError = GetEndPosError(startPos, endPos);
+            var startPosSignal = GetThrottleInputSignalFromPos(startPos);
+            var endPosSignal = GetThrottleInputSignalFromPos(endPos);
+            var endPosOutSignal = GetThrottleOutputSignalFromPos(endPos);
+            var endPosError = GetEndPosError(startPos, endPos);
             return new MechanicMovingProfile<ThrottleErrors>(endPosOutSignal, startPosSignal, endPosSignal, revers, tormos, endPosError, startPosError);
         }
 
@@ -66,7 +92,7 @@ namespace Oratoria.Domain.Devices.Throttle
                 return Position2In;
             if (pos == ThrottlePosition.Close)
                 return Position1In;
-            throw new Exception("неверная позиция дроссельного затвора");
+            throw new InvalidOperationException("неверная позиция дроссельного затвора");
         }
 
         private OutputSignal<bool> GetThrottleOutputSignalFromPos(ThrottlePosition pos)
@@ -77,7 +103,7 @@ namespace Oratoria.Domain.Devices.Throttle
                 return Position2Out;
             if (pos == ThrottlePosition.Close)
                 return Position1Out;
-            throw new Exception("неверная позиция дроссельного затвора");
+            throw new InvalidOperationException("неверная позиция дроссельного затвора");
         }
 
         private static ThrottleErrors GetEndPosError(ThrottlePosition startPos, ThrottlePosition endPos)
@@ -88,7 +114,7 @@ namespace Oratoria.Domain.Devices.Throttle
                 return ThrottleErrors.CannotOpen;
             if (endPos == ThrottlePosition.Throttling)
                 return ThrottleErrors.CannotThrottling;
-            throw new Exception("Неверные начальная или конечная позиция");
+            throw new InvalidOperationException("Неверные начальная или конечная позиция");
         }
 
         protected override ThrottlePosition MapState(MechanicsPositions position) => position switch

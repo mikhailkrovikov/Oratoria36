@@ -28,27 +28,27 @@ namespace Oratoria.Application.Module2.Signals
         public InputSignal<double> BPNCurrent { get; set; }
 
 
-        [MagnetronCurrentSignal<Magnetrons>(Magnetrons.Magnetrn1)]
+        [MagnetronCurrentSignal<Magnetrons>(Magnetrons.Magnetron1)]
         public InputSignal<double> BPM1Current { get; set; }
 
 
-        [MagnetronVoltageSignal<Magnetrons>(Magnetrons.Magnetrn1)]
+        [MagnetronVoltageSignal<Magnetrons>(Magnetrons.Magnetron1)]
         public InputSignal<double> BPM1Voltage { get; set; }
 
 
-        [MagnetronCurrentSignal<Magnetrons>(Magnetrons.Magnetrn2)]
+        [MagnetronCurrentSignal<Magnetrons>(Magnetrons.Magnetron2)]
         public InputSignal<double> BPM2Current { get; set; }
 
 
-        [MagnetronVoltageSignal<Magnetrons>(Magnetrons.Magnetrn2)]
+        [MagnetronVoltageSignal<Magnetrons>(Magnetrons.Magnetron2)]
         public InputSignal<double> BPM2Voltage { get; set; }
 
 
-        [MagnetronCurrentSignal<Magnetrons>(Magnetrons.Magnetrn3)]
+        [MagnetronCurrentSignal<Magnetrons>(Magnetrons.Magnetron3)]
         public InputSignal<double> BPM3Current { get; set; }
 
 
-        [MagnetronVoltageSignal<Magnetrons>(Magnetrons.Magnetrn3)]
+        [MagnetronVoltageSignal<Magnetrons>(Magnetrons.Magnetron3)]
         public InputSignal<double> BPM3Voltage { get; set; }
 
 

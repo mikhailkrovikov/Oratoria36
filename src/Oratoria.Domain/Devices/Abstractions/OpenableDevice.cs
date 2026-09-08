@@ -10,13 +10,13 @@ namespace Oratoria.Domain.Devices.Abstractions
 {
     public abstract class OpenableDevice : Device<OpenableStatus, OpenableErrors>
     {
-        protected InputSignal<bool>? IsOpen { get; set; }
+        public InputSignal<bool>? IsOpen { get; set; }
 
-        protected InputSignal<bool>? IsClose { get; set; }
+        public InputSignal<bool>? IsClose { get; set; }
 
-        protected OutputSignal<bool>? Open { get; set; }
+        public OutputSignal<bool>? Open { get; set; }
 
-        protected OutputSignal<bool>? Close { get; set; }
+        public OutputSignal<bool>? Close { get; set; }
 
         public Setting<int> TimeForWarning { get; }
 
@@ -70,7 +70,7 @@ namespace Oratoria.Domain.Devices.Abstractions
             TimeForError = Settings.GetSetting(deviceId, nameof(TimeForError), "Время до ошибки", "сек", 15, 1, 3600);
         }
 
-
+        [DeviceAction("Открыть")]
         public virtual async Task<bool> OpenValve()
         {
             Logger.LogInformation($"{DeviceName}: открытие");
@@ -175,6 +175,8 @@ namespace Oratoria.Domain.Devices.Abstractions
             }
         }
 
+
+        [DeviceAction("Закрыть")]
         public virtual async Task<bool> CloseValve()
         {
             Logger.LogInformation($"{DeviceName}: закрытие");

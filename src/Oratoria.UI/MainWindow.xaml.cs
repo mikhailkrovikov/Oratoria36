@@ -6,7 +6,7 @@ using Oratoria.UI.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace UI;
+namespace Oratoria.UI;
 
 public partial class MainWindow : Window
 {

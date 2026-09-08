@@ -45,13 +45,21 @@ namespace Oratoria.Domain.Devices.Heater
             PowerOn?.OnSignalChanged += _ => OnStateChanged();
         }
 
-        public virtual async Task<bool> TurnOn(double setpoint)
+        [DeviceAction("Включить")]
+        public virtual async Task<bool> TurnOn([DeviceActionParameter("уставка")] double setpoint)
         {
+            if (setpoint == 0)
+            {
+                HeaterPowerSetPoint.Value = setpoint;
+                return await base.TurnOff();
+            }
             var result = await base.TurnOn();
             if (result)
                 HeaterPowerSetPoint.Value = setpoint;
             return result;
         }
+
+        [DeviceAction("Выключить")]
         public virtual async Task<bool> ResetSetpoint()
         {
             HeaterPowerSetPoint.Value = 0;

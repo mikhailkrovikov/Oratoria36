@@ -4,6 +4,7 @@ using Oratoria.Domain.Devices.Abstractions.MechanicAttributes;
 using Oratoria.Domain.Devices.Flap.FlapAttributes;
 using Oratoria.Domain.Devices.Heater.HeaterAttributes;
 using Oratoria.Domain.Devices.Leaker.LeakerAttributes;
+using Oratoria.Domain.Devices.Magnetron.MagnetronAttributes;
 using Oratoria.Domain.Devices.Shutter.ShutterAttributes;
 using Oratoria.Domain.Devices.Valve.ValveAttributes;
 using Oratoria.Domain.Signals;
@@ -19,6 +20,10 @@ namespace Oratoria.Application.Module2.Signals
         IOutputStrategy<bool> _strategy;
 
         public ObservableCollection<OutputSignal<bool>> DigitalOutputs;
+
+        [MagnetronRotatingSignal<Magnetrons>(Magnetrons.Magnetron1)]
+        [MagnetronRotatingSignal<Magnetrons>(Magnetrons.Magnetron2)]
+        [MagnetronRotatingSignal<Magnetrons>(Magnetrons.Magnetron3)]
         public OutputSignal<bool> MagnetronsRotation { get; set; }
         public OutputSignal<bool> ResetVacuumetrAlarm { get; set; }
         public OutputSignal<bool> ControlOfVacuum { get; set; }
@@ -27,8 +32,17 @@ namespace Oratoria.Application.Module2.Signals
 
         [HeaterPowerOnSignal<Heaters>(Heaters.Heater)]
         public OutputSignal<bool> BPNOn { get; set; }
+
+
+        [MagnetronPowerOnSignal<Magnetrons>(Magnetrons.Magnetron1)]
         public OutputSignal<bool> BPM1On { get; set; }
+
+
+        [MagnetronPowerOnSignal<Magnetrons>(Magnetrons.Magnetron2)]
         public OutputSignal<bool> BPM2On { get; set; }
+
+
+        [MagnetronPowerOnSignal<Magnetrons>(Magnetrons.Magnetron3)]
         public OutputSignal<bool> BPM3On { get; set; }
 
         [LeakerOpenSignal<Leakers>(Leakers.ArgonLeaker)]

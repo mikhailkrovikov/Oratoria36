@@ -48,6 +48,7 @@ namespace Oratoria.Domain.Devices.AVRPump
             RutsPumpOn.OnSignalChanged += _ => OnStateChanged();
         }
 
+        [DeviceAction("Включить")]
         public virtual async Task<bool> TurnOn()
         {
             Logger.LogInformation($"{DeviceName}: включение");
@@ -147,6 +148,8 @@ namespace Oratoria.Domain.Devices.AVRPump
             }
         }
 
+
+        [DeviceAction("Выключить")]
         public virtual async Task<bool> TurnOff()
         {
             Logger.LogInformation($"{DeviceName}: выключение");

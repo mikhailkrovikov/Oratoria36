@@ -31,9 +31,9 @@ namespace Oratoria.Application.Module2
             Throttle = Factory.CreateDevice<Throttle>(Mechanics.Throttle);
             Table = Factory.CreateDevice<Table>(Mechanics.Table);
             Heater = Factory.CreateDevice<Heater>(Heaters.Heater);
-            Magnetron1 = Factory.CreateDevice<Magnetron>(Magnetrons.Magnetrn1);
-            Magnetron2 = Factory.CreateDevice<Magnetron>(Magnetrons.Magnetrn2);
-            Magnetron3 = Factory.CreateDevice<Magnetron>(Magnetrons.Magnetrn3);
+            Magnetron1 = Factory.CreateDevice<Magnetron>(Magnetrons.Magnetron1);
+            Magnetron2 = Factory.CreateDevice<Magnetron>(Magnetrons.Magnetron2);
+            Magnetron3 = Factory.CreateDevice<Magnetron>(Magnetrons.Magnetron3);
             CryogenicPump = Factory.CreateDevice<CryogenicPump>(Pumps.CryogenicPump);
             VICB = Factory.CreateDevice<HighVacuumSensor>(PressureSensors.VICB);
         }

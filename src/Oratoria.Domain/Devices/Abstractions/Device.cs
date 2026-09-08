@@ -33,6 +33,12 @@ namespace Oratoria.Domain.Devices.Abstractions
             Settings = settings;
         }
 
+        [DeviceAction("Сброс ошибок")]
+        public void ResetErrors()
+        {
+            DeviceErrors.ResetAllErrors();
+        }
+
         protected void OnStateChanged()
         {
             StateChanged?.Invoke();

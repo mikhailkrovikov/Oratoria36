@@ -1,5 +1,6 @@
 using Oratoria.Application.TransportModule.DeviceCollection;
 using Oratoria.Domain.Connection;
+using Oratoria.Domain.Devices.Abstractions.MechanicAttributes;
 using Oratoria.Domain.Devices.Door.DoorAttributes;
 using Oratoria.Domain.Devices.Shutter.ShutterAttributes;
 using Oratoria.Domain.Signals;
@@ -24,12 +25,41 @@ namespace Oratoria.Application.TransportModule.Signals
         public InputSignal<bool> Shl1_Tormos { get; set; }
         public InputSignal<bool> Shl1_Peregruz { get; set; }
         public InputSignal<bool> Shl1_UURG1 { get; set; }
+
+
+        [MechanicPosition1InputSignal<Mechanics>(Mechanics.Сarriage)]
         public InputSignal<bool> Shl2_Pos1 { get; set; }
+
+
+        [MechanicPosition2InputSignal<Mechanics>(Mechanics.Сarriage)]
         public InputSignal<bool> Shl2_Pos2 { get; set; }
+
+
+        [MechanicPosition3InputSignal<Mechanics>(Mechanics.Сarriage)]
         public InputSignal<bool> Shl2_Pos3 { get; set; }
+
+
+        [MechanicPosition4InputSignal<Mechanics>(Mechanics.Сarriage)]
         public InputSignal<bool> Shl2_Pos4 { get; set; }
+
+
+        [MechanicPosition5InputSignal<Mechanics>(Mechanics.Сarriage)]
+        public InputSignal<bool> Position5 { get; set; }
+
+
+        [MechanicPosition6InputSignal<Mechanics>(Mechanics.Сarriage)]
+        public InputSignal<bool> Position6 { get; set; }
+
+
+        [MechanicReversInputSignal<Mechanics>(Mechanics.Сarriage)]
         public InputSignal<bool> Shl2_Revers { get; set; }
+
+
+        [MechanicTormosInputSignal<Mechanics>(Mechanics.Сarriage)]
         public InputSignal<bool> Shl2_Tormos { get; set; }
+
+
+        [MechanicDriverOverloadInputSignal<Mechanics>(Mechanics.Сarriage)]
         public InputSignal<bool> Shl2_Peregruz { get; set; }
         public InputSignal<bool> Shl2_UURG2 { get; set; }
 
@@ -53,12 +83,10 @@ namespace Oratoria.Application.TransportModule.Signals
         [ShutterIsCloseSignal<Shutters>(Shutters.Shl2Shutter)]
         public InputSignal<bool> Zatvor_Shl2_Closed { get; set; }
 
+
         [DoorIsCloseSignal<Doors>(Doors.Door2)]
         public InputSignal<bool> Door_Shl2_Closed { get; set; }
 
-
-        public InputSignal<bool> Position5 { get; set; }
-        public InputSignal<bool> Position6 { get; set; }
 
         public TransportDI(ModbusTCPConfig netConfig, IInputStrategy<bool> strategy)
         {

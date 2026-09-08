@@ -31,10 +31,10 @@ namespace Oratoria.Domain.Signals.Abstractions
     }
 
     public abstract class Signal<T> : Signal
-    {
-        public delegate void SignalChangedHandler(T value);
+    {  
+        public virtual event Action<T> OnSignalChanged;
 
-        public virtual event SignalChangedHandler OnSignalChanged;
+
         [JsonIgnore]
         public virtual T Value { get; set; }
 

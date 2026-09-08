@@ -6,10 +6,10 @@ namespace Oratoria.Persistence.Services
 {
     public class SettingService : ISettingsService
     {
-        private readonly AppDBContext _dbContext;
+        private readonly SettingDBContext _dbContext;
         private readonly ILogger<SettingService> _logger;
 
-        public SettingService(AppDBContext dbContext, ILogger<SettingService> logger)
+        public SettingService(SettingDBContext dbContext, ILogger<SettingService> logger)
         {
             _dbContext = dbContext;
             _logger = logger;

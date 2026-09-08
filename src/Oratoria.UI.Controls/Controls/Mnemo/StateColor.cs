@@ -1,9 +1,11 @@
-namespace Oratoria.UI.Controls.Mnemo
+namespace Oratoria.UI.Controls.Controls.Mnemo
 {
     public enum StateColor
     {
         Off,
         Transition,
-        On
+        On,
+        Uncertain,
+        Indefinite
     }
 }

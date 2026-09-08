@@ -1,5 +1,6 @@
 using Oratoria.Application.TransportModule.DeviceCollection;
 using Oratoria.Domain.Connection;
+using Oratoria.Domain.Devices.Abstractions.MechanicAttributes;
 using Oratoria.Domain.Devices.Shutter.ShutterAttributes;
 using Oratoria.Domain.Signals;
 using Oratoria.Domain.Signals.Abstractions;
@@ -26,12 +27,39 @@ namespace Oratoria.Application.TransportModule.Signals
         public OutputSignal<bool> Shl2_Privod1 { get; set; }
         public OutputSignal<bool> Shl2_Privod2 { get; set; }
         public OutputSignal<bool> Shl2_Privod3 { get; set; }
+
+
+        [MechanicDriverOutputSignal<Mechanics>(Mechanics.Сarriage)]
         public OutputSignal<bool> Shl2_Privod4 { get; set; }
+
+
+        [MechanicPosition1OutputSignal<Mechanics>(Mechanics.Сarriage)]
         public OutputSignal<bool> Shl2_Pos1 { get; set; }
+
+
+        [MechanicPosition2OutputSignal<Mechanics>(Mechanics.Сarriage)]
         public OutputSignal<bool> Shl2_Pos2 { get; set; }
+
+
+        [MechanicPosition3OutputSignal<Mechanics>(Mechanics.Сarriage)]
         public OutputSignal<bool> Shl2_Pos3 { get; set; }
+
+
+        [MechanicPosition4OutputSignal<Mechanics>(Mechanics.Сarriage)]
         public OutputSignal<bool> Shl2_Pos4 { get; set; }
+
+
+        [MechanicPosition5OutputSignal<Mechanics>(Mechanics.Сarriage)]
+        public OutputSignal<bool> Position5 { get; set; }
+
+
+        [MechanicPosition6OutputSignal<Mechanics>(Mechanics.Сarriage)]
+        public OutputSignal<bool> Position6 { get; set; }
+
+
         public OutputSignal<bool> Shl1_Revers { get; set; }
+
+
         public OutputSignal<bool> Shl1_Tormos { get; set; }
 
 
@@ -41,7 +69,13 @@ namespace Oratoria.Application.TransportModule.Signals
         public OutputSignal<bool> Shl1_Podduv { get; set; }
         public OutputSignal<bool> Shl1_Napusk { get; set; }
         public OutputSignal<bool> Shl1_UURG1 { get; set; }
+
+
+        [MechanicReversOutputSignal<Mechanics>(Mechanics.Сarriage)]
         public OutputSignal<bool> Shl2_Revers { get; set; }
+
+
+        [MechanicTormosOutputSignal<Mechanics>(Mechanics.Сarriage)]
         public OutputSignal<bool> Shl2_Tormos { get; set; }
 
 
@@ -51,8 +85,7 @@ namespace Oratoria.Application.TransportModule.Signals
         public OutputSignal<bool> Shl2_Podduv { get; set; }
         public OutputSignal<bool> Shl2_Napusk { get; set; }
         public OutputSignal<bool> Shl2_UURG2 { get; set; }
-        public OutputSignal<bool> Position5 { get; set; }
-        public OutputSignal<bool> Position6 { get; set; }
+
 
         public TransportDO(ModbusTCPConfig netConfig, IOutputStrategy<bool> strategy)
         {

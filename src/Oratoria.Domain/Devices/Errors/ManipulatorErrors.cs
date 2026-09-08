@@ -12,11 +12,11 @@ namespace Oratoria.Domain.Devices.Errors
 
         [DeviceErrorCategory(DeviceErrorCategory.Error)]
         [Description("Неопределенное положение")]
-        Error1_2,
+        IndefinitePos,
 
         [DeviceErrorCategory(DeviceErrorCategory.Error)]
         [Description("Неоднозначное положение")]
-        Error1_3,
+        UnsertainPos,
 
         [DeviceErrorCategory(DeviceErrorCategory.None)]
         [Description("Нет ошибок")]
@@ -24,19 +24,19 @@ namespace Oratoria.Domain.Devices.Errors
 
         [DeviceErrorCategory(DeviceErrorCategory.Error)]
         [Description("Не в исходном положении")]
-        Error1_1,
+        NotInStartPos,
 
         [DeviceErrorCategory(DeviceErrorCategory.Error)]
         [Description("Не опустился к ложементу")] 
-        Error1_4,
+        NotComeInPos1,
 
         [DeviceErrorCategory(DeviceErrorCategory.Error)]
         [Description("Не поднялся от ложемента к исходному")]
-        Error1_5,
+        NotComeInPos2,
 
         [DeviceErrorCategory(DeviceErrorCategory.Error)]
         [Description("Не опустился к каретке")]
-        Error1_6,
+        NotComeInPos3,
 
         [DeviceErrorCategory(DeviceErrorCategory.Error)]
         [Description("Не поднялся от каретки к исходному")]

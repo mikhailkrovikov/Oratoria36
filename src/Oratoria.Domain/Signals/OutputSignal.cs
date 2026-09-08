@@ -6,7 +6,7 @@ namespace Oratoria.Domain.Signals
     {
         private readonly IOutputStrategy<T> _strategy;
         
-        public override event SignalChangedHandler? OnSignalChanged;
+        public override event Action<T>? OnSignalChanged;
 
         T _value;
         public override T Value
@@ -42,7 +42,7 @@ namespace Oratoria.Domain.Signals
 
             var tasks = new List<Task>();
 
-            foreach (SignalChangedHandler handler in handlers.Cast<SignalChangedHandler>())
+            foreach (Action<T> handler in handlers.Cast<Action<T>>())
                 tasks.Add(Task.Run(() => handler.Invoke(value)));
             
         }

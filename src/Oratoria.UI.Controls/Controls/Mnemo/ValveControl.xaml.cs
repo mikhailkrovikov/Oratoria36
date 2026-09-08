@@ -1,3 +1,4 @@
+using Oratoria.UI.Controls.Controls.Mnemo;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -29,9 +30,9 @@ namespace Oratoria.UI.Controls.Mnemo
         public static readonly DependencyProperty ErrorIconProperty =
             DependencyProperty.Register(
                 nameof(ErrorIcon),
-                typeof(ErrorIcon),
+                typeof(ErrorStateIcon),
                 typeof(ValveControl),
-                new PropertyMetadata(ErrorIcon.None, OnAppearanceChanged));
+                new PropertyMetadata(ErrorStateIcon.None, OnAppearanceChanged));
 
         public static readonly DependencyProperty CommandProperty =
             DependencyProperty.Register(
@@ -63,9 +64,9 @@ namespace Oratoria.UI.Controls.Mnemo
             set => SetValue(LabelProperty, value);
         }
 
-        public ErrorIcon ErrorIcon
+        public ErrorStateIcon ErrorIcon
         {
-            get => (ErrorIcon)GetValue(ErrorIconProperty);
+            get => (ErrorStateIcon)GetValue(ErrorIconProperty);
             set => SetValue(ErrorIconProperty, value);
         }
 
@@ -102,7 +103,7 @@ namespace Oratoria.UI.Controls.Mnemo
             RightFlap.Fill = fill;
             Center.Fill = fill;
 
-            if (ErrorIcon == ErrorIcon.None)
+            if (ErrorIcon == ErrorStateIcon.None)
             {
                 ErrorOverlay.Visibility = Visibility.Collapsed;
                 return;
@@ -111,15 +112,15 @@ namespace Oratoria.UI.Controls.Mnemo
             ErrorOverlay.Visibility = Visibility.Visible;
             ErrorBadge.Fill = ErrorIcon switch
             {
-                ErrorIcon.Warning => WarningIcon,
-                ErrorIcon.Error => ErrorIconFill,
+                ErrorStateIcon.Warning => WarningIcon,
+                ErrorStateIcon.Error => ErrorIconFill,
                 _ => Brushes.Transparent
             };
         }
 
         private static Brush CreateBrush(string hex)
         {
-            var brush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(hex)!);
+            var brush = new SolidColorBrush((System.Windows.Media.Color)ColorConverter.ConvertFromString(hex)!);
             brush.Freeze();
             return brush;
         }

@@ -62,17 +62,24 @@ namespace Oratoria.Domain.Devices.Magnetron
             }
             else
                 DeviceErrors.ResetError(error);
-
         }
 
-        public virtual async Task<bool> TurnOn(double setpoint)
+        [DeviceAction("Включить")]
+        public virtual async Task<bool> TurnOn([DeviceActionParameter("уставка")] double setpoint)
         {
+            if (setpoint == 0)
+            {
+                MagnetronPowerSetPoint.Value = setpoint;
+                return await base.TurnOff();
+            }
             var result = await base.TurnOn();
             if (result)
                 MagnetronPowerSetPoint.Value = setpoint;
             return result;
         }
 
+
+        [DeviceAction("Выключить")]
         public virtual async Task<bool> ResetSetpoint()
         {
             MagnetronPowerSetPoint.Value = 0;

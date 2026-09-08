@@ -27,7 +27,8 @@ namespace Oratoria.Domain.Devices.Leaker
             Close?.OnSignalChanged += _ => OnStateChanged();
         }
 
-        public async Task<bool> SetConsumption(double percent)
+        [DeviceAction("Уставка")]
+        public async Task<bool> SetConsumption([DeviceActionParameter("%")] double percent)
         {
             LeakerSetpoint?.Value = percent / 10;
             if (State != OpenableStatus.Open)

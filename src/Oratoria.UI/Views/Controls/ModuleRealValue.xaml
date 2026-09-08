@@ -1,0 +1,77 @@
+<UserControl x:Class="Oratoria.UI.Views.Controls.ModuleRealValue"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:vm="clr-namespace:Oratoria.UI.ViewModels"
+             d:DataContext="{d:DesignInstance Type=vm:ModuleRealValueVM}"
+             mc:Ignorable="d"
+             Width="600"
+             Background="{DynamicResource Brush.Surface}"
+             BorderThickness="0.5"
+             BorderBrush="{DynamicResource Brush.BorderLight}">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="{DynamicResource Brush.Button.Background}" Padding="6,4" Grid.ColumnSpan="3">
+            <TextBlock Text="{Binding ModuleName}"
+                       Foreground="{DynamicResource Brush.Text}"
+                       FontSize="14"
+                       FontWeight="Bold"
+                       Margin="10,0,0,0"/>
+        </Border>
+
+        <Label Content="Параметр" Style="{DynamicResource RealValueHeaderLabel}" Margin="15,0,0,0" Grid.Column="0" Grid.Row="1"/>
+        <Label Content="Текущее" Style="{DynamicResource RealValueHeaderLabel}" Grid.Column="1" Margin="15,0,0,0" Grid.Row="1"/>
+        <Label Content="Заданное" Style="{DynamicResource RealValueHeaderLabel}" Grid.Column="2" Margin="15,0,0,0" Grid.Row="1"/>
+
+        <Label Content="Мощность нагрева, Вт" Style="{DynamicResource RealValueLabel}" Grid.Row="2" Grid.Column="0"/>
+        <Label Content="Температура, °C" Style="{DynamicResource RealValueLabel}" Grid.Row="3" Grid.Column="0"/>
+        <Label Content="Давление, Па" Style="{DynamicResource RealValueLabel}" Grid.Row="4" Grid.Column="0"/>
+        <Label Content="Расход, л/ч" Style="{DynamicResource RealValueLabel}" Grid.Row="5" Grid.Column="0"/>
+        <Label Content="Мощность магнетрона 1, Вт" Style="{DynamicResource RealValueLabel}" Grid.Row="6" Grid.Column="0"/>
+        <Label Content="Мощность магнетрона 2, Вт" Style="{DynamicResource RealValueLabel}" Grid.Row="7" Grid.Column="0"/>
+        <Label Content="Мощность магнетрона 3, Вт" Style="{DynamicResource RealValueLabel}" Grid.Row="8" Grid.Column="0"/>
+        <Label Content="Ресурс 1" Style="{DynamicResource RealValueLabel}" Grid.Row="9" Grid.Column="0"/>
+        <Label Content="Ресурс 2" Style="{DynamicResource RealValueLabel}" Grid.Row="10" Grid.Column="0"/>
+        <Label Content="Ресурс 3" Style="{DynamicResource RealValueLabel}" Grid.Row="11" Grid.Column="0"/>
+
+        <Label Content="{Binding HeaterPower}" Style="{DynamicResource DynamicRealValueLabel}" Grid.Column="1" Grid.Row="2"/>
+        <Label Content="{Binding Temperature}" Style="{DynamicResource DynamicRealValueLabel}" Grid.Column="1" Grid.Row="3"/>
+        <Label Content="{Binding Pressure}" Style="{DynamicResource DynamicRealValueLabel}" Grid.Column="1" Grid.Row="4"/>
+        <Label Content="{Binding RRGRealValue}" Style="{DynamicResource DynamicRealValueLabel}" Grid.Column="1" Grid.Row="5"/>
+        <Label Content="{Binding Magnetron1Power}" Style="{DynamicResource DynamicRealValueLabel}" Grid.Column="1" Grid.Row="6"/>
+        <Label Content="{Binding Magnetron2Power}" Style="{DynamicResource DynamicRealValueLabel}" Grid.Column="1" Grid.Row="7"/>
+        <Label Content="{Binding Magnetron3Power}" Style="{DynamicResource DynamicRealValueLabel}" Grid.Column="1" Grid.Row="8"/>
+        <Label Content="{Binding Resource1Power}" Style="{DynamicResource DynamicRealValueLabel}" Grid.Column="1" Grid.Row="9" Grid.ColumnSpan="2"/>
+        <Label Content="{Binding Resource2Power}" Style="{DynamicResource DynamicRealValueLabel}" Grid.Column="1" Grid.Row="10" Grid.ColumnSpan="2"/>
+        <Label Content="{Binding Resource3Power}" Style="{DynamicResource DynamicRealValueLabel}" Grid.Column="1" Grid.Row="11" Grid.ColumnSpan="2"/>
+
+        <Label Content="{Binding HeaterPowerSetPoint}" Style="{DynamicResource RealValueLabel}" Grid.Column="2" Grid.Row="2"/>
+        <Label Content="{Binding HeaterTemperatureSetpoint}" Style="{DynamicResource RealValueLabel}" Grid.Column="2" Grid.Row="3"/>
+        <Label Content="{Binding PressureSetpoint}" Style="{DynamicResource RealValueLabel}" Grid.Column="2" Grid.Row="4"/>
+        <Label Content="{Binding RRGSetPointValue}" Style="{DynamicResource RealValueLabel}" Grid.Column="2" Grid.Row="5"/>
+        <Label Content="{Binding Magnetron1PowerSetpoint}" Style="{DynamicResource RealValueLabel}" Grid.Column="2" Grid.Row="6"/>
+        <Label Content="{Binding Magnetron2PowerSetpoint}" Style="{DynamicResource RealValueLabel}" Grid.Column="2" Grid.Row="7"/>
+        <Label Content="{Binding Magnetron3PowerSetpoint}" Style="{DynamicResource RealValueLabel}" Grid.Column="2" Grid.Row="8"/>
+    </Grid>
+</UserControl>

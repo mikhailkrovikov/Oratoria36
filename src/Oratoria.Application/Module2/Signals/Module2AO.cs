@@ -23,15 +23,15 @@ namespace Oratoria.Application.Module2.Signals
         public OutputSignal<double> BPNPower { get; set; }
 
 
-        [MagnetronSetpointSignal<Magnetrons>(Magnetrons.Magnetrn1)]
+        [MagnetronSetpointSignal<Magnetrons>(Magnetrons.Magnetron1)]
         public OutputSignal<double> BPM1Power { get; set; }
 
 
-        [MagnetronSetpointSignal<Magnetrons>(Magnetrons.Magnetrn2)]
+        [MagnetronSetpointSignal<Magnetrons>(Magnetrons.Magnetron2)]
         public OutputSignal<double> BPM2Power { get; set; }
         
 
-        [MagnetronSetpointSignal<Magnetrons>(Magnetrons.Magnetrn3)]
+        [MagnetronSetpointSignal<Magnetrons>(Magnetrons.Magnetron3)]
         public OutputSignal<double> BPM3Power { get; set; }
 
 

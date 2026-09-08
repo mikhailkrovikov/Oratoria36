@@ -1,0 +1,133 @@
+<UserControl x:Class="Oratoria.UI.Controls.Mnemo.CryoPumpControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignWidth="170"
+             d:DesignHeight="200">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Oratoria.UI.Controls;component/Themes/Colors.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style x:Key="InvisibleButton" TargetType="Button">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderBrush" Value="Transparent"/>
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <ContentPresenter/>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="PumpShape" TargetType="Shape">
+                <Setter Property="Stroke" Value="{StaticResource Brush.Text}"/>
+                <Setter Property="StrokeThickness" Value="4"/>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Button}}" Value="True">
+                        <Setter Property="StrokeThickness" Value="8"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+            <Style x:Key="PumpLine" TargetType="Shape">
+                <Setter Property="Stroke" Value="{StaticResource Brush.Text}"/>
+                <Setter Property="StrokeThickness" Value="2"/>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Button}}" Value="True">
+                        <Setter Property="StrokeThickness" Value="4"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="{Binding Label, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                   Foreground="{StaticResource Brush.Text}"
+                   FontWeight="Bold"
+                   FontSize="12"
+                   HorizontalAlignment="Center"
+                   TextAlignment="Center"
+                   Margin="0,0,0,2"
+                   Grid.Row="0"/>
+
+        <Button Command="{Binding Command, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                CommandParameter="{Binding CommandParameter, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                Style="{StaticResource InvisibleButton}"
+                Cursor="Hand"
+                Grid.Row="1">
+            <Viewbox Stretch="Uniform">
+                <Grid Width="150" Height="150">
+                    <Path x:Name="Body"
+                          Margin="20,20,20,20"
+                          Style="{StaticResource PumpShape}">
+                        <Path.Data>
+                            <PathGeometry>
+                                <PathFigure IsClosed="True">
+                                    <LineSegment Point="0,0"/>
+                                    <LineSegment Point="110,0"/>
+                                    <LineSegment Point="110,110"/>
+                                    <LineSegment Point="0,110"/>
+                                </PathFigure>
+                            </PathGeometry>
+                        </Path.Data>
+                    </Path>
+                    <Path Style="{StaticResource PumpLine}">
+                        <Path.Data>
+                            <LineGeometry StartPoint="75,20" EndPoint="75,0"/>
+                        </Path.Data>
+                    </Path>
+                    <Path Style="{StaticResource PumpLine}">
+                        <Path.Data>
+                            <PathGeometry>
+                                <PathFigure StartPoint="0,50">
+                                    <LineSegment Point="100,50"/>
+                                    <LineSegment Point="75,75"/>
+                                    <LineSegment Point="100,100"/>
+                                    <LineSegment Point="0,100"/>
+                                </PathFigure>
+                            </PathGeometry>
+                        </Path.Data>
+                    </Path>
+                    <Path Style="{StaticResource PumpLine}">
+                        <Path.Data>
+                            <LineGeometry StartPoint="75,75" EndPoint="100,75"/>
+                        </Path.Data>
+                    </Path>
+                    <Viewbox x:Name="ErrorOverlay"
+                             Width="30" Height="30"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Top"
+                             Margin="20,20,0,0"
+                             IsHitTestVisible="False"
+                             Visibility="Collapsed">
+                        <Canvas Width="50" Height="50">
+                            <Ellipse x:Name="ErrorBadge"
+                                     Width="50" Height="50"
+                                     Stroke="Black"
+                                     StrokeThickness="3"/>
+                            <Rectangle Width="6" Height="20"
+                                       Canvas.Left="22" Canvas.Top="10"
+                                       RadiusX="1" RadiusY="1"
+                                       Fill="Black"/>
+                            <Ellipse Width="6" Height="6"
+                                     Canvas.Left="22" Canvas.Top="34"
+                                     Fill="Black"/>
+                        </Canvas>
+                    </Viewbox>
+                </Grid>
+            </Viewbox>
+        </Button>
+    </Grid>
+</UserControl>

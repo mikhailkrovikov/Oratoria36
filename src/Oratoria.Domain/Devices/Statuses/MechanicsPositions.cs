@@ -21,5 +21,14 @@ namespace Oratoria.Domain.Devices.Statuses
 
         [Description("Позиция 3")]
         Position3,
+
+        [Description("Позиция 4")]
+        Position4,
+
+        [Description("Позиция 5")]
+        Position5,
+
+        [Description("Позиция 6")]
+        Position6
     }
 }

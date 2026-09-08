@@ -42,15 +42,14 @@ namespace Oratoria.Domain.Devices
         public void AddError(TError error)
         {
             _errors.Add(error);
-            ErrorChanged?.Invoke(error);
-            OnPropertyChanged(nameof(HighestCategory));
+            Notify(error);
         }
 
         public void ResetRangeErrors(params TError[] errors)
         {
             foreach (var e in errors)
                 _errors.Remove(e);
-            OnPropertyChanged(nameof(HighestCategory));
+            Notify(errors.Length > 0 ? errors[0] : default!);
         }
 
         public bool HasError(TError error)
@@ -66,13 +65,18 @@ namespace Oratoria.Domain.Devices
         public void ResetError(TError error)
         {
             _errors.Remove(error);
-            ErrorChanged?.Invoke(error);
-            OnPropertyChanged(nameof(HighestCategory));
+            Notify(error);
         }
 
         public void ResetAllErrors()
         {
             _errors.Clear();
+            Notify(default!);
+        }
+
+        private void Notify(TError error)
+        {
+            ErrorChanged?.Invoke(error);
             OnPropertyChanged(nameof(HighestCategory));
         }
 

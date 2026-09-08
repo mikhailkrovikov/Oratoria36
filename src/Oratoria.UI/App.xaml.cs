@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Extensions.Logging;
+using Oratoria.Application;
 using Oratoria.Application.Connection;
 using Oratoria.Application.Connection.Pollers;
 using Oratoria.Application.Module1.Signals;
@@ -22,9 +23,11 @@ using Oratoria.Domain.Settings;
 using Oratoria.Infrastructure;
 using Oratoria.Persistence;
 using Oratoria.Persistence.Services;
+using Oratoria.UI;
 using Oratoria.UI.Logging;
 using Oratoria.UI.ViewModels;
 using Oratoria.UI.Views.Pages;
+using Oratoria.UI.Views.Pages.Module2Pages;
 using System.IO;
 using System.Windows;
 namespace UI;
@@ -64,11 +67,32 @@ public partial class App : Application
             var db = scope.ServiceProvider.GetRequiredService<AppDBContext>();
             db.Database.Migrate();
         }
+        using (var scope = _services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<SettingDBContext>();
+            db.Database.Migrate();
+        }
+        using (var scope = _services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<RecipeDBContext>();
+            db.Database.Migrate();
+        }
 
         _services.GetRequiredService<ISettingsContext>();
 
+#if !RELEASE
+        _services.GetRequiredService<DTInitializer>();
+#endif
         _services.GetRequiredService<GeneralPoller>().StartPoller();
         _services.GetRequiredService<MainWindow>().Show();
+
+        AppDomain.CurrentDomain.UnhandledException += ProcessException;
+    }
+
+    static void ProcessException(object sender, UnhandledExceptionEventArgs args)
+    {
+        Console.WriteLine((args.ExceptionObject as Exception).StackTrace);
+        Environment.Exit(1);
     }
 
     protected override void OnExit(ExitEventArgs e)
@@ -86,7 +110,8 @@ public partial class App : Application
 #if !RELEASE
         services.AddSingleton<TwinContext>();
         services.AddSingleton<IRegister>(sp => sp.GetRequiredService<TwinContext>().TModel);
-        services.AddSingleton<DigitalTwinStrategy>();
+        services.AddTransient<DigitalTwinStrategy>();
+        services.AddSingleton<DTInitializer>();
 #endif
         services.AddSingleton<Module1Signals>();
         services.AddSingleton<Module2Signals>();      
@@ -130,9 +155,17 @@ public partial class App : Application
     {
         var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "app.db");
         services.AddDbContext<AppDBContext>(o => o.UseSqlite($"Data Source={path}"));
-        services.AddTransient<IUserService, UserService>();
+
+        var settingPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "settings.db");
+        services.AddDbContext<AppDBContext>(o => o.UseSqlite($"Data Source={settingPath}"));
+
+        var recPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "recipes.db");
+        services.AddDbContext<RecipeDBContext>(o => o.UseSqlite($"Data Source={recPath}"));
+
+        services.AddScoped<IUserService, UserService>();
         services.AddSingleton<ISettingsService, SettingService>();
         services.AddSingleton<ISettingsContext, SettingsContext>();
+        services.AddScoped<IRecipeService, RecipeService>();
     }
 
     private static void EnsureLogDatabase()

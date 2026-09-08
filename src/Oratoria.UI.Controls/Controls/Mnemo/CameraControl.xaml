@@ -1,0 +1,39 @@
+<UserControl x:Class="Oratoria.UI.Controls.Mnemo.CameraControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignWidth="574"
+             d:DesignHeight="318"
+             IsHitTestVisible="False">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Oratoria.UI.Controls;component/Themes/Colors.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid Background="Transparent">
+        <Path Stroke="{StaticResource Brush.BorderLight}"
+              StrokeThickness="4"
+              Stretch="Uniform"
+              Fill="Transparent">
+            <Path.Data>
+                <PathGeometry>
+                    <PathFigure StartPoint="20,0" IsClosed="True">
+                        <LineSegment Point="80,0"/>
+                        <LineSegment Point="80,20"/>
+                        <LineSegment Point="100,20"/>
+                        <LineSegment Point="100,80"/>
+                        <LineSegment Point="0,80"/>
+                        <LineSegment Point="0,20"/>
+                        <LineSegment Point="20,20"/>
+                        <LineSegment Point="20,0"/>
+                    </PathFigure>
+                </PathGeometry>
+            </Path.Data>
+        </Path>
+    </Grid>
+</UserControl>

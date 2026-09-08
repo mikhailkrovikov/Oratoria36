@@ -1,11 +1,12 @@
 using Oratoria.UI.Controls.Controls.Navigation;
 using Oratoria.UI.Logging;
 using Oratoria.UI.Services;
+using Oratoria.UI.Controls.DialogWindows;
 using Oratoria.UI.Views.Pages;
+using Oratoria.UI.Views.Pages.Module2Pages;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 
@@ -39,12 +40,12 @@ public class MainWindowVM : INotifyPropertyChanged
 
     public ICommand CloseButtonCommand { get; } = new RelayCommand(_ =>
     {
-        var result = MessageBox.Show(
+        var result = UserMessageBox.Show(
             "Вы уверены, что хотите выйти из программы?",
             "Подтверждение выхода",
-            MessageBoxButton.OKCancel,
-            MessageBoxImage.Question);
-        if (result == MessageBoxResult.OK)
+            MBType.Info,
+            MBButtons.Okcancel);
+        if (result == MBResult.Ok)
             System.Windows.Application.Current.Shutdown();
     });
 

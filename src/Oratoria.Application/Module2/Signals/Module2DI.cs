@@ -23,21 +23,21 @@ namespace Oratoria.Application.Module2.Signals
 
         public InputSignal<bool> UurgIsOn { get; set; }
 
-        [MagnetronIsRotatingSignal<Magnetrons>(Magnetrons.Magnetrn1)]
-        [MagnetronIsRotatingSignal<Magnetrons>(Magnetrons.Magnetrn2)]
-        [MagnetronIsRotatingSignal<Magnetrons>(Magnetrons.Magnetrn3)]
+        [MagnetronIsRotatingSignal<Magnetrons>(Magnetrons.Magnetron1)]
+        [MagnetronIsRotatingSignal<Magnetrons>(Magnetrons.Magnetron2)]
+        [MagnetronIsRotatingSignal<Magnetrons>(Magnetrons.Magnetron3)]
         public InputSignal<bool> Rotation_BPM { get; set; }
 
 
-        [MagnetronOverheatSignal<Magnetrons>(Magnetrons.Magnetrn1)]
-        [MagnetronOverheatSignal<Magnetrons>(Magnetrons.Magnetrn2)]
-        [MagnetronOverheatSignal<Magnetrons>(Magnetrons.Magnetrn3)]
+        [MagnetronOverheatSignal<Magnetrons>(Magnetrons.Magnetron1)]
+        [MagnetronOverheatSignal<Magnetrons>(Magnetrons.Magnetron2)]
+        [MagnetronOverheatSignal<Magnetrons>(Magnetrons.Magnetron3)]
         public InputSignal<bool> BPMOverHeat { get; set; }
 
 
-        [MagnetronOverloadSignal<Magnetrons>(Magnetrons.Magnetrn1)]
-        [MagnetronOverloadSignal<Magnetrons>(Magnetrons.Magnetrn2)]
-        [MagnetronOverloadSignal<Magnetrons>(Magnetrons.Magnetrn3)]
+        [MagnetronOverloadSignal<Magnetrons>(Magnetrons.Magnetron1)]
+        [MagnetronOverloadSignal<Magnetrons>(Magnetrons.Magnetron2)]
+        [MagnetronOverloadSignal<Magnetrons>(Magnetrons.Magnetron3)]
         public InputSignal<bool> BPMNoOverload { get; set; }
 
 
@@ -45,15 +45,15 @@ namespace Oratoria.Application.Module2.Signals
         public InputSignal<bool> BPNIsOn { get; set; }
 
 
-        [MagnetronIsPowerOnSignal<Magnetrons>(Magnetrons.Magnetrn1)]
+        [MagnetronIsPowerOnSignal<Magnetrons>(Magnetrons.Magnetron1)]
         public InputSignal<bool> BPM1IsOn { get; set; }
 
 
-        [MagnetronIsPowerOnSignal<Magnetrons>(Magnetrons.Magnetrn2)]
+        [MagnetronIsPowerOnSignal<Magnetrons>(Magnetrons.Magnetron2)]
         public InputSignal<bool> BPM2IsOn { get; set; }
 
 
-        [MagnetronIsPowerOnSignal<Magnetrons>(Magnetrons.Magnetrn3)]
+        [MagnetronIsPowerOnSignal<Magnetrons>(Magnetrons.Magnetron3)]
         public InputSignal<bool> BPM3IsOn { get; set; }
 
 

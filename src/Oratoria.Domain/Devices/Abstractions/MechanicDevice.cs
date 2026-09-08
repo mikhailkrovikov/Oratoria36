@@ -30,6 +30,12 @@ namespace Oratoria.Domain.Devices.Abstractions
 
         public InputSignal<bool> Position3In { get; set; }
 
+        public InputSignal<bool> Position4In { get; set; }
+
+        public InputSignal<bool> Position5In { get; set; }
+
+        public InputSignal<bool> Position6In { get; set; }
+
         public InputSignal<bool> TormosIn { get; set; }
 
         public InputSignal<bool> ReversIn { get; set; }
@@ -50,10 +56,16 @@ namespace Oratoria.Domain.Devices.Abstractions
 
         public OutputSignal<bool>? Position4Out { get; set; }
 
+        public OutputSignal<bool> Position5Out { get; set; }
+
+        public OutputSignal<bool>? Position6Out { get; set; }
+
 
         private MechanicsPositions _state = MechanicsPositions.Indefinite;
 
         public override MechanicsPositions State => _state;
+
+        public TPos Position => MapState(State);
 
         private void SetState(MechanicsPositions value)
         {
@@ -77,6 +89,9 @@ namespace Oratoria.Domain.Devices.Abstractions
             Position1In = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(MechanicPosition1InputSignalAttribute<>))!;
             Position2In = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(MechanicPosition2InputSignalAttribute<>))!;
             Position3In = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(MechanicPosition3InputSignalAttribute<>))!;
+            Position4In = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(MechanicPosition4InputSignalAttribute<>));
+            Position5In = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(MechanicPosition5InputSignalAttribute<>));
+            Position6In = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(MechanicPosition6InputSignalAttribute<>));
             TormosIn = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(MechanicTormosInputSignalAttribute<>))!;
             ReversIn = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(MechanicReversInputSignalAttribute<>))!;
             DriverOverload = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(MechanicDriverOverloadInputSignalAttribute<>))!;
@@ -84,6 +99,9 @@ namespace Oratoria.Domain.Devices.Abstractions
             Position1Out = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(MechanicPosition1OutputSignalAttribute<>))!;
             Position2Out = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(MechanicPosition2OutputSignalAttribute<>))!;
             Position3Out = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(MechanicPosition3OutputSignalAttribute<>))!;
+            Position4Out = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(MechanicPosition4OutputSignalAttribute<>))!;
+            Position5Out = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(MechanicPosition5OutputSignalAttribute<>))!;
+            Position6Out = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(MechanicPosition6OutputSignalAttribute<>))!;
             TormosOut = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(MechanicTormosOutputSignalAttribute<>))!;
             ReversOut = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(MechanicReversOutputSignalAttribute<>))!;
             Actuator = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(MechanicDriverOutputSignalAttribute<>))!;
@@ -119,6 +137,7 @@ namespace Oratoria.Domain.Devices.Abstractions
             ResetToken();
         }
 
+        [DeviceAction("Инициализация")]
         public async Task<TPos> Init()
         {
             Logger.LogInformation($"{DeviceName}: инициализация");

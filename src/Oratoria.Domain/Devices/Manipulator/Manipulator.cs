@@ -10,44 +10,80 @@ namespace Oratoria.Domain.Devices.Manipulator
 {
     public class Manipulator : MechanicDevice<ManipulatorPosition, ManipulatorErrors>
     {
-        public Manipulator(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory, ISettingsContext settings) : base(deviceId, signals, loggerFactory, settings)
+        public Manipulator(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory, ISettingsContext settings) 
+            : base(deviceId, signals, loggerFactory, settings)
         {         
         }
 
-
+        [DeviceAction("Исходная → Транспорт")]
         public async Task<bool> FromHomeToTransport()
         {
-            return await Move(ManipulatorPosition.Home, ManipulatorPosition.Transport) == ManipulatorPosition.Transport;
+            try
+            {
+                return await Move(ManipulatorPosition.Home, ManipulatorPosition.Transport) == ManipulatorPosition.Transport;
+            }
+            catch (InvalidOperationException ex)
+            {
+                Logger.LogError(ex.Message);
+                return false;
+            }
         }
 
+        [DeviceAction("Модуль → Исходная")]
         public async Task<bool> FromModuleToHome()
         {
-            return await Move(ManipulatorPosition.Module, ManipulatorPosition.Home) == ManipulatorPosition.Home;
+            try
+            {
+                return await Move(ManipulatorPosition.Module, ManipulatorPosition.Home) == ManipulatorPosition.Home;
+            }
+            catch (InvalidOperationException ex)
+            {
+                Logger.LogError(ex.Message);
+                return false;
+            }
         }
 
+        [DeviceAction("Исходная → Модуль")]
         public async Task<bool> FromHomeToModule()
         {
-            return await Move(ManipulatorPosition.Home, ManipulatorPosition.Module) == ManipulatorPosition.Module;
+            try
+            {
+                return await Move(ManipulatorPosition.Home, ManipulatorPosition.Module) == ManipulatorPosition.Module;
+            }
+            catch (InvalidOperationException ex)
+            {
+                Logger.LogError(ex.Message);
+                return false;
+            }
         }
 
+        [DeviceAction("Транспорт → Исходная")]
         public async Task<bool> FromTransportToHome()
         {
-            return await Move(ManipulatorPosition.Transport, ManipulatorPosition.Home) == ManipulatorPosition.Home;
+            try
+            {
+                return await Move(ManipulatorPosition.Transport, ManipulatorPosition.Home) == ManipulatorPosition.Home;
+            }
+            catch (InvalidOperationException ex)
+            {
+                Logger.LogError(ex.Message);
+                return false;
+            }
         }
 
         public override MechanicMovingProfile<ManipulatorErrors> GetMovingProfile(ManipulatorPosition startPos, ManipulatorPosition endPos)
         {
             if (startPos == endPos)
-                throw new Exception("позиции перемещения манипулятора совпадают");
+                throw new InvalidOperationException("позиции перемещения манипулятора совпадают");
             if (startPos != ManipulatorPosition.Home && endPos != ManipulatorPosition.Home)
-                throw new Exception("неверные позиции перемещения манипулятора");
-            var startPosError = ManipulatorErrors.Error1_1;
+                throw new InvalidOperationException("неверные позиции перемещения манипулятора");
+            var startPosError = ManipulatorErrors.NotInStartPos;
             var revers = endPos - startPos < 0;
             var tormos = true;
-            InputSignal<bool> startPosSignal = GetManInputSignalFromPos(startPos);
-            InputSignal<bool> endPosSignal = GetManInputSignalFromPos(endPos);
-            OutputSignal<bool> endPosOutSignal = GetManOutputSignalFromPos(endPos);
-            ManipulatorErrors endPosError = GetEndPosError(startPos, endPos);
+            var startPosSignal = GetManInputSignalFromPos(startPos);
+            var endPosSignal = GetManInputSignalFromPos(endPos);
+            var endPosOutSignal = GetManOutputSignalFromPos(endPos);
+            var endPosError = GetEndPosError(startPos, endPos);
             return new MechanicMovingProfile<ManipulatorErrors>(endPosOutSignal, startPosSignal, endPosSignal, revers, tormos, endPosError, startPosError);
         }
 
@@ -59,7 +95,7 @@ namespace Oratoria.Domain.Devices.Manipulator
                 return Position2In;
             if (pos == ManipulatorPosition.Module)
                 return Position1In;
-            throw new Exception("неверная позиция манипулятора");
+            throw new InvalidOperationException("неверная позиция манипулятора");
         }
 
         private OutputSignal<bool> GetManOutputSignalFromPos(ManipulatorPosition pos)
@@ -70,7 +106,7 @@ namespace Oratoria.Domain.Devices.Manipulator
                 return Position2Out;
             if (pos == ManipulatorPosition.Module)
                 return Position1Out;
-            throw new Exception("неверная позиция манипулятора");
+            throw new InvalidOperationException("неверная позиция манипулятора");
         }
 
         private static ManipulatorErrors GetEndPosError(ManipulatorPosition startPos, ManipulatorPosition endPos)
@@ -78,18 +114,18 @@ namespace Oratoria.Domain.Devices.Manipulator
             if (startPos == ManipulatorPosition.Home)
             {
                 if (endPos == ManipulatorPosition.Transport)
-                    return ManipulatorErrors.Error1_6;
+                    return ManipulatorErrors.NotComeInPos3;
                 if (endPos == ManipulatorPosition.Module)
-                    return ManipulatorErrors.Error1_4;
+                    return ManipulatorErrors.NotComeInPos1;
             }
             if (endPos == ManipulatorPosition.Home)
             {
                 if (startPos == ManipulatorPosition.Transport)
                     return ManipulatorErrors.Error1_7;
                 if (startPos == ManipulatorPosition.Module)
-                    return ManipulatorErrors.Error1_5;
+                    return ManipulatorErrors.NotComeInPos2;
             }
-            throw new Exception("Неверные начальная или конечная позиция");
+            throw new InvalidOperationException("Неверные начальная или конечная позиция");
         }
 
         protected override ManipulatorPosition MapState(MechanicsPositions position) => position switch
@@ -106,25 +142,25 @@ namespace Oratoria.Domain.Devices.Manipulator
         protected override ManipulatorErrors MapError(MechanicsErrors error) => error switch
         {
             MechanicsErrors.NotInited => ManipulatorErrors.NotInited,
-            MechanicsErrors.NotInStartPos => ManipulatorErrors.Error1_1,
-            MechanicsErrors.IndefinitePos => ManipulatorErrors.Error1_2,
-            MechanicsErrors.UnsertainPos => ManipulatorErrors.Error1_3,
-            MechanicsErrors.NotComeInPos1 => ManipulatorErrors.Error1_4,
-            MechanicsErrors.NotComeInPos2 => ManipulatorErrors.Error1_5,
-            MechanicsErrors.NotComeInPos3 => ManipulatorErrors.Error1_6,
+            MechanicsErrors.NotInStartPos => ManipulatorErrors.NotInStartPos,
+            MechanicsErrors.IndefinitePos => ManipulatorErrors.IndefinitePos,
+            MechanicsErrors.UnsertainPos => ManipulatorErrors.UnsertainPos,
+            MechanicsErrors.NotComeInPos1 => ManipulatorErrors.NotComeInPos1,
+            MechanicsErrors.NotComeInPos2 => ManipulatorErrors.NotComeInPos2,
+            MechanicsErrors.NotComeInPos3 => ManipulatorErrors.NotComeInPos3,
             MechanicsErrors.None => ManipulatorErrors.None,
-            _ => ManipulatorErrors.Error1_1
+            _ => ManipulatorErrors.NotInStartPos
         };
 
         protected override MechanicsErrors ToBaseError(ManipulatorErrors error) => error switch
         {
             ManipulatorErrors.NotInited => MechanicsErrors.NotInited,
-            ManipulatorErrors.Error1_1 => MechanicsErrors.NotInStartPos,
-            ManipulatorErrors.Error1_2 => MechanicsErrors.IndefinitePos,
-            ManipulatorErrors.Error1_3 => MechanicsErrors.UnsertainPos,
-            ManipulatorErrors.Error1_4 => MechanicsErrors.NotComeInPos1,
-            ManipulatorErrors.Error1_5 => MechanicsErrors.NotComeInPos2,
-            ManipulatorErrors.Error1_6 => MechanicsErrors.NotComeInPos3,
+            ManipulatorErrors.NotInStartPos => MechanicsErrors.NotInStartPos,
+            ManipulatorErrors.IndefinitePos => MechanicsErrors.IndefinitePos,
+            ManipulatorErrors.UnsertainPos => MechanicsErrors.UnsertainPos,
+            ManipulatorErrors.NotComeInPos1 => MechanicsErrors.NotComeInPos1,
+            ManipulatorErrors.NotComeInPos2 => MechanicsErrors.NotComeInPos2,
+            ManipulatorErrors.NotComeInPos3 => MechanicsErrors.NotComeInPos3,
             ManipulatorErrors.Error1_7 => MechanicsErrors.NotComeInPos2,
             ManipulatorErrors.None => MechanicsErrors.None,
             _ => MechanicsErrors.NotInEndPos

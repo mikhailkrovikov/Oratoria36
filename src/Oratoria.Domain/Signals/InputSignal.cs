@@ -5,7 +5,7 @@ namespace Oratoria.Domain.Signals
     public class InputSignal<T> : BusketSignal<T>
     {
 
-        public override event SignalChangedHandler OnSignalChanged;
+        public override event Action<T> OnSignalChanged;
 
         IInputStrategy<T> _strategy;
 
@@ -53,7 +53,7 @@ namespace Oratoria.Domain.Signals
 
             var tasks = new List<Task>();
 
-            foreach (SignalChangedHandler handler in handlers)
+            foreach (Action<T> handler in handlers)
             {
                 tasks.Add(Task.Run(() => handler.Invoke(value)));
             }

@@ -10,15 +10,15 @@ namespace Oratoria.Domain.Devices.Abstractions
 {
     public abstract class PowerDevice : Device<PowerDeviceStatus, PowerDeviceErrors>
     {
-        protected InputSignal<bool>? IsPowerOn { get; set; }
+        public InputSignal<bool>? IsPowerOn { get; set; }
 
-        protected InputSignal<bool>? IsPowerOff { get; set; }
+        public InputSignal<bool>? IsPowerOff { get; set; }
 
-        protected OutputSignal<bool>? PowerOn { get; set; }
+        public OutputSignal<bool>? PowerOn { get; set; }
 
-        protected OutputSignal<bool>? PowerOff { get; set; }
+        public OutputSignal<bool>? PowerOff { get; set; }
 
-        protected Setting<int> TimeForError { get; }
+        public Setting<int> TimeForError { get; }
 
         public override PowerDeviceStatus State
         {
@@ -67,6 +67,7 @@ namespace Oratoria.Domain.Devices.Abstractions
             TimeForError = Settings.GetSetting(deviceId, nameof(TimeForError), "Время до ошибки", "сек", 10);
         }
 
+        [DeviceAction("Включить")]
         public virtual async Task<bool> TurnOn()
         {
             Logger.LogInformation($"{DeviceName}: включение");
@@ -144,7 +145,7 @@ namespace Oratoria.Domain.Devices.Abstractions
         }
 
 
-
+        [DeviceAction("Выключить")]
         public virtual async Task<bool> TurnOff()
         {
             Logger.LogInformation($"{DeviceName}: выключение");

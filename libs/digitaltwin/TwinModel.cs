@@ -67,6 +67,9 @@ namespace DigitalTwin
                         SetBoolInput(inputPin2, true);
                     }
                 };
+
+                SetBoolInput(inputPin1, false);
+                SetBoolInput(inputPin2, true);
             }
         }
 

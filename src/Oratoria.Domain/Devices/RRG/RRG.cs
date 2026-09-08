@@ -58,9 +58,13 @@ namespace Oratoria.Domain.Devices.RRG
             RRGDifference = Settings.GetSetting(deviceId, nameof(RRGDifference), "Предел отклонения", "%", 5.0, 0.0, 100.0);
             MaxFlowRate = Settings.GetSetting(deviceId, nameof(MaxFlowRate), "Верхний предел", "л/ч", 100.0);
             TimeOfAction = Settings.GetSetting(deviceId, nameof(TimeOfAction), "Время выхода уставку", "сек", 30);
+
+            RRGRealValueSignal.OnSignalChanged += _ => OnStateChanged();
+            RRGSetpointSignal.OnSignalChanged += _ => OnStateChanged();
         }
 
-        public async Task<bool> SetValue(double value)
+        [DeviceAction("Задать уставку")]
+        public async Task<bool> SetValue([DeviceActionParameter("л/ч")] double value)
         {
             if (MaxFlowRate.Value == 0)
             {
@@ -116,6 +120,7 @@ namespace Oratoria.Domain.Devices.RRG
             }
         }
 
+        [DeviceAction("Сбросить уставку")]
         public async Task<bool> ResetValue()
         {
             RRGRealValueSignal.OnSignalChanged -= CheckState;
