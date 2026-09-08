@@ -153,14 +153,12 @@ public partial class App : Application
 
     private static void ConfigurateDataBase(IServiceCollection services)
     {
-        var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "app.db");
-        services.AddDbContext<AppDBContext>(o => o.UseSqlite($"Data Source={path}"));
+        
+        services.AddDbContext<AppDBContext>();
+      
+        services.AddDbContext<SettingDBContext>();
 
-        var settingPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "settings.db");
-        services.AddDbContext<AppDBContext>(o => o.UseSqlite($"Data Source={settingPath}"));
-
-        var recPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "recipes.db");
-        services.AddDbContext<RecipeDBContext>(o => o.UseSqlite($"Data Source={recPath}"));
+        services.AddDbContext<RecipeDBContext>();
 
         services.AddScoped<IUserService, UserService>();
         services.AddSingleton<ISettingsService, SettingService>();

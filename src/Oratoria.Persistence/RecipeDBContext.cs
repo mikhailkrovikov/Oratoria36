@@ -13,8 +13,14 @@ namespace Oratoria.Persistence
 
         public DbSet<RecipeEntity> Recipes { get; set; }
 
-        public RecipeDBContext(DbContextOptions<RecipeDBContext> options) : base(options)
+        public RecipeDBContext()
         {
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "recipies.db");
+            optionsBuilder.UseSqlite($"Data Source={path}");
         }
     }
 }

@@ -7,10 +7,15 @@ namespace Oratoria.Persistence
     {
         public DbSet<UserEntity> Users { get; set; }
         public DbSet<RoleEntity> Roles { get; set; }
-        //public DbSet<DeviceSettingEntity> DeviceSettings { get; set; }
 
-        public AppDBContext(DbContextOptions<AppDBContext> options) : base(options)
+        public AppDBContext()
         {
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "app.db");
+            optionsBuilder.UseSqlite($"Data Source={path}");
         }
     }
 }
