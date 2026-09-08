@@ -8,6 +8,7 @@ using Oratoria.Domain.Devices.NitrogenFeeder;
 using Oratoria.Domain.Devices.PressureSensor;
 using Oratoria.Domain.Devices.Valve;
 using Oratoria.Domain.Settings;
+using Oratoria.Infrastructure;
 
 namespace Oratoria.Application.VacuumModule
 {
@@ -114,5 +115,7 @@ namespace Oratoria.Application.VacuumModule
             TrupoprovodLowVacuum = Factory.CreateDevice <LowVacuumSensor>(PressureSensors.TrupoprovodLowVacuum);
             AVRLowVacuum = Factory.CreateDevice <LowVacuumSensor>(PressureSensors.AVRLowVacuum);
         }
+
+        public override string Name => ModuleId.VacuumModule.GetDescription();
     }
 }

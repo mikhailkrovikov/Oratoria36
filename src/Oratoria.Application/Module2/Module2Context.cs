@@ -14,6 +14,7 @@ using Oratoria.Domain.Devices.RRG;
 using Oratoria.Domain.Devices.PressureSensor;
 using Oratoria.Domain.Devices.CryogenicPump;
 using Oratoria.Domain.Settings;
+using Oratoria.Infrastructure;
 
 namespace Oratoria.Application.Module2
 {
@@ -37,5 +38,7 @@ namespace Oratoria.Application.Module2
             CryogenicPump = Factory.CreateDevice<CryogenicPump>(Pumps.CryogenicPump);
             VICB = Factory.CreateDevice<HighVacuumSensor>(PressureSensors.VICB);
         }
+
+        public override string Name => ModuleId.Module2.GetDescription();
     }
 }

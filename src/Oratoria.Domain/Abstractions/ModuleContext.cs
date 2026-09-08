@@ -6,6 +6,8 @@ namespace Oratoria.Domain.Abstractions
 {
     public abstract class ModuleContext
     {
+        public abstract string Name { get; }
+
         protected DeviceFactory Factory { get; }
 
         protected ModuleContext(IModuleSignals signals, ILoggerFactory loggerFactory, ISettingsContext settings)

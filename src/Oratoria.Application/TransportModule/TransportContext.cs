@@ -8,6 +8,7 @@ using Oratoria.Domain.Devices.Shutter;
 using Oratoria.Domain.Devices.Valve;
 using Oratoria.Domain.Settings;
 using Oratoria.Domain.Signals.Abstractions;
+using Oratoria.Infrastructure;
 
 namespace Oratoria.Application.TransportModule
 {
@@ -31,5 +32,7 @@ namespace Oratoria.Application.TransportModule
             Door2 = Factory.CreateDevice<Door>(Doors.Door2);
             Carriage = Factory.CreateDevice<Carriage>(Mechanics.Сarriage);
         }
+
+        public override string Name => ModuleId.TransportModule.GetDescription();
     }
 }
