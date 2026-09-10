@@ -30,7 +30,7 @@ namespace Oratoria.Domain.Carrier
             if (from.NodeId == sourceNode.NodeId || to.NodeId == sourceNode.NodeId)
                 throw new InvalidOperationException("перенос невозможен");
 
-            return Execute(() => carrier.CanCarry(from, to) && !sourceNode.IsEmpty,
+            return Execute(() => carrier.CanCarry(from, to) && sourceNode.IsEmpty,
                 body => body
                 .DoAlgorithm(carrier, () => carrier.Carry(from, sourceNode))
                 .DoAlgorithm(carrier, () => carrier.Carry(sourceNode, to)));

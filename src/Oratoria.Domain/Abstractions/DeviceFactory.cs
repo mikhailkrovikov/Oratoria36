@@ -21,7 +21,7 @@ namespace Oratoria.Domain.Abstractions
         {
             var device = Activator.CreateInstance(typeof(TDevice), deviceId, _signals, _loggerFactory, _settings);
             if (device == null)
-                throw new Exception("Unable to create device, check enums");        
+                throw new NotSupportedException("Unable to create device, check enums");        
             return (TDevice)device;
         }
     }

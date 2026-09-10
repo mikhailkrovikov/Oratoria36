@@ -1,4 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
+using Oratoria.Application.Gateway1;
+using Oratoria.Application.Gateway2;
 using Oratoria.Application.Module2;
 using Oratoria.Application.TransportModule;
 using Oratoria.Application.VacuumModule;
@@ -17,7 +19,9 @@ public partial class MainWindow : Window
         IServiceProvider services,
         Module2Context module2Context,
         VacuumContext vacuumContext,
-        TransportContext context)
+        TransportContext context,
+        Gateway1Context gateway1Context,
+        Gateway2Context gateway2Context)
     {
         InitializeComponent();
         _vm = maimwindowVM;

@@ -7,8 +7,11 @@ namespace Oratoria.Application
         [Description("Транспортный модуль")]
         TransportModule,
 
-        [Description("Вакуумная система")]
-        VacuumModule,
+        [Description("Шлюз 1")]
+        Gateway1,
+
+        [Description("Шлюз 2")]
+        Gateway2,
 
         [Description("Модуль 1 трехпозиционного напыления")]
         Module1,

@@ -8,6 +8,8 @@ using NLog.Extensions.Logging;
 using Oratoria.Application;
 using Oratoria.Application.Connection;
 using Oratoria.Application.Connection.Pollers;
+using Oratoria.Application.Gateway1;
+using Oratoria.Application.Gateway2;
 using Oratoria.Application.Module1.Signals;
 using Oratoria.Application.Module2;
 using Oratoria.Application.Module2.Signals;
@@ -114,14 +116,22 @@ public partial class App : Application
         services.AddSingleton<DTInitializer>();
 #endif
         services.AddSingleton<Module1Signals>();
-        services.AddSingleton<Module2Signals>();      
+
+        services.AddSingleton<Module2Signals>();
+        services.AddSingleton<Module2Context>();
         services.AddSingleton<Module3Signals>();
+
         services.AddSingleton<Module4Signals>();
+
         services.AddSingleton<TransportSignals>();
+        services.AddSingleton<TransportContext>();
+
         services.AddSingleton<VacuumSignals>();
         services.AddSingleton<VacuumContext>();
-        services.AddSingleton<TransportContext>();
-        services.AddSingleton<Module2Context>();
+
+        services.AddSingleton<Gateway1Context>();
+        services.AddSingleton<Gateway2Context>();
+
 
         services.AddSingleton(sp =>
         {

@@ -64,27 +64,27 @@ namespace Oratoria.Application.TransportModule.Signals
         public InputSignal<bool> Shl2_UURG2 { get; set; }
 
 
-        [ShutterIsOpenSignal<Shutters>(Shutters.Shl1Shutter)]
+        [ShutterIsOpenSignal<Gateway1.DeviceCollection.Shutters>(Gateway1.DeviceCollection.Shutters.Shl1Shutter)]
         public InputSignal<bool> Zatvor_Shl1_Open { get; set; }
 
 
-        [ShutterIsCloseSignal<Shutters>(Shutters.Shl1Shutter)]
+        [ShutterIsCloseSignal<Gateway1.DeviceCollection.Shutters>(Gateway1.DeviceCollection.Shutters.Shl1Shutter)]
         public InputSignal<bool> Zatvor_Shl1_Closed { get; set; }
 
 
-        [DoorIsCloseSignal<Doors>(Doors.Door1)]
+        [DoorIsCloseSignal<Gateway1.DeviceCollection.Doors>(Gateway1.DeviceCollection.Doors.Door1)]
         public InputSignal<bool> Door_Shl1_Closed { get; set; }
 
 
-        [ShutterIsOpenSignal<Shutters>(Shutters.Shl2Shutter)]
-        public InputSignal<bool> Zatvor_Shl2_Open { get; set; }
+        [ShutterIsOpenSignal<Gateway2.DeviceCollections.Shutters>(Gateway2.DeviceCollections.Shutters.Shl2Shutter)]
+        public InputSignal<bool> Zatvor_Shl2_Open { get; set; } 
 
 
-        [ShutterIsCloseSignal<Shutters>(Shutters.Shl2Shutter)]
+        [ShutterIsCloseSignal<Gateway2.DeviceCollections.Shutters>(Gateway2.DeviceCollections.Shutters.Shl2Shutter)]
         public InputSignal<bool> Zatvor_Shl2_Closed { get; set; }
 
 
-        [DoorIsCloseSignal<Doors>(Doors.Door2)]
+        [DoorIsCloseSignal<Gateway2.DeviceCollections.Doors>(Gateway2.DeviceCollections.Doors.Door2)]
         public InputSignal<bool> Door_Shl2_Closed { get; set; }
 
 

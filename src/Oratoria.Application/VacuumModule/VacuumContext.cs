@@ -14,69 +14,69 @@ namespace Oratoria.Application.VacuumModule
 {
     public class VacuumContext : ModuleContext
     {
-        public Valve FK_M1 { get; set; }
+        public Valve FK_M1 { get; }
 
-        public Valve FK_M2 { get; set; }
+        public Valve FK_M2 { get; }
 
-        public Valve FK_M3 { get; set; }
+        public Valve FK_M3 { get; }
 
-        public Valve FK_M4 { get; set; }
+        public Valve FK_M4 { get; }
 
-        public Valve FK_AVR { get; set; }
+        public Valve FK_AVR { get; }
 
-        public Valve FK_OK { get; set; }
+        public Valve FK_OK { get; }
 
-        public Valve FK_AP { get; set; }
+        public Valve FK_AP { get; }
 
-        public Valve FK_KN1 { get; set; }
+        public Valve FK_KN1 { get; }
 
-        public Valve KN2_Zatvor { get; set; }
+        public Valve KN2_Zatvor { get; }
 
-        public Valve FK_TM { get; set; }
+        public Valve FK_TM { get; }
 
-        public Valve FK_Shl1 { get; set; }
+        public Valve FK_Shl1 { get; }
 
-        public Valve FK_Shl2 { get; set; }
+        public Valve FK_Shl2 { get; }
 
-        public Valve KN_Zatvor_TM { get; set; }
+        public Valve KN_Zatvor_TM { get; }
 
-        public Valve FK_Trb { get; set; }
+        public Valve FK_Trb { get; }
 
-        public AVRPump AVR { get; set; }
+        public AVRPump AVR { get; }
 
-        public CryogenicPump KN1_TM { get; set; }
+        public CryogenicPump KN1_TM { get; }
 
-        public CryogenicPump KN2_Shl { get; set; }
+        public CryogenicPump KN2_Shl { get; }
 
-        public NitrogenFeeder AP1 { get; set; }
+        public NitrogenFeeder AP1 { get; }
 
-        public PressureSensor Module1LowPressure { get; set; }
+        public PressureSensor Module1LowPressure { get; }
 
-        public PressureSensor Module2LowPressure { get; set; }
+        public PressureSensor Module2LowPressure { get; }
 
-        public PressureSensor Module3LowPressure { get; set; }
+        public PressureSensor Module3LowPressure { get; }
 
-        public PressureSensor Module4LowPressure { get; set; }
+        public PressureSensor Module4LowPressure { get; }
 
-        public PressureSensor TransportLowVacuum { get; set; }
+        public PressureSensor TransportLowVacuum { get; }
 
-        public PressureSensor TransportHighVacuum { get; set; }
+        public PressureSensor TransportHighVacuum { get; }
 
-        public PressureSensor Gateway1LowVacuum { get; set; }
+        public PressureSensor Gateway1LowVacuum { get; }
 
-        public PressureSensor Gateway2LowVacuum { get; set; }
+        public PressureSensor Gateway2LowVacuum { get; }
 
-        public PressureSensor KNTransportLowVacuum { get; set; }
+        public PressureSensor KNTransportLowVacuum { get; }
 
-        public PressureSensor KNTransportHighVacuum { get; set; }
+        public PressureSensor KNTransportHighVacuum { get; }
 
-        public PressureSensor KNGatewaytLowVacuum { get; set; }
+        public PressureSensor KNGatewaytLowVacuum { get; }
 
-        public PressureSensor KNGatewayHighVacuum { get; set; }
+        public PressureSensor KNGatewayHighVacuum { get; }
 
-        public PressureSensor TrupoprovodLowVacuum { get; set; }
+        public PressureSensor TrupoprovodLowVacuum { get; }
 
-        public PressureSensor AVRLowVacuum { get; set; }
+        public PressureSensor AVRLowVacuum { get; }
 
         public VacuumContext(VacuumSignals signals, ILoggerFactory loggerFactory, ISettingsContext settings) : base(signals, loggerFactory, settings)
         {
@@ -112,10 +112,10 @@ namespace Oratoria.Application.VacuumModule
             KNTransportHighVacuum = Factory.CreateDevice<HighVacuumSensor>(PressureSensors.KNTransportHighVacuum);
             KNGatewaytLowVacuum = Factory.CreateDevice<LowVacuumSensor>(PressureSensors.KNGatewaytLowVacuum);
             KNGatewayHighVacuum = Factory.CreateDevice<HighVacuumSensor>(PressureSensors.KNGatewayHighVacuum);
-            TrupoprovodLowVacuum = Factory.CreateDevice <LowVacuumSensor>(PressureSensors.TrupoprovodLowVacuum);
-            AVRLowVacuum = Factory.CreateDevice <LowVacuumSensor>(PressureSensors.AVRLowVacuum);
+            TrupoprovodLowVacuum = Factory.CreateDevice<LowVacuumSensor>(PressureSensors.TrupoprovodLowVacuum);
+            AVRLowVacuum = Factory.CreateDevice<LowVacuumSensor>(PressureSensors.AVRLowVacuum);
         }
 
-        public override string Name => ModuleId.VacuumModule.GetDescription();
+        public override string Name => ModuleId.TransportModule.GetDescription();
     }
 }

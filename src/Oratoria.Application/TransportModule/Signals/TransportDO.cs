@@ -63,7 +63,7 @@ namespace Oratoria.Application.TransportModule.Signals
         public OutputSignal<bool> Shl1_Tormos { get; set; }
 
 
-        [ShutterOpenSignal<Shutters>(Shutters.Shl1Shutter)]
+        [ShutterOpenSignal<Gateway1.DeviceCollection.Shutters>(Gateway1.DeviceCollection.Shutters.Shl1Shutter)]
         public OutputSignal<bool> Shl1_Zatvor { get; set; }
 
         public OutputSignal<bool> Shl1_Podduv { get; set; }
@@ -79,7 +79,7 @@ namespace Oratoria.Application.TransportModule.Signals
         public OutputSignal<bool> Shl2_Tormos { get; set; }
 
 
-        [ShutterOpenSignal<Shutters>(Shutters.Shl2Shutter)]
+        [ShutterOpenSignal<Gateway2.DeviceCollections.Shutters>(Gateway2.DeviceCollections.Shutters.Shl2Shutter)]
         public OutputSignal<bool> Shl2_Zatvor { get; set; }
 
         public OutputSignal<bool> Shl2_Podduv { get; set; }
