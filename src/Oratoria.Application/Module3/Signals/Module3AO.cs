@@ -1,7 +1,11 @@
+using Oratoria.Application.Module3.DeviceCollection;
+using Oratoria.Domain.Devices.Heater.HeaterAttributes;
+using Oratoria.Domain.Devices.Leaker.LeakerAttributes;
+using Oratoria.Domain.Devices.Magnetron.MagnetronAttributes;
+using Oratoria.Domain.Devices.RRG.RRGAttributes;
 using Oratoria.Domain.Connection;
 using Oratoria.Domain.Signals;
 using Oratoria.Domain.Signals.Abstractions;
-using Oratoria.Domain.Signals.Strategies;
 using System.Collections;
 using System.Collections.ObjectModel;
 
@@ -12,12 +16,31 @@ namespace Oratoria.Application.Module3.Signals
         IOutputStrategy<double> _strategy;
 
         public ObservableCollection<OutputSignal<double>> AnalogOutputs;
+
+
+        [HeaterSetpointSignal<Heaters>(Heaters.Heater)]
         public OutputSignal<double> Moshchnost_BPN { get; set; }
+
+
+        [MagnetronSetpointSignal<Magnetrons>(Magnetrons.Magnetron1)]
         public OutputSignal<double> Moshchnost_BPM1 { get; set; }
+
+
+        [MagnetronSetpointSignal<Magnetrons>(Magnetrons.Magnetron2)]
         public OutputSignal<double> Moshchnost_BPM2 { get; set; }
+
+
+        [MagnetronSetpointSignal<Magnetrons>(Magnetrons.Magnetron3)]
         public OutputSignal<double> Moshchnost_BPM3 { get; set; }
+
+
+        [LeakerSetpointSignal<Leakers>(Leakers.ArgonLeaker)]
         public OutputSignal<double> Upravlenie_natekatelem { get; set; }
+
+
+        [RRGSetpointSignal<RRGs>(RRGs.RRG)]
         public OutputSignal<double> Raskhod_gasa_ustavka { get; set; }
+
 
         public Module3AO(ModbusTCPConfig netConfig, IOutputStrategy<double> strategy)
         {

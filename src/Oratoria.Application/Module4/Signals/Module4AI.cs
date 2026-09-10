@@ -1,3 +1,10 @@
+using Oratoria.Application.Module4.DeviceCollection;
+using Oratoria.Domain.Devices.Heater.HeaterAttributes;
+using Oratoria.Domain.Devices.Magnetron.MagnetronAttributes;
+using Oratoria.Domain.Devices.PressureSensor;
+using Oratoria.Domain.Devices.PressureSensor.PressureSensorAttributes;
+using Oratoria.Domain.Devices.RRG;
+using Oratoria.Domain.Devices.RRG.RRGAttributes;
 using Oratoria.Domain.Connection;
 using Oratoria.Domain.Signals;
 using Oratoria.Domain.Signals.Abstractions;
@@ -12,17 +19,52 @@ namespace Oratoria.Application.Module4.Signals
         IInputStrategy<double> _strategy;
 
         public ObservableCollection<InputSignal<double>> AnalogInputs;
+
+
+        [HeaterVoltageSignal<Heaters>(Heaters.Heater)]
         public InputSignal<double> Napryazhenie_BPN { get; set; }
+
+
+        [HeaterCurrentSignal<Heaters>(Heaters.Heater)]
         public InputSignal<double> Tok_BPN { get; set; }
+
+
+        [MagnetronCurrentSignal<Magnetrons>(Magnetrons.Magnetron1)]
         public InputSignal<double> Tok_BPM1 { get; set; }
+
+
+        [MagnetronVoltageSignal<Magnetrons>(Magnetrons.Magnetron1)]
         public InputSignal<double> Napryazhenie_BPM1 { get; set; }
+
+
+        [MagnetronCurrentSignal<Magnetrons>(Magnetrons.Magnetron2)]
         public InputSignal<double> Tok_BPM2 { get; set; }
+
+
+        [MagnetronVoltageSignal<Magnetrons>(Magnetrons.Magnetron2)]
         public InputSignal<double> Napryazhenie_BPM2 { get; set; }
+
+
+        [MagnetronCurrentSignal<Magnetrons>(Magnetrons.Magnetron3)]
         public InputSignal<double> Tok_BPM3 { get; set; }
+
+
+        [MagnetronVoltageSignal<Magnetrons>(Magnetrons.Magnetron3)]
         public InputSignal<double> Napryazhenie_BPM3 { get; set; }
+
+
+        [HeaterTemperatureSignal<Heaters>(Heaters.Heater)]
         public InputSignal<double> Termopara { get; set; }
+
+
+        [PressureSensorSignal<PressureSensors>(PressureSensors.VICB)]
         public InputSignal<double> VICB { get; set; }
+
+
+        [RRGRealValueSignal<RRGs>(RRGs.RRG)]
         public InputSignal<double> Raskhod_gasa_tekushchee { get; set; }
+
+
         public Module4AI(ModbusTCPConfig netConfig, IInputStrategy<double> strategy)
         {
 #if RELEASE

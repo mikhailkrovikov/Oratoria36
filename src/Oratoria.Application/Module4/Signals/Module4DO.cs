@@ -1,3 +1,11 @@
+using Oratoria.Application.Module4.DeviceCollection;
+using Oratoria.Domain.Devices.Abstractions.MechanicAttributes;
+using Oratoria.Domain.Devices.Flap.FlapAttributes;
+using Oratoria.Domain.Devices.Heater.HeaterAttributes;
+using Oratoria.Domain.Devices.Leaker.LeakerAttributes;
+using Oratoria.Domain.Devices.Magnetron.MagnetronAttributes;
+using Oratoria.Domain.Devices.Shutter.ShutterAttributes;
+using Oratoria.Domain.Devices.Valve.ValveAttributes;
 using Oratoria.Domain.Connection;
 using Oratoria.Domain.Signals;
 using Oratoria.Domain.Signals.Abstractions;
@@ -12,37 +20,122 @@ namespace Oratoria.Application.Module4.Signals
         IOutputStrategy<bool> _strategy;
 
         public ObservableCollection<OutputSignal<bool>> DigitalOutputs;
+
+
+        [MagnetronRotatingSignal<Magnetrons>(Magnetrons.Magnetron1)]
+        [MagnetronRotatingSignal<Magnetrons>(Magnetrons.Magnetron2)]
+        [MagnetronRotatingSignal<Magnetrons>(Magnetrons.Magnetron3)]
         public OutputSignal<bool> Vraschenie_magnetronov { get; set; }
+
+
         public OutputSignal<bool> Avariya_vakuumetra { get; set; }
+
         public OutputSignal<bool> Soglasovanie_bolshe { get; set; }
+
         public OutputSignal<bool> Kontrol_zagazhivaniya_vakuuma { get; set; }
         public OutputSignal<bool> Obegazhivanie_vakuuma { get; set; }
+
         public OutputSignal<bool> Termopara_vklyuchit { get; set; }
+
         public OutputSignal<bool> Anod_vklyuchit { get; set; }
+
         public OutputSignal<bool> Upravlenie_EVM_vklyuchit { get; set; }
+
         public OutputSignal<bool> Uroven_EVM_vklyuchit { get; set; }
+
         public OutputSignal<bool> VCH_vyklyuchit { get; set; }
+
+
+        [HeaterPowerOnSignal<Heaters>(Heaters.Heater)]
         public OutputSignal<bool> BPN_vklyuchit { get; set; }
+
+
+        [MagnetronPowerOnSignal<Magnetrons>(Magnetrons.Magnetron1)]
         public OutputSignal<bool> BPM1_vklyuchit { get; set; }
+
+
+        [MagnetronPowerOnSignal<Magnetrons>(Magnetrons.Magnetron2)]
         public OutputSignal<bool> BPM2_vklyuchit { get; set; }
+
+
+        [MagnetronPowerOnSignal<Magnetrons>(Magnetrons.Magnetron3)]
         public OutputSignal<bool> BPM3_vklyuchit { get; set; }
+
+
+        [LeakerOpenSignal<Leakers>(Leakers.ArgonLeaker)]
         public OutputSignal<bool> Natekatel_1_vklyuchit { get; set; }
+
+
+        [LeakerOpenSignal<Leakers>(Leakers.NitrogenLeaker)]
         public OutputSignal<bool> Natekatel_2_vklyuchit { get; set; }
+
+
         public OutputSignal<bool> BP_UOG_vklyuchit { get; set; }
+
+
         public OutputSignal<bool> UURG_vklyuchit { get; set; }
+
+
         public OutputSignal<bool> Privod_3_vklyuchit { get; set; }
+
+
+        [ValveOpenSignal<Valves>(Valves.ForValveCryoPump)]
         public OutputSignal<bool> FK_KN_otkryt { get; set; }
+
+
+        [FlapCloseSignal<Flaps>(Flaps.Flap)]
         public OutputSignal<bool> Zaslonka_otkryt { get; set; }
+
+
+        [ShutterOpenSignal<Shutters>(Shutters.Shutter)]
         public OutputSignal<bool> ShZ_otkryt { get; set; }
+
+
         public OutputSignal<bool> Podduv_vklyuchit { get; set; }
+
+
+        [MechanicDriverOutputSignal<Mechanics>(Mechanics.Manipulator)]
         public OutputSignal<bool> Privod_1_vklyuchit { get; set; }
+
+
+        [MechanicDriverOutputSignal<Mechanics>(Mechanics.Table)]
         public OutputSignal<bool> Privod_2_vklyuchit { get; set; }
+
+
+        [MechanicDriverOutputSignal<Mechanics>(Mechanics.Throttle)]
         public OutputSignal<bool> Privod_4_vklyuchit { get; set; }
+
+
+        [MechanicPosition1OutputSignal<Mechanics>(Mechanics.Table)]
+        [MechanicPosition1OutputSignal<Mechanics>(Mechanics.Manipulator)]
+        [MechanicPosition1OutputSignal<Mechanics>(Mechanics.Throttle)]
         public OutputSignal<bool> Poziciya_1 { get; set; }
+
+
+        [MechanicPosition2OutputSignal<Mechanics>(Mechanics.Table)]
+        [MechanicPosition2OutputSignal<Mechanics>(Mechanics.Manipulator)]
+        [MechanicPosition2OutputSignal<Mechanics>(Mechanics.Throttle)]
         public OutputSignal<bool> Poziciya_2 { get; set; }
+
+
+        [MechanicPosition3OutputSignal<Mechanics>(Mechanics.Table)]
+        [MechanicPosition3OutputSignal<Mechanics>(Mechanics.Manipulator)]
+        [MechanicPosition3OutputSignal<Mechanics>(Mechanics.Throttle)]
         public OutputSignal<bool> Poziciya_3 { get; set; }
+
+
+        [MechanicReversOutputSignal<Mechanics>(Mechanics.Table)]
+        [MechanicReversOutputSignal<Mechanics>(Mechanics.Manipulator)]
+        [MechanicReversOutputSignal<Mechanics>(Mechanics.Throttle)]
         public OutputSignal<bool> Revers_vklyuchit { get; set; }
+
+
+        [MechanicTormosOutputSignal<Mechanics>(Mechanics.Table)]
+        [MechanicTormosOutputSignal<Mechanics>(Mechanics.Manipulator)]
+        [MechanicTormosOutputSignal<Mechanics>(Mechanics.Throttle)]
         public OutputSignal<bool> Tormoz_vklyuchit { get; set; }
+
+
         public OutputSignal<bool> Kriogennyj_nasos_vklyuchit { get; set; }
 
         public Module4DO(ModbusTCPConfig netConfig, IOutputStrategy<bool> strategy)

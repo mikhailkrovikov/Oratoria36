@@ -1,3 +1,12 @@
+using Oratoria.Domain.Devices.Shutter.ShutterAttributes;
+using Oratoria.Domain.Devices.Valve.ValveAttributes;
+using Oratoria.Application.Module3.DeviceCollection;
+using Oratoria.Domain.Devices.Flap.FlapAttributes;
+using Oratoria.Domain.Devices.Leaker.LeakerAttributes;
+using Oratoria.Domain.Devices.Abstractions.MechanicAttributes;
+using Oratoria.Domain.Devices.Heater.HeaterAttributes;
+using Oratoria.Domain.Devices.Magnetron.MagnetronAttributes;
+using Oratoria.Domain.Devices.CryogenicPump;
 using Oratoria.Domain.Connection;
 using Oratoria.Domain.Signals;
 using Oratoria.Domain.Signals.Abstractions;
@@ -13,36 +22,131 @@ namespace Oratoria.Application.Module3.Signals
 
         public ObservableCollection<InputSignal<bool>> DigitalInputs;
         public InputSignal<bool> Nakal_est { get; set; }
+
         public InputSignal<bool> Upravlenie_EVM { get; set; }
+
         public InputSignal<bool> Uroven_EVM { get; set; }
+
+
+        [MagnetronIsRotatingSignal<Magnetrons>(Magnetrons.Magnetron1)]
+        [MagnetronIsRotatingSignal<Magnetrons>(Magnetrons.Magnetron2)]
+        [MagnetronIsRotatingSignal<Magnetrons>(Magnetrons.Magnetron3)]
         public InputSignal<bool> Dvizhenie_BPM { get; set; }
+
         public InputSignal<bool> Anod_vklyuchen { get; set; }
+
         public InputSignal<bool> VCH_vklyuchen { get; set; }
+
         public InputSignal<bool> VCH_vyklyuchen { get; set; }
+
         public InputSignal<bool> UURG_vklyucheno { get; set; }
+
+
+        [HeaterIsPowerOnSignal<Heaters>(Heaters.Heater)]
         public InputSignal<bool> BPN_vklyuchen { get; set; }
+
+
+        [MagnetronIsPowerOnSignal<Magnetrons>(Magnetrons.Magnetron1)]
         public InputSignal<bool> BPM1_vklyuchen { get; set; }
+
+
+        [MagnetronOverheatSignal<Magnetrons>(Magnetrons.Magnetron1)]
+        [MagnetronOverheatSignal<Magnetrons>(Magnetrons.Magnetron2)]
+        [MagnetronOverheatSignal<Magnetrons>(Magnetrons.Magnetron3)]
         public InputSignal<bool> Peregrev_BPM_est { get; set; }
+
+
+        [MagnetronOverloadSignal<Magnetrons>(Magnetrons.Magnetron1)]
+        [MagnetronOverloadSignal<Magnetrons>(Magnetrons.Magnetron2)]
+        [MagnetronOverloadSignal<Magnetrons>(Magnetrons.Magnetron3)]
         public InputSignal<bool> Peregruzka_BPM_est { get; set; }
+
+
+        [MagnetronIsPowerOnSignal<Magnetrons>(Magnetrons.Magnetron2)]
         public InputSignal<bool> BPM2_vklyuchen { get; set; }
+
+
+        [MechanicPosition1InputSignal<Mechanics>(Mechanics.Table)]
+        [MechanicPosition1InputSignal<Mechanics>(Mechanics.Manipulator)]
+        [MechanicPosition1InputSignal<Mechanics>(Mechanics.Throttle)]
         public InputSignal<bool> Poziciya_1 { get; set; }
+
+
+        [MechanicPosition2InputSignal<Mechanics>(Mechanics.Table)]
+        [MechanicPosition2InputSignal<Mechanics>(Mechanics.Manipulator)]
+        [MechanicPosition2InputSignal<Mechanics>(Mechanics.Throttle)]
         public InputSignal<bool> Poziciya_2 { get; set; }
+
+
+        [MechanicPosition3InputSignal<Mechanics>(Mechanics.Table)]
+        [MechanicPosition3InputSignal<Mechanics>(Mechanics.Manipulator)]
+        [MechanicPosition3InputSignal<Mechanics>(Mechanics.Throttle)]
         public InputSignal<bool> Poziciya_3 { get; set; }
+
+
+        [MagnetronIsPowerOnSignal<Magnetrons>(Magnetrons.Magnetron3)]
         public InputSignal<bool> BPM3_vklyuchen { get; set; }
+
+
+        [MechanicReversInputSignal<Mechanics>(Mechanics.Table)]
+        [MechanicReversInputSignal<Mechanics>(Mechanics.Manipulator)]
+        [MechanicReversInputSignal<Mechanics>(Mechanics.Throttle)]
         public InputSignal<bool> Revers_vklyuchen { get; set; }
+
+
+        [CryogenicPumpIsOnSignal<Pumps>(Pumps.CryogenicPump)]
         public InputSignal<bool> Kriogennyj_nasos_vklyuchen { get; set; }
+
+
+        [LeakerIsOpenSignal<Leakers>(Leakers.ArgonLeaker)]
         public InputSignal<bool> Natekatel_1_vklyuchen { get; set; }
+
+
+        [LeakerIsOpenSignal<Leakers>(Leakers.NitrogenLeaker)]
         public InputSignal<bool> Natekatel_2_vklyuchen { get; set; }
+
+
         public InputSignal<bool> BP_UOG_vklyuchen { get; set; }
+
+
+        [ValveIsOpenSignal<Valves>(Valves.ForValveCryoPump)]
         public InputSignal<bool> FK_KN_DU_63_otkryt { get; set; }
+
+
+        [ValveIsCloseSignal<Valves>(Valves.ForValveCryoPump)]
         public InputSignal<bool> FK_KN_DU_63_zakryt { get; set; }
+
+
+        [FlapIsOpenSignal<Flaps>(Flaps.Flap)]
         public InputSignal<bool> Zaslonka_otkryta { get; set; }
+
+
+        [FlapIsCloseSignal<Flaps>(Flaps.Flap)]
         public InputSignal<bool> Zaslonka_zakryta { get; set; }
+
+
+        [ShutterIsOpenSignal<Shutters>(Shutters.Shutter)]
         public InputSignal<bool> SHCHZ_otkryt { get; set; }
+
+
+        [ShutterIsCloseSignal<Shutters>(Shutters.Shutter)]
         public InputSignal<bool> SHCHZ_zakryt { get; set; }
+
+
         public InputSignal<bool> Peregrev_vody_est { get; set; }
+
         public InputSignal<bool> Voda_est { get; set; }
+
+
+        [MechanicTormosInputSignal<Mechanics>(Mechanics.Table)]
+        [MechanicTormosInputSignal<Mechanics>(Mechanics.Manipulator)]
+        [MechanicTormosInputSignal<Mechanics>(Mechanics.Throttle)]
         public InputSignal<bool> Tormoz_vklyuchen { get; set; }
+
+
+        [MechanicDriverOverloadInputSignal<Mechanics>(Mechanics.Table)]
+        [MechanicDriverOverloadInputSignal<Mechanics>(Mechanics.Manipulator)]
+        [MechanicDriverOverloadInputSignal<Mechanics>(Mechanics.Throttle)]
         public InputSignal<bool> Peregruz_privoda_est { get; set; }
 
         public Module3DI(ModbusTCPConfig netConfig, IInputStrategy<bool> strategy)
