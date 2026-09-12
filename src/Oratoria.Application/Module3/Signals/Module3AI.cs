@@ -13,45 +13,44 @@ namespace Oratoria.Application.Module3.Signals
 {
     public class Module3AI : IEnumerable<InputSignal<double>>
     {
-        IInputStrategy<double> _strategy;
-
+        private readonly IInputStrategy<double> _strategy;
         public ObservableCollection<InputSignal<double>> AnalogInputs;
 
 
         [HeaterVoltageSignal<Heaters>(Heaters.Heater)]
-        public InputSignal<double> Napryazhenie_BPN { get; set; }
+        public InputSignal<double> BPNVoltage { get; set; }
 
 
         [HeaterCurrentSignal<Heaters>(Heaters.Heater)]
-        public InputSignal<double> Tok_BPN { get; set; }
+        public InputSignal<double> BPNCurrent { get; set; }
 
 
         [MagnetronCurrentSignal<Magnetrons>(Magnetrons.Magnetron1)]
-        public InputSignal<double> Tok_BPM1 { get; set; }
+        public InputSignal<double> BPM1Current { get; set; }
 
 
         [MagnetronVoltageSignal<Magnetrons>(Magnetrons.Magnetron1)]
-        public InputSignal<double> Napryazhenie_BPM1 { get; set; }
+        public InputSignal<double> BPM1Voltage { get; set; }
 
 
         [MagnetronCurrentSignal<Magnetrons>(Magnetrons.Magnetron2)]
-        public InputSignal<double> Tok_BPM2 { get; set; }
+        public InputSignal<double> BPM2Current { get; set; }
 
 
         [MagnetronVoltageSignal<Magnetrons>(Magnetrons.Magnetron2)]
-        public InputSignal<double> Napryazhenie_BPM2 { get; set; }
+        public InputSignal<double> BPM2Voltage { get; set; }
 
 
         [MagnetronCurrentSignal<Magnetrons>(Magnetrons.Magnetron3)]
-        public InputSignal<double> Tok_BPM3 { get; set; }
+        public InputSignal<double> BPM3Current { get; set; }
 
 
         [MagnetronVoltageSignal<Magnetrons>(Magnetrons.Magnetron3)]
-        public InputSignal<double> Napryazhenie_BPM3 { get; set; }
+        public InputSignal<double> BPM3Voltage { get; set; }
 
 
         [HeaterTemperatureSignal<Heaters>(Heaters.Heater)]
-        public InputSignal<double> Termopara { get; set; }
+        public InputSignal<double> BPNTemperature { get; set; }
 
 
         [PressureSensorSignal<PressureSensors>(PressureSensors.VICB)]
@@ -59,7 +58,7 @@ namespace Oratoria.Application.Module3.Signals
 
 
         [RRGRealValueSignal<RRGs>(RRGs.RRG)]
-        public InputSignal<double> Raskhod_gasa_tekushchee { get; set; }
+        public InputSignal<double> RRGRealvalue { get; set; }
 
 
         public Module3AI(ModbusTCPConfig netConfig, IInputStrategy<double> strategy)
@@ -70,33 +69,34 @@ namespace Oratoria.Application.Module3.Signals
             _strategy = strategy;
 #endif
 
-            Napryazhenie_BPN = new InputSignal<double>("Напряжение БПН", 0, _strategy);
-            Tok_BPN = new InputSignal<double>("Ток БПН", 1, _strategy);
-            Tok_BPM1 = new InputSignal<double>("Ток БПМ1", 2, _strategy);
-            Napryazhenie_BPM1 = new InputSignal<double>("Напряжение БПМ1", 3, _strategy);
-            Tok_BPM2 = new InputSignal<double>("Ток БПМ2", 4, _strategy);
-            Napryazhenie_BPM2 = new InputSignal<double>("Напряжение БПМ2", 5, _strategy);
-            Tok_BPM3 = new InputSignal<double>("Ток БПМ3", 6, _strategy);
-            Napryazhenie_BPM3 = new InputSignal<double>("Напряжение БПМ3", 7, _strategy);
-            Termopara = new InputSignal<double>("Термопара", 8, _strategy);
+            BPNVoltage = new InputSignal<double>("Напряжение БПН", 0, _strategy);
+            BPNCurrent = new InputSignal<double>("Ток БПН", 1, _strategy);
+            BPM1Current = new InputSignal<double>("Ток БПМ1", 2, _strategy);
+            BPM1Voltage = new InputSignal<double>("Напряжение БПМ1", 3, _strategy);
+            BPM2Current = new InputSignal<double>("Ток БПМ2", 4, _strategy);
+            BPM2Voltage = new InputSignal<double>("Напряжение БПМ2", 5, _strategy);
+            BPM3Current = new InputSignal<double>("Ток БПМ3", 6, _strategy);
+            BPM3Voltage = new InputSignal<double>("Напряжение БПМ3", 7, _strategy);
+            BPNTemperature = new InputSignal<double>("Температура БПН", 8, _strategy);
             VICB = new InputSignal<double>("ВИЦБ", 9, _strategy);
-            Raskhod_gasa_tekushchee = new InputSignal<double>("Расход газа: текущее", 10, _strategy);
+            RRGRealvalue = new InputSignal<double>("Расход газа: текущее", 10, _strategy);
 
             AnalogInputs =
             [
-                Napryazhenie_BPN,
-                Tok_BPN,
-                Tok_BPM1,
-                Napryazhenie_BPM1,
-                Tok_BPM2,
-                Napryazhenie_BPM2,
-                Tok_BPM3,
-                Napryazhenie_BPM3,
-                Termopara,
+                BPNVoltage,
+                BPNCurrent,
+                BPM1Current,
+                BPM1Voltage,
+                BPM2Current,
+                BPM2Voltage,
+                BPM3Current,
+                BPM3Voltage,
+                BPNTemperature,
                 VICB,
-                Raskhod_gasa_tekushchee
+                RRGRealvalue
             ];
         }
+        
 
         public IEnumerator<InputSignal<double>> GetEnumerator()
         {
