@@ -33,7 +33,7 @@ namespace Oratoria.Domain.Devices.Carriage
         public override MechanicMovingProfile<CarriageErrors> GetMovingProfile(CarriagePosition startPos, CarriagePosition endPos)
         {
             if (startPos == endPos)
-                throw new Exception("позиции перемещения каретки совпадают");
+                throw new InvalidOperationException("позиции перемещения каретки совпадают");
             var startPosError = CarriageErrors.NotInStartPosition;
             var revers = endPos - startPos < 0;
             var tormos = true;
@@ -84,6 +84,12 @@ namespace Oratoria.Domain.Devices.Carriage
             MechanicsErrors.NotInStartPos => CarriageErrors.NotInStartPosition,
             MechanicsErrors.IndefinitePos => CarriageErrors.IndefinitePosition,
             MechanicsErrors.UnsertainPos => CarriageErrors.UncertainPosition,
+            MechanicsErrors.NotComeInPos1 => CarriageErrors.NotCameInPosition1,
+            MechanicsErrors.NotComeInPos2 => CarriageErrors.NotCameInPosition2,
+            MechanicsErrors.NotComeInPos3 => CarriageErrors.NotCameInPosition3,
+            MechanicsErrors.NotComeInPos4 => CarriageErrors.NotCameInPosition4,
+            MechanicsErrors.NotComeInPos5 => CarriageErrors.NotCameInPosition5,
+            MechanicsErrors.NotComeInPos6 => CarriageErrors.NotCameInPosition6,
             MechanicsErrors.None => CarriageErrors.None,
             _ => throw new NotSupportedException($"Не удалось преобразовать ошибку из {errors} в CarriageErrors")
         };

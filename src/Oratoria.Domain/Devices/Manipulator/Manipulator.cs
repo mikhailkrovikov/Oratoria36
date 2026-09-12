@@ -10,9 +10,9 @@ namespace Oratoria.Domain.Devices.Manipulator
 {
     public class Manipulator : MechanicDevice<ManipulatorPosition, ManipulatorErrors>
     {
-        public Manipulator(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory, ISettingsContext settings) 
+        public Manipulator(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory, ISettingsContext settings)
             : base(deviceId, signals, loggerFactory, settings)
-        {         
+        {
         }
 
         [DeviceAction("Исходная → Транспорт")]
@@ -111,13 +111,6 @@ namespace Oratoria.Domain.Devices.Manipulator
 
         private static ManipulatorErrors GetEndPosError(ManipulatorPosition startPos, ManipulatorPosition endPos)
         {
-            if (startPos == ManipulatorPosition.Home)
-            {
-                if (endPos == ManipulatorPosition.Transport)
-                    return ManipulatorErrors.NotComeInPos3;
-                if (endPos == ManipulatorPosition.Module)
-                    return ManipulatorErrors.NotComeInPos1;
-            }
             if (endPos == ManipulatorPosition.Home)
             {
                 if (startPos == ManipulatorPosition.Transport)

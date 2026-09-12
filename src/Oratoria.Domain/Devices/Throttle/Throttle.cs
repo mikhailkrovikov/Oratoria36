@@ -74,7 +74,7 @@ namespace Oratoria.Domain.Devices.Throttle
         {
             if (startPos == endPos)
                 throw new InvalidOperationException("позиции перемещения стола совпадают");
-            var startPosError = ThrottleErrors.IndefinitePosition;
+            var startPosError = ThrottleErrors.NotinStartPos;
             var revers = endPos - startPos < 0;
             var tormos = true;
             var startPosSignal = GetThrottleInputSignalFromPos(startPos);
@@ -131,7 +131,7 @@ namespace Oratoria.Domain.Devices.Throttle
         protected override ThrottleErrors MapError(MechanicsErrors error) => error switch
         {
             MechanicsErrors.NotInited => ThrottleErrors.NotInited,
-            MechanicsErrors.NotInStartPos => ThrottleErrors.IndefinitePosition,
+            MechanicsErrors.NotInStartPos => ThrottleErrors.NotinStartPos,
             MechanicsErrors.IndefinitePos => ThrottleErrors.IndefinitePosition,
             MechanicsErrors.UnsertainPos => ThrottleErrors.UncertainPosition,
             MechanicsErrors.NotComeInPos1 => ThrottleErrors.CannotClose,
@@ -144,6 +144,7 @@ namespace Oratoria.Domain.Devices.Throttle
         protected override MechanicsErrors ToBaseError(ThrottleErrors error) => error switch
         {
             ThrottleErrors.NotInited => MechanicsErrors.NotInited,
+            ThrottleErrors.NotinStartPos => MechanicsErrors.NotInStartPos,
             ThrottleErrors.IndefinitePosition => MechanicsErrors.IndefinitePos,
             ThrottleErrors.UncertainPosition => MechanicsErrors.UnsertainPos,
             ThrottleErrors.CannotClose => MechanicsErrors.NotComeInPos1,
