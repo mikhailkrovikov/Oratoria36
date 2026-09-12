@@ -78,53 +78,6 @@ namespace Oratoria.Domain.Devices.Carriage
             throw new InvalidOperationException("неверная позиция каретки");
         }
 
-        //protected override CarriageErrors MapError(MechanicsErrors errors) => errors switch
-        //{
-        //    MechanicsErrors.NotInited => CarriageErrors.NotInited,
-        //    MechanicsErrors.NotInStartPos => CarriageErrors.NotInStartPosition,
-        //    MechanicsErrors.IndefinitePos => CarriageErrors.IndefinitePosition,
-        //    MechanicsErrors.UnsertainPos => CarriageErrors.UncertainPosition,
-        //    MechanicsErrors.NotComeInPos1 => CarriageErrors.NotCameInPosition1,
-        //    MechanicsErrors.NotComeInPos2 => CarriageErrors.NotCameInPosition2,
-        //    MechanicsErrors.NotComeInPos3 => CarriageErrors.NotCameInPosition3,
-        //    MechanicsErrors.NotComeInPos4 => CarriageErrors.NotCameInPosition4,
-        //    MechanicsErrors.NotComeInPos5 => CarriageErrors.NotCameInPosition5,
-        //    MechanicsErrors.NotComeInPos6 => CarriageErrors.NotCameInPosition6,
-        //    MechanicsErrors.None => CarriageErrors.None,
-        //    _ => throw new NotSupportedException($"Не удалось преобразовать ошибку из {errors} в CarriageErrors")
-        //};
-
-        //protected override CarriagePosition MapState(MechanicsPositions position) => position switch
-        //{
-
-        //    MechanicsPositions.Position1 => CarriagePosition.Position1,
-        //    MechanicsPositions.Position2 => CarriagePosition.Position2,
-        //    MechanicsPositions.Position3 => CarriagePosition.Position3,
-        //    MechanicsPositions.Position4 => CarriagePosition.Position4,
-        //    MechanicsPositions.Position5 => CarriagePosition.Position5,
-        //    MechanicsPositions.Position6 => CarriagePosition.Position6,
-        //    MechanicsPositions.Indefinite => CarriagePosition.Indefinite,
-        //    MechanicsPositions.Uncertain => CarriagePosition.Uncertain,
-        //    MechanicsPositions.Transition => CarriagePosition.Transition,
-        //    _ => CarriagePosition.Uncertain
-        //};
-
-        //protected override MechanicsErrors ToBaseError(CarriageErrors error) => error switch
-        //{
-        //    CarriageErrors.NotInited => MechanicsErrors.NotInited,
-        //    CarriageErrors.IndefinitePosition => MechanicsErrors.IndefinitePos,
-        //    CarriageErrors.NotInStartPosition => MechanicsErrors.NotInStartPos,
-        //    CarriageErrors.UncertainPosition => MechanicsErrors.UnsertainPos,
-        //    CarriageErrors.NotCameInPosition1 => MechanicsErrors.NotComeInPos1,
-        //    CarriageErrors.NotCameInPosition2 => MechanicsErrors.NotComeInPos2,
-        //    CarriageErrors.NotCameInPosition3 => MechanicsErrors.NotComeInPos3,
-        //    CarriageErrors.NotCameInPosition4 => MechanicsErrors.NotComeInPos4,
-        //    CarriageErrors.NotCameInPosition5 => MechanicsErrors.NotComeInPos5,
-        //    CarriageErrors.NotCameInPosition6 => MechanicsErrors.NotComeInPos6,
-        //    CarriageErrors.None => MechanicsErrors.None,
-        //    _ => throw new NotSupportedException($"Не удалось преобразовать ошибку из {error} в MechanicsErrors")
-        //};
-
         private static CarriageErrors GetEndPosError(CarriagePosition endPos)
         {
             if (endPos == CarriagePosition.Position1)
