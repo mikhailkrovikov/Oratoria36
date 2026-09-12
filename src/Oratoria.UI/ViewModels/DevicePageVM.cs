@@ -27,6 +27,7 @@ public class DevicePageVM : INotifyPropertyChanged
     private readonly object _deviceErrors;
     private readonly Type _errorEnumType;
     private readonly MethodInfo _getCategoryMethod;
+    private readonly MethodInfo? _mapErrorMethod;
     private readonly CollectionViewSource _deviceLogsSource;
     private bool _isRunning;
 
@@ -57,9 +58,11 @@ public class DevicePageVM : INotifyPropertyChanged
         var deviceInterface = DeviceReflection.GetDeviceInterface(device.GetType());
 
         _deviceNameProp = device.GetType().GetProperty("DeviceName");
-        _stateProp = deviceInterface.GetProperty("State")!;
+        _stateProp = device.GetType().GetProperty("Position")
+            ?? deviceInterface.GetProperty("State")!;
         _deviceErrors = deviceInterface.GetProperty("DeviceErrors")!.GetValue(device)!;
         _errorEnumType = deviceInterface.GetGenericArguments()[1];
+        _mapErrorMethod = device.GetType().GetMethod("MapError", new[] { _errorEnumType });
         _getCategoryMethod = typeof(DeviceError<>).MakeGenericType(_errorEnumType).GetMethod(nameof(DeviceError<Enum>.GetCategory))!;
 
         var stateChanged = deviceInterface.GetEvent("StateChanged")!;
@@ -239,7 +242,10 @@ public class DevicePageVM : INotifyPropertyChanged
             if (category == DeviceErrorCategory.None)
                 continue;
 
-            Errors.Add(error.GetDescription());
+            var displayError = _mapErrorMethod is null
+                ? error
+                : (Enum)_mapErrorMethod.Invoke(_device, new object[] { error })!;
+            Errors.Add(displayError.GetDescription());
         }
 
         OnPropertyChanged(nameof(Errors));

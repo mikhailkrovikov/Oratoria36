@@ -18,6 +18,7 @@ namespace Oratoria.Domain.Devices.Manipulator
         [DeviceAction("Исходная → Транспорт")]
         public async Task<bool> FromHomeToTransport()
         {
+            Logger.LogInformation("Из исходной в транспорт");
             try
             {
                 return await Move(ManipulatorPosition.Home, ManipulatorPosition.Transport) == ManipulatorPosition.Transport;
@@ -32,6 +33,7 @@ namespace Oratoria.Domain.Devices.Manipulator
         [DeviceAction("Модуль → Исходная")]
         public async Task<bool> FromModuleToHome()
         {
+            Logger.LogInformation("Из модуля в исходную");
             try
             {
                 return await Move(ManipulatorPosition.Module, ManipulatorPosition.Home) == ManipulatorPosition.Home;
@@ -46,6 +48,7 @@ namespace Oratoria.Domain.Devices.Manipulator
         [DeviceAction("Исходная → Модуль")]
         public async Task<bool> FromHomeToModule()
         {
+            Logger.LogInformation("Из исходной в модуль");
             try
             {
                 return await Move(ManipulatorPosition.Home, ManipulatorPosition.Module) == ManipulatorPosition.Module;
@@ -60,6 +63,7 @@ namespace Oratoria.Domain.Devices.Manipulator
         [DeviceAction("Транспорт → Исходная")]
         public async Task<bool> FromTransportToHome()
         {
+            Logger.LogInformation("Из транспорта в исходную");
             try
             {
                 return await Move(ManipulatorPosition.Transport, ManipulatorPosition.Home) == ManipulatorPosition.Home;

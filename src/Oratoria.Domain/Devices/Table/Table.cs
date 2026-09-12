@@ -18,6 +18,7 @@ namespace Oratoria.Domain.Devices.Table
         [DeviceAction("Исходная → Откат")]
         public async Task<bool> FromHomeToRollback()
         {
+            Logger.LogInformation("Из исходной в откат");
             try
             {
                 return await Move(ModuleTablePosition.Home, ModuleTablePosition.Rollback) == ModuleTablePosition.Rollback;
@@ -32,6 +33,7 @@ namespace Oratoria.Domain.Devices.Table
         [DeviceAction("Откат → Обработка")]
         public async Task<bool> FromRollbackToProcessing()
         {
+            Logger.LogInformation("Из отката в обработку");
             try
             {
                 return await Move(ModuleTablePosition.Rollback, ModuleTablePosition.Processing) == ModuleTablePosition.Processing;
@@ -46,6 +48,7 @@ namespace Oratoria.Domain.Devices.Table
         [DeviceAction("Обработка → Откат")]
         public async Task<bool> FromProcessingToRollback()
         {
+            Logger.LogInformation("Из обработки в откат");
             try
             {
                 return await Move(ModuleTablePosition.Processing, ModuleTablePosition.Rollback) == ModuleTablePosition.Rollback;
@@ -60,6 +63,7 @@ namespace Oratoria.Domain.Devices.Table
         [DeviceAction("Откат → Исходная")]
         public async Task<bool> FromRollbackToHome()
         {
+            Logger.LogInformation("Из отката в исходную");
             try
             {
                 return await Move(ModuleTablePosition.Rollback, ModuleTablePosition.Home) == ModuleTablePosition.Home;

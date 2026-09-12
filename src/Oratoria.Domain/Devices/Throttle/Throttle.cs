@@ -18,6 +18,7 @@ namespace Oratoria.Domain.Devices.Throttle
         [DeviceAction("Открыть")]
         public async Task<bool> Open()
         {
+            Logger.LogInformation("Открытие");
             try
             {
                 if (MapState(State) == ThrottlePosition.Throttling)
@@ -37,6 +38,7 @@ namespace Oratoria.Domain.Devices.Throttle
         [DeviceAction("Закрыть")]
         public async Task<bool> Close()
         {
+            Logger.LogInformation("Закрытие");
             try
             {
                 if (MapState(State) == ThrottlePosition.Throttling)
@@ -55,6 +57,7 @@ namespace Oratoria.Domain.Devices.Throttle
         [DeviceAction("Дросселирование")]
         public async Task<bool> Throttling()
         {
+            Logger.LogInformation("Дросселирование");
             try
             {
                 if (MapState(State) == ThrottlePosition.Close)

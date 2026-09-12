@@ -18,6 +18,7 @@ namespace Oratoria.Domain.Devices.Carriage
         [DeviceAction("Отправить каретку")]
         public async Task<bool> MoveCarriage([DeviceActionParameter("позиция")] int position)
         {
+            Logger.LogInformation($"в позицию {position}");
             try
             {
                 var state = MapState(State);

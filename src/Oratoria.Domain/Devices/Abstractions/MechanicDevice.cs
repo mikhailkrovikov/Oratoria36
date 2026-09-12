@@ -30,7 +30,7 @@ namespace Oratoria.Domain.Devices.Abstractions
                     $"Не удалось преобразовать {position} в {typeof(TPos).Name}.");
         }
 
-        protected TErr MapError(MechanicsErrors error)
+        public TErr MapError(MechanicsErrors error)
         {
             return _errorMap.TryGetValue(error, out var result)
                 ? result
