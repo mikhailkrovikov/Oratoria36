@@ -106,7 +106,7 @@
             </DockPanel>
         </Border>
 
-        <Border Grid.Column="6" Style="{StaticResource SoftGroupContainer}">
+        <!--<Border Grid.Column="6" Style="{StaticResource SoftGroupContainer}">
             <DockPanel>
                 <TextBlock Text="АНАЛОГОВЫЕ ВЫХОДЫ"
                            Style="{StaticResource SectionTitle}"
@@ -135,6 +135,6 @@
                     </Grid>
                 </ScrollViewer>
             </DockPanel>
-        </Border>
+        </Border>-->
     </Grid>
 </Page>

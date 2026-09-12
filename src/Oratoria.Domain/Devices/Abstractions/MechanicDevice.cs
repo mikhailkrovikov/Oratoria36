@@ -26,24 +26,21 @@ namespace Oratoria.Domain.Devices.Abstractions
         {
             return _positionMap.TryGetValue(position, out var result)
                 ? result
-                : throw new NotSupportedException(
-                    $"Не удалось преобразовать {position} в {typeof(TPos).Name}.");
+                : throw new NotSupportedException($"Не удалось преобразовать {position} в {typeof(TPos).Name}.");
         }
 
         public TErr MapError(MechanicsErrors error)
         {
             return _errorMap.TryGetValue(error, out var result)
                 ? result
-                : throw new NotSupportedException(
-                    $"Не удалось преобразовать {error} в {typeof(TErr).Name}.");
+                : throw new NotSupportedException($"Не удалось преобразовать {error} в {typeof(TErr).Name}.");
         }
 
         protected MechanicsErrors ToBaseError(TErr error)
         {
             return _baseErrorMap.TryGetValue(error, out var result)
                 ? result
-                : throw new NotSupportedException(
-                    $"Не удалось преобразовать {typeof(TErr).Name}.{error} в MechanicsErrors.");
+                : throw new NotSupportedException($"Не удалось преобразовать {typeof(TErr).Name}.{error} в MechanicsErrors.");
         }
 
         public InputSignal<bool> Position1In { get; set; }
@@ -134,53 +131,23 @@ namespace Oratoria.Domain.Devices.Abstractions
             Position3In.OnSignalChanged += _ => OnPositionChanged();
 
             ActionTime = Settings.GetSetting(deviceId, nameof(ActionTime), "Время движения актуатора", "сек", 30);
-        }
 
-        static MechanicDevice()
-        {
             foreach (var field in typeof(TPos).GetFields(BindingFlags.Public | BindingFlags.Static))
             {
-                var attribute = field.GetCustomAttribute<MechanicStatusMappingAttribute>()
-                    ?? throw new InvalidOperationException(
-                        $"Для {typeof(TPos).Name}.{field.Name} не задано соответствие позиции.");
-
-                if (!Enum.IsDefined(typeof(MechanicsPositions), attribute.Position))
-                    throw new InvalidOperationException(
-                        $"Для {typeof(TPos).Name}.{field.Name} задана неизвестная базовая позиция.");
-
+                var attribute = field.GetCustomAttribute<MechanicStatusMappingAttribute>();
                 var position = (TPos)field.GetValue(null)!;
-
-                if (_positionMap.ContainsValue(position))
-                    throw new InvalidOperationException(
-                        $"В {typeof(TPos).Name} несколько элементов имеют значение {position}.");
-
-                if (!_positionMap.TryAdd(attribute.Position, position))
-                    throw new InvalidOperationException(
-                        $"В {typeof(TPos).Name} повторяется соответствие {attribute.Position}.");
+                _positionMap.Add(attribute.Position, position);
             }
 
             foreach (var field in typeof(TErr).GetFields(
                 BindingFlags.Public | BindingFlags.Static))
             {
-                var attribute = field.GetCustomAttribute<MechanicErrorMappingAttribute>()
-                    ?? throw new InvalidOperationException(
-                        $"Для {typeof(TErr).Name}.{field.Name} не задано соответствие ошибки.");
-
-                if (!Enum.IsDefined(typeof(MechanicsErrors), attribute.Error))
-                    throw new InvalidOperationException(
-                        $"Для {typeof(TErr).Name}.{field.Name} задана неизвестная базовая ошибка.");
-
+                var attribute = field.GetCustomAttribute<MechanicErrorMappingAttribute>();
                 var error = (TErr)field.GetValue(null)!;
-
-                if (!_baseErrorMap.TryAdd(error, attribute.Error))
-                    throw new InvalidOperationException(
-                        $"В {typeof(TErr).Name} несколько элементов имеют значение {error}.");
-
-                if (!_errorMap.TryAdd(attribute.Error, error))
-                    throw new InvalidOperationException(
-                        $"В {typeof(TErr).Name} повторяется соответствие {attribute.Error}.");
+                _baseErrorMap.Add(error, attribute.Error);
+                _errorMap.Add(attribute.Error, error);
             }
-        }
+        } 
 
         protected void DriverOverloadHandler(bool value)
         {
