@@ -7,6 +7,7 @@ using Oratoria.Domain.Settings;
 using Oratoria.Domain.Signals;
 using Oratoria.Domain.Signals.Abstractions;
 using Oratoria.Infrastructure;
+using System.Reflection;
 
 namespace Oratoria.Domain.Devices.Abstractions
 {
@@ -15,14 +16,35 @@ namespace Oratoria.Domain.Devices.Abstractions
         where TPos : Enum
         where TErr : Enum
     {
-        public const int TIME_FOR_WAITING_POS_MILLISEC = 1000;
+        private static readonly Dictionary<MechanicsPositions, TPos> _positionMap = new();
+        private static readonly Dictionary<MechanicsErrors, TErr> _errorMap = new();
+        private static readonly Dictionary<TErr, MechanicsErrors> _baseErrorMap = new();
+
         public abstract MechanicMovingProfile<TErr> GetMovingProfile(TPos startPos, TPos endPos);
 
-        protected abstract TPos MapState(MechanicsPositions position);
+        protected TPos MapState(MechanicsPositions position)
+        {
+            return _positionMap.TryGetValue(position, out var result)
+                ? result
+                : throw new NotSupportedException(
+                    $"Не удалось преобразовать {position} в {typeof(TPos).Name}.");
+        }
 
-        protected abstract TErr MapError(MechanicsErrors errors);
+        protected TErr MapError(MechanicsErrors error)
+        {
+            return _errorMap.TryGetValue(error, out var result)
+                ? result
+                : throw new NotSupportedException(
+                    $"Не удалось преобразовать {error} в {typeof(TErr).Name}.");
+        }
 
-        protected abstract MechanicsErrors ToBaseError(TErr error);
+        protected MechanicsErrors ToBaseError(TErr error)
+        {
+            return _baseErrorMap.TryGetValue(error, out var result)
+                ? result
+                : throw new NotSupportedException(
+                    $"Не удалось преобразовать {typeof(TErr).Name}.{error} в MechanicsErrors.");
+        }
 
         public InputSignal<bool> Position1In { get; set; }
 
@@ -111,7 +133,53 @@ namespace Oratoria.Domain.Devices.Abstractions
             Position2In.OnSignalChanged += _ => OnPositionChanged();
             Position3In.OnSignalChanged += _ => OnPositionChanged();
 
-            ActionTime = Settings.GetSetting(deviceId, nameof(ActionTime), "Время движения актуатора", "сек", 30); 
+            ActionTime = Settings.GetSetting(deviceId, nameof(ActionTime), "Время движения актуатора", "сек", 30);
+        }
+
+        static MechanicDevice()
+        {
+            foreach (var field in typeof(TPos).GetFields(BindingFlags.Public | BindingFlags.Static))
+            {
+                var attribute = field.GetCustomAttribute<MechanicStatusMappingAttribute>()
+                    ?? throw new InvalidOperationException(
+                        $"Для {typeof(TPos).Name}.{field.Name} не задано соответствие позиции.");
+
+                if (!Enum.IsDefined(typeof(MechanicsPositions), attribute.Position))
+                    throw new InvalidOperationException(
+                        $"Для {typeof(TPos).Name}.{field.Name} задана неизвестная базовая позиция.");
+
+                var position = (TPos)field.GetValue(null)!;
+
+                if (_positionMap.ContainsValue(position))
+                    throw new InvalidOperationException(
+                        $"В {typeof(TPos).Name} несколько элементов имеют значение {position}.");
+
+                if (!_positionMap.TryAdd(attribute.Position, position))
+                    throw new InvalidOperationException(
+                        $"В {typeof(TPos).Name} повторяется соответствие {attribute.Position}.");
+            }
+
+            foreach (var field in typeof(TErr).GetFields(
+                BindingFlags.Public | BindingFlags.Static))
+            {
+                var attribute = field.GetCustomAttribute<MechanicErrorMappingAttribute>()
+                    ?? throw new InvalidOperationException(
+                        $"Для {typeof(TErr).Name}.{field.Name} не задано соответствие ошибки.");
+
+                if (!Enum.IsDefined(typeof(MechanicsErrors), attribute.Error))
+                    throw new InvalidOperationException(
+                        $"Для {typeof(TErr).Name}.{field.Name} задана неизвестная базовая ошибка.");
+
+                var error = (TErr)field.GetValue(null)!;
+
+                if (!_baseErrorMap.TryAdd(error, attribute.Error))
+                    throw new InvalidOperationException(
+                        $"В {typeof(TErr).Name} несколько элементов имеют значение {error}.");
+
+                if (!_errorMap.TryAdd(attribute.Error, error))
+                    throw new InvalidOperationException(
+                        $"В {typeof(TErr).Name} повторяется соответствие {attribute.Error}.");
+            }
         }
 
         protected void DriverOverloadHandler(bool value)
@@ -161,10 +229,10 @@ namespace Oratoria.Domain.Devices.Abstractions
             var pos5 = Position5In?.Value;
             var pos6 = Position6In?.Value;
 
-            var trueCount = 
-                (pos1 ? 1 : 0) + 
-                (pos2 ? 1 : 0) + 
-                (pos3 ? 1 : 0) + 
+            var trueCount =
+                (pos1 ? 1 : 0) +
+                (pos2 ? 1 : 0) +
+                (pos3 ? 1 : 0) +
                 (pos4 ?? false ? 1 : 0) +
                 (pos5 ?? false ? 1 : 0) +
                 (pos6 ?? false ? 1 : 0);
@@ -268,7 +336,7 @@ namespace Oratoria.Domain.Devices.Abstractions
             try
             {
                 Actuator.Value = true;
-                await Task.Delay(TIME_FOR_WAITING_POS_MILLISEC, token);
+                await Task.Delay(ActionTime.Value * 1000, token);
                 if (!movingProfile.StartPosSignal.Value)
                 {
                     Logger.LogError($"{DeviceName}: неверное исходное положение");
@@ -330,7 +398,7 @@ namespace Oratoria.Domain.Devices.Abstractions
             var ret = await EventWaiter.WaitEvent(nameof(TormosIn.OnSignalChanged),
                 TormosIn,
                 (bool v) => TormosIn.Value == value,
-                TIME_FOR_WAITING_POS_MILLISEC, token);
+                ActionTime.Value * 1000, token);
             if (!ret)
             {
                 Logger.LogWarning($"{DeviceName}: тормоз: ошибка обратной связи");
@@ -347,7 +415,7 @@ namespace Oratoria.Domain.Devices.Abstractions
             var ret = await EventWaiter.WaitEvent(nameof(ReversIn.OnSignalChanged),
                 ReversIn,
                 (bool v) => ReversIn.Value == value,
-                TIME_FOR_WAITING_POS_MILLISEC, token);
+                ActionTime.Value * 1000, token);
             if (!ret)
             {
                 Logger.LogWarning($"{DeviceName}: реверс: ошибка обратной связи");
@@ -358,12 +426,12 @@ namespace Oratoria.Domain.Devices.Abstractions
     }
 
     public class MechanicMovingProfile<TErr>(
-        OutputSignal<bool> outPos, 
+        OutputSignal<bool> outPos,
         InputSignal<bool> startPos,
-        InputSignal<bool> endPos, 
-        bool revers, 
-        bool tormos, 
-        TErr endPosError, 
+        InputSignal<bool> endPos,
+        bool revers,
+        bool tormos,
+        TErr endPosError,
         TErr startPosError) where TErr : Enum
     {
         public OutputSignal<bool> EndPosOutSignal { get; } = outPos;

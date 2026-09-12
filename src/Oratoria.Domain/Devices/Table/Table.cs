@@ -120,41 +120,41 @@ namespace Oratoria.Domain.Devices.Table
             throw new InvalidOperationException("Неверная конечная позиция");
         }
 
-        protected override ModuleTablePosition MapState(MechanicsPositions position) => position switch
-        {
-            MechanicsPositions.Position1 => ModuleTablePosition.Home,
-            MechanicsPositions.Position2 => ModuleTablePosition.Rollback,
-            MechanicsPositions.Position3 => ModuleTablePosition.Processing,
-            MechanicsPositions.Indefinite => ModuleTablePosition.Indefinite,
-            MechanicsPositions.Uncertain => ModuleTablePosition.Uncertain,
-            MechanicsPositions.Transition => ModuleTablePosition.Transition,
-            _ => ModuleTablePosition.Uncertain
-        };
+        //protected override ModuleTablePosition MapState(MechanicsPositions position) => position switch
+        //{
+        //    MechanicsPositions.Position1 => ModuleTablePosition.Home,
+        //    MechanicsPositions.Position2 => ModuleTablePosition.Rollback,
+        //    MechanicsPositions.Position3 => ModuleTablePosition.Processing,
+        //    MechanicsPositions.Indefinite => ModuleTablePosition.Indefinite,
+        //    MechanicsPositions.Uncertain => ModuleTablePosition.Uncertain,
+        //    MechanicsPositions.Transition => ModuleTablePosition.Transition,
+        //    _ => ModuleTablePosition.Uncertain
+        //};
 
-        protected override ModuleTableErrors MapError(MechanicsErrors error) => error switch
-        {
-            MechanicsErrors.NotInited => ModuleTableErrors.NotInited,
-            MechanicsErrors.NotInStartPos => ModuleTableErrors.Error2_6,
-            MechanicsErrors.IndefinitePos => ModuleTableErrors.Error2_1,
-            MechanicsErrors.UnsertainPos => ModuleTableErrors.Error2_2,
-            MechanicsErrors.NotComeInPos1 => ModuleTableErrors.Error2_4,
-            MechanicsErrors.NotComeInPos2 => ModuleTableErrors.Error2_3,
-            MechanicsErrors.NotComeInPos3 => ModuleTableErrors.Error2_5,
-            MechanicsErrors.None => ModuleTableErrors.None,
-            _ => throw new NotSupportedException($"Не удалось преобразовать ошибку из {error} в ModuleTableErrors")
-        };
+        //protected override ModuleTableErrors MapError(MechanicsErrors error) => error switch
+        //{
+        //    MechanicsErrors.NotInited => ModuleTableErrors.NotInited,
+        //    MechanicsErrors.NotInStartPos => ModuleTableErrors.Error2_6,
+        //    MechanicsErrors.IndefinitePos => ModuleTableErrors.Error2_1,
+        //    MechanicsErrors.UnsertainPos => ModuleTableErrors.Error2_2,
+        //    MechanicsErrors.NotComeInPos1 => ModuleTableErrors.Error2_4,
+        //    MechanicsErrors.NotComeInPos2 => ModuleTableErrors.Error2_3,
+        //    MechanicsErrors.NotComeInPos3 => ModuleTableErrors.Error2_5,
+        //    MechanicsErrors.None => ModuleTableErrors.None,
+        //    _ => throw new NotSupportedException($"Не удалось преобразовать ошибку из {error} в ModuleTableErrors")
+        //};
 
-        protected override MechanicsErrors ToBaseError(ModuleTableErrors error) => error switch
-        {
-            ModuleTableErrors.NotInited => MechanicsErrors.NotInited,
-            ModuleTableErrors.Error2_6 => MechanicsErrors.NotInStartPos,
-            ModuleTableErrors.Error2_1 => MechanicsErrors.IndefinitePos,
-            ModuleTableErrors.Error2_2 => MechanicsErrors.UnsertainPos,
-            ModuleTableErrors.Error2_4 => MechanicsErrors.NotComeInPos1,
-            ModuleTableErrors.Error2_3 => MechanicsErrors.NotComeInPos2,
-            ModuleTableErrors.Error2_5 => MechanicsErrors.NotComeInPos3,
-            ModuleTableErrors.None => MechanicsErrors.None,
-            _ => throw new NotSupportedException($"Не удалось преобразовать ошибку из {error} в MechanicsErrors")
-        };
+        //protected override MechanicsErrors ToBaseError(ModuleTableErrors error) => error switch
+        //{
+        //    ModuleTableErrors.NotInited => MechanicsErrors.NotInited,
+        //    ModuleTableErrors.Error2_6 => MechanicsErrors.NotInStartPos,
+        //    ModuleTableErrors.Error2_1 => MechanicsErrors.IndefinitePos,
+        //    ModuleTableErrors.Error2_2 => MechanicsErrors.UnsertainPos,
+        //    ModuleTableErrors.Error2_4 => MechanicsErrors.NotComeInPos1,
+        //    ModuleTableErrors.Error2_3 => MechanicsErrors.NotComeInPos2,
+        //    ModuleTableErrors.Error2_5 => MechanicsErrors.NotComeInPos3,
+        //    ModuleTableErrors.None => MechanicsErrors.None,
+        //    _ => throw new NotSupportedException($"Не удалось преобразовать ошибку из {error} в MechanicsErrors")
+        //};
     }
 }

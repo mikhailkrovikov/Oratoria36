@@ -37,9 +37,5 @@ namespace Oratoria.Domain.Devices.Errors
         [DeviceErrorCategory(DeviceErrorCategory.Error)]
         [Description("Не опустился к каретке")]
         NotComeInPos3,
-
-        //[DeviceErrorCategory(DeviceErrorCategory.Error)]
-        //[Description("Не поднялся от каретки к исходному")]
-        //Error1_7,
     }
 }

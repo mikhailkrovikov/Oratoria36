@@ -117,41 +117,41 @@ namespace Oratoria.Domain.Devices.Throttle
             throw new InvalidOperationException("Неверная конечная позиция");
         }
 
-        protected override ThrottlePosition MapState(MechanicsPositions position) => position switch
-        {
-            MechanicsPositions.Position1 => ThrottlePosition.Close,
-            MechanicsPositions.Position2 => ThrottlePosition.Open,
-            MechanicsPositions.Position3 => ThrottlePosition.Throttling,
-            MechanicsPositions.Indefinite => ThrottlePosition.Indefinite,
-            MechanicsPositions.Uncertain => ThrottlePosition.Uncertain,
-            MechanicsPositions.Transition => ThrottlePosition.Transition,
-            _ => ThrottlePosition.Uncertain
-        };
+        //protected override ThrottlePosition MapState(MechanicsPositions position) => position switch
+        //{
+        //    MechanicsPositions.Position1 => ThrottlePosition.Close,
+        //    MechanicsPositions.Position2 => ThrottlePosition.Open,
+        //    MechanicsPositions.Position3 => ThrottlePosition.Throttling,
+        //    MechanicsPositions.Indefinite => ThrottlePosition.Indefinite,
+        //    MechanicsPositions.Uncertain => ThrottlePosition.Uncertain,
+        //    MechanicsPositions.Transition => ThrottlePosition.Transition,
+        //    _ => ThrottlePosition.Uncertain
+        //};
 
-        protected override ThrottleErrors MapError(MechanicsErrors error) => error switch
-        {
-            MechanicsErrors.NotInited => ThrottleErrors.NotInited,
-            MechanicsErrors.NotInStartPos => ThrottleErrors.NotInStartPos,
-            MechanicsErrors.IndefinitePos => ThrottleErrors.IndefinitePosition,
-            MechanicsErrors.UnsertainPos => ThrottleErrors.UncertainPosition,
-            MechanicsErrors.NotComeInPos1 => ThrottleErrors.CannotClose,
-            MechanicsErrors.NotComeInPos2 => ThrottleErrors.CannotOpen,
-            MechanicsErrors.NotComeInPos3 => ThrottleErrors.CannotThrottling,
-            MechanicsErrors.None => ThrottleErrors.None,
-            _ => throw new NotSupportedException($"Не удалось преобразовать ошибку из {error} в ThrottleErrors")
-        };
+        //protected override ThrottleErrors MapError(MechanicsErrors error) => error switch
+        //{
+        //    MechanicsErrors.NotInited => ThrottleErrors.NotInited,
+        //    MechanicsErrors.NotInStartPos => ThrottleErrors.NotInStartPos,
+        //    MechanicsErrors.IndefinitePos => ThrottleErrors.IndefinitePosition,
+        //    MechanicsErrors.UnsertainPos => ThrottleErrors.UncertainPosition,
+        //    MechanicsErrors.NotComeInPos1 => ThrottleErrors.CannotClose,
+        //    MechanicsErrors.NotComeInPos2 => ThrottleErrors.CannotOpen,
+        //    MechanicsErrors.NotComeInPos3 => ThrottleErrors.CannotThrottling,
+        //    MechanicsErrors.None => ThrottleErrors.None,
+        //    _ => throw new NotSupportedException($"Не удалось преобразовать ошибку из {error} в ThrottleErrors")
+        //};
 
-        protected override MechanicsErrors ToBaseError(ThrottleErrors error) => error switch
-        {
-            ThrottleErrors.NotInited => MechanicsErrors.NotInited,
-            ThrottleErrors.NotInStartPos => MechanicsErrors.NotInStartPos,
-            ThrottleErrors.IndefinitePosition => MechanicsErrors.IndefinitePos,
-            ThrottleErrors.UncertainPosition => MechanicsErrors.UnsertainPos,
-            ThrottleErrors.CannotClose => MechanicsErrors.NotComeInPos1,
-            ThrottleErrors.CannotOpen => MechanicsErrors.NotComeInPos2,
-            ThrottleErrors.CannotThrottling => MechanicsErrors.NotComeInPos3,
-            ThrottleErrors.None => MechanicsErrors.None,
-            _ => throw new NotSupportedException($"Не удалось преобразовать ошибку из {error} в MechanicsErrors")
-        };
+        //protected override MechanicsErrors ToBaseError(ThrottleErrors error) => error switch
+        //{
+        //    ThrottleErrors.NotInited => MechanicsErrors.NotInited,
+        //    ThrottleErrors.NotInStartPos => MechanicsErrors.NotInStartPos,
+        //    ThrottleErrors.IndefinitePosition => MechanicsErrors.IndefinitePos,
+        //    ThrottleErrors.UncertainPosition => MechanicsErrors.UnsertainPos,
+        //    ThrottleErrors.CannotClose => MechanicsErrors.NotComeInPos1,
+        //    ThrottleErrors.CannotOpen => MechanicsErrors.NotComeInPos2,
+        //    ThrottleErrors.CannotThrottling => MechanicsErrors.NotComeInPos3,
+        //    ThrottleErrors.None => MechanicsErrors.None,
+        //    _ => throw new NotSupportedException($"Не удалось преобразовать ошибку из {error} в MechanicsErrors")
+        //};
     }
 }

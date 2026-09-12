@@ -13,10 +13,6 @@ namespace Oratoria.Domain.Devices.Errors
         [Description("Не в исходном положении")]
         NotInStartPos,
 
-        //[DeviceErrorCategory(DeviceErrorCategory.Error)]
-        //[Description("Не в конечном положении")]
-        //NotInEndPos,
-
         [DeviceErrorCategory(DeviceErrorCategory.Error)]
         [Description("Неопределенное положение")]
         IndefinitePos,

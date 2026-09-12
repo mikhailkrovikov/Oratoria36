@@ -120,41 +120,41 @@ namespace Oratoria.Domain.Devices.Manipulator
             throw new InvalidOperationException("Неверная конечная позиция");
         }
 
-        protected override ManipulatorPosition MapState(MechanicsPositions position) => position switch
-        {
-            MechanicsPositions.Position1 => ManipulatorPosition.Module,
-            MechanicsPositions.Position2 => ManipulatorPosition.Home,
-            MechanicsPositions.Position3 => ManipulatorPosition.Transport,
-            MechanicsPositions.Indefinite => ManipulatorPosition.Indefinite,
-            MechanicsPositions.Uncertain => ManipulatorPosition.Uncertain,
-            MechanicsPositions.Transition => ManipulatorPosition.Transition,
-            _ => ManipulatorPosition.Uncertain
-        };
+        //protected override ManipulatorPosition MapState(MechanicsPositions position) => position switch
+        //{
+        //    MechanicsPositions.Position1 => ManipulatorPosition.Module,
+        //    MechanicsPositions.Position2 => ManipulatorPosition.Home,
+        //    MechanicsPositions.Position3 => ManipulatorPosition.Transport,
+        //    MechanicsPositions.Indefinite => ManipulatorPosition.Indefinite,
+        //    MechanicsPositions.Uncertain => ManipulatorPosition.Uncertain,
+        //    MechanicsPositions.Transition => ManipulatorPosition.Transition,
+        //    _ => ManipulatorPosition.Uncertain
+        //};
 
-        protected override ManipulatorErrors MapError(MechanicsErrors error) => error switch
-        {
-            MechanicsErrors.NotInited => ManipulatorErrors.NotInited,
-            MechanicsErrors.NotInStartPos => ManipulatorErrors.NotInStartPos,
-            MechanicsErrors.IndefinitePos => ManipulatorErrors.IndefinitePos,
-            MechanicsErrors.UnsertainPos => ManipulatorErrors.UnsertainPos,
-            MechanicsErrors.NotComeInPos1 => ManipulatorErrors.NotComeInPos1,
-            MechanicsErrors.NotComeInPos2 => ManipulatorErrors.NotComeInPos2,
-            MechanicsErrors.NotComeInPos3 => ManipulatorErrors.NotComeInPos3,
-            MechanicsErrors.None => ManipulatorErrors.None,
-            _ => throw new NotSupportedException($"Не удалось преобразовать ошибку из {error} в ManipulatorErrors")
-        };
+        //protected override ManipulatorErrors MapError(MechanicsErrors error) => error switch
+        //{
+        //    MechanicsErrors.NotInited => ManipulatorErrors.NotInited,
+        //    MechanicsErrors.NotInStartPos => ManipulatorErrors.NotInStartPos,
+        //    MechanicsErrors.IndefinitePos => ManipulatorErrors.IndefinitePos,
+        //    MechanicsErrors.UnsertainPos => ManipulatorErrors.UnsertainPos,
+        //    MechanicsErrors.NotComeInPos1 => ManipulatorErrors.NotComeInPos1,
+        //    MechanicsErrors.NotComeInPos2 => ManipulatorErrors.NotComeInPos2,
+        //    MechanicsErrors.NotComeInPos3 => ManipulatorErrors.NotComeInPos3,
+        //    MechanicsErrors.None => ManipulatorErrors.None,
+        //    _ => throw new NotSupportedException($"Не удалось преобразовать ошибку из {error} в ManipulatorErrors")
+        //};
 
-        protected override MechanicsErrors ToBaseError(ManipulatorErrors error) => error switch
-        {
-            ManipulatorErrors.NotInited => MechanicsErrors.NotInited,
-            ManipulatorErrors.NotInStartPos => MechanicsErrors.NotInStartPos,
-            ManipulatorErrors.IndefinitePos => MechanicsErrors.IndefinitePos,
-            ManipulatorErrors.UnsertainPos => MechanicsErrors.UnsertainPos,
-            ManipulatorErrors.NotComeInPos1 => MechanicsErrors.NotComeInPos1,
-            ManipulatorErrors.NotComeInPos2 => MechanicsErrors.NotComeInPos2,
-            ManipulatorErrors.NotComeInPos3 => MechanicsErrors.NotComeInPos3,
-            ManipulatorErrors.None => MechanicsErrors.None,
-            _ => throw new NotSupportedException($"Не удалось преобразовать ошибку из {error} в MechanicsErrors")
-        };
+        //protected override MechanicsErrors ToBaseError(ManipulatorErrors error) => error switch
+        //{
+        //    ManipulatorErrors.NotInited => MechanicsErrors.NotInited,
+        //    ManipulatorErrors.NotInStartPos => MechanicsErrors.NotInStartPos,
+        //    ManipulatorErrors.IndefinitePos => MechanicsErrors.IndefinitePos,
+        //    ManipulatorErrors.UnsertainPos => MechanicsErrors.UnsertainPos,
+        //    ManipulatorErrors.NotComeInPos1 => MechanicsErrors.NotComeInPos1,
+        //    ManipulatorErrors.NotComeInPos2 => MechanicsErrors.NotComeInPos2,
+        //    ManipulatorErrors.NotComeInPos3 => MechanicsErrors.NotComeInPos3,
+        //    ManipulatorErrors.None => MechanicsErrors.None,
+        //    _ => throw new NotSupportedException($"Не удалось преобразовать ошибку из {error} в MechanicsErrors")
+        //};
     }
 }
