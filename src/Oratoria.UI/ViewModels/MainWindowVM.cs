@@ -28,6 +28,10 @@ public class MainWindowVM : INotifyPropertyChanged
             .Item<Module2SignalsPage>("Сигналы")
             .Item<Module2SettingsPage>("Настройки")
             .Item<Module2LogsPage>("Журнал"))
+        .Group("Модуль 3", m3 => m3
+            .Item<Module3SignalsPage>("Сигналы"))
+        .Group("Модуль 4", m4 => m4
+            .Item<Module4SignalsPage>("Сигналы"))
         .Item<ConnectionSettingsPage>("Сеть")
         .Build();
     }
