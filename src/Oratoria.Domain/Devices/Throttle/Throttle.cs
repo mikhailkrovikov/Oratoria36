@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using Oratoria.Domain.Devices.Abstractions;
 using Oratoria.Domain.Devices.Errors;
 using Oratoria.Domain.Devices.Statuses;
@@ -73,14 +73,14 @@ namespace Oratoria.Domain.Devices.Throttle
         public override MechanicMovingProfile<ThrottleErrors> GetMovingProfile(ThrottlePosition startPos, ThrottlePosition endPos)
         {
             if (startPos == endPos)
-                throw new InvalidOperationException("позиции перемещения стола совпадают");
-            var startPosError = ThrottleErrors.NotinStartPos;
+                throw new InvalidOperationException("позиции перемещения дроссельного затвора совпадают");
+            var startPosError = ThrottleErrors.NotInStartPos;
             var revers = endPos - startPos < 0;
             var tormos = true;
             var startPosSignal = GetThrottleInputSignalFromPos(startPos);
             var endPosSignal = GetThrottleInputSignalFromPos(endPos);
             var endPosOutSignal = GetThrottleOutputSignalFromPos(endPos);
-            var endPosError = GetEndPosError(startPos, endPos);
+            var endPosError = GetEndPosError(endPos);
             return new MechanicMovingProfile<ThrottleErrors>(endPosOutSignal, startPosSignal, endPosSignal, revers, tormos, endPosError, startPosError);
         }
 
@@ -106,7 +106,7 @@ namespace Oratoria.Domain.Devices.Throttle
             throw new InvalidOperationException("неверная позиция дроссельного затвора");
         }
 
-        private static ThrottleErrors GetEndPosError(ThrottlePosition startPos, ThrottlePosition endPos)
+        private static ThrottleErrors GetEndPosError(ThrottlePosition endPos)
         {
             if (endPos == ThrottlePosition.Close)
                 return ThrottleErrors.CannotClose;
@@ -114,7 +114,7 @@ namespace Oratoria.Domain.Devices.Throttle
                 return ThrottleErrors.CannotOpen;
             if (endPos == ThrottlePosition.Throttling)
                 return ThrottleErrors.CannotThrottling;
-            throw new InvalidOperationException("Неверные начальная или конечная позиция");
+            throw new InvalidOperationException("Неверная конечная позиция");
         }
 
         protected override ThrottlePosition MapState(MechanicsPositions position) => position switch
@@ -131,7 +131,7 @@ namespace Oratoria.Domain.Devices.Throttle
         protected override ThrottleErrors MapError(MechanicsErrors error) => error switch
         {
             MechanicsErrors.NotInited => ThrottleErrors.NotInited,
-            MechanicsErrors.NotInStartPos => ThrottleErrors.NotinStartPos,
+            MechanicsErrors.NotInStartPos => ThrottleErrors.NotInStartPos,
             MechanicsErrors.IndefinitePos => ThrottleErrors.IndefinitePosition,
             MechanicsErrors.UnsertainPos => ThrottleErrors.UncertainPosition,
             MechanicsErrors.NotComeInPos1 => ThrottleErrors.CannotClose,
@@ -144,7 +144,7 @@ namespace Oratoria.Domain.Devices.Throttle
         protected override MechanicsErrors ToBaseError(ThrottleErrors error) => error switch
         {
             ThrottleErrors.NotInited => MechanicsErrors.NotInited,
-            ThrottleErrors.NotinStartPos => MechanicsErrors.NotInStartPos,
+            ThrottleErrors.NotInStartPos => MechanicsErrors.NotInStartPos,
             ThrottleErrors.IndefinitePosition => MechanicsErrors.IndefinitePos,
             ThrottleErrors.UncertainPosition => MechanicsErrors.UnsertainPos,
             ThrottleErrors.CannotClose => MechanicsErrors.NotComeInPos1,

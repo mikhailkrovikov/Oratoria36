@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using Oratoria.Domain.Devices.Abstractions;
 using Oratoria.Domain.Devices.Errors;
 using Oratoria.Domain.Devices.Statuses;
@@ -83,7 +83,7 @@ namespace Oratoria.Domain.Devices.Table
             var startPosSignal = GetTableInputSignalFromPos(startPos);
             var endPosSignal = GetTableInputSignalFromPos(endPos);
             var endPosOutSignal = GetTableOutputSignalFromPos(endPos);
-            var endPosError = GetEndPosError(startPos, endPos);
+            var endPosError = GetEndPosError(endPos);
             return new MechanicMovingProfile<ModuleTableErrors>(endPosOutSignal, startPosSignal, endPosSignal, revers, tormos, endPosError, startPosError);
         }
 
@@ -109,7 +109,7 @@ namespace Oratoria.Domain.Devices.Table
             throw new InvalidOperationException("неверная позиция ложемента");
         }
 
-        private static ModuleTableErrors GetEndPosError(ModuleTablePosition startPos, ModuleTablePosition endPos)
+        private static ModuleTableErrors GetEndPosError(ModuleTablePosition endPos)
         {
             if (endPos == ModuleTablePosition.Rollback)
                 return ModuleTableErrors.Error2_3;
@@ -117,7 +117,7 @@ namespace Oratoria.Domain.Devices.Table
                 return ModuleTableErrors.Error2_5;
             if (endPos == ModuleTablePosition.Home)
                 return ModuleTableErrors.Error2_4;
-            throw new InvalidOperationException("Неверные начальная или конечная позиция");
+            throw new InvalidOperationException("Неверная конечная позиция");
         }
 
         protected override ModuleTablePosition MapState(MechanicsPositions position) => position switch

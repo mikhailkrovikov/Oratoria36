@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using Oratoria.Domain.Devices.Abstractions;
 using Oratoria.Domain.Devices.Errors;
 using Oratoria.Domain.Devices.Statuses;
@@ -40,7 +40,7 @@ namespace Oratoria.Domain.Devices.Carriage
             var startPosSignal = GetCarriageInputSignalFromPos(startPos);
             var endPosSignal = GetCarriageInputSignalFromPos(endPos);
             var endPosOutSignal = GetCarriageOutputSignalFromPos(endPos);
-            var endPosError = GetEndPosError(startPos, endPos);
+            var endPosError = GetEndPosError(endPos);
             return new MechanicMovingProfile<CarriageErrors>(endPosOutSignal, startPosSignal, endPosSignal, revers, tormos, endPosError, startPosError);
         }
 
@@ -125,7 +125,7 @@ namespace Oratoria.Domain.Devices.Carriage
             _ => throw new NotSupportedException($"Не удалось преобразовать ошибку из {error} в MechanicsErrors")
         };
 
-        private static CarriageErrors GetEndPosError(CarriagePosition startPos, CarriagePosition endPos)
+        private static CarriageErrors GetEndPosError(CarriagePosition endPos)
         {
             if (endPos == CarriagePosition.Position1)
                 return CarriageErrors.NotCameInPosition1;
@@ -139,7 +139,7 @@ namespace Oratoria.Domain.Devices.Carriage
                 return CarriageErrors.NotCameInPosition5;
             if (endPos == CarriagePosition.Position6)
                 return CarriageErrors.NotCameInPosition6;
-            throw new InvalidOperationException("Неверные начальная или конечная позиция");
+            throw new InvalidOperationException("Неверная конечная позиция");
         }
     }
 }

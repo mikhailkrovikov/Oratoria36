@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using Oratoria.Domain.Devices.Abstractions;
 using Oratoria.Domain.Devices.Errors;
 using Oratoria.Domain.Devices.Statuses;
@@ -83,7 +83,7 @@ namespace Oratoria.Domain.Devices.Manipulator
             var startPosSignal = GetManInputSignalFromPos(startPos);
             var endPosSignal = GetManInputSignalFromPos(endPos);
             var endPosOutSignal = GetManOutputSignalFromPos(endPos);
-            var endPosError = GetEndPosError(startPos, endPos);
+            var endPosError = GetEndPosError(endPos);
             return new MechanicMovingProfile<ManipulatorErrors>(endPosOutSignal, startPosSignal, endPosSignal, revers, tormos, endPosError, startPosError);
         }
 
@@ -109,16 +109,15 @@ namespace Oratoria.Domain.Devices.Manipulator
             throw new InvalidOperationException("неверная позиция манипулятора");
         }
 
-        private static ManipulatorErrors GetEndPosError(ManipulatorPosition startPos, ManipulatorPosition endPos)
+        private static ManipulatorErrors GetEndPosError(ManipulatorPosition endPos)
         {
+            if (endPos == ManipulatorPosition.Module)
+                return ManipulatorErrors.NotComeInPos1;
             if (endPos == ManipulatorPosition.Home)
-            {
-                if (startPos == ManipulatorPosition.Transport)
-                    return ManipulatorErrors.NotComeInPos2;
-                if (startPos == ManipulatorPosition.Module)
-                    return ManipulatorErrors.NotComeInPos2;
-            }
-            throw new InvalidOperationException("Неверные начальная или конечная позиция");
+                return ManipulatorErrors.NotComeInPos2;
+            if (endPos == ManipulatorPosition.Transport)
+                return ManipulatorErrors.NotComeInPos3;
+            throw new InvalidOperationException("Неверная конечная позиция");
         }
 
         protected override ManipulatorPosition MapState(MechanicsPositions position) => position switch

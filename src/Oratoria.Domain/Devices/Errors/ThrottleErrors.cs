@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 
 namespace Oratoria.Domain.Devices.Errors
 {
@@ -14,7 +14,7 @@ namespace Oratoria.Domain.Devices.Errors
 
         [DeviceErrorCategory(DeviceErrorCategory.Error)]
         [Description("Не в исходном положении")]
-        NotinStartPos,
+        NotInStartPos,
 
         [DeviceErrorCategory(DeviceErrorCategory.Error)]
         [Description("Неопределенное положение")]
