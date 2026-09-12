@@ -5,7 +5,6 @@ using Oratoria.Domain.Devices.Statuses;
 using Oratoria.Domain.Settings;
 using Oratoria.Domain.Signals;
 using Oratoria.Domain.Signals.Abstractions;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Oratoria.Domain.Devices.Carriage
 {
@@ -86,7 +85,7 @@ namespace Oratoria.Domain.Devices.Carriage
             MechanicsErrors.IndefinitePos => CarriageErrors.IndefinitePosition,
             MechanicsErrors.UnsertainPos => CarriageErrors.UncertainPosition,
             MechanicsErrors.None => CarriageErrors.None,
-            _ => CarriageErrors.UncertainPosition
+            _ => throw new NotSupportedException($"Не удалось преобразовать ошибку из {errors} в CarriageErrors")
         };
 
         protected override CarriagePosition MapState(MechanicsPositions position) => position switch
@@ -110,8 +109,14 @@ namespace Oratoria.Domain.Devices.Carriage
             CarriageErrors.IndefinitePosition => MechanicsErrors.IndefinitePos,
             CarriageErrors.NotInStartPosition => MechanicsErrors.NotInStartPos,
             CarriageErrors.UncertainPosition => MechanicsErrors.UnsertainPos,
+            CarriageErrors.NotCameInPosition1 => MechanicsErrors.NotComeInPos1,
+            CarriageErrors.NotCameInPosition2 => MechanicsErrors.NotComeInPos2,
+            CarriageErrors.NotCameInPosition3 => MechanicsErrors.NotComeInPos3,
+            CarriageErrors.NotCameInPosition4 => MechanicsErrors.NotComeInPos4,
+            CarriageErrors.NotCameInPosition5 => MechanicsErrors.NotComeInPos5,
+            CarriageErrors.NotCameInPosition6 => MechanicsErrors.NotComeInPos6,
             CarriageErrors.None => MechanicsErrors.None,
-            _ => MechanicsErrors.NotInEndPos
+            _ => throw new NotSupportedException($"Не удалось преобразовать ошибку из {error} в MechanicsErrors")
         };
 
         private static CarriageErrors GetEndPosError(CarriagePosition startPos, CarriagePosition endPos)

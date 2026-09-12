@@ -31,15 +31,15 @@ namespace Oratoria.Domain.Devices.Errors
         NotComeInPos1,
 
         [DeviceErrorCategory(DeviceErrorCategory.Error)]
-        [Description("Не поднялся от ложемента к исходному")]
+        [Description("Не пришёл в исходную позицию")]
         NotComeInPos2,
 
         [DeviceErrorCategory(DeviceErrorCategory.Error)]
         [Description("Не опустился к каретке")]
         NotComeInPos3,
 
-        [DeviceErrorCategory(DeviceErrorCategory.Error)]
-        [Description("Не поднялся от каретки к исходному")]
-        Error1_7,
+        //[DeviceErrorCategory(DeviceErrorCategory.Error)]
+        //[Description("Не поднялся от каретки к исходному")]
+        //Error1_7,
     }
 }

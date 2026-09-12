@@ -130,9 +130,12 @@ namespace Oratoria.Domain.Devices.Abstractions
             Actuator.Value = false;
             TormosOut.Value = false;
             ReversOut.Value = false;
-            Position1Out.Value = false;
-            Position2Out.Value = false;
-            Position3Out.Value = false;
+            Position1Out?.Value = false;
+            Position2Out?.Value = false;
+            Position3Out?.Value = false;
+            Position4Out?.Value = false;
+            Position5Out?.Value = false;
+            Position6Out?.Value = false;
             Logger.LogDebug($"{DeviceName}: стоп");
             ResetToken();
         }
@@ -154,10 +157,19 @@ namespace Oratoria.Domain.Devices.Abstractions
             var pos1 = Position1In.Value;
             var pos2 = Position2In.Value;
             var pos3 = Position3In.Value;
+            var pos4 = Position4In?.Value;
+            var pos5 = Position5In?.Value;
+            var pos6 = Position6In?.Value;
 
-            var trueCount = (pos1 ? 1 : 0) + (pos2 ? 1 : 0) + (pos3 ? 1 : 0);
+            var trueCount = 
+                (pos1 ? 1 : 0) + 
+                (pos2 ? 1 : 0) + 
+                (pos3 ? 1 : 0) + 
+                (pos4 ?? false ? 1 : 0) +
+                (pos5 ?? false ? 1 : 0) +
+                (pos6 ?? false ? 1 : 0);
 
-            if (!pos1 && !pos2 && !pos3)
+            if (trueCount == 0)
             {
                 Logger.LogError($"{DeviceName}: неопределенное положение");
                 DeviceErrors.AddError(MechanicsErrors.IndefinitePos);
@@ -175,23 +187,43 @@ namespace Oratoria.Domain.Devices.Abstractions
 
             else if (pos1)
             {
-                DeviceErrors.ResetAllErrors();
+                DeviceErrors.ResetRangeErrors(MechanicsErrors.UnsertainPos, MechanicsErrors.IndefinitePos);
                 SetState(MechanicsPositions.Position1);
                 return MapState(MechanicsPositions.Position1);
             }
 
             else if (pos2)
             {
-                DeviceErrors.ResetAllErrors();
+                DeviceErrors.ResetRangeErrors(MechanicsErrors.UnsertainPos, MechanicsErrors.IndefinitePos);
                 SetState(MechanicsPositions.Position2);
                 return MapState(MechanicsPositions.Position2);
             }
 
             else if (pos3)
             {
-                DeviceErrors.ResetAllErrors();
+                DeviceErrors.ResetRangeErrors(MechanicsErrors.UnsertainPos, MechanicsErrors.IndefinitePos);
                 SetState(MechanicsPositions.Position3);
                 return MapState(MechanicsPositions.Position3);
+            }
+            else if (pos4 ?? false)
+            {
+                DeviceErrors.ResetRangeErrors(MechanicsErrors.UnsertainPos, MechanicsErrors.IndefinitePos);
+                SetState(MechanicsPositions.Position4);
+                return MapState(MechanicsPositions.Position4);
+            }
+
+            else if (pos5 ?? false)
+            {
+                DeviceErrors.ResetRangeErrors(MechanicsErrors.UnsertainPos, MechanicsErrors.IndefinitePos);
+                SetState(MechanicsPositions.Position5);
+                return MapState(MechanicsPositions.Position5);
+            }
+
+            else if (pos6 ?? false)
+            {
+                DeviceErrors.ResetRangeErrors(MechanicsErrors.UnsertainPos, MechanicsErrors.IndefinitePos);
+                SetState(MechanicsPositions.Position6);
+                return MapState(MechanicsPositions.Position6);
             }
 
             Logger.LogError($"{DeviceName}: неоднозначное положение");
@@ -207,20 +239,16 @@ namespace Oratoria.Domain.Devices.Abstractions
             }
             catch { }
             Actuator.Value = false;
-            Position1Out.Value = false;
-            Position2Out.Value = false;
-            Position3Out.Value = false;
+            Position1Out?.Value = false;
+            Position2Out?.Value = false;
+            Position3Out?.Value = false;
+            Position4Out?.Value = false;
+            Position5Out?.Value = false;
+            Position6Out?.Value = false;
             ReversOut.Value = false;
             TormosOut.Value = false;
             ResetToken();
         }
-
-        public void ResetErrors()
-        {
-            Logger.LogInformation($"{DeviceName}: сброс ошибок");
-            DeviceErrors.ResetAllErrors();
-        }
-
 
         private Task<bool> GetMovingTask(InputSignal<bool> targetPosition)
         {

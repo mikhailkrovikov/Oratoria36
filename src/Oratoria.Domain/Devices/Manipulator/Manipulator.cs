@@ -121,7 +121,7 @@ namespace Oratoria.Domain.Devices.Manipulator
             if (endPos == ManipulatorPosition.Home)
             {
                 if (startPos == ManipulatorPosition.Transport)
-                    return ManipulatorErrors.Error1_7;
+                    return ManipulatorErrors.NotComeInPos2;
                 if (startPos == ManipulatorPosition.Module)
                     return ManipulatorErrors.NotComeInPos2;
             }
@@ -149,7 +149,7 @@ namespace Oratoria.Domain.Devices.Manipulator
             MechanicsErrors.NotComeInPos2 => ManipulatorErrors.NotComeInPos2,
             MechanicsErrors.NotComeInPos3 => ManipulatorErrors.NotComeInPos3,
             MechanicsErrors.None => ManipulatorErrors.None,
-            _ => ManipulatorErrors.NotInStartPos
+            _ => throw new NotSupportedException($"Не удалось преобразовать ошибку из {error} в ManipulatorErrors")
         };
 
         protected override MechanicsErrors ToBaseError(ManipulatorErrors error) => error switch
@@ -161,9 +161,8 @@ namespace Oratoria.Domain.Devices.Manipulator
             ManipulatorErrors.NotComeInPos1 => MechanicsErrors.NotComeInPos1,
             ManipulatorErrors.NotComeInPos2 => MechanicsErrors.NotComeInPos2,
             ManipulatorErrors.NotComeInPos3 => MechanicsErrors.NotComeInPos3,
-            ManipulatorErrors.Error1_7 => MechanicsErrors.NotComeInPos2,
             ManipulatorErrors.None => MechanicsErrors.None,
-            _ => MechanicsErrors.NotInEndPos
+            _ => throw new NotSupportedException($"Не удалось преобразовать ошибку из {error} в MechanicsErrors")
         };
     }
 }

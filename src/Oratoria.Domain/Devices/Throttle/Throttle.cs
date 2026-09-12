@@ -138,7 +138,7 @@ namespace Oratoria.Domain.Devices.Throttle
             MechanicsErrors.NotComeInPos2 => ThrottleErrors.CannotOpen,
             MechanicsErrors.NotComeInPos3 => ThrottleErrors.CannotThrottling,
             MechanicsErrors.None => ThrottleErrors.None,
-            _ => ThrottleErrors.CannotClose
+            _ => throw new NotSupportedException($"Не удалось преобразовать ошибку из {error} в ThrottleErrors")
         };
 
         protected override MechanicsErrors ToBaseError(ThrottleErrors error) => error switch
@@ -150,7 +150,7 @@ namespace Oratoria.Domain.Devices.Throttle
             ThrottleErrors.CannotOpen => MechanicsErrors.NotComeInPos2,
             ThrottleErrors.CannotThrottling => MechanicsErrors.NotComeInPos3,
             ThrottleErrors.None => MechanicsErrors.None,
-            _ => MechanicsErrors.NotInEndPos
+            _ => throw new NotSupportedException($"Не удалось преобразовать ошибку из {error} в MechanicsErrors")
         };
     }
 }

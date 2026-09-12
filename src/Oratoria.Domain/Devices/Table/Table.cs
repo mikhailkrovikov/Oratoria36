@@ -141,7 +141,7 @@ namespace Oratoria.Domain.Devices.Table
             MechanicsErrors.NotComeInPos2 => ModuleTableErrors.Error2_3,
             MechanicsErrors.NotComeInPos3 => ModuleTableErrors.Error2_5,
             MechanicsErrors.None => ModuleTableErrors.None,
-            _ => ModuleTableErrors.Error2_6
+            _ => throw new NotSupportedException($"Не удалось преобразовать ошибку из {error} в ModuleTableErrors")
         };
 
         protected override MechanicsErrors ToBaseError(ModuleTableErrors error) => error switch
@@ -154,7 +154,7 @@ namespace Oratoria.Domain.Devices.Table
             ModuleTableErrors.Error2_3 => MechanicsErrors.NotComeInPos2,
             ModuleTableErrors.Error2_5 => MechanicsErrors.NotComeInPos3,
             ModuleTableErrors.None => MechanicsErrors.None,
-            _ => MechanicsErrors.NotInEndPos
+            _ => throw new NotSupportedException($"Не удалось преобразовать ошибку из {error} в MechanicsErrors")
         };
     }
 }
