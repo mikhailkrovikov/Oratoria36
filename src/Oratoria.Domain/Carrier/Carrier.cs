@@ -32,12 +32,6 @@ namespace Oratoria.Domain.Carrier
             return true;
         }
 
-        /// <summary>
-        /// Элементарный перенос из точки в точку
-        /// </summary>
-        /// <param name="from">первая точка</param>
-        /// <param name="to">вторая точка</param>
-        /// <returns></returns>
         public Task<AlgorithmResult> Carry(RouteNode from, RouteNode to)
         {
             return Execute(() => CanCarry(from, to),
