@@ -16,6 +16,7 @@ namespace Oratoria.Domain.Devices.Abstractions
         where TPos : Enum
         where TErr : Enum
     {
+        private const int DELAY = 1000;
         private static readonly Dictionary<MechanicsPositions, TPos> _positionMap = new();
         private static readonly Dictionary<MechanicsErrors, TErr> _errorMap = new();
         private static readonly Dictionary<TErr, MechanicsErrors> _baseErrorMap = new();
@@ -24,23 +25,38 @@ namespace Oratoria.Domain.Devices.Abstractions
 
         protected TPos MapState(MechanicsPositions position)
         {
-            return _positionMap.TryGetValue(position, out var result)
-                ? result
-                : throw new NotSupportedException($"Не удалось преобразовать {position} в {typeof(TPos).Name}.");
+            if (_positionMap.TryGetValue(position, out var result))
+            {
+                return result;
+            }
+            else
+            {
+                throw new NotSupportedException($"Не удалось преобразовать {position} в {typeof(TPos).Name}.");
+            }
         }
 
         public TErr MapError(MechanicsErrors error)
         {
-            return _errorMap.TryGetValue(error, out var result)
-                ? result
-                : throw new NotSupportedException($"Не удалось преобразовать {error} в {typeof(TErr).Name}.");
+            if (_errorMap.TryGetValue(error, out var result))
+            {
+                return result;
+            }
+            else
+            {
+                throw new NotSupportedException($"Не удалось преобразовать {error} в {typeof(TErr).Name}.");
+            }
         }
 
         protected MechanicsErrors ToBaseError(TErr error)
         {
-            return _baseErrorMap.TryGetValue(error, out var result)
-                ? result
-                : throw new NotSupportedException($"Не удалось преобразовать {typeof(TErr).Name}.{error} в MechanicsErrors.");
+            if (_baseErrorMap.TryGetValue(error, out var result))
+            {
+                return result;
+            }
+            else
+            {
+                throw new NotSupportedException($"Не удалось преобразовать {typeof(TErr).Name}.{error} в MechanicsErrors.");
+            }
         }
 
         public InputSignal<bool> Position1In { get; set; }
@@ -155,32 +171,13 @@ namespace Oratoria.Domain.Devices.Abstractions
                 Logger.LogWarning($"{DeviceName}: перегруз привода");
         }
 
-        public void EmergencyStop()
-        {
-            try
-            {
-                CTSource.Cancel();
-            }
-            catch { }
-            Actuator.Value = false;
-            TormosOut.Value = false;
-            ReversOut.Value = false;
-            Position1Out?.Value = false;
-            Position2Out?.Value = false;
-            Position3Out?.Value = false;
-            Position4Out?.Value = false;
-            Position5Out?.Value = false;
-            Position6Out?.Value = false;
-            Logger.LogDebug($"{DeviceName}: стоп");
-            ResetToken();
-        }
 
         [DeviceAction("Инициализация")]
         public async Task<TPos> Init()
         {
             Logger.LogInformation($"{DeviceName}: инициализация");
             Actuator.Value = true;
-            await Task.Delay(1000);
+            await Task.Delay(DELAY);
             var result = GetPosition();
             Actuator.Value = false;
             return result;
@@ -266,32 +263,41 @@ namespace Oratoria.Domain.Devices.Abstractions
             return MapState(MechanicsPositions.Uncertain);
         }
 
-        public void AlarmStop()
+        [DeviceAction("Стоп приводов")]
+        public void EmergencyStop()
         {
+            Logger.LogInformation($"{DeviceName}: стоп");
             try
             {
                 CTSource.Cancel();
             }
             catch { }
             Actuator.Value = false;
+            TormosOut.Value = false;
+            ReversOut.Value = false;
             Position1Out?.Value = false;
             Position2Out?.Value = false;
             Position3Out?.Value = false;
             Position4Out?.Value = false;
             Position5Out?.Value = false;
             Position6Out?.Value = false;
-            ReversOut.Value = false;
-            TormosOut.Value = false;
             ResetToken();
         }
 
-        private Task<bool> GetMovingTask(InputSignal<bool> targetPosition)
+        private async Task<bool> GetMovingTask(InputSignal<bool> targetPosition, CancellationToken token)
         {
-            return EventWaiter.WaitEvent(nameof(targetPosition.OnSignalChanged),
+            if (targetPosition.Value)
+                return true;
+
+            if (await EventWaiter.WaitEvent(nameof(targetPosition.OnSignalChanged),
                     targetPosition,
-                    (bool value) => targetPosition.Value == true,
+                    (bool value) => value,
                     ActionTime.Value * 1000,
-                    CTSource.Token);
+                    token))
+                return true;
+
+            token.ThrowIfCancellationRequested();
+            return targetPosition.Value;
         }
 
         public async Task<TPos> Move(TPos startPos, TPos endPos)
@@ -303,7 +309,7 @@ namespace Oratoria.Domain.Devices.Abstractions
             try
             {
                 Actuator.Value = true;
-                await Task.Delay(ActionTime.Value * 1000, token);
+                await Task.Delay(DELAY);
                 if (!movingProfile.StartPosSignal.Value)
                 {
                     Logger.LogError($"{DeviceName}: неверное исходное положение");
@@ -318,14 +324,6 @@ namespace Oratoria.Domain.Devices.Abstractions
 
                 movingProfile.EndPosOutSignal.Value = true;
                 SetState(MechanicsPositions.Transition);
-
-                var positionReached = await GetMovingTask(movingProfile.EndPosSignal);
-                token.ThrowIfCancellationRequested();
-                if (!positionReached)
-                {
-                    Logger.LogWarning($"{DeviceName}: превышено время движения");
-                    positionReached = await GetMovingTask(movingProfile.EndPosSignal);
-                }
 
                 movingProfile.EndPosOutSignal.Value = false;
                 await ReversCommand(false, token);
