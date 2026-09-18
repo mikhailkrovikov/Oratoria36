@@ -16,33 +16,33 @@ namespace Oratoria.Application.Module4.Signals
 {
     public class Module4AO : IEnumerable<OutputSignal<double>>
     {
-        IOutputStrategy<double> _strategy;
-
+        private readonly IOutputStrategy<double> _strategy;
         public ObservableCollection<OutputSignal<double>> AnalogOutputs;
 
 
         [HeaterSetpointSignal<Heaters>(Heaters.Heater)]
-        public OutputSignal<double> Moshchnost_BPN { get; set; }
+        public OutputSignal<double> BPNPower { get; set; }
 
 
         [MagnetronSetpointSignal<Magnetrons>(Magnetrons.Magnetron1)]
-        public OutputSignal<double> Moshchnost_BPM1 { get; set; }
+        public OutputSignal<double> BPM1Power { get; set; }
 
 
         [MagnetronSetpointSignal<Magnetrons>(Magnetrons.Magnetron2)]
-        public OutputSignal<double> Moshchnost_BPM2 { get; set; }
+        public OutputSignal<double> BPM2Power { get; set; }
 
 
         [MagnetronSetpointSignal<Magnetrons>(Magnetrons.Magnetron3)]
-        public OutputSignal<double> Moshchnost_BPM3 { get; set; }
+        public OutputSignal<double> BPM3Power { get; set; }
 
 
         [LeakerSetpointSignal<Leakers>(Leakers.ArgonLeaker)]
-        public OutputSignal<double> Upravlenie_natekatelem { get; set; }
+        public OutputSignal<double> LeakerControl { get; set; }
 
 
         [RRGSetpointSignal<RRGs>(RRGs.RRG)]
-        public OutputSignal<double> Raskhod_gasa_ustavka { get; set; }
+        public OutputSignal<double> RRGSetpoint { get; set; }
+
 
         public Module4AO(ModbusTCPConfig netConfig, IOutputStrategy<double> strategy)
         {
@@ -51,23 +51,25 @@ namespace Oratoria.Application.Module4.Signals
 #else
             _strategy = strategy;
 #endif
-            Moshchnost_BPN = new OutputSignal<double>("Мощность БПН", 0, _strategy);
-            Moshchnost_BPM1 = new OutputSignal<double>("Мощность БПМ1", 1, _strategy);
-            Moshchnost_BPM2 = new OutputSignal<double>("Мощность БПМ2", 2, _strategy);
-            Moshchnost_BPM3 = new OutputSignal<double>("Мощность БПМ3", 3, _strategy);
-            Upravlenie_natekatelem = new OutputSignal<double>("Управление натекателем", 4, _strategy);
-            Raskhod_gasa_ustavka = new OutputSignal<double>("Расход газа: уставка", 5, _strategy);
+
+            BPNPower = new OutputSignal<double>("Мощность БПН", 0, _strategy);
+            BPM1Power = new OutputSignal<double>("Мощность БПМ1", 1, _strategy);
+            BPM2Power = new OutputSignal<double>("Мощность БПМ2", 2, _strategy);
+            BPM3Power = new OutputSignal<double>("Мощность БПМ3", 3, _strategy);
+            LeakerControl = new OutputSignal<double>("Управление натекателем", 4, _strategy);
+            RRGSetpoint = new OutputSignal<double>("Расход газа: уставка", 5, _strategy);
 
             AnalogOutputs =
             [
-                Moshchnost_BPN,
-                Moshchnost_BPM1,
-                Moshchnost_BPM2,
-                Moshchnost_BPM3,
-                Upravlenie_natekatelem,
-                Raskhod_gasa_ustavka
+                BPNPower,
+                BPM1Power,
+                BPM2Power,
+                BPM3Power,
+                LeakerControl,
+                RRGSetpoint
             ];
         }
+
 
         public IEnumerator<OutputSignal<double>> GetEnumerator()
         {

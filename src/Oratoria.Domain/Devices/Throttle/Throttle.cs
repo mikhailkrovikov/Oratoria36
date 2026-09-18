@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using Oratoria.Domain.Devices.Abstractions;
 using Oratoria.Domain.Devices.Errors;
 using Oratoria.Domain.Devices.Statuses;
@@ -18,6 +18,7 @@ namespace Oratoria.Domain.Devices.Throttle
         [DeviceAction("Открыть")]
         public async Task<bool> Open()
         {
+            Logger.LogInformation("Открытие");
             try
             {
                 if (MapState(State) == ThrottlePosition.Throttling)
@@ -37,6 +38,7 @@ namespace Oratoria.Domain.Devices.Throttle
         [DeviceAction("Закрыть")]
         public async Task<bool> Close()
         {
+            Logger.LogInformation("Закрытие");
             try
             {
                 if (MapState(State) == ThrottlePosition.Throttling)
@@ -55,6 +57,7 @@ namespace Oratoria.Domain.Devices.Throttle
         [DeviceAction("Дросселирование")]
         public async Task<bool> Throttling()
         {
+            Logger.LogInformation("Дросселирование");
             try
             {
                 if (MapState(State) == ThrottlePosition.Close)
@@ -73,14 +76,14 @@ namespace Oratoria.Domain.Devices.Throttle
         public override MechanicMovingProfile<ThrottleErrors> GetMovingProfile(ThrottlePosition startPos, ThrottlePosition endPos)
         {
             if (startPos == endPos)
-                throw new InvalidOperationException("позиции перемещения стола совпадают");
-            var startPosError = ThrottleErrors.IndefinitePosition;
+                throw new InvalidOperationException("позиции перемещения дроссельного затвора совпадают");
+            var startPosError = ThrottleErrors.NotInStartPos;
             var revers = endPos - startPos < 0;
             var tormos = true;
             var startPosSignal = GetThrottleInputSignalFromPos(startPos);
             var endPosSignal = GetThrottleInputSignalFromPos(endPos);
             var endPosOutSignal = GetThrottleOutputSignalFromPos(endPos);
-            var endPosError = GetEndPosError(startPos, endPos);
+            var endPosError = GetEndPosError(endPos);
             return new MechanicMovingProfile<ThrottleErrors>(endPosOutSignal, startPosSignal, endPosSignal, revers, tormos, endPosError, startPosError);
         }
 
@@ -106,7 +109,7 @@ namespace Oratoria.Domain.Devices.Throttle
             throw new InvalidOperationException("неверная позиция дроссельного затвора");
         }
 
-        private static ThrottleErrors GetEndPosError(ThrottlePosition startPos, ThrottlePosition endPos)
+        private static ThrottleErrors GetEndPosError(ThrottlePosition endPos)
         {
             if (endPos == ThrottlePosition.Close)
                 return ThrottleErrors.CannotClose;
@@ -114,43 +117,7 @@ namespace Oratoria.Domain.Devices.Throttle
                 return ThrottleErrors.CannotOpen;
             if (endPos == ThrottlePosition.Throttling)
                 return ThrottleErrors.CannotThrottling;
-            throw new InvalidOperationException("Неверные начальная или конечная позиция");
+            throw new InvalidOperationException("Неверная конечная позиция");
         }
-
-        protected override ThrottlePosition MapState(MechanicsPositions position) => position switch
-        {
-            MechanicsPositions.Position1 => ThrottlePosition.Close,
-            MechanicsPositions.Position2 => ThrottlePosition.Open,
-            MechanicsPositions.Position3 => ThrottlePosition.Throttling,
-            MechanicsPositions.Indefinite => ThrottlePosition.Indefinite,
-            MechanicsPositions.Uncertain => ThrottlePosition.Uncertain,
-            MechanicsPositions.Transition => ThrottlePosition.Transition,
-            _ => ThrottlePosition.Uncertain
-        };
-
-        protected override ThrottleErrors MapError(MechanicsErrors error) => error switch
-        {
-            MechanicsErrors.NotInited => ThrottleErrors.NotInited,
-            MechanicsErrors.NotInStartPos => ThrottleErrors.IndefinitePosition,
-            MechanicsErrors.IndefinitePos => ThrottleErrors.IndefinitePosition,
-            MechanicsErrors.UnsertainPos => ThrottleErrors.UncertainPosition,
-            MechanicsErrors.NotComeInPos1 => ThrottleErrors.CannotClose,
-            MechanicsErrors.NotComeInPos2 => ThrottleErrors.CannotOpen,
-            MechanicsErrors.NotComeInPos3 => ThrottleErrors.CannotThrottling,
-            MechanicsErrors.None => ThrottleErrors.None,
-            _ => ThrottleErrors.CannotClose
-        };
-
-        protected override MechanicsErrors ToBaseError(ThrottleErrors error) => error switch
-        {
-            ThrottleErrors.NotInited => MechanicsErrors.NotInited,
-            ThrottleErrors.IndefinitePosition => MechanicsErrors.IndefinitePos,
-            ThrottleErrors.UncertainPosition => MechanicsErrors.UnsertainPos,
-            ThrottleErrors.CannotClose => MechanicsErrors.NotComeInPos1,
-            ThrottleErrors.CannotOpen => MechanicsErrors.NotComeInPos2,
-            ThrottleErrors.CannotThrottling => MechanicsErrors.NotComeInPos3,
-            ThrottleErrors.None => MechanicsErrors.None,
-            _ => MechanicsErrors.NotInEndPos
-        };
     }
 }

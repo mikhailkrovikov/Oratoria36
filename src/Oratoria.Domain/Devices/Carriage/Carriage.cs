@@ -1,11 +1,10 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using Oratoria.Domain.Devices.Abstractions;
 using Oratoria.Domain.Devices.Errors;
 using Oratoria.Domain.Devices.Statuses;
 using Oratoria.Domain.Settings;
 using Oratoria.Domain.Signals;
 using Oratoria.Domain.Signals.Abstractions;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Oratoria.Domain.Devices.Carriage
 {
@@ -19,6 +18,7 @@ namespace Oratoria.Domain.Devices.Carriage
         [DeviceAction("Отправить каретку")]
         public async Task<bool> MoveCarriage([DeviceActionParameter("позиция")] int position)
         {
+            Logger.LogInformation($"в позицию {position}");
             try
             {
                 var state = MapState(State);
@@ -34,14 +34,14 @@ namespace Oratoria.Domain.Devices.Carriage
         public override MechanicMovingProfile<CarriageErrors> GetMovingProfile(CarriagePosition startPos, CarriagePosition endPos)
         {
             if (startPos == endPos)
-                throw new Exception("позиции перемещения каретки совпадают");
+                throw new InvalidOperationException("позиции перемещения каретки совпадают");
             var startPosError = CarriageErrors.NotInStartPosition;
             var revers = endPos - startPos < 0;
             var tormos = true;
             var startPosSignal = GetCarriageInputSignalFromPos(startPos);
             var endPosSignal = GetCarriageInputSignalFromPos(endPos);
             var endPosOutSignal = GetCarriageOutputSignalFromPos(endPos);
-            var endPosError = GetEndPosError(startPos, endPos);
+            var endPosError = GetEndPosError(endPos);
             return new MechanicMovingProfile<CarriageErrors>(endPosOutSignal, startPosSignal, endPosSignal, revers, tormos, endPosError, startPosError);
         }
 
@@ -79,42 +79,7 @@ namespace Oratoria.Domain.Devices.Carriage
             throw new InvalidOperationException("неверная позиция каретки");
         }
 
-        protected override CarriageErrors MapError(MechanicsErrors errors) => errors switch
-        {
-            MechanicsErrors.NotInited => CarriageErrors.NotInited,
-            MechanicsErrors.NotInStartPos => CarriageErrors.NotInStartPosition,
-            MechanicsErrors.IndefinitePos => CarriageErrors.IndefinitePosition,
-            MechanicsErrors.UnsertainPos => CarriageErrors.UncertainPosition,
-            MechanicsErrors.None => CarriageErrors.None,
-            _ => CarriageErrors.UncertainPosition
-        };
-
-        protected override CarriagePosition MapState(MechanicsPositions position) => position switch
-        {
-
-            MechanicsPositions.Position1 => CarriagePosition.Position1,
-            MechanicsPositions.Position2 => CarriagePosition.Position2,
-            MechanicsPositions.Position3 => CarriagePosition.Position3,
-            MechanicsPositions.Position4 => CarriagePosition.Position4,
-            MechanicsPositions.Position5 => CarriagePosition.Position5,
-            MechanicsPositions.Position6 => CarriagePosition.Position6,
-            MechanicsPositions.Indefinite => CarriagePosition.Indefinite,
-            MechanicsPositions.Uncertain => CarriagePosition.Uncertain,
-            MechanicsPositions.Transition => CarriagePosition.Transition,
-            _ => CarriagePosition.Uncertain
-        };
-
-        protected override MechanicsErrors ToBaseError(CarriageErrors error) => error switch
-        {
-            CarriageErrors.NotInited => MechanicsErrors.NotInited,
-            CarriageErrors.IndefinitePosition => MechanicsErrors.IndefinitePos,
-            CarriageErrors.NotInStartPosition => MechanicsErrors.NotInStartPos,
-            CarriageErrors.UncertainPosition => MechanicsErrors.UnsertainPos,
-            CarriageErrors.None => MechanicsErrors.None,
-            _ => MechanicsErrors.NotInEndPos
-        };
-
-        private static CarriageErrors GetEndPosError(CarriagePosition startPos, CarriagePosition endPos)
+        private static CarriageErrors GetEndPosError(CarriagePosition endPos)
         {
             if (endPos == CarriagePosition.Position1)
                 return CarriageErrors.NotCameInPosition1;
@@ -128,7 +93,7 @@ namespace Oratoria.Domain.Devices.Carriage
                 return CarriageErrors.NotCameInPosition5;
             if (endPos == CarriagePosition.Position6)
                 return CarriageErrors.NotCameInPosition6;
-            throw new InvalidOperationException("Неверные начальная или конечная позиция");
+            throw new InvalidOperationException("Неверная конечная позиция");
         }
     }
 }

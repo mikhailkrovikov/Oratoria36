@@ -1,17 +1,17 @@
 using System.Windows.Controls;
-using Oratoria.Application.VacuumModule.Signals;
+using Oratoria.Application.Module3.Signals;
 using Oratoria.UI.Services;
 
 namespace Oratoria.UI.Views.Pages;
 
-public partial class VacuumSignalsPage : Page
+public partial class Module3SignalsPage : Page
 {
-    public VacuumSignalsPage(VacuumSignals signals)
+    public Module3SignalsPage(Module3Signals signals)
     {
         InitializeComponent();
         SignalPageConfig.ConfigureDISignalGrid(DigitalInputGrid, signals.DISignals.DigitalInputs);
         SignalPageConfig.ConfigureDOSignalGrid(DigitalOutputGrid, signals.DOSignals.DigitalOutputs);
         SignalPageConfig.ConfigureAISignalGrid(AnalogInputGrid, signals.AISignals.AnalogInputs);
-        //SignalPageConfig.ConfigureAOSignalGrid(AnalogOutputGrid, signals.AOSignals.AnalogOutputs);
+        SignalPageConfig.ConfigureAOSignalGrid(AnalogOutputGrid, signals.AOSignals.AnalogOutputs);
     }
 }

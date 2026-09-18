@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using Oratoria.Domain.Devices.Abstractions;
 using Oratoria.Domain.Devices.Errors;
 using Oratoria.Domain.Devices.Statuses;
@@ -10,14 +10,15 @@ namespace Oratoria.Domain.Devices.Manipulator
 {
     public class Manipulator : MechanicDevice<ManipulatorPosition, ManipulatorErrors>
     {
-        public Manipulator(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory, ISettingsContext settings) 
+        public Manipulator(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory, ISettingsContext settings)
             : base(deviceId, signals, loggerFactory, settings)
-        {         
+        {
         }
 
         [DeviceAction("Исходная → Транспорт")]
         public async Task<bool> FromHomeToTransport()
         {
+            Logger.LogInformation("Из исходной в транспорт");
             try
             {
                 return await Move(ManipulatorPosition.Home, ManipulatorPosition.Transport) == ManipulatorPosition.Transport;
@@ -32,6 +33,7 @@ namespace Oratoria.Domain.Devices.Manipulator
         [DeviceAction("Модуль → Исходная")]
         public async Task<bool> FromModuleToHome()
         {
+            Logger.LogInformation("Из модуля в исходную");
             try
             {
                 return await Move(ManipulatorPosition.Module, ManipulatorPosition.Home) == ManipulatorPosition.Home;
@@ -46,6 +48,7 @@ namespace Oratoria.Domain.Devices.Manipulator
         [DeviceAction("Исходная → Модуль")]
         public async Task<bool> FromHomeToModule()
         {
+            Logger.LogInformation("Из исходной в модуль");
             try
             {
                 return await Move(ManipulatorPosition.Home, ManipulatorPosition.Module) == ManipulatorPosition.Module;
@@ -60,6 +63,7 @@ namespace Oratoria.Domain.Devices.Manipulator
         [DeviceAction("Транспорт → Исходная")]
         public async Task<bool> FromTransportToHome()
         {
+            Logger.LogInformation("Из транспорта в исходную");
             try
             {
                 return await Move(ManipulatorPosition.Transport, ManipulatorPosition.Home) == ManipulatorPosition.Home;
@@ -83,7 +87,7 @@ namespace Oratoria.Domain.Devices.Manipulator
             var startPosSignal = GetManInputSignalFromPos(startPos);
             var endPosSignal = GetManInputSignalFromPos(endPos);
             var endPosOutSignal = GetManOutputSignalFromPos(endPos);
-            var endPosError = GetEndPosError(startPos, endPos);
+            var endPosError = GetEndPosError(endPos);
             return new MechanicMovingProfile<ManipulatorErrors>(endPosOutSignal, startPosSignal, endPosSignal, revers, tormos, endPosError, startPosError);
         }
 
@@ -109,61 +113,15 @@ namespace Oratoria.Domain.Devices.Manipulator
             throw new InvalidOperationException("неверная позиция манипулятора");
         }
 
-        private static ManipulatorErrors GetEndPosError(ManipulatorPosition startPos, ManipulatorPosition endPos)
+        private static ManipulatorErrors GetEndPosError(ManipulatorPosition endPos)
         {
-            if (startPos == ManipulatorPosition.Home)
-            {
-                if (endPos == ManipulatorPosition.Transport)
-                    return ManipulatorErrors.NotComeInPos3;
-                if (endPos == ManipulatorPosition.Module)
-                    return ManipulatorErrors.NotComeInPos1;
-            }
+            if (endPos == ManipulatorPosition.Module)
+                return ManipulatorErrors.NotComeInPos1;
             if (endPos == ManipulatorPosition.Home)
-            {
-                if (startPos == ManipulatorPosition.Transport)
-                    return ManipulatorErrors.Error1_7;
-                if (startPos == ManipulatorPosition.Module)
-                    return ManipulatorErrors.NotComeInPos2;
-            }
-            throw new InvalidOperationException("Неверные начальная или конечная позиция");
+                return ManipulatorErrors.NotComeInPos2;
+            if (endPos == ManipulatorPosition.Transport)
+                return ManipulatorErrors.NotComeInPos3;
+            throw new InvalidOperationException("Неверная конечная позиция");
         }
-
-        protected override ManipulatorPosition MapState(MechanicsPositions position) => position switch
-        {
-            MechanicsPositions.Position1 => ManipulatorPosition.Module,
-            MechanicsPositions.Position2 => ManipulatorPosition.Home,
-            MechanicsPositions.Position3 => ManipulatorPosition.Transport,
-            MechanicsPositions.Indefinite => ManipulatorPosition.Indefinite,
-            MechanicsPositions.Uncertain => ManipulatorPosition.Uncertain,
-            MechanicsPositions.Transition => ManipulatorPosition.Transition,
-            _ => ManipulatorPosition.Uncertain
-        };
-
-        protected override ManipulatorErrors MapError(MechanicsErrors error) => error switch
-        {
-            MechanicsErrors.NotInited => ManipulatorErrors.NotInited,
-            MechanicsErrors.NotInStartPos => ManipulatorErrors.NotInStartPos,
-            MechanicsErrors.IndefinitePos => ManipulatorErrors.IndefinitePos,
-            MechanicsErrors.UnsertainPos => ManipulatorErrors.UnsertainPos,
-            MechanicsErrors.NotComeInPos1 => ManipulatorErrors.NotComeInPos1,
-            MechanicsErrors.NotComeInPos2 => ManipulatorErrors.NotComeInPos2,
-            MechanicsErrors.NotComeInPos3 => ManipulatorErrors.NotComeInPos3,
-            MechanicsErrors.None => ManipulatorErrors.None,
-            _ => ManipulatorErrors.NotInStartPos
-        };
-
-        protected override MechanicsErrors ToBaseError(ManipulatorErrors error) => error switch
-        {
-            ManipulatorErrors.NotInited => MechanicsErrors.NotInited,
-            ManipulatorErrors.NotInStartPos => MechanicsErrors.NotInStartPos,
-            ManipulatorErrors.IndefinitePos => MechanicsErrors.IndefinitePos,
-            ManipulatorErrors.UnsertainPos => MechanicsErrors.UnsertainPos,
-            ManipulatorErrors.NotComeInPos1 => MechanicsErrors.NotComeInPos1,
-            ManipulatorErrors.NotComeInPos2 => MechanicsErrors.NotComeInPos2,
-            ManipulatorErrors.NotComeInPos3 => MechanicsErrors.NotComeInPos3,
-            ManipulatorErrors.Error1_7 => MechanicsErrors.NotComeInPos2,
-            ManipulatorErrors.None => MechanicsErrors.None,
-            _ => MechanicsErrors.NotInEndPos
-        };
     }
 }

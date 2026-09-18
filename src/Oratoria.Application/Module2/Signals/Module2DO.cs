@@ -17,7 +17,7 @@ namespace Oratoria.Application.Module2.Signals
 
     public class Module2DO : IEnumerable<OutputSignal<bool>>
     {
-        IOutputStrategy<bool> _strategy;
+        private readonly IOutputStrategy<bool> _strategy;
 
         public ObservableCollection<OutputSignal<bool>> DigitalOutputs;
 
@@ -25,10 +25,13 @@ namespace Oratoria.Application.Module2.Signals
         [MagnetronRotatingSignal<Magnetrons>(Magnetrons.Magnetron2)]
         [MagnetronRotatingSignal<Magnetrons>(Magnetrons.Magnetron3)]
         public OutputSignal<bool> MagnetronsRotation { get; set; }
+
         public OutputSignal<bool> ResetVacuumetrAlarm { get; set; }
+
         public OutputSignal<bool> ControlOfVacuum { get; set; }
         public OutputSignal<bool> VacuumDecontamination { get; set; }
         public OutputSignal<bool> Termopara_vklyuchit { get; set; }
+
 
         [HeaterPowerOnSignal<Heaters>(Heaters.Heater)]
         public OutputSignal<bool> BPNOn { get; set; }
