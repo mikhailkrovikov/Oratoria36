@@ -9,6 +9,8 @@ namespace Oratoria.Persistence.EntitiesConfigurations
         public void Configure(EntityTypeBuilder<RecipeEntity> builder)
         {
             builder.HasKey(r => r.RecipeId);
+            builder.ToTable(t => t.HasCheckConstraint("ValidModuleId", "ModuleId > 0 AND ModuleId < 10"));
+            builder.Property(r => r.Name).HasMaxLength(50);
         }
     }
 }

@@ -7,6 +7,7 @@ namespace Oratoria.Persistence.Entities
     public class RecipeEntity
     {
         public Guid RecipeId { get; set; } = Guid.NewGuid();
+        public int ModuleId { get; set; }
         public string Name { get; set; } = null!;
         public List<RecipeStepEntity> Steps {  get; set; } = new();
     }
