@@ -2,7 +2,7 @@
 
 namespace Oratoria.Domain.Algorithms
 {
-    public class AlgorithmBody
+    public sealed class AlgorithmBody
     {
         private readonly AlgorithmBase _owner;
         private readonly CancellationToken _token;
