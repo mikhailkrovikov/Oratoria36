@@ -11,7 +11,11 @@
             _token = token;
         }
 
-        private void Schedule(Func<Task<AlgorithmResult>> func)
+        /// <summary>
+        /// Использовать для методов расширения AlgorithmBody
+        /// </summary>
+        /// <param name="func"></param>
+        public void Schedule(Func<Task<AlgorithmResult>> func)
         {
             _actions.Add(func);
         }
