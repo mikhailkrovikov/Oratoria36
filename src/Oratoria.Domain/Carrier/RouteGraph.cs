@@ -22,13 +22,19 @@ namespace Oratoria.Domain.Carrier
         public Task<AlgorithmResult> Transfer(RouteNode from, RouteNode to)
         {
             if (from == null)
+            {
                 throw new ArgumentNullException("исходная точка не назначена");
+            }
 
             if (to == null)
+            {
                 throw new ArgumentNullException("целевая точка не назначена");
+            }
 
             if (from.NodeId == sourceNode.NodeId || to.NodeId == sourceNode.NodeId)
-                throw new InvalidOperationException("перенос невозможен");
+            {
+                throw new InvalidOperationException($"{sourceNode} не может быть точкой отправления назначения");
+            }
 
             return Execute(() => carrier.CanCarry(from, to) && sourceNode.IsEmpty,
                 body => body
