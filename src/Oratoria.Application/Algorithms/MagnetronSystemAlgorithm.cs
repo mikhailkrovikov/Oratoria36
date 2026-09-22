@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Oratoria.Domain.Algorithms;
+﻿using Oratoria.Domain.Algorithms;
 using Oratoria.Infrastructure;
 
 namespace Oratoria.Application.Algorithms
@@ -8,9 +6,7 @@ namespace Oratoria.Application.Algorithms
     public class MagnetronSystemAlgorithm : AlgorithmBase
     {
         private readonly TechnologyModuleContext _context;
-
-        public MagnetronSystemAlgorithm(TechnologyModuleContext context, ILoggerFactory loggerFactory) 
-            : base(loggerFactory.CreateLogger("Магнетронная система"))
+        public MagnetronSystemAlgorithm(TechnologyModuleContext context)
         {
             _context = context;
         }
@@ -18,59 +14,77 @@ namespace Oratoria.Application.Algorithms
         public bool CanStartAllMagns() => true;
         public bool CanStopAllMagns() => true;
 
-        public Task<AlgorithmResult> StartAllMagnetrons(double setPoint1, double setPoint2, double setPoint3)
+        public Task<AlgorithmResult> StartAllMagnetrons(
+            double setPoint1,
+            double setPoint2,
+            double setPoint3,
+            CancellationToken cancellationToken = default)
         {
-            var parallel = new List<Func<Task<bool>>>();
-            parallel.Add(() => _context.Magnetron1.TurnOn(setPoint1));
-            parallel.Add(() => _context.Magnetron2.TurnOn(setPoint2));
-            parallel.Add(() => _context.Magnetron3.TurnOn(setPoint3));
-
-            return Execute(CanStartAllMagns, 
+            return Execute(CanStartAllMagns,
                 body => body
-                .DoParallelTasks(parallel.ToArray())
-                .DoTask(WaitRotation));
+                    .Parallel(
+                        ct => _context.Magnetron1.TurnOn(setPoint1, ct),
+                        ct => _context.Magnetron2.TurnOn(setPoint2, ct),
+                        ct => _context.Magnetron3.TurnOn(setPoint3, ct))
+                    .DoTask(WaitRotation),
+                cancellationToken);
         }
 
-        public Task<AlgorithmResult> StopAllMagnetrons()
+        public Task<AlgorithmResult> StopAllMagnetrons(
+            CancellationToken cancellationToken = default)
         {
-            return Execute(CanStopAllMagns, StopThreeMagnsParallel);
+            return Execute(
+                CanStopAllMagns,
+                body => body.DoTask(StopThreeMagns),
+                cancellationToken);
         }
 
-        private AlgorithmBody StopThreeMagnsParallel(AlgorithmBody body)
-            => body
-                .DoParallelTasks(
-                    _context.Magnetron1.TurnOff,
-                    _context.Magnetron2.TurnOff,
-                    _context.Magnetron3.TurnOff)
-                .DoTask(WaitRotationOff);
+        private async Task<bool> StopThreeMagns(
+            CancellationToken cancellationToken)
+        {
+            var results = await Task.WhenAll(
+                _context.Magnetron1.TurnOff(cancellationToken),
+                _context.Magnetron2.TurnOff(cancellationToken),
+                _context.Magnetron3.TurnOff(cancellationToken));
 
+            if (!results.All(result => result))
+                return false;
 
-        private async Task<bool> WaitRotation()
+            return await WaitRotationOff(cancellationToken);
+        }
+
+        private async Task<bool> WaitRotation(
+            CancellationToken cancellationToken)
         {
             _context.Magnetron1.RotationOn.Value = true;
-            Token.ThrowIfCancellationRequested();
+
+            cancellationToken.ThrowIfCancellationRequested();
+
             if (_context.Magnetron1.IsRotating.Value)
                 return true;
-            var res = await EventWaiter.WaitEvent(
+
+            var result = await EventWaiter.WaitEvent(
                 nameof(_context.Magnetron1.IsRotating.OnSignalChanged),
                 _context.Magnetron1.IsRotating,
-                (bool x) => x,
+                (bool value) => value,
                 _context.Magnetron1.TimeForError.Value,
-                Token);
-            if (!res)
-            {
-                Logger.LogError("Ошибка запуска вращения");
-                await StopThreeMagnsParallel(new AlgorithmBody(this, Token)).Start();
-                _context.Magnetron1.RotationOn.Value = false;
-                return false;
-            }
-            return true;
+                cancellationToken);
+
+            if (result)
+                return true;
+
+            Reason = "Ошибка запуска вращения";
+
+            await StopThreeMagns(cancellationToken);
+
+            _context.Magnetron1.RotationOn.Value = false;
+            return false;
         }
 
-        private async Task<bool> WaitRotationOff()
+        private async Task<bool> WaitRotationOff(CancellationToken cancellationToken)
         {
             _context.Magnetron1.RotationOn.Value = false;
-            Token.ThrowIfCancellationRequested();
+            cancellationToken.ThrowIfCancellationRequested();
             if (_context.Magnetron1.IsRotating.Value)
             {
                 await EventWaiter.WaitEvent(
@@ -78,7 +92,7 @@ namespace Oratoria.Application.Algorithms
                     _context.Magnetron1.IsRotating,
                     (bool x) => !x,
                     _context.Magnetron1.TimeForError.Value,
-                    Token);
+                    cancellationToken);
             }
             return true;
         }

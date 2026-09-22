@@ -1,11 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
-using Oratoria.Application.Gateway1;
-using Oratoria.Application.TransportModule;
+﻿using Oratoria.Application.Gateway1;
 using Oratoria.Domain;
 using Oratoria.Domain.Algorithms;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Oratoria.Application.Algorithms
 {
@@ -13,8 +8,7 @@ namespace Oratoria.Application.Algorithms
     {
         private readonly GatewayContext _context;
 
-        public GatewayTransportingAlgorithm(GatewayContext context, ILoggerFactory loggerFactory)
-            : base(loggerFactory.CreateLogger("Транспортировка"))
+        public GatewayTransportingAlgorithm(GatewayContext context)
         {
             _context = context;
         }

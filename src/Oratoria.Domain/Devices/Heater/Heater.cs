@@ -46,24 +46,24 @@ namespace Oratoria.Domain.Devices.Heater
         }
 
         [DeviceAction("Включить")]
-        public virtual async Task<bool> TurnOn([DeviceActionParameter("уставка")] double setpoint)
+        public virtual async Task<bool> TurnOn([DeviceActionParameter("уставка")] double setpoint, CancellationToken cancellationToken = default)
         {
             if (setpoint == 0)
             {
                 HeaterPowerSetPoint.Value = setpoint;
-                return await base.TurnOff();
+                return await base.TurnOff(cancellationToken);
             }
-            var result = await base.TurnOn();
+            var result = await base.TurnOn(cancellationToken);
             if (result)
                 HeaterPowerSetPoint.Value = setpoint;
             return result;
         }
 
         [DeviceAction("Выключить")]
-        public virtual async Task<bool> ResetSetpoint()
+        public virtual async Task<bool> ResetSetpoint(CancellationToken cancellationToken = default)
         {
             HeaterPowerSetPoint.Value = 0;
-            return await base.TurnOff();
+            return await base.TurnOff(cancellationToken);
         }
     }
 }

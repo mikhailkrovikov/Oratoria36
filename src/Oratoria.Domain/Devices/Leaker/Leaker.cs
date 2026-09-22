@@ -28,11 +28,11 @@ namespace Oratoria.Domain.Devices.Leaker
         }
 
         [DeviceAction("Уставка")]
-        public async Task<bool> SetConsumption([DeviceActionParameter("%")] double percent)
+        public async Task<bool> SetConsumption([DeviceActionParameter("%")] double percent, CancellationToken cancellationToken = default)
         {
             LeakerSetpoint?.Value = percent / 10;
             if (State != OpenableStatus.Open)
-                return await OpenValve();
+                return await OpenValve(cancellationToken);
             return true;
         }
     }

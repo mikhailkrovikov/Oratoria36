@@ -1,11 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Oratoria.Application.TransportModule;
+﻿using Oratoria.Application.TransportModule;
 using Oratoria.Domain;
 using Oratoria.Domain.Algorithms;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Oratoria.Application.Algorithms
 {
@@ -13,9 +8,7 @@ namespace Oratoria.Application.Algorithms
     {
         private readonly TransportContext _context;
 
-
-        public CentralTransporting(TransportContext context, ILoggerFactory loggerFactory) 
-            : base(loggerFactory.CreateLogger("Транспортировка"))
+        public CentralTransporting(TransportContext context)
         {
             _context = context;
         }

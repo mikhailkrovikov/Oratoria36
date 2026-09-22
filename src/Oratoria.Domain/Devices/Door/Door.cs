@@ -24,13 +24,13 @@ namespace Oratoria.Domain.Devices.Door
         }
 
         [Obsolete]
-        public override Task<bool> CloseValve()
+        public override Task<bool> CloseValve(CancellationToken cancellationToken = default)
         {
             throw new NotSupportedException("В данном устройстве закрытие не предусмотрено");
         }
 
         [Obsolete]
-        public override Task<bool> OpenValve()
+        public override Task<bool> OpenValve(CancellationToken cancellationToken = default)
         {
             throw new NotSupportedException("В данном устройстве открытие не предусмотрено");
         }

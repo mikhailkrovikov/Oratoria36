@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using Oratoria.Domain;
+﻿using Oratoria.Domain;
 using Oratoria.Domain.Algorithms;
 
 namespace Oratoria.Application.Algorithms
@@ -7,9 +6,7 @@ namespace Oratoria.Application.Algorithms
     public class ModuleTransportingAlgorithm : AlgorithmBase
     {
         private readonly TechnologyModuleContext _context;
-
-        public ModuleTransportingAlgorithm(TechnologyModuleContext context, ILoggerFactory loggerFactory)
-            : base(loggerFactory.CreateLogger("Транспортировка"))
+        public ModuleTransportingAlgorithm(TechnologyModuleContext context)
         {
             _context = context;
         }
@@ -17,48 +14,52 @@ namespace Oratoria.Application.Algorithms
         private bool CanLoadPlate() => true;
         private bool CanUnloadPlate() => true;
 
-        public Task<AlgorithmResult> LoadPlate(Plate plate)
+        public Task<AlgorithmResult> LoadPlate(Plate plate, CancellationToken cancellationToken = default)
         {
             var shutterSub = () => _context.Shutter.Open?.OnSignalChanged += KeepShutterOpen;
             var shutterUnsub = () => _context.Shutter.Open?.OnSignalChanged -= KeepShutterOpen;
 
             return Execute(CanLoadPlate,
                 body => body
-                .DoTask(() => _context.Manipulator.FromHomeToTransport())
-                .DoTask(() => _context.Manipulator.FromTransportToHome())
-                .DoTask(() => TakeFromCarriage(plate))
-                .DoTask(() => _context.Shutter.OpenValve())
-                .Subscribe(shutterSub, shutterUnsub)
-                .DoTask(() => _context.Manipulator.FromHomeToModule())
-                .DoTask(() => _context.Table.FromHomeToRollback())
-                .DoTask(() => _context.Manipulator.FromModuleToHome())
-                .DoTask(() => LeaveInModule(plate))
-                .DoTask(() => _context.Table.FromRollbackToProcessing())
-                .Unsubscribe(shutterUnsub)
-                .DoTask(() => _context.Shutter.CloseValve()));
+                    .DoTask(_context.Manipulator.FromHomeToTransport)
+                    .DoTask(_context.Manipulator.FromTransportToHome)
+                    .DoTask(ct => TakeFromCarriage(plate, ct))
+                    .DoTask(_context.Shutter.OpenValve)
+                    .Subscribe(shutterSub, shutterUnsub)
+                    .DoTask(_context.Manipulator.FromHomeToModule)
+                    .DoTask(_context.Table.FromHomeToRollback)
+                    .DoTask(_context.Manipulator.FromModuleToHome)
+                    .DoTask(ct => LeaveInModule(plate, ct))
+                    .DoTask(_context.Table.FromRollbackToProcessing)
+                    .Unsubscribe(shutterUnsub)
+                    .DoTask(_context.Shutter.CloseValve),
+                cancellationToken);
         }
 
-        public Task<AlgorithmResult> UnloadPlate(Plate plate)
+        public Task<AlgorithmResult> UnloadPlate(Plate plate, CancellationToken cancellationToken = default)
         {
             var shutterSub = () => _context.Shutter.Open?.OnSignalChanged += KeepShutterOpen;
             var shutterUnsub = () => _context.Shutter.Open?.OnSignalChanged -= KeepShutterOpen;
 
             return Execute(CanUnloadPlate,
                 body => body
-                .DoTask(() => _context.Table.FromProcessingToRollback())
-                .DoTask(() => _context.Shutter.OpenValve())
-                .Subscribe(shutterSub, shutterUnsub)
-                .DoTask(() => _context.Manipulator.FromHomeToModule())
-                .DoTask(() => _context.Table.FromRollbackToHome())
-                .DoTask(() => _context.Manipulator.FromModuleToHome())
-                .DoTask(() => TakeFromModule(plate))
-                .Unsubscribe(shutterUnsub)
-                .DoTask(() => _context.Shutter.CloseValve()));
+                    .DoTask(_context.Table.FromProcessingToRollback)
+                    .DoTask(_context.Shutter.OpenValve)
+                    .Subscribe(shutterSub, shutterUnsub)
+                    .DoTask(_context.Manipulator.FromHomeToModule)
+                    .DoTask(_context.Table.FromRollbackToHome)
+                    .DoTask(_context.Manipulator.FromModuleToHome)
+                    .DoTask(ct => TakeFromModule(plate, ct))
+                    .Unsubscribe(shutterUnsub)
+                    .DoTask(_context.Shutter.CloseValve),
+                cancellationToken);
         }
 
-        private static async Task<bool> TakeFromCarriage(Plate plate)
+        private static async Task<bool> TakeFromCarriage(
+            Plate plate,
+            CancellationToken cancellationToken)
         {
-            var ok = await plate.GetState(true);
+            var ok = await plate.GetState(true, cancellationToken);
             if (!ok)
             {
                 plate.DeviceErrors.AddError(PlateErrors.NotTakenFromTransport);
@@ -68,9 +69,11 @@ namespace Oratoria.Application.Algorithms
             return true;
         }
 
-        private static async Task<bool> LeaveInModule(Plate plate)
+        private static async Task<bool> LeaveInModule(
+            Plate plate,
+            CancellationToken cancellationToken)
         {
-            var ok = await plate.GetState(false);
+            var ok = await plate.GetState(false, cancellationToken);
             if (!ok)
             {
                 plate.DeviceErrors.AddError(PlateErrors.NotTakenFromTransport);
@@ -80,9 +83,11 @@ namespace Oratoria.Application.Algorithms
             return true;
         }
 
-        private static async Task<bool> TakeFromModule(Plate plate)
+        private static async Task<bool> TakeFromModule(
+            Plate plate,
+            CancellationToken cancellationToken)
         {
-            var ok = await plate.GetState(true);
+            var ok = await plate.GetState(true, cancellationToken);
             if (!ok)
             {
                 plate.DeviceErrors.AddError(PlateErrors.NotTakenFromModule);
@@ -96,7 +101,6 @@ namespace Oratoria.Application.Algorithms
         {
             if (_context.Shutter.Open != null && !_context.Shutter.Open.Value)
             {
-                Logger.LogWarning("Неожиданное закрытие ЩЗ, принудительное открытие");
                 _context.Shutter.Open.Value = true;
             }
         }

@@ -1,14 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
-using Oratoria.Domain.Algorithms;
+﻿using Oratoria.Domain.Algorithms;
 
 namespace Oratoria.Domain.Carrier
 {
     public class Carrier : AlgorithmBase
     {
-        public Carrier(ILogger logger) : base(logger)
-        {
-        }
-
         public bool CanCarry(RouteNode from, RouteNode to)
         {
             if (from.NodeId == to.NodeId)
@@ -32,18 +27,18 @@ namespace Oratoria.Domain.Carrier
             return true;
         }
 
-        public Task<AlgorithmResult> Carry(RouteNode from, RouteNode to)
+        public Task<AlgorithmResult> Carry(RouteNode from, RouteNode to, CancellationToken token = default)
         {
             return Execute(() => CanCarry(from, to),
                 body => body
-                .DoAlgorithm(from.Unload.Owner, () => from.Unload.Run())
-                .DoAlgorithm(to.Load.Owner, to.Load.Run)
-                .DoTask(() =>
+                .DoAlgorithm(from.Unload)
+                .DoAlgorithm(to.Load)
+                .DoAction(() =>
                 {
                     from.IsEmpty = true;
                     to.IsEmpty = false;
-                    return Task.FromResult(true);
-                }));
+                }),
+                token);
         }
     }
 }

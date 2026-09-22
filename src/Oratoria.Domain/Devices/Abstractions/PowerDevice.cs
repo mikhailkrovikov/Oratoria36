@@ -68,159 +68,160 @@ namespace Oratoria.Domain.Devices.Abstractions
         }
 
         [DeviceAction("Включить")]
-        public virtual async Task<bool> TurnOn()
+        public virtual Task<bool> TurnOn(CancellationToken cancellationToken = default)
         {
             Logger.LogInformation($"{DeviceName}: включение");
-            ResetToken();
-            var token = CTSource.Token;
-            try
+            return RunOperation(cancellationToken, async token =>
             {
-                if (State == PowerDeviceStatus.On)
+                try
                 {
+                    if (State == PowerDeviceStatus.On)
+                    {
+                        DeviceErrors.ResetError(PowerDeviceErrors.CannotTurnOn);
+                        return true;
+                    }
+
+                    PowerOn?.Value = true;
+                    PowerOff?.Value = false;
+
+                    var res = true;
+                    var needWait = false;
+
+                    if (IsPowerOn != null && !IsPowerOn.Value)
+                        needWait = true;
+
+                    if (IsPowerOff != null && IsPowerOff.Value)
+                        needWait = true;
+
+                    if (needWait)
+                    {
+                        token.ThrowIfCancellationRequested();
+                        if (IsPowerOn != null)
+                        {
+                            res = await EventWaiter.WaitEvent(nameof(IsPowerOn.OnSignalChanged),
+                                IsPowerOn,
+                                (bool x) =>
+                                {
+                                    if (IsPowerOn != null)
+                                        return IsPowerOn.Value;
+
+                                    if (IsPowerOff != null)
+                                        return !IsPowerOff.Value;
+
+                                    return true;
+                                },
+                                TimeForError.Value * 1000, token);
+                        }
+                        else if (IsPowerOff != null)
+                        {
+                            res = await EventWaiter.WaitEvent(nameof(IsPowerOff.OnSignalChanged),
+                                IsPowerOff,
+                                (bool x) => !IsPowerOff.Value,
+                                TimeForError.Value * 1000, token);
+                        }
+                    }
+                    if (!res)
+                    {
+                        Logger.LogError($"{DeviceName}: не смог включиться, авария");
+                        DeviceErrors.AddError(PowerDeviceErrors.CannotTurnOn);
+                        PowerOn?.Value = false;
+                        return false;
+                    }
                     DeviceErrors.ResetError(PowerDeviceErrors.CannotTurnOn);
+                    IsPowerOn?.OnSignalChanged += IsPowerOn_OnSignalChanged;
                     return true;
                 }
-
-                PowerOn?.Value = true;
-                PowerOff?.Value = false;
-
-                var res = true;
-                var needWait = false;
-
-                if (IsPowerOn != null && !IsPowerOn.Value)
-                    needWait = true;
-
-                if (IsPowerOff != null && IsPowerOff.Value)
-                    needWait = true;
-
-                if (needWait)
+                catch (OperationCanceledException)
                 {
-                    token.ThrowIfCancellationRequested();
-                    if (IsPowerOn != null)
-                    {
-                        res = await EventWaiter.WaitEvent(nameof(IsPowerOn.OnSignalChanged),
-                            IsPowerOn,
-                            (bool x) =>
-                            {
-                                if (IsPowerOn != null)
-                                    return IsPowerOn.Value;
-
-                                if (IsPowerOff != null)
-                                    return !IsPowerOff.Value;
-
-                                return true;
-                            },
-                            TimeForError.Value * 1000, token);
-                    }
-                    else if (IsPowerOff != null)
-                    {
-                        res = await EventWaiter.WaitEvent(nameof(IsPowerOff.OnSignalChanged),
-                            IsPowerOff,
-                            (bool x) => !IsPowerOff.Value,
-                            TimeForError.Value * 1000, token);
-                    }
+                    Logger.LogInformation($"{DeviceName}: включение отменено");
+                    throw;
                 }
-                if (!res)
+                catch (Exception ex)
                 {
-                    Logger.LogError($"{DeviceName}: не смог включиться, авария");
-                    DeviceErrors.AddError(PowerDeviceErrors.CannotTurnOn);
-                    PowerOn?.Value = false;
+                    Logger.LogError($"{DeviceName}: ошибка включения");
+                    Logger.LogError(ex.Message);
                     return false;
                 }
-                DeviceErrors.ResetError(PowerDeviceErrors.CannotTurnOn);
-                IsPowerOn?.OnSignalChanged += IsPowerOn_OnSignalChanged;
-                return true;
-            }
-            catch (OperationCanceledException)
-            {
-                Logger.LogInformation($"{DeviceName}: включение отменено");
-                return false;
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError($"{DeviceName}: ошибка включения");
-                Logger.LogError(ex.Message);
-                return false;
-            }
+            });
         }
 
 
         [DeviceAction("Выключить")]
-        public virtual async Task<bool> TurnOff()
+        public virtual Task<bool> TurnOff(CancellationToken cancellationToken = default)
         {
             Logger.LogInformation($"{DeviceName}: выключение");
-            ResetToken();
-            var token = CTSource.Token;
-
-            try
+            return RunOperation(cancellationToken, async token =>
             {
-                if (State == PowerDeviceStatus.Off)
+                try
                 {
+                    if (State == PowerDeviceStatus.Off)
+                    {
+                        DeviceErrors.ResetError(PowerDeviceErrors.CannotTurnOff);
+                        return true;
+                    }
+
+                    IsPowerOn?.OnSignalChanged -= IsPowerOn_OnSignalChanged;
+                    PowerOn?.Value = false;
+                    PowerOff?.Value = true;
+
+                    var res = true;
+                    var needWait = false;
+
+                    if (IsPowerOff != null && !IsPowerOff.Value)
+                        needWait = true;
+
+                    if (IsPowerOn != null && IsPowerOn.Value)
+                        needWait = true;
+
+                    if (needWait)
+                    {
+                        token.ThrowIfCancellationRequested();
+                        if (IsPowerOff != null)
+                        {
+                            res = await EventWaiter.WaitEvent(nameof(IsPowerOff.OnSignalChanged),
+                                IsPowerOff,
+                                (bool x) =>
+                                {
+                                    if (IsPowerOff != null)
+                                        return IsPowerOff.Value;
+
+                                    if (IsPowerOn != null)
+                                        return !IsPowerOn.Value;
+
+                                    return true;
+                                },
+                                TimeForError.Value * 1000, token);
+                        }
+                        else if (IsPowerOn != null)
+                        {
+                            res = await EventWaiter.WaitEvent(nameof(IsPowerOn.OnSignalChanged),
+                                IsPowerOn,
+                                (bool x) => !IsPowerOn.Value,
+                                TimeForError.Value * 1000, token);
+                        }
+                    }
+                    if (!res)
+                    {
+                        Logger.LogError($"{DeviceName}: не смог выключиться, авария");
+                        DeviceErrors.AddError(PowerDeviceErrors.CannotTurnOff);
+                        PowerOff?.Value = false;
+                        return false;
+                    }
                     DeviceErrors.ResetError(PowerDeviceErrors.CannotTurnOff);
                     return true;
                 }
-
-                IsPowerOn?.OnSignalChanged -= IsPowerOn_OnSignalChanged;
-                PowerOn?.Value = false;
-                PowerOff?.Value = true;
-
-                var res = true;
-                var needWait = false;
-
-                if (IsPowerOff != null && !IsPowerOff.Value)
-                    needWait = true;
-
-                if (IsPowerOn != null && IsPowerOn.Value)
-                    needWait = true;
-
-                if (needWait)
+                catch (OperationCanceledException)
                 {
-                    token.ThrowIfCancellationRequested();
-                    if (IsPowerOff != null)
-                    {
-                        res = await EventWaiter.WaitEvent(nameof(IsPowerOff.OnSignalChanged),
-                            IsPowerOff,
-                            (bool x) =>
-                            {
-                                if (IsPowerOff != null)
-                                    return IsPowerOff.Value;
-
-                                if (IsPowerOn != null)
-                                    return !IsPowerOn.Value;
-
-                                return true;
-                            },
-                            TimeForError.Value * 1000, token);
-                    }
-                    else if (IsPowerOn != null)
-                    {
-                        res = await EventWaiter.WaitEvent(nameof(IsPowerOn.OnSignalChanged),
-                            IsPowerOn,
-                            (bool x) => !IsPowerOn.Value,
-                            TimeForError.Value * 1000, token);
-                    }
+                    Logger.LogInformation($"{DeviceName}: выключение отменено");
+                    throw;
                 }
-                if (!res)
+                catch (Exception ex)
                 {
-                    Logger.LogError($"{DeviceName}: не смог выключиться, авария");
-                    DeviceErrors.AddError(PowerDeviceErrors.CannotTurnOff);
-                    PowerOff?.Value = false;
+                    Logger.LogError($"{DeviceName}: ошибка выключения");
+                    Logger.LogError(ex.Message);
                     return false;
                 }
-                DeviceErrors.ResetError(PowerDeviceErrors.CannotTurnOff);
-                return true;
-            }
-            catch (OperationCanceledException)
-            {
-                Logger.LogInformation($"{DeviceName}: выключение отменено");
-                return false;
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError($"{DeviceName}: ошибка выключения");
-                Logger.LogError(ex.Message);
-                return false;
-            }
+            });
         }
 
         private void IsPowerOn_OnSignalChanged(bool value)

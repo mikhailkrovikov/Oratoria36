@@ -1,112 +1,94 @@
-﻿using Microsoft.Extensions.Logging;
-
-namespace Oratoria.Domain.Algorithms
+﻿namespace Oratoria.Domain.Algorithms
 {
     public abstract class AlgorithmBase : IAlgorithm
     {
-        private CancellationTokenSource _ctSource = new();
+        private CancellationTokenSource? ctsource;
+        private readonly object locker = new();
 
-        protected AlgorithmBase(ILogger logger)
-        {
-            Logger = logger;
-        }
+        public AlgorithmStatus Status { get; protected set; }
 
-        protected ILogger Logger { get; }
-
-        protected CancellationToken Token => _ctSource.Token;
-
-        public AlgorithmStatus Status
-        {
-            get => field;
-            protected set
-            {
-                if (value != field)
-                {
-                    field = value;
-                    StateChanged?.Invoke();
-                }
-            }
-        }
-
-        public List<IAlgorithm> Children { get; set; } = new();
-
-        public string? Reason { get; set; }
-
-
-        public event Action? StateChanged;
+        public string? Reason { get; protected set; }
 
         public void Cancel()
         {
+            CancellationTokenSource? source;
+
+            lock (locker)
+            {
+                source = ctsource;
+            }
+
             try
             {
-                _ctSource.Cancel();
-                foreach (var child in Children)
-                    child.Cancel();
+                source?.Cancel();
             }
-            catch (Exception ex)
+            catch
             {
-                Logger.LogDebug(ex.Message);
             }
         }
 
-        protected void ResetToken()
+        public async Task<AlgorithmResult> Execute(
+            Func<bool> canExecute,
+            Func<AlgorithmBody, AlgorithmBody> build,
+            CancellationToken parentToken = default)
         {
-            try
-            {
-                _ctSource.Cancel();
-                _ctSource.Dispose();
-            }
-            catch { }
-            _ctSource = new CancellationTokenSource();
-        }
+            CancellationTokenSource ctSource;
 
-        public void AddAlgorithm(IAlgorithm algorithm)
-        {
-            Children.Add(algorithm);
-        }
-
-        public async Task<AlgorithmResult> Execute(Func<bool> canExecute, Func<AlgorithmBody, AlgorithmBody> build, CancellationToken parentToken = default)
-        {
-            if (Status == AlgorithmStatus.Running)
+            lock (locker)
             {
-                Reason = "уже выполняется";
-                return AlgorithmResult.Fail(this);
+                if (ctsource != null)
+                    return AlgorithmResult.Blocked(this);
+
+                ctSource = CancellationTokenSource
+                    .CreateLinkedTokenSource(parentToken);
+
+                ctsource = ctSource;
             }
 
-            if (!canExecute())
-                return AlgorithmResult.Blocked(this);
-
-            ResetToken();
-            Children.Clear();
-            Reason = string.Empty;
-            Status = AlgorithmStatus.Running;
-
-            using var linked = CancellationTokenSource.CreateLinkedTokenSource(_ctSource.Token, parentToken);
             try
             {
-                var result = await build(new AlgorithmBody(this, linked.Token)).Start();
-                if (result.Ok)
+                Reason = string.Empty;
+                ctSource.Token.ThrowIfCancellationRequested();
+
+                if (!canExecute())
                 {
-                    Status = AlgorithmStatus.Completed;
+                    Status = AlgorithmStatus.Blocked;
+                    return AlgorithmResult.Blocked(this);
                 }
-                else
-                {
-                    Status = result.Status;
-                }
+
+                Status = AlgorithmStatus.Running;
+
+                var result = await build(
+                    new AlgorithmBody(ctSource.Token)).ExecuteAsync();
+
+                ctSource.Token.ThrowIfCancellationRequested();
+
+                result = result.WithSource(this);
+
+                if (!result.Ok && string.IsNullOrEmpty(Reason))
+                    Reason = result.Failed?.Reason;
+
+                Status = result.Status;
                 return result;
             }
-            catch (OperationCanceledException ex)
+            catch (OperationCanceledException)
             {
                 Status = AlgorithmStatus.Cancelled;
-                Logger.LogWarning("отмена операции");
                 return AlgorithmResult.Canceled(this);
             }
             catch (Exception ex)
             {
-                Status = AlgorithmStatus.Failed;
                 Reason = ex.Message;
-                Logger.LogError(ex.Message);
+                Status = AlgorithmStatus.Failed;
                 return AlgorithmResult.Fail(this);
+            }
+            finally
+            {
+                lock (locker)
+                {
+                    ctsource = null;
+                    ctSource.Dispose();
+                }
             }
         }
     }

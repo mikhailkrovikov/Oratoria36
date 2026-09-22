@@ -8,7 +8,7 @@ using Oratoria.Domain.Signals.Abstractions;
 
 namespace Oratoria.Domain.Devices.Carriage
 {
-    public class Carriage : MechanicDevice<CarriagePosition, CarriageErrors>
+    public sealed class Carriage : MechanicDevice<CarriagePosition, CarriageErrors>
     {
         public Carriage(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory, ISettingsContext settings)
             : base(deviceId, signals, loggerFactory, settings)
@@ -16,13 +16,13 @@ namespace Oratoria.Domain.Devices.Carriage
         }
 
         [DeviceAction("Отправить каретку")]
-        public async Task<bool> MoveCarriage([DeviceActionParameter("позиция")] int position)
+        public async Task<bool> MoveCarriage([DeviceActionParameter("позиция")] int position, CancellationToken cancellationToken = default)
         {
             Logger.LogInformation($"в позицию {position}");
             try
             {
                 var state = MapState(State);
-                return await Move(state, (CarriagePosition)position) == (CarriagePosition)position;
+                return await Move(state, (CarriagePosition)position, cancellationToken) == (CarriagePosition)position;
             }
             catch (InvalidOperationException ex)
             {
@@ -31,7 +31,7 @@ namespace Oratoria.Domain.Devices.Carriage
             }
         }
 
-        public override MechanicMovingProfile<CarriageErrors> GetMovingProfile(CarriagePosition startPos, CarriagePosition endPos)
+        protected override MechanicMovingProfile<CarriageErrors> GetMovingProfile(CarriagePosition startPos, CarriagePosition endPos)
         {
             if (startPos == endPos)
                 throw new InvalidOperationException("позиции перемещения каретки совпадают");

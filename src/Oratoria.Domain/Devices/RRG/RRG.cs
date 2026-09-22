@@ -64,7 +64,7 @@ namespace Oratoria.Domain.Devices.RRG
         }
 
         [DeviceAction("Задать уставку")]
-        public async Task<bool> SetValue([DeviceActionParameter("л/ч")] double value)
+        public async Task<bool> SetValue([DeviceActionParameter("л/ч")] double value, CancellationToken cancellationToken = default)
         {
             if (MaxFlowRate.Value == 0)
             {
@@ -73,97 +73,98 @@ namespace Oratoria.Domain.Devices.RRG
             }
 
             if (value == 0)
-                return await ResetValue();
+                return await ResetValue(cancellationToken);
 
             Logger.LogInformation($"{DeviceName}: выход на уставку {value} л/ч");
-            ResetToken();
-            var token = CTSource.Token;
-            RRGRealValueSignal.OnSignalChanged -= CheckState;
-            try
+            return await RunOperation(cancellationToken, async token =>
             {
-                RRGSetpointSignal.Value = value * (5.0 / MaxFlowRate.Value);
-                if (State != RRGStatus.Open)
+                RRGRealValueSignal.OnSignalChanged -= CheckState;
+                try
                 {
-                    var result = await EventWaiter.WaitEvent
-                    (nameof(RRGRealValueSignal.OnSignalChanged),
-                    RRGRealValueSignal,
-                    (double x) => State == RRGStatus.Open, TimeOfAction.Value * 1000, token);
+                    RRGSetpointSignal.Value = value * (5.0 / MaxFlowRate.Value);
+                    if (State != RRGStatus.Open)
+                    {
+                        var result = await EventWaiter.WaitEvent
+                        (nameof(RRGRealValueSignal.OnSignalChanged),
+                        RRGRealValueSignal,
+                        (double x) => State == RRGStatus.Open, TimeOfAction.Value * 1000, token);
 
-                    if (!result)
-                    {
-                        Logger.LogWarning($"{DeviceName}: не удается достичь уставки");
-                        DeviceErrors.AddError(RRGErrors.CannotSetCons);
-                        return false;
+                        if (!result)
+                        {
+                            Logger.LogWarning($"{DeviceName}: не удается достичь уставки");
+                            DeviceErrors.AddError(RRGErrors.CannotSetCons);
+                            return false;
+                        }
+                        else
+                        {
+                            DeviceErrors.ResetError(RRGErrors.CannotSetCons);
+                            RRGRealValueSignal.OnSignalChanged += CheckState;
+                            return true;
+                        }
                     }
-                    else
-                    {
-                        DeviceErrors.ResetError(RRGErrors.CannotSetCons);
-                        RRGRealValueSignal.OnSignalChanged += CheckState;
-                        return true;
-                    }
+                    DeviceErrors.ResetError(RRGErrors.CannotSetCons);
+                    RRGRealValueSignal.OnSignalChanged += CheckState;
+                    return true;
+
                 }
-                DeviceErrors.ResetError(RRGErrors.CannotSetCons);
-                RRGRealValueSignal.OnSignalChanged += CheckState;
-                return true;
-
-            }
-            catch (OperationCanceledException)
-            {
-                Logger.LogInformation($"{DeviceName}: открытие отменено");
-                return false;
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError($"{DeviceName}: ошибка открытия");
-                Logger.LogError(ex.Message);
-                return false;
-            }
+                catch (OperationCanceledException)
+                {
+                    Logger.LogInformation($"{DeviceName}: открытие отменено");
+                    throw;
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogError($"{DeviceName}: ошибка открытия");
+                    Logger.LogError(ex.Message);
+                    return false;
+                }
+            });
         }
 
         [DeviceAction("Сбросить уставку")]
-        public async Task<bool> ResetValue()
+        public Task<bool> ResetValue(CancellationToken cancellationToken = default)
         {
-            RRGRealValueSignal.OnSignalChanged -= CheckState;
             Logger.LogInformation($"{DeviceName}: сброс уставки");
-            ResetToken();
-            var token = CTSource.Token;
-
-            try
+            return RunOperation(cancellationToken, async token =>
             {
-                RRGSetpointSignal.Value = 0;
-                if (State != RRGStatus.Close)
+                RRGRealValueSignal.OnSignalChanged -= CheckState;
+                try
                 {
-                    var result = await EventWaiter.WaitEvent
-                    (nameof(RRGRealValueSignal.OnSignalChanged),
-                    RRGRealValueSignal,
-                    (double x) => State == RRGStatus.Close, TimeOfAction.Value * 1000, token);
+                    RRGSetpointSignal.Value = 0;
+                    if (State != RRGStatus.Close)
+                    {
+                        var result = await EventWaiter.WaitEvent
+                        (nameof(RRGRealValueSignal.OnSignalChanged),
+                        RRGRealValueSignal,
+                        (double x) => State == RRGStatus.Close, TimeOfAction.Value * 1000, token);
 
-                    if (!result)
-                    {
-                        Logger.LogWarning($"{DeviceName}: не удается сбросить уставки");
-                        DeviceErrors.AddError(RRGErrors.CannotResetCons);
-                        return false;
+                        if (!result)
+                        {
+                            Logger.LogWarning($"{DeviceName}: не удается сбросить уставки");
+                            DeviceErrors.AddError(RRGErrors.CannotResetCons);
+                            return false;
+                        }
+                        else
+                        {
+                            DeviceErrors.ResetError(RRGErrors.CannotResetCons);
+                            return true;
+                        }
                     }
-                    else
-                    {
-                        DeviceErrors.ResetError(RRGErrors.CannotResetCons);
-                        return true;
-                    }
+                    DeviceErrors.ResetError(RRGErrors.CannotResetCons);
+                    return true;
                 }
-                DeviceErrors.ResetError(RRGErrors.CannotResetCons);
-                return true;
-            }
-            catch (OperationCanceledException)
-            {
-                Logger.LogInformation($"{DeviceName}: закрытие отменено");
-                return false;
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError($"{DeviceName}: ошибка закрытия");
-                Logger.LogError(ex.Message);
-                return false;
-            }
+                catch (OperationCanceledException)
+                {
+                    Logger.LogInformation($"{DeviceName}: закрытие отменено");
+                    throw;
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogError($"{DeviceName}: ошибка закрытия");
+                    Logger.LogError(ex.Message);
+                    return false;
+                }
+            });
         }
 
         private void CheckState(double value)

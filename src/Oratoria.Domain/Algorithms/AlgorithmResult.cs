@@ -2,35 +2,50 @@
 {
     public sealed class AlgorithmResult
     {
-        public readonly bool Ok;
-        public readonly AlgorithmStatus Status;
-        public readonly IAlgorithm? Failed;
+        public bool Ok
+        {
+            get
+            {
+                return Status == AlgorithmStatus.Completed;
+            }
+        }
 
-        private AlgorithmResult(bool ok, AlgorithmStatus status, IAlgorithm? failed)
+        public AlgorithmStatus Status { get; }
+
+        public IAlgorithm? Failed { get; }
+
+        private AlgorithmResult(AlgorithmStatus status, IAlgorithm? failed = null)
         { 
-            Ok = ok; 
             Status = status;
             Failed = failed; 
         }
 
         public static AlgorithmResult Success()
         {
-            return new AlgorithmResult(true, AlgorithmStatus.Completed, null);
+            return new AlgorithmResult(AlgorithmStatus.Completed);
         }
 
-        public static AlgorithmResult Fail(IAlgorithm failed)
+        public static AlgorithmResult Fail(IAlgorithm? failed = null)
         {
-            return new AlgorithmResult(false, AlgorithmStatus.Failed, failed);
+            return new AlgorithmResult(AlgorithmStatus.Failed, failed);
         }
 
-        public static AlgorithmResult Canceled(IAlgorithm failed)
+        public static AlgorithmResult Canceled(IAlgorithm? failed = null)
         {
-            return new AlgorithmResult(false, AlgorithmStatus.Cancelled, failed);
+            return new AlgorithmResult(AlgorithmStatus.Cancelled, failed);
         }
 
-        public static AlgorithmResult Blocked(IAlgorithm failed)
+        public static AlgorithmResult Blocked(IAlgorithm? failed = null)
         {
-            return new AlgorithmResult(false, AlgorithmStatus.Blocked, failed);
+            return new AlgorithmResult(AlgorithmStatus.Blocked, failed);
+        }
+
+        public AlgorithmResult WithSource(IAlgorithm algorithm)
+        {
+            if (Ok || Failed != null)
+                return this;
+
+            return new AlgorithmResult(Status, algorithm);
         }
     }
 }

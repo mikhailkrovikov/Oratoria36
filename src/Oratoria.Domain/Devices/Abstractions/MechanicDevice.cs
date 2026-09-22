@@ -21,7 +21,7 @@ namespace Oratoria.Domain.Devices.Abstractions
         private static readonly Dictionary<MechanicsErrors, TErr> _errorMap = new();
         private static readonly Dictionary<TErr, MechanicsErrors> _baseErrorMap = new();
 
-        public abstract MechanicMovingProfile<TErr> GetMovingProfile(TPos startPos, TPos endPos);
+        protected abstract MechanicMovingProfile<TErr> GetMovingProfile(TPos startPos, TPos endPos);
 
         protected TPos MapState(MechanicsPositions position)
         {
@@ -163,7 +163,7 @@ namespace Oratoria.Domain.Devices.Abstractions
                 _baseErrorMap.Add(error, attribute.Error);
                 _errorMap.Add(attribute.Error, error);
             }
-        } 
+        }
 
         protected void DriverOverloadHandler(bool value)
         {
@@ -173,15 +173,22 @@ namespace Oratoria.Domain.Devices.Abstractions
 
 
         [DeviceAction("Инициализация")]
-        public async Task<TPos> Init()
+        public Task<TPos> Init(CancellationToken cancellationToken = default)
         {
-            Logger.LogInformation($"{DeviceName}: инициализация");
-            Actuator.Value = true;
-            await Task.Delay(DELAY);
-            var result = GetPosition();
-            Actuator.Value = false;
-            return result;
-
+            return RunOperation(cancellationToken, async token =>
+            {
+                Logger.LogInformation($"{DeviceName}: инициализация");
+                Actuator.Value = true;
+                try
+                {
+                    await Task.Delay(DELAY, token);
+                    return GetPosition();
+                }
+                finally
+                {
+                    Actuator.Value = false;
+                }
+            });
         }
 
         private TPos GetPosition()
@@ -284,75 +291,62 @@ namespace Oratoria.Domain.Devices.Abstractions
             ResetToken();
         }
 
-        private async Task<bool> GetMovingTask(InputSignal<bool> targetPosition, CancellationToken token)
+        public Task<TPos> Move(TPos startPos, TPos endPos, CancellationToken cancellationToken = default)
         {
-            if (targetPosition.Value)
-                return true;
-
-            if (await EventWaiter.WaitEvent(nameof(targetPosition.OnSignalChanged),
-                    targetPosition,
-                    (bool value) => value,
-                    ActionTime.Value * 1000,
-                    token))
-                return true;
-
-            token.ThrowIfCancellationRequested();
-            return targetPosition.Value;
-        }
-
-        public async Task<TPos> Move(TPos startPos, TPos endPos)
-        {
-            ResetToken();
-            var token = CTSource.Token;
-            var movingProfile = GetMovingProfile(startPos, endPos);
-
-            try
+            return RunOperation(cancellationToken, async token =>
             {
-                Actuator.Value = true;
-                await Task.Delay(DELAY);
-                if (!movingProfile.StartPosSignal.Value)
+                try
                 {
-                    Logger.LogError($"{DeviceName}: неверное исходное положение");
-                    DeviceErrors.AddError(ToBaseError(movingProfile.StartPosError));
+                    var movingProfile = GetMovingProfile(startPos, endPos);
+                    Actuator.Value = true;
+                    await Task.Delay(DELAY, token);
+                    if (!movingProfile.StartPosSignal.Value)
+                    {
+                        Logger.LogError($"{DeviceName}: неверное исходное положение");
+                        DeviceErrors.AddError(ToBaseError(movingProfile.StartPosError));
+                        Actuator.Value = false;
+                        GetPosition();
+                        return MapState(State);
+                    }
+
+                    if (!await ReversCommand(movingProfile.Revers, token))
+                        return MapState(State);
+
+                    if (!await TormosCommand(movingProfile.Tormos, token))
+                        return MapState(State);
+
+                    movingProfile.EndPosOutSignal.Value = true;
+                    SetState(MechanicsPositions.Transition);
+
+                    movingProfile.EndPosOutSignal.Value = false;
+                    await ReversCommand(false, token);
+                    await TormosCommand(false, token);
+
+
+                    if (!movingProfile.EndPosSignal.Value)
+                    {
+                        Logger.LogError($"{DeviceName}: неверное конечное положение");
+                        DeviceErrors.AddError(ToBaseError(movingProfile.EndPosError));
+                        Actuator.Value = false;
+                        GetPosition();
+                        return MapState(State);
+                    }
                     Actuator.Value = false;
                     GetPosition();
+                    DeviceErrors.ResetRangeErrors(
+                        ToBaseError(movingProfile.StartPosError),
+                        ToBaseError(movingProfile.EndPosError));
+
                     return MapState(State);
                 }
-
-                await ReversCommand(movingProfile.Revers, token);
-                await TormosCommand(movingProfile.Tormos, token);
-
-                movingProfile.EndPosOutSignal.Value = true;
-                SetState(MechanicsPositions.Transition);
-
-                movingProfile.EndPosOutSignal.Value = false;
-                await ReversCommand(false, token);
-                await TormosCommand(false, token);
-
-
-                if (!movingProfile.EndPosSignal.Value)
+                catch (OperationCanceledException)
                 {
-                    Logger.LogError($"{DeviceName}: неверное конечное положение");
-                    DeviceErrors.AddError(ToBaseError(movingProfile.EndPosError));
+                    Logger.LogWarning($"{DeviceName}: движение прервано");
                     Actuator.Value = false;
                     GetPosition();
-                    return MapState(State);
+                    throw;
                 }
-                Actuator.Value = false;
-                GetPosition();
-                DeviceErrors.ResetRangeErrors(
-                    ToBaseError(movingProfile.StartPosError),
-                    ToBaseError(movingProfile.EndPosError));
-
-                return MapState(State);
-            }
-            catch (OperationCanceledException)
-            {
-                Logger.LogWarning($"{DeviceName}: движение прервано");
-                Actuator.Value = false;
-                GetPosition();
-                return MapState(State);
-            }
+            });
         }
 
         private async Task<bool> TormosCommand(bool value, CancellationToken token)
@@ -388,29 +382,5 @@ namespace Oratoria.Domain.Devices.Abstractions
             }
             return true;
         }
-    }
-
-    public class MechanicMovingProfile<TErr>(
-        OutputSignal<bool> outPos,
-        InputSignal<bool> startPos,
-        InputSignal<bool> endPos,
-        bool revers,
-        bool tormos,
-        TErr endPosError,
-        TErr startPosError) where TErr : Enum
-    {
-        public OutputSignal<bool> EndPosOutSignal { get; } = outPos;
-
-        public InputSignal<bool> StartPosSignal { get; } = startPos;
-
-        public InputSignal<bool> EndPosSignal { get; } = endPos;
-
-        public bool Revers { get; } = revers;
-
-        public bool Tormos { get; } = tormos;
-
-        public TErr EndPosError { get; } = endPosError;
-
-        public TErr StartPosError { get; } = startPosError;
     }
 }

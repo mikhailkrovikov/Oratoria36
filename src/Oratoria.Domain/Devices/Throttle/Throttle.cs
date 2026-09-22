@@ -8,7 +8,7 @@ using Oratoria.Domain.Signals.Abstractions;
 
 namespace Oratoria.Domain.Devices.Throttle
 {
-    public class Throttle : MechanicDevice<ThrottlePosition, ThrottleErrors>
+    public sealed class Throttle : MechanicDevice<ThrottlePosition, ThrottleErrors>
     {
         public Throttle(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory, ISettingsContext settings) 
             : base(deviceId, signals, loggerFactory, settings)
@@ -16,15 +16,15 @@ namespace Oratoria.Domain.Devices.Throttle
         }
 
         [DeviceAction("Открыть")]
-        public async Task<bool> Open()
+        public async Task<bool> Open(CancellationToken cancellationToken = default)
         {
             Logger.LogInformation("Открытие");
             try
             {
                 if (MapState(State) == ThrottlePosition.Throttling)
-                    return await Move(ThrottlePosition.Throttling, ThrottlePosition.Open) == ThrottlePosition.Open;
+                    return await Move(ThrottlePosition.Throttling, ThrottlePosition.Open, cancellationToken) == ThrottlePosition.Open;
                 else if (MapState(State) == ThrottlePosition.Close)
-                    return await Move(ThrottlePosition.Close, ThrottlePosition.Open) == ThrottlePosition.Open;
+                    return await Move(ThrottlePosition.Close, ThrottlePosition.Open, cancellationToken) == ThrottlePosition.Open;
                 else return false;
 
             }
@@ -36,15 +36,15 @@ namespace Oratoria.Domain.Devices.Throttle
         }
 
         [DeviceAction("Закрыть")]
-        public async Task<bool> Close()
+        public async Task<bool> Close(CancellationToken cancellationToken = default)
         {
             Logger.LogInformation("Закрытие");
             try
             {
                 if (MapState(State) == ThrottlePosition.Throttling)
-                    return await Move(ThrottlePosition.Throttling, ThrottlePosition.Close) == ThrottlePosition.Close;
+                    return await Move(ThrottlePosition.Throttling, ThrottlePosition.Close, cancellationToken) == ThrottlePosition.Close;
                 else if (MapState(State) == ThrottlePosition.Open)
-                    return await Move(ThrottlePosition.Open, ThrottlePosition.Close) == ThrottlePosition.Close;
+                    return await Move(ThrottlePosition.Open, ThrottlePosition.Close, cancellationToken) == ThrottlePosition.Close;
                 else return false;
             }
             catch (InvalidOperationException ex)
@@ -55,15 +55,15 @@ namespace Oratoria.Domain.Devices.Throttle
         }
 
         [DeviceAction("Дросселирование")]
-        public async Task<bool> Throttling()
+        public async Task<bool> Throttling(CancellationToken cancellationToken = default)
         {
             Logger.LogInformation("Дросселирование");
             try
             {
                 if (MapState(State) == ThrottlePosition.Close)
-                    return await Move(ThrottlePosition.Close, ThrottlePosition.Throttling) == ThrottlePosition.Throttling;
+                    return await Move(ThrottlePosition.Close, ThrottlePosition.Throttling, cancellationToken) == ThrottlePosition.Throttling;
                 else if (MapState(State) == ThrottlePosition.Open)
-                    return await Move(ThrottlePosition.Open, ThrottlePosition.Throttling) == ThrottlePosition.Throttling;
+                    return await Move(ThrottlePosition.Open, ThrottlePosition.Throttling, cancellationToken) == ThrottlePosition.Throttling;
                 else return false;
             }
             catch (InvalidOperationException ex)
@@ -73,7 +73,7 @@ namespace Oratoria.Domain.Devices.Throttle
             }
         }
 
-        public override MechanicMovingProfile<ThrottleErrors> GetMovingProfile(ThrottlePosition startPos, ThrottlePosition endPos)
+        protected override MechanicMovingProfile<ThrottleErrors> GetMovingProfile(ThrottlePosition startPos, ThrottlePosition endPos)
         {
             if (startPos == endPos)
                 throw new InvalidOperationException("позиции перемещения дроссельного затвора совпадают");
