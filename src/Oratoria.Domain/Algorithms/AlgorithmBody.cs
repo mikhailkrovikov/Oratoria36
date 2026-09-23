@@ -150,9 +150,19 @@
             }
             finally
             {
-                foreach (var unsubscribe in _subscriptions)
-                    unsubscribe();
-
+                foreach (var unsubscribe in _subscriptions
+                    .AsEnumerable()
+                    .Reverse()
+                    .ToArray())
+                {
+                    try
+                    {
+                        unsubscribe();
+                    }
+                    catch
+                    {
+                    }
+                }
                 _subscriptions.Clear();
             }
         }
