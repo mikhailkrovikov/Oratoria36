@@ -17,9 +17,9 @@ namespace Oratoria.Domain.Devices.Abstractions
         where TErr : Enum
     {
         private const int DELAY = 1000;
-        private static readonly Dictionary<MechanicsPositions, TPos> _positionMap = new();
-        private static readonly Dictionary<MechanicsErrors, TErr> _errorMap = new();
-        private static readonly Dictionary<TErr, MechanicsErrors> _baseErrorMap = new();
+        private readonly Dictionary<MechanicsPositions, TPos> _positionMap = new();
+        private readonly Dictionary<MechanicsErrors, TErr> _errorMap = new();
+        private readonly Dictionary<TErr, MechanicsErrors> _baseErrorMap = new();
 
         protected abstract MechanicMovingProfile<TErr> GetMovingProfile(TPos startPos, TPos endPos);
 

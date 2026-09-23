@@ -12,15 +12,15 @@ namespace Oratoria.Domain.Devices.Valve
     {
         public Valve(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory, ISettingsContext settings) : base(deviceId, signals, loggerFactory, settings)
         {
-            IsOpen = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(ValveIsOpenSignalAttribute<>));
-            IsClose = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(ValveIsCloseSignalAttribute<>));
-            Open = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(ValveOpenSignalAttribute<>))!;
-            Close = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(ValveCloseSignalAttribute<>));
+            IsOpenSignal = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(ValveIsOpenSignalAttribute<>));
+            IsCloseSignal = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(ValveIsCloseSignalAttribute<>));
+            OpenSignal = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(ValveOpenSignalAttribute<>))!;
+            CloseSignal = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(ValveCloseSignalAttribute<>));
 
-            IsOpen?.OnSignalChanged += _ => OnStateChanged();
-            IsClose?.OnSignalChanged += _ => OnStateChanged();
-            Open?.OnSignalChanged += _ => OnStateChanged();
-            Close?.OnSignalChanged += _ => OnStateChanged();
+            IsOpenSignal?.OnSignalChanged += _ => OnStateChanged();
+            IsCloseSignal?.OnSignalChanged += _ => OnStateChanged();
+            OpenSignal?.OnSignalChanged += _ => OnStateChanged();
+            CloseSignal?.OnSignalChanged += _ => OnStateChanged();
         }
     }
 }

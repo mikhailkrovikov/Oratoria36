@@ -12,15 +12,15 @@ namespace Oratoria.Domain.Devices.Flap
     {
         public Flap(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory, ISettingsContext settings) : base(deviceId, signals, loggerFactory, settings)
         {
-            IsOpen = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(FlapIsOpenSignalAttribute<>));
-            IsClose = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(FlapIsCloseSignalAttribute<>));
-            Open = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(FlapOpenSignalAttribute<>));
-            Close = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(FlapCloseSignalAttribute<>));
+            IsOpenSignal = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(FlapIsOpenSignalAttribute<>));
+            IsCloseSignal = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(FlapIsCloseSignalAttribute<>));
+            OpenSignal = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(FlapOpenSignalAttribute<>));
+            CloseSignal = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(FlapCloseSignalAttribute<>));
 
-            IsOpen?.OnSignalChanged += _ => OnStateChanged();
-            IsClose?.OnSignalChanged += _ => OnStateChanged();
-            Open?.OnSignalChanged += _ => OnStateChanged();
-            Close?.OnSignalChanged += _ => OnStateChanged();
+            IsOpenSignal?.OnSignalChanged += _ => OnStateChanged();
+            IsCloseSignal?.OnSignalChanged += _ => OnStateChanged();
+            OpenSignal?.OnSignalChanged += _ => OnStateChanged();
+            CloseSignal?.OnSignalChanged += _ => OnStateChanged();
         }
     }
 }

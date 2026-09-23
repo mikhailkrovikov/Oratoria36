@@ -10,13 +10,13 @@ namespace Oratoria.Domain.Devices.Abstractions
 {
     public abstract class OpenableDevice : Device<OpenableStatus, OpenableErrors>
     {
-        public InputSignal<bool>? IsOpen { get; set; }
+        public InputSignal<bool>? IsOpenSignal { get; set; }
 
-        public InputSignal<bool>? IsClose { get; set; }
+        public InputSignal<bool>? IsCloseSignal { get; set; }
 
-        public OutputSignal<bool>? Open { get; set; }
+        public OutputSignal<bool>? OpenSignal { get; set; }
 
-        public OutputSignal<bool>? Close { get; set; }
+        public OutputSignal<bool>? CloseSignal { get; set; }
 
         public Setting<int> TimeForWarning { get; }
 
@@ -26,37 +26,37 @@ namespace Oratoria.Domain.Devices.Abstractions
         {
             get
             {
-                if (IsOpen != null && IsClose != null)
+                if (IsOpenSignal != null && IsCloseSignal != null)
                 {
-                    if (IsClose.Value == IsOpen.Value)
+                    if (IsCloseSignal.Value == IsOpenSignal.Value)
                         return OpenableStatus.Transition;
-                    if (IsClose.Value)
+                    if (IsCloseSignal.Value)
                         return OpenableStatus.Close;
-                    if (IsOpen.Value)
+                    if (IsOpenSignal.Value)
                         return OpenableStatus.Open;
                     return OpenableStatus.Transition;
                 }
-                if (IsOpen != null)
+                if (IsOpenSignal != null)
                 {
-                    if (IsOpen.Value)
+                    if (IsOpenSignal.Value)
                         return OpenableStatus.Open;
                     return OpenableStatus.Close;
                 }
-                if (IsClose != null)
+                if (IsCloseSignal != null)
                 {
-                    if (IsClose.Value)
+                    if (IsCloseSignal.Value)
                         return OpenableStatus.Close;
                     return OpenableStatus.Open;
                 }
-                if (Open != null)
+                if (OpenSignal != null)
                 {
-                    if (Open.Value)
+                    if (OpenSignal.Value)
                         return OpenableStatus.Open;
                     return OpenableStatus.Close;
                 }
-                if (Close != null)
+                if (CloseSignal != null)
                 {
-                    if (Close.Value)
+                    if (CloseSignal.Value)
                         return OpenableStatus.Close;
                     return OpenableStatus.Open;
                 }
@@ -84,43 +84,43 @@ namespace Oratoria.Domain.Devices.Abstractions
                         return true;
                     }
 
-                    Open?.Value = true;
-                    Close?.Value = false;
+                    OpenSignal?.Value = true;
+                    CloseSignal?.Value = false;
 
                     var res = true;
                     var needWait = false;
 
-                    if (IsOpen != null && !IsOpen.Value)
+                    if (IsOpenSignal != null && !IsOpenSignal.Value)
                         needWait = true;
 
-                    if (IsClose != null && IsClose.Value)
+                    if (IsCloseSignal != null && IsCloseSignal.Value)
                         needWait = true;
 
 
                     if (needWait)
                     {
                         token.ThrowIfCancellationRequested();
-                        if (IsOpen != null)
+                        if (IsOpenSignal != null)
                         {
-                            res = await EventWaiter.WaitEvent(nameof(IsOpen.OnSignalChanged),
-                                IsOpen,
+                            res = await EventWaiter.WaitEvent(nameof(IsOpenSignal.OnSignalChanged),
+                                IsOpenSignal,
                                 (bool x) =>
                                 {
-                                    if (IsOpen != null)
-                                        return IsOpen.Value;
+                                    if (IsOpenSignal != null)
+                                        return IsOpenSignal.Value;
 
-                                    if (IsClose != null)
-                                        return !IsClose.Value;
+                                    if (IsCloseSignal != null)
+                                        return !IsCloseSignal.Value;
 
                                     return true;
                                 },
                                 TimeForWarning.Value * 1000, token);
                         }
-                        else if (IsClose != null)
+                        else if (IsCloseSignal != null)
                         {
-                            res = await EventWaiter.WaitEvent(nameof(IsClose.OnSignalChanged),
-                                IsClose,
-                                (bool x) => !IsClose.Value,
+                            res = await EventWaiter.WaitEvent(nameof(IsCloseSignal.OnSignalChanged),
+                                IsCloseSignal,
+                                (bool x) => !IsCloseSignal.Value,
                                 TimeForWarning.Value * 1000, token);
                         }
                     }
@@ -128,34 +128,34 @@ namespace Oratoria.Domain.Devices.Abstractions
                     {
                         Logger.LogWarning($"{DeviceName}: долгое открытие, предупреждение");
                         DeviceErrors.AddError(OpenableErrors.TooLongOpening);
-                        if (IsOpen != null)
+                        if (IsOpenSignal != null)
                         {
-                            res = await EventWaiter.WaitEvent(nameof(IsOpen.OnSignalChanged),
-                                IsOpen,
+                            res = await EventWaiter.WaitEvent(nameof(IsOpenSignal.OnSignalChanged),
+                                IsOpenSignal,
                                 (bool x) =>
                                 {
-                                    if (IsOpen != null)
-                                        return IsOpen.Value;
+                                    if (IsOpenSignal != null)
+                                        return IsOpenSignal.Value;
 
-                                    if (IsClose != null)
-                                        return !IsClose.Value;
+                                    if (IsCloseSignal != null)
+                                        return !IsCloseSignal.Value;
 
                                     return true;
                                 },
                                 TimeForError.Value * 1000, token);
                         }
-                        else if (IsClose != null)
+                        else if (IsCloseSignal != null)
                         {
-                            res = await EventWaiter.WaitEvent(nameof(IsClose.OnSignalChanged),
-                                IsClose,
-                                (bool x) => !IsClose.Value,
+                            res = await EventWaiter.WaitEvent(nameof(IsCloseSignal.OnSignalChanged),
+                                IsCloseSignal,
+                                (bool x) => !IsCloseSignal.Value,
                                 TimeForError.Value * 1000, token);
                         }
                         if (!res)
                         {
                             Logger.LogError($"{DeviceName}: не смог открыться, авария");
                             DeviceErrors.AddError(OpenableErrors.CannotOpen);
-                            Open?.Value = false;
+                            OpenSignal?.Value = false;
                             return false;
                         }
                     }
@@ -165,7 +165,7 @@ namespace Oratoria.Domain.Devices.Abstractions
                 catch (OperationCanceledException)
                 {
                     Logger.LogInformation($"{DeviceName}: открытие отменено");
-                    Open?.Value = false;
+                    OpenSignal?.Value = false;
                     throw;
                 }
                 catch (Exception ex)
@@ -192,43 +192,43 @@ namespace Oratoria.Domain.Devices.Abstractions
                         return true;
                     }
 
-                    Open?.Value = false;
-                    Close?.Value = true;
+                    OpenSignal?.Value = false;
+                    CloseSignal?.Value = true;
 
                     var res = true;
                     var needWait = false;
 
-                    if (IsClose != null && !IsClose.Value)
+                    if (IsCloseSignal != null && !IsCloseSignal.Value)
                         needWait = true;
 
-                    if (IsOpen != null && IsOpen.Value)
+                    if (IsOpenSignal != null && IsOpenSignal.Value)
                         needWait = true;
 
 
                     if (needWait)
                     {
                         token.ThrowIfCancellationRequested();
-                        if (IsClose != null)
+                        if (IsCloseSignal != null)
                         {
-                            res = await EventWaiter.WaitEvent(nameof(IsClose.OnSignalChanged),
-                                IsClose,
+                            res = await EventWaiter.WaitEvent(nameof(IsCloseSignal.OnSignalChanged),
+                                IsCloseSignal,
                                 (bool x) =>
                                 {
-                                    if (IsClose != null)
-                                        return IsClose.Value;
+                                    if (IsCloseSignal != null)
+                                        return IsCloseSignal.Value;
 
-                                    if (IsOpen != null)
-                                        return !IsOpen.Value;
+                                    if (IsOpenSignal != null)
+                                        return !IsOpenSignal.Value;
 
                                     return true;
                                 },
                                 TimeForWarning.Value * 1000, token);
                         }
-                        else if (IsOpen != null)
+                        else if (IsOpenSignal != null)
                         {
-                            res = await EventWaiter.WaitEvent(nameof(IsOpen.OnSignalChanged),
-                                IsOpen,
-                                (bool x) => !IsOpen.Value,
+                            res = await EventWaiter.WaitEvent(nameof(IsOpenSignal.OnSignalChanged),
+                                IsOpenSignal,
+                                (bool x) => !IsOpenSignal.Value,
                                 TimeForWarning.Value * 1000, token);
                         }
                     }
@@ -236,34 +236,34 @@ namespace Oratoria.Domain.Devices.Abstractions
                     {
                         Logger.LogWarning($"{DeviceName}: долгое закрытие, предупреждение");
                         DeviceErrors.AddError(OpenableErrors.TooLongClosing);
-                        if (IsClose != null)
+                        if (IsCloseSignal != null)
                         {
-                            res = await EventWaiter.WaitEvent(nameof(IsClose.OnSignalChanged),
-                                IsClose,
+                            res = await EventWaiter.WaitEvent(nameof(IsCloseSignal.OnSignalChanged),
+                                IsCloseSignal,
                                 (bool x) =>
                                 {
-                                    if (IsClose != null)
-                                        return IsClose.Value;
+                                    if (IsCloseSignal != null)
+                                        return IsCloseSignal.Value;
 
-                                    if (IsOpen != null)
-                                        return !IsOpen.Value;
+                                    if (IsOpenSignal != null)
+                                        return !IsOpenSignal.Value;
 
                                     return true;
                                 },
                                 TimeForError.Value * 1000, token);
                         }
-                        else if (IsOpen != null)
+                        else if (IsOpenSignal != null)
                         {
-                            res = await EventWaiter.WaitEvent(nameof(IsOpen.OnSignalChanged),
-                                IsOpen,
-                                (bool x) => !IsOpen.Value,
+                            res = await EventWaiter.WaitEvent(nameof(IsOpenSignal.OnSignalChanged),
+                                IsOpenSignal,
+                                (bool x) => !IsOpenSignal.Value,
                                 TimeForError.Value * 1000, token);
                         }
                         if (!res)
                         {
                             Logger.LogError($"{DeviceName}: не смог закрыться, авария");
                             DeviceErrors.AddError(OpenableErrors.CannotClose);
-                            Close?.Value = false;
+                            CloseSignal?.Value = false;
                             return false;
                         }
                     }
@@ -273,7 +273,7 @@ namespace Oratoria.Domain.Devices.Abstractions
                 catch (OperationCanceledException)
                 {
                     Logger.LogInformation($"{DeviceName}: закрытие отменено");
-                    Close?.Value = false;
+                    CloseSignal?.Value = false;
                     throw;
                 }
                 catch (Exception ex)

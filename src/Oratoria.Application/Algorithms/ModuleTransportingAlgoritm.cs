@@ -16,8 +16,8 @@ namespace Oratoria.Application.Algorithms
 
         public Task<AlgorithmResult> LoadPlate(Plate plate, CancellationToken cancellationToken = default)
         {
-            var shutterSub = () => _context.Shutter.Open?.OnSignalChanged += KeepShutterOpen;
-            var shutterUnsub = () => _context.Shutter.Open?.OnSignalChanged -= KeepShutterOpen;
+            var shutterSub = () => _context.Shutter.OpenSignal?.OnSignalChanged += KeepShutterOpen;
+            var shutterUnsub = () => _context.Shutter.OpenSignal?.OnSignalChanged -= KeepShutterOpen;
 
             return Execute(CanLoadPlate,
                 body => body
@@ -38,8 +38,8 @@ namespace Oratoria.Application.Algorithms
 
         public Task<AlgorithmResult> UnloadPlate(Plate plate, CancellationToken cancellationToken = default)
         {
-            var shutterSub = () => _context.Shutter.Open?.OnSignalChanged += KeepShutterOpen;
-            var shutterUnsub = () => _context.Shutter.Open?.OnSignalChanged -= KeepShutterOpen;
+            var shutterSub = () => _context.Shutter.OpenSignal?.OnSignalChanged += KeepShutterOpen;
+            var shutterUnsub = () => _context.Shutter.OpenSignal?.OnSignalChanged -= KeepShutterOpen;
 
             return Execute(CanUnloadPlate,
                 body => body
@@ -99,9 +99,9 @@ namespace Oratoria.Application.Algorithms
 
         private void KeepShutterOpen(bool value)
         {
-            if (_context.Shutter.Open != null && !_context.Shutter.Open.Value)
+            if (_context.Shutter.OpenSignal != null && !_context.Shutter.OpenSignal.Value)
             {
-                _context.Shutter.Open.Value = true;
+                _context.Shutter.OpenSignal.Value = true;
             }
         }
     }

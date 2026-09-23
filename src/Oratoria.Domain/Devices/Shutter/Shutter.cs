@@ -12,15 +12,15 @@ namespace Oratoria.Domain.Devices.Shutter
     {
         public Shutter(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory, ISettingsContext settings) : base(deviceId, signals, loggerFactory, settings)
         {
-            IsOpen = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(ShutterIsOpenSignalAttribute<>));
-            IsClose = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(ShutterIsCloseSignalAttribute<>));
-            Open = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(ShutterOpenSignalAttribute<>));
-            Close = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(ShutterCloseSignalAttribute<>));
+            IsOpenSignal = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(ShutterIsOpenSignalAttribute<>));
+            IsCloseSignal = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(ShutterIsCloseSignalAttribute<>));
+            OpenSignal = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(ShutterOpenSignalAttribute<>));
+            CloseSignal = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(ShutterCloseSignalAttribute<>));
 
-            IsOpen?.OnSignalChanged += _ => OnStateChanged();
-            IsClose?.OnSignalChanged += _ => OnStateChanged();
-            Open?.OnSignalChanged += _ => OnStateChanged();
-            Close?.OnSignalChanged += _ => OnStateChanged();
+            IsOpenSignal?.OnSignalChanged += _ => OnStateChanged();
+            IsCloseSignal?.OnSignalChanged += _ => OnStateChanged();
+            OpenSignal?.OnSignalChanged += _ => OnStateChanged();
+            CloseSignal?.OnSignalChanged += _ => OnStateChanged();
         }
     }
 }

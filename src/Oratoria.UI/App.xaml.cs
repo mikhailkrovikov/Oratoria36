@@ -13,7 +13,9 @@ using Oratoria.Application.Gateway2;
 using Oratoria.Application.Module1.Signals;
 using Oratoria.Application.Module2;
 using Oratoria.Application.Module2.Signals;
+using Oratoria.Application.Module3;
 using Oratoria.Application.Module3.Signals;
+using Oratoria.Application.Module4;
 using Oratoria.Application.Module4.Signals;
 using Oratoria.Application.Strategies;
 using Oratoria.Application.TransportModule;
@@ -110,9 +112,9 @@ public partial class App : Application
         var settingPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "connection.json");
         services.AddSingleton(_ => new JsonFileStore<ConnectionFile>(settingPath));
         services.AddSingleton<NetContext>();
+
 #if !RELEASE
-        services.AddSingleton<TwinContext>();
-        services.AddSingleton<IRegister>(sp => sp.GetRequiredService<TwinContext>().TModel);
+        services.AddSingleton<IRegister, TwinModel>();
         services.AddTransient<DigitalTwinStrategy>();
         services.AddSingleton<DTInitializer>();
 #endif
@@ -120,9 +122,12 @@ public partial class App : Application
 
         services.AddSingleton<Module2Signals>();
         services.AddSingleton<Module2Context>();
+
         services.AddSingleton<Module3Signals>();
+        services.AddSingleton<Module3Context>();
 
         services.AddSingleton<Module4Signals>();
+        services.AddSingleton<Module4Context>();
 
         services.AddSingleton<TransportSignals>();
         services.AddSingleton<TransportContext>();

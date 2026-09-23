@@ -15,16 +15,16 @@ namespace Oratoria.Domain.Devices.Leaker
 
         public Leaker(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory, ISettingsContext settings) : base(deviceId, signals, loggerFactory, settings)
         {
-            IsOpen = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(LeakerIsOpenSignalAttribute<>));
-            IsClose = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(LeakerIsCloseSignalAttribute<>));
-            Open = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(LeakerOpenSignalAttribute<>));
-            Close = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(LeakerCloseSignalAttribute<>));
+            IsOpenSignal = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(LeakerIsOpenSignalAttribute<>));
+            IsCloseSignal = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(LeakerIsCloseSignalAttribute<>));
+            OpenSignal = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(LeakerOpenSignalAttribute<>));
+            CloseSignal = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(LeakerCloseSignalAttribute<>));
             LeakerSetpoint = SignalHelper<OutputSignal<double>>.GetSignal(deviceId, signals.AOSignals, typeof(LeakerSetpointSignalAttribute<>));
 
-            IsOpen?.OnSignalChanged += _ => OnStateChanged();
-            IsClose?.OnSignalChanged += _ => OnStateChanged();
-            Open?.OnSignalChanged += _ => OnStateChanged();
-            Close?.OnSignalChanged += _ => OnStateChanged();
+            IsOpenSignal?.OnSignalChanged += _ => OnStateChanged();
+            IsCloseSignal?.OnSignalChanged += _ => OnStateChanged();
+            OpenSignal?.OnSignalChanged += _ => OnStateChanged();
+            CloseSignal?.OnSignalChanged += _ => OnStateChanged();
         }
 
         [DeviceAction("Уставка")]
