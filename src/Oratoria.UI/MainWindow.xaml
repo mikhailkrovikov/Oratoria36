@@ -90,8 +90,9 @@
                 </DataGrid.Columns>
             </DataGrid>
 
-            <ListBox x:Name="ErrorsListBox" Grid.Column="1" IsHitTestVisible="False"
+            <ListBox x:Name="ErrorsListBox" Grid.Column="1"
                      ItemsSource="{Binding Alarms}"
+                     SelectionChanged="ErrorsListBox_SelectionChanged"
                      Background="Transparent"
                      Margin="0"
                      Visibility="Visible"
@@ -110,6 +111,12 @@
                             </DataTrigger>
                             <DataTrigger Binding="{Binding Category}" Value="Fatal">
                                 <Setter Property="Background" Value="Red"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding HasDescription}" Value="True">
+                                <Setter Property="Cursor" Value="Hand"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding HasDescription}" Value="False">
+                                <Setter Property="IsHitTestVisible" Value="False"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>

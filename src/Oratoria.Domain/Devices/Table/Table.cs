@@ -81,7 +81,7 @@ namespace Oratoria.Domain.Devices.Table
                 throw new InvalidOperationException("позиции перемещения стола совпадают");
             if (startPos != ModuleTablePosition.Rollback && endPos != ModuleTablePosition.Rollback)
                 throw new InvalidOperationException("неверные позиции перемещения стола");
-            var startPosError = ModuleTableErrors.Error2_6;
+            var startPosError = ModuleTableErrors.NotInHome;
             var revers = endPos - startPos < 0;
             var tormos = true;
             var startPosSignal = GetTableInputSignalFromPos(startPos);
@@ -116,11 +116,11 @@ namespace Oratoria.Domain.Devices.Table
         private static ModuleTableErrors GetEndPosError(ModuleTablePosition endPos)
         {
             if (endPos == ModuleTablePosition.Rollback)
-                return ModuleTableErrors.Error2_3;
+                return ModuleTableErrors.NotCameInRollback;
             if (endPos == ModuleTablePosition.Processing)
-                return ModuleTableErrors.Error2_5;
+                return ModuleTableErrors.NotCameInProcess;
             if (endPos == ModuleTablePosition.Home)
-                return ModuleTableErrors.Error2_4;
+                return ModuleTableErrors.NotCameInHome;
             throw new InvalidOperationException("Неверная конечная позиция");
         }
     }

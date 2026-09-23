@@ -89,10 +89,15 @@ public sealed class AlarmService
                     .GetCustomAttribute<DeviceErrorCategoryAttribute>()?
                     .Category ?? DeviceErrorCategory.None;
 
+                var description = field?
+                    .GetCustomAttribute<ErrorDescriptionAttribute>()?
+                    .Text;
+
                 Items.Add(new AlarmItem(
                     deviceName,
                     error,
-                    category));
+                    category,
+                    description));
             }
         }
     }

@@ -1,9 +1,6 @@
-using Microsoft.Extensions.DependencyInjection;
-using Oratoria.Application.Gateway1;
-using Oratoria.Application.Gateway2;
-using Oratoria.Application.Module2;
-using Oratoria.Application.TransportModule;
-using Oratoria.Application.VacuumModule;
+using Oratoria.Domain.Devices;
+using Oratoria.UI.Controls.DialogWindows;
+using Oratoria.UI.Services;
 using Oratoria.UI.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
@@ -40,5 +37,31 @@ public partial class MainWindow : Window
     {
         LogGrid.Visibility = Visibility.Collapsed;
         ErrorsListBox.Visibility = Visibility.Visible;
+    }
+
+    private void ErrorsListBox_SelectionChanged(
+    object sender,
+    SelectionChangedEventArgs e)
+    {
+        if (ErrorsListBox.SelectedItem is not AlarmItem alarm)
+            return;
+
+        if (!alarm.HasDescription)
+            return;
+
+        var type = alarm.Category switch
+        {
+            DeviceErrorCategory.Warn => MBType.Warning,
+            DeviceErrorCategory.Error => MBType.Error,
+            DeviceErrorCategory.Fatal => MBType.Error,
+            _ => MBType.Info
+        };
+
+        UserMessageBox.Show(
+            alarm.Description!,
+            alarm.Text,
+            type);
+
+        ErrorsListBox.SelectedIndex = -1;
     }
 }
