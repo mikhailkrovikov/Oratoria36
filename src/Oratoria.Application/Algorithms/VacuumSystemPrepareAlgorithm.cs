@@ -74,7 +74,7 @@ namespace Oratoria.Application.Algorithms
                 .DoTask(async c =>
                 {
                     logger.LogInformation("Ожидание высокого вакуума в шлюзах");
-                    return await WaitForPressure(vacuumContext.KNGatewayHighVacuum, 1, c);
+                    return await WaitForPressure(vacuumContext.KNGatewayHighVacuum, 0.00007, c);
                 })
                 .DoTask(c => vacuumContext.KN2_Zatvor.CloseValve(c))
 
@@ -105,15 +105,20 @@ namespace Oratoria.Application.Algorithms
                 .DoTask(async c =>
                 {
                     logger.LogInformation("Ожидание высокого вакуума в транспортном модуле");
-                    return await WaitForPressure(vacuumContext.TransportHighVacuum, 1, c);
+                    return await WaitForPressure(vacuumContext.TransportHighVacuum, 0.00007, c);
                 })
                 .DoAction(() => logger.LogInformation("Подготовка вакуумной системы завершена")),
 
                 cancellationToken);
         }
 
+
+
         private static async Task<bool> WaitForPressure(PressureSensor sensor, double targetPressure, CancellationToken token)
         {
+            if (sensor.CurrentPressure <= targetPressure)
+                return true;
+
             return await EventWaiter.WaitEvent(
                 nameof(sensor.PressureSignal.OnSignalChanged),
                 sensor.PressureSignal,

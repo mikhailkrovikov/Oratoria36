@@ -8,11 +8,15 @@ namespace DigitalTwin
 {
     public class TwinModel : IRegister
     {
+        private readonly object _pressureLock = new();
+        private readonly List<(ushort pressure, ushort[] valves, ushort oil, ushort ruts, ushort aux)> _pressureSimulators = new();
+        private CancellationTokenSource? _pressureCts;
         private readonly System.Collections.Concurrent.ConcurrentDictionary<string, IRegister> _modules = new();
 
         public IRegister GetModule(string moduleId) => _modules.GetOrAdd(moduleId, _ => new TwinModel());
 
         private Dictionary<ushort, bool> _boolInputs = new();
+        private Dictionary<ushort, bool> _boolOutputs = new();
         private Dictionary<ushort, double> _doubleInputs = new();
         private Dictionary<ushort, Action<bool>> _boolHandlers = new();
         private Dictionary<ushort, Action<double>> _doubleHandlers = new();
@@ -223,13 +227,57 @@ namespace DigitalTwin
             //}
         }
 
+        public void RegisterPressureSimulator(ushort pressurePin, ushort[] valvePins,
+            ushort oilPumpPin, ushort rutsPumpPin, ushort auxiliaryPumpPin)
+        {
+            lock (_pressureLock)
+            {
+                _pressureSimulators.Add((pressurePin, valvePins, oilPumpPin, rutsPumpPin, auxiliaryPumpPin));
+                _pressureCts ??= StartPressureSimulation();
+            }
+            SetDoubleInput(pressurePin, 10.0);
+        }
+
+        private CancellationTokenSource StartPressureSimulation()
+        {
+            var cts = new CancellationTokenSource();
+            _ = Task.Run(async () =>
+            {
+                var last = DateTime.UtcNow;
+                while (!cts.IsCancellationRequested)
+                {
+                    await Task.Delay(100, cts.Token);
+                    var now = DateTime.UtcNow;
+                    var dt = (now - last).TotalSeconds;
+                    last = now;
+                    (ushort pressure, ushort[] valves, ushort oil, ushort ruts, ushort aux)[] items;
+                    lock (_pressureLock) items = _pressureSimulators.ToArray();
+                    foreach (var item in items)
+                    {
+                        var pumping = (GetOutputBool(item.oil) && GetOutputBool(item.ruts)) || GetOutputBool(item.aux);
+                        var connected = item.valves.Any(GetOutputBool);
+                        if (!pumping || !connected) continue;
+                        var voltage = GetInputDouble(item.pressure);
+                        var target = voltage > 2.0 ? 2.0 : 1.0;
+                        var rate = target == 2.0 ? 0.9 : 0.1;
+                        SetDoubleInput(item.pressure, Math.Max(target, voltage - rate * dt));
+                    }
+                }
+            }, cts.Token);
+            return cts;
+        }
+
         /// <summary>
         /// Set value strategy
         /// </summary>
         public void SetOutput<T>(ushort pinNumber, T value)
         {
-            if (value is bool b && _boolHandlers.TryGetValue(pinNumber, out var boolHandler))
-                boolHandler(b);
+            if (value is bool b)
+            {
+                _boolOutputs[pinNumber] = b;
+                if (_boolHandlers.TryGetValue(pinNumber, out var boolHandler))
+                    boolHandler(b);
+            }
             else if (value is double d && _doubleHandlers.TryGetValue(pinNumber, out var doubleHandler))
                 doubleHandler(d);
         }
@@ -238,6 +286,8 @@ namespace DigitalTwin
         /// Get bool value strategy
         /// </summary>
         public bool GetInputBool(ushort pinNumber) => _boolInputs.GetValueOrDefault(pinNumber, false);
+
+        private bool GetOutputBool(ushort pinNumber) => _boolOutputs.GetValueOrDefault(pinNumber, false);
 
         /// <summary>
         /// Get double value strategy

@@ -135,6 +135,38 @@ namespace Oratoria.Application
 
             model.RegisterDevice<bool>(context.AP1.PowerOn.PinNumber, context.AP1.IsPowerOn.PinNumber, 300);
 
+            var gatewayValves = new[]
+            {
+                context.FK_OK.OpenSignal.PinNumber,
+                context.FK_Shl1.OpenSignal.PinNumber,
+                context.FK_Shl2.OpenSignal.PinNumber,
+            };
+            var transportValves = new[]
+            {
+                context.FK_TM.OpenSignal.PinNumber,
+                context.FK_KN1.OpenSignal.PinNumber,
+            };
+            model.RegisterPressureSimulator(context.TransportLowVacuum.PressureSignal.PinNumber, transportValves,
+                context.AVR.OilPumpOn.PinNumber, context.AVR.RutsPumpOn.PinNumber, context.AP1.PowerOn.PinNumber);
+            model.RegisterPressureSimulator(context.TransportHighVacuum.PressureSignal.PinNumber, transportValves,
+                context.AVR.OilPumpOn.PinNumber, context.AVR.RutsPumpOn.PinNumber, context.AP1.PowerOn.PinNumber);
+            model.RegisterPressureSimulator(context.Gateway1LowVacuum.PressureSignal.PinNumber, gatewayValves,
+                context.AVR.OilPumpOn.PinNumber, context.AVR.RutsPumpOn.PinNumber, context.AP1.PowerOn.PinNumber);
+            model.RegisterPressureSimulator(context.Gateway2LowVacuum.PressureSignal.PinNumber, gatewayValves,
+                context.AVR.OilPumpOn.PinNumber, context.AVR.RutsPumpOn.PinNumber, context.AP1.PowerOn.PinNumber);
+            model.RegisterPressureSimulator(context.AVRLowVacuum.PressureSignal.PinNumber, new[] { context.FK_AVR.OpenSignal.PinNumber },
+                context.AVR.OilPumpOn.PinNumber, context.AVR.RutsPumpOn.PinNumber, context.AP1.PowerOn.PinNumber);
+            model.RegisterPressureSimulator(context.KNGatewaytLowVacuum.PressureSignal.PinNumber, new[] { context.KN2_Zatvor.OpenSignal.PinNumber },
+                context.AVR.OilPumpOn.PinNumber, context.AVR.RutsPumpOn.PinNumber, context.AP1.PowerOn.PinNumber);
+            model.RegisterPressureSimulator(context.KNGatewayHighVacuum.PressureSignal.PinNumber, new[] { context.KN2_Zatvor.OpenSignal.PinNumber },
+                context.AVR.OilPumpOn.PinNumber, context.AVR.RutsPumpOn.PinNumber, context.AP1.PowerOn.PinNumber);
+            model.RegisterPressureSimulator(context.KNTransportLowVacuum.PressureSignal.PinNumber, transportValves,
+                context.AVR.OilPumpOn.PinNumber, context.AVR.RutsPumpOn.PinNumber, context.AP1.PowerOn.PinNumber);
+            model.RegisterPressureSimulator(context.KNTransportHighVacuum.PressureSignal.PinNumber, transportValves,
+                context.AVR.OilPumpOn.PinNumber, context.AVR.RutsPumpOn.PinNumber, context.AP1.PowerOn.PinNumber);
+            model.RegisterPressureSimulator(context.TrupoprovodLowVacuum.PressureSignal.PinNumber, new[] { context.FK_Trb.OpenSignal.PinNumber },
+                context.AVR.OilPumpOn.PinNumber, context.AVR.RutsPumpOn.PinNumber, context.AP1.PowerOn.PinNumber);
+
             model.RegisterDevice<bool>(context.FK_M1.OpenSignal.PinNumber, context.FK_M1.IsOpenSignal.PinNumber, context.FK_M1.IsCloseSignal.PinNumber, 300);
             model.RegisterDevice<bool>(context.FK_M2.OpenSignal.PinNumber, context.FK_M2.IsOpenSignal.PinNumber, context.FK_M2.IsCloseSignal.PinNumber, 300);
             model.RegisterDevice<bool>(context.FK_M3.OpenSignal.PinNumber, context.FK_M3.IsOpenSignal.PinNumber, context.FK_M3.IsCloseSignal.PinNumber, 300);
