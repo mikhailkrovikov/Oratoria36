@@ -42,9 +42,14 @@
             Schedule(async () =>
             {
                 var ok = await action(_token);
-                return ok
-                    ? AlgorithmResult.Success()
-                    : AlgorithmResult.Fail();
+                if (ok)
+                {
+                    return AlgorithmResult.Success();
+                }
+                else
+                {
+                    return AlgorithmResult.Fail();
+                }
             });
             return this;
         }
@@ -76,9 +81,14 @@
                 var results = await Task.WhenAll(
                     actions.Select(action => action(_token)));
 
-                return results.All(ok => ok)
-                    ? AlgorithmResult.Success()
-                    : AlgorithmResult.Fail();
+                if (results.All(ok => ok))
+                {
+                    return AlgorithmResult.Success();
+                }
+                else
+                {
+                    return AlgorithmResult.Fail();
+                }
             });
             return this;
         }
