@@ -39,5 +39,12 @@ namespace Oratoria.Domain.Carrier
                     .DoAlgorithm(ct => carrier.Carry(sourceNode, to, ct)),
                 token);
         }
+
+
+        public Task<AlgorithmResult> StopTransfer()
+        {
+            return Execute(() => true,
+                body => body);
+        }
     }
 }

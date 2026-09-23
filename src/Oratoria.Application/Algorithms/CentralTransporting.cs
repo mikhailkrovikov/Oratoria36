@@ -16,16 +16,18 @@ namespace Oratoria.Application.Algorithms
         public bool CanLoadPlate() => true;
         public bool CanUnloadPlate() => true;
 
-        public Task<AlgorithmResult> LoadPlate(Plate plate)
+        public Task<AlgorithmResult> LoadPlate(Plate plate, int targetModule)
         {
-            // Implementation for loading plate
-            throw new NotImplementedException();
+            return Execute(CanLoadPlate, 
+                body => body
+                .DoTask((cts) => _context.Carriage.MoveCarriage(targetModule, cts)));
         }
 
-        public Task<AlgorithmResult> UnloadPlate(Plate plate)
+        public Task<AlgorithmResult> UnloadPlate(Plate plate, int targetModule)
         {
-            // Implementation for unloading plate
-            throw new NotImplementedException();
+            return Execute(CanLoadPlate,
+                body => body
+                .DoTask((cts) => _context.Carriage.MoveCarriage(targetModule, cts)));
         }
     }
 }
