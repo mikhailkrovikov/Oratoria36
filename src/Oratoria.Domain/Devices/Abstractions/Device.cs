@@ -42,6 +42,7 @@ namespace Oratoria.Domain.Devices.Abstractions
         [DeviceAction("Сброс ошибок")]
         public void ResetErrors()
         {
+            Logger.LogInformation($"{DeviceName}: выполнение сброса ошибок");
             DeviceErrors.ResetAllErrors();
         }
 
