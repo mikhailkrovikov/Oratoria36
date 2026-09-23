@@ -1,7 +1,12 @@
+using Oratoria.Application.Gateway1;
+using Oratoria.Application.Gateway2;
+using Oratoria.Application.Module2;
+using Oratoria.Application.TransportModule;
+using Oratoria.Application.VacuumModule;
 using Oratoria.UI.Controls.Controls.Navigation;
+using Oratoria.UI.Controls.DialogWindows;
 using Oratoria.UI.Logging;
 using Oratoria.UI.Services;
-using Oratoria.UI.Controls.DialogWindows;
 using Oratoria.UI.Views.Pages;
 using Oratoria.UI.Views.Pages.Module2Pages;
 using System.Collections.ObjectModel;
@@ -14,25 +19,39 @@ namespace Oratoria.UI.ViewModels;
 
 public class MainWindowVM : INotifyPropertyChanged
 {
-    public MainWindowVM()
+    public MainWindowVM(
+        AlarmService alarmService,
+        Module2Context module2,
+        VacuumContext vacuum,
+        TransportContext transport,
+        Gateway1Context gateway1,
+        Gateway2Context gateway2)
     {
+        alarmService.AddContext(module2);
+        alarmService.AddContext(vacuum);
+        alarmService.AddContext(transport);
+        alarmService.AddContext(gateway1);
+        alarmService.AddContext(gateway2);
+
+        Alarms = alarmService.Items;
+
         Navigation = new NavigationBuilder()
-        .Item<MainPage>("Главная")
-        .Group("Транспорт", transport => transport
-            .Item<TransportSignalsPage>("Сигналы"))
-        .Group("Вакуумная система", vacuum => vacuum
-            .Item<VacuumSignalsPage>("Сигналы"))
-        .Group("Модуль 2", m2 => m2
-            .Item<Module2MnemoPage>("Мнемосхема")
-            .Item<Module2RecipePage>("Рецепт")
-            .Item<Module2SignalsPage>("Сигналы")
-            .Item<Module2SettingsPage>("Настройки")
-            .Item<Module2LogsPage>("Журнал"))
-        .Group("Модуль 3", m3 => m3
-            .Item<Module3SignalsPage>("Сигналы"))
-        .Group("Модуль 4", m4 => m4
-            .Item<Module4SignalsPage>("Сигналы"))
-        .Item<ConnectionSettingsPage>("Сеть")
+        .AddSubButton<MainPage>("Главная")
+        .AddMainButton("Транспорт", transport => transport
+            .AddSubButton<TransportSignalsPage>("Сигналы"))
+        .AddMainButton("Вакуумная система", vacuum => vacuum
+            .AddSubButton<VacuumSignalsPage>("Сигналы"))
+        .AddMainButton("Модуль 2", m2 => m2
+            .AddSubButton<Module2MnemoPage>("Мнемосхема")
+            .AddSubButton<Module2RecipePage>("Рецепт")
+            .AddSubButton<Module2SignalsPage>("Сигналы")
+            .AddSubButton<Module2SettingsPage>("Настройки")
+            .AddSubButton<Module2LogsPage>("Журнал"))
+        .AddMainButton("Модуль 3", m3 => m3
+            .AddSubButton<Module3SignalsPage>("Сигналы"))
+        .AddMainButton("Модуль 4", m4 => m4
+            .AddSubButton<Module4SignalsPage>("Сигналы"))
+        .AddSubButton<ConnectionSettingsPage>("Сеть")
         .Build();
     }
 
@@ -40,7 +59,7 @@ public class MainWindowVM : INotifyPropertyChanged
 
     public ObservableCollection<LogEntry> Logs => DataGridTarget.LogEntries;
 
-    public ObservableCollection<object> Alarms { get; } = new();
+    public ObservableCollection<AlarmItem> Alarms { get; }
 
     public ICommand CloseButtonCommand { get; } = new RelayCommand(_ =>
     {

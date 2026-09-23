@@ -27,6 +27,7 @@ using Oratoria.Persistence;
 using Oratoria.Persistence.Services;
 using Oratoria.UI;
 using Oratoria.UI.Logging;
+using Oratoria.UI.Services;
 using Oratoria.UI.ViewModels;
 using Oratoria.UI.Views.Pages;
 using Oratoria.UI.Views.Pages.Module2Pages;
@@ -148,6 +149,8 @@ public partial class App : Application
             };
             return new GeneralPoller(pollers, sp.GetRequiredService<ILogger<GeneralPoller>>());
         });
+
+        services.AddSingleton<AlarmService>();
 
         services.AddTransient<ConnectionSettingsVM>();
         services.AddTransient<ConnectionSettingsPage>();

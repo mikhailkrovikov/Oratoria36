@@ -16,12 +16,7 @@ public partial class MainWindow : Window
 
     public MainWindow(
         MainWindowVM maimwindowVM,
-        IServiceProvider services,
-        Module2Context module2Context,
-        VacuumContext vacuumContext,
-        TransportContext context,
-        Gateway1Context gateway1Context,
-        Gateway2Context gateway2Context)
+        IServiceProvider services)
     {
         InitializeComponent();
         _vm = maimwindowVM;

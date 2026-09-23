@@ -46,7 +46,7 @@ namespace Oratoria.Domain.Devices.Heater
         }
 
         [DeviceAction("Включить")]
-        public virtual async Task<bool> TurnOn([DeviceActionParameter("уставка")] double setpoint, CancellationToken cancellationToken = default)
+        public virtual async Task<bool> TurnOn([DeviceActionParameter("Вт")] double setpoint, CancellationToken cancellationToken = default)
         {
             if (setpoint == 0)
             {
