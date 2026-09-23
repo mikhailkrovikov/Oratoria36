@@ -115,7 +115,6 @@ public partial class App : Application
 
 #if !RELEASE
         services.AddSingleton<IRegister, TwinModel>();
-        services.AddTransient<DigitalTwinStrategy>();
         services.AddSingleton<DTInitializer>();
 #endif
         services.AddSingleton<Module1Signals>();

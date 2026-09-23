@@ -8,6 +8,10 @@ namespace DigitalTwin
 {
     public class TwinModel : IRegister
     {
+        private readonly System.Collections.Concurrent.ConcurrentDictionary<string, IRegister> _modules = new();
+
+        public IRegister GetModule(string moduleId) => _modules.GetOrAdd(moduleId, _ => new TwinModel());
+
         private Dictionary<ushort, bool> _boolInputs = new();
         private Dictionary<ushort, double> _doubleInputs = new();
         private Dictionary<ushort, Action<bool>> _boolHandlers = new();
@@ -210,7 +214,7 @@ namespace DigitalTwin
             //}
         }
 
-        private void SetDoubleInput(ushort pinNumber, double value)
+        public void SetDoubleInput(ushort pinNumber, double value)
         {
             //if (_doubleInputs.GetValueOrDefault(pinNumber) != value)
             //{

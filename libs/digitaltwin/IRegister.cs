@@ -2,6 +2,10 @@
 {
     public interface IRegister
     {
+        IRegister GetModule(string moduleId);
+
+        void SetDoubleInput(ushort pinNumber, double value);
+
         event Action<ushort, bool> BoolInputChanged;
         event Action<ushort, double> DoubleInputChanged;
 

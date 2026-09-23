@@ -1,5 +1,8 @@
-﻿using DigitalTwin;
-using Microsoft.EntityFrameworkCore;
+using Oratoria.Application.VacuumModule.Signals;
+using Oratoria.Application.Module4.Signals;
+using Oratoria.Application.Module3.Signals;
+using Oratoria.Application.Module2.Signals;
+using DigitalTwin;
 using Oratoria.Application.Module2;
 using Oratoria.Application.Module3;
 using Oratoria.Application.Module4;
@@ -16,14 +19,16 @@ namespace Oratoria.Application
             VacuumContext vacuumContext,
             IRegister model)
         {
-            InitTechnologyModule(module2context, model);
-            InitTechnologyModule(module3Context, model);
-            InitTechnologyModule(module4Context, model);
-            InitVacuumModule(vacuumContext, model);
+            InitTechnologyModule(module2context, model.GetModule(nameof(Module2Signals)));
+            InitTechnologyModule(module3Context, model.GetModule(nameof(Module3Signals)));
+            InitTechnologyModule(module4Context, model.GetModule(nameof(Module4Signals)));
+            InitVacuumModule(vacuumContext, model.GetModule(nameof(VacuumSignals)));
         }
 
         public static void InitTechnologyModule(TechnologyModuleContext context, IRegister model)
         {
+            model.SetDoubleInput(context.VICB.PressureSignal.PinNumber, 10.0);
+
             var manOuts = new ushort[]
             {
                 context.Manipulator.Position1Out.PinNumber,
@@ -109,6 +114,25 @@ namespace Oratoria.Application
 
         public static void InitVacuumModule(VacuumContext context, IRegister model)
         {
+            // 10 В: 100 000 Па для НВ и верхний предел 1333 Па для ВВ.
+            model.SetDoubleInput(context.Module1LowPressure.PressureSignal.PinNumber, 10.0);
+            model.SetDoubleInput(context.Module2LowPressure.PressureSignal.PinNumber, 10.0);
+            model.SetDoubleInput(context.Module3LowPressure.PressureSignal.PinNumber, 10.0);
+            model.SetDoubleInput(context.Module4LowPressure.PressureSignal.PinNumber, 10.0);
+            model.SetDoubleInput(context.TransportLowVacuum.PressureSignal.PinNumber, 10.0);
+            model.SetDoubleInput(context.TransportHighVacuum.PressureSignal.PinNumber, 10.0);
+            model.SetDoubleInput(context.Gateway1LowVacuum.PressureSignal.PinNumber, 10.0);
+            model.SetDoubleInput(context.Gateway2LowVacuum.PressureSignal.PinNumber, 10.0);
+            model.SetDoubleInput(context.KNTransportLowVacuum.PressureSignal.PinNumber, 10.0);
+            model.SetDoubleInput(context.KNTransportHighVacuum.PressureSignal.PinNumber, 10.0);
+            model.SetDoubleInput(context.KNGatewaytLowVacuum.PressureSignal.PinNumber, 10.0);
+            model.SetDoubleInput(context.KNGatewayHighVacuum.PressureSignal.PinNumber, 10.0);
+            model.SetDoubleInput(context.TrupoprovodLowVacuum.PressureSignal.PinNumber, 10.0);
+            model.SetDoubleInput(context.AVRLowVacuum.PressureSignal.PinNumber, 10.0);
+
+            model.RegisterDevice<bool>(context.AVR.OilPumpOn.PinNumber, context.AVR.IsOilPumpOn.PinNumber, 500);
+            model.RegisterDevice<bool>(context.AVR.RutsPumpOn.PinNumber, context.AVR.IsRutsPumpOn.PinNumber, 500);
+
             model.RegisterDevice<bool>(context.FK_M1.OpenSignal.PinNumber, context.FK_M1.IsOpenSignal.PinNumber, context.FK_M1.IsCloseSignal.PinNumber, 300);
             model.RegisterDevice<bool>(context.FK_M2.OpenSignal.PinNumber, context.FK_M2.IsOpenSignal.PinNumber, context.FK_M2.IsCloseSignal.PinNumber, 300);
             model.RegisterDevice<bool>(context.FK_M3.OpenSignal.PinNumber, context.FK_M3.IsOpenSignal.PinNumber, context.FK_M3.IsCloseSignal.PinNumber, 300);
