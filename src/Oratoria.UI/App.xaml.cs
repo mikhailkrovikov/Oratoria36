@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Extensions.Logging;
 using Oratoria.Application;
+using Oratoria.Application.Algorithms;
 using Oratoria.Application.Connection;
 using Oratoria.Application.Connection.Pollers;
 using Oratoria.Application.Gateway1;
@@ -33,6 +34,7 @@ using Oratoria.UI.Services;
 using Oratoria.UI.ViewModels;
 using Oratoria.UI.Views.Pages;
 using Oratoria.UI.Views.Pages.Module2Pages;
+using Oratoria.UI.Views.Pages.VacuumPages;
 using System.IO;
 using System.Windows;
 namespace UI;
@@ -154,6 +156,8 @@ public partial class App : Application
             return new GeneralPoller(pollers, sp.GetRequiredService<ILogger<GeneralPoller>>());
         });
 
+        services.AddSingleton<VacuumSystemPrepareAlgorithm>();
+
         services.AddSingleton<AlarmService>();
 
         services.AddTransient<ConnectionSettingsVM>();
@@ -168,6 +172,8 @@ public partial class App : Application
 
         services.AddTransient<TransportSignalsPage>();
         services.AddTransient<VacuumSignalsPage>();
+        services.AddSingleton<VacuumMnemoPage>();
+        services.AddSingleton<VacuumMnemoPageVM>();
         services.AddSingleton<MainWindowVM>();
         services.AddSingleton<MainWindow>();
     }

@@ -133,6 +133,8 @@ namespace Oratoria.Application
             model.RegisterDevice<bool>(context.AVR.OilPumpOn.PinNumber, context.AVR.IsOilPumpOn.PinNumber, 500);
             model.RegisterDevice<bool>(context.AVR.RutsPumpOn.PinNumber, context.AVR.IsRutsPumpOn.PinNumber, 500);
 
+            model.RegisterDevice<bool>(context.AP1.PowerOn.PinNumber, context.AP1.IsPowerOn.PinNumber, 300);
+
             model.RegisterDevice<bool>(context.FK_M1.OpenSignal.PinNumber, context.FK_M1.IsOpenSignal.PinNumber, context.FK_M1.IsCloseSignal.PinNumber, 300);
             model.RegisterDevice<bool>(context.FK_M2.OpenSignal.PinNumber, context.FK_M2.IsOpenSignal.PinNumber, context.FK_M2.IsCloseSignal.PinNumber, 300);
             model.RegisterDevice<bool>(context.FK_M3.OpenSignal.PinNumber, context.FK_M3.IsOpenSignal.PinNumber, context.FK_M3.IsCloseSignal.PinNumber, 300);

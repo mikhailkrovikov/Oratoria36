@@ -20,5 +20,8 @@
     <Compile Update="Views\Pages\Module2Pages\Module2SignalsPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\Pages\VacuumPages\VacuumMnemoPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 </Project>

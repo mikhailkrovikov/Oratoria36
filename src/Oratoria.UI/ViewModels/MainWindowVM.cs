@@ -9,6 +9,7 @@ using Oratoria.UI.Logging;
 using Oratoria.UI.Services;
 using Oratoria.UI.Views.Pages;
 using Oratoria.UI.Views.Pages.Module2Pages;
+using Oratoria.UI.Views.Pages.VacuumPages;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -40,6 +41,7 @@ public class MainWindowVM : INotifyPropertyChanged
         .AddMainButton("Транспорт", transport => transport
             .AddSubButton<TransportSignalsPage>("Сигналы"))
         .AddMainButton("Вакуумная система", vacuum => vacuum
+            .AddSubButton<VacuumMnemoPage>("Мнемосхема")
             .AddSubButton<VacuumSignalsPage>("Сигналы"))
         .AddMainButton("Модуль 2", m2 => m2
             .AddSubButton<Module2MnemoPage>("Мнемосхема")

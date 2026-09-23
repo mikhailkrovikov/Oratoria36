@@ -1,0 +1,843 @@
+<Page x:Class="Oratoria.UI.Views.Pages.VacuumPages.VacuumMnemoPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:vm="clr-namespace:Oratoria.UI.ViewModels"
+      xmlns:converters="clr-namespace:Oratoria.UI.Converters"
+      xmlns:mnemo="clr-namespace:Oratoria.UI.Controls.Mnemo;assembly=Oratoria.UI.Controls"
+      d:DataContext="{d:DesignInstance Type=vm:VacuumMnemoPageVM}"
+      mc:Ignorable="d" d:DesignHeight="850" d:DesignWidth="1920"
+      Title="Вакуумная система" Background="{DynamicResource Brush.Window}">
+    <Page.Resources>
+        <converters:PipeColorToBrushConverter x:Key="PipeColorConverter"/>
+    </Page.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel VerticalAlignment="Top" Margin="38.75,0,0,16">
+            <TextBlock Text="{Binding ModuleName}"
+                       Style="{StaticResource Text.Header}"
+                       FontSize="24"/>
+        </StackPanel>
+        <Viewbox Grid.Row="1" Stretch="Uniform" Margin="8">
+            <Viewbox.RenderTransform>
+                <TranslateTransform X="-40"/>
+            </Viewbox.RenderTransform>
+            <!-- Preserve the original coordinates; margins include pipes and gauges outside the old canvas. -->
+            <Canvas Width="1920" Height="920" Margin="60,0,110,0">
+
+                <Path Stroke="{Binding ForPumpLine, Converter={StaticResource PipeColorConverter}}"
+                      StrokeThickness="3"
+                      Data="M 1850,665
+                      L1800,665"/>
+
+                <Path Stroke="{Binding ForPumpLine, Converter={StaticResource PipeColorConverter}}"
+                      StrokeThickness="3"
+                      Data="M 1820,665
+                      L1820,565
+                      L1700,565"/>
+
+                <Path Stroke="{Binding FkAvrLine, Converter={StaticResource PipeColorConverter}}"
+                      StrokeThickness="3"
+                      Data="M1750,665
+                      L1590,665"/>
+
+                <Path Stroke="{Binding MainForLine, Converter={StaticResource PipeColorConverter}}" StrokeThickness="3"
+                      Data="M1630,565
+                      L1500,565
+                      L1500,665
+                      L1520, 665"/>
+
+                <Path Stroke="{Binding MainForLine, Converter={StaticResource PipeColorConverter}}" StrokeThickness="3"
+                      Data="M1200,888
+                      L1500,888
+                      L1500,788
+                      L1480,788
+                      L1500,788
+                      L1500,498
+                      L1260,498
+                      L1500,498
+                      L1500,410
+                      L1090,410
+                      L1500,410
+                      L1500,312
+                      L1170,312
+                      L1500,312
+                      L1500,202
+                      L1090,202
+                      L1500,202
+                      L1500,94
+                      L1170,94
+                      L1500,94
+                      L1500,10
+                      L-50,10
+                      L-50,94
+                      L15,94
+                      L-50,94
+                      L-50,202
+                      L100,202
+                      L-50,202
+                      L-50,312
+                      L15,312
+                      L-50,312
+                      L-50,410
+                      L100,410"/>
+
+                <Path Stroke="{Binding FkTrbLine, Converter={StaticResource PipeColorConverter}}"
+                      StrokeThickness="3"
+                      Data="M1200,498
+                      L1115,498
+                      L1115,743
+                      L-50,743
+                      L-50,605
+                      L100,605"/>
+                <Path Stroke="{Binding FkTrbLine, Converter={StaticResource PipeColorConverter}}"
+                      StrokeThickness="3"
+                      Data="M1090,605
+                      L1200,605"/>
+
+                <Path Stroke="{Binding FkTRmLine, Converter={StaticResource PipeColorConverter}}"
+                      StrokeThickness="3"
+                      Data="M1140,888
+                      L560,888
+                      L560,756.5"/>
+                <Path Stroke="{Binding FkTRmLine, Converter={StaticResource PipeColorConverter}}"
+                      StrokeThickness="3">
+                    <Path.Data>
+                        <PathGeometry>
+                            <PathFigure StartPoint="559,758">
+                                <ArcSegment Point="559,728" Size="15,15" />
+                            </PathFigure>
+                        </PathGeometry>
+                    </Path.Data>
+                </Path>
+                <Path Stroke="{Binding FkTRmLine, Converter={StaticResource PipeColorConverter}}"
+                      StrokeThickness="3"
+                      Data="M560,729.5
+                      L560,646"/>
+
+                <Path Stroke="{Binding FkKN1Line, Converter={StaticResource PipeColorConverter}}"
+                      StrokeThickness="3"
+                      Data="M1410,788
+                      L1360,788"/>
+
+                <Path Stroke="{Binding KN1Line, Converter={StaticResource PipeColorConverter}}"
+                      StrokeThickness="3"
+                      Data="M1300,788
+                      L1200,788"/>
+
+                <Path Stroke="{Binding ZatvorKN1Line, Converter={StaticResource PipeColorConverter}}"
+                      StrokeThickness="3"
+                      Data="M1140,788
+                      L630,788
+                      L630,756.5"/>
+                <Path Stroke="{Binding ZatvorKN1Line, Converter={StaticResource PipeColorConverter}}"
+                      StrokeThickness="3">
+                    <Path.Data>
+                        <PathGeometry>
+                            <PathFigure StartPoint="630,758">
+                                <ArcSegment Point="630,728" Size="15,15" />
+                            </PathFigure>
+                        </PathGeometry>
+                    </Path.Data>
+                </Path>
+                <Path Stroke="{Binding ZatvorKN1Line, Converter={StaticResource PipeColorConverter}}"
+                      StrokeThickness="3"
+                      Data="M630,729.5
+                      L630,646"/>
+
+                <Path Stroke="{Binding KN2Line, Converter={StaticResource PipeColorConverter}}"
+                      StrokeThickness="3"
+                      Data="M1300,605
+                      L1260,605"/>
+
+                <Path Stroke="{Binding Shl2Line, Converter={StaticResource PipeColorConverter}}"
+                      StrokeThickness="3"
+                      Data="M988,605
+                      L1020,605"/>
+
+                <Path Stroke="{Binding Shl1Line, Converter={StaticResource PipeColorConverter}}"
+                      StrokeThickness="3"
+                      Data="M170,605
+                      L200,605"/>
+
+                <Path Stroke="{Binding FkM2Line, Converter={StaticResource PipeColorConverter}}"
+                      StrokeThickness="3"
+                      Data="M986,410
+                      L1020,410"/>
+
+                <Path Stroke="{Binding FkKNM2Line, Converter={StaticResource PipeColorConverter}}"
+                      StrokeThickness="3"
+                      Data="M986,312
+                      L1100,312"/>
+
+                <Path Stroke="{Binding FkM4Line, Converter={StaticResource PipeColorConverter}}"
+                      StrokeThickness="3"
+                      Data="M986,202
+                      L1020,202"/>
+
+                <Path Stroke="{Binding FkKNM4Line, Converter={StaticResource PipeColorConverter}}"
+                      StrokeThickness="3"
+                      Data="M986,94
+                      L1100,94"/>
+
+                <Path Stroke="{Binding FkKNM3Line, Converter={StaticResource PipeColorConverter}}"
+                      StrokeThickness="3"
+                      Data="M80,94
+                      L200,94"/>
+
+                <Path Stroke="{Binding FkM3Line, Converter={StaticResource PipeColorConverter}}"
+                      StrokeThickness="3"
+                      Data="M170,202
+                      L200,202"/>
+
+                <Path Stroke="{Binding FkKNM1Line, Converter={StaticResource PipeColorConverter}}"
+                      StrokeThickness="3"
+                      Data="M80,312
+                      L200,312"/>
+
+                <Path Stroke="{Binding FkM1Line, Converter={StaticResource PipeColorConverter}}"
+                      StrokeThickness="3"
+                      Data="M170,410
+                      L200,410"/>
+
+
+                <Rectangle Stroke="{DynamicResource Brush.BorderLight}"
+                           StrokeThickness="4"
+                           Canvas.Left="499"
+                           Canvas.Top="72"
+                           Width="191"
+                           Height="577"/>
+
+                <!-- Align the new valve symbol with the original pipe axis. -->
+                <mnemo:ValveControl
+                    Color="{Binding Module3_FK_KN_DU_63State}"
+                    ErrorIcon="{Binding Module3_FK_KN_DU_63Error}"
+                    Label="ФК-КН М3"
+                    Command="{Binding Module3_FK_KN_DU_63Command}"
+                    ToolTip="{Binding Module3_FK_KN_DU_63Name}"
+                    Canvas.Left="11"
+                    Canvas.Top="16"
+                    Width="80"
+                    Height="100"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top">
+                    <mnemo:ValveControl.RenderTransform>
+                        <TranslateTransform Y="5.576"/>
+                    </mnemo:ValveControl.RenderTransform>
+                </mnemo:ValveControl>
+
+                <mnemo:ValveControl
+                    Color="{Binding FK_M3State}"
+                    ErrorIcon="{Binding FK_M3Error}"
+                    Label="{Binding FK_M3Name}"
+                    Command="{Binding FK_M3Command}"
+                    Canvas.Left="91"
+                    Canvas.Top="125"
+                    Width="80"
+                    Height="100">
+                    <mnemo:ValveControl.RenderTransform>
+                        <TranslateTransform Y="4.576"/>
+                    </mnemo:ValveControl.RenderTransform>
+                </mnemo:ValveControl>
+
+                <mnemo:ValveControl
+                    Color="Uncertain"
+                    Label="ФК-КН М1"
+                    IsEnabled="False"
+                    ToolTip="Модуль 1 пока не подключён"
+                    Canvas.Left="11"
+                    Canvas.Top="232"
+                    Width="80"
+                    Height="100">
+                    <mnemo:ValveControl.RenderTransform>
+                        <TranslateTransform Y="7.576"/>
+                    </mnemo:ValveControl.RenderTransform>
+                </mnemo:ValveControl>
+
+                <mnemo:ValveControl
+                    Color="{Binding FK_M1State}"
+                    ErrorIcon="{Binding FK_M1Error}"
+                    Label="{Binding FK_M1Name}"
+                    Command="{Binding FK_M1Command}"
+                    Canvas.Left="91"
+                    Canvas.Top="333"
+                    Width="80"
+                    Height="100">
+                    <mnemo:ValveControl.RenderTransform>
+                        <TranslateTransform Y="4.576"/>
+                    </mnemo:ValveControl.RenderTransform>
+                </mnemo:ValveControl>
+
+                <mnemo:CameraControl
+                    Canvas.Left="195"
+                    Canvas.Top="22"
+                    Width="260"
+                    Height="203"/>
+
+                <mnemo:ValveControl
+                    Color="{Binding FK_Shl1State}"
+                    ErrorIcon="{Binding FK_Shl1Error}"
+                    Label="{Binding FK_Shl1Name}"
+                    Command="{Binding FK_Shl1Command}"
+                    Canvas.Left="91"
+                    Canvas.Top="525"
+                    Width="80"
+                    Height="100"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top">
+                    <mnemo:ValveControl.RenderTransform>
+                        <TranslateTransform Y="7.576"/>
+                    </mnemo:ValveControl.RenderTransform>
+                </mnemo:ValveControl>
+
+                <mnemo:ShutterControl
+                    Color="{Binding Module3_ShutterState}"
+                    ErrorIcon="{Binding Module3_ShutterError}"
+                    Command="{Binding Module3_ShutterCommand}"
+                    Width="55"
+                    Height="180"
+                    Canvas.Left="448"
+                    Canvas.Top="57"/>
+
+                <mnemo:CameraControl
+                    Canvas.Left="195"
+                    Canvas.Top="234"
+                    Width="260"
+                    Height="203"/>
+
+                <mnemo:ShutterControl
+                    Color="Uncertain"
+                    IsEnabled="False"
+                    ToolTip="Модуль 1 пока не подключён"
+                    Width="55"
+                    Height="180"
+                    Canvas.Left="448"
+                    Canvas.Top="269"/>
+
+                <mnemo:CameraControl
+                    Canvas.Left="195"
+                    Canvas.Top="509"
+                    Width="260"
+                    Height="203"
+                    RenderTransformOrigin="0.5,0.5"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top">
+                    <mnemo:CameraControl.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="180"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </mnemo:CameraControl.RenderTransform>
+                </mnemo:CameraControl>
+
+                <mnemo:ShutterControl
+                    Color="{Binding Shl1ShutterState}"
+                    ErrorIcon="{Binding Shl1ShutterError}"
+                    Command="{Binding Shl1ShutterCommand}"
+                    Width="55"
+                    Height="180"
+                    Canvas.Left="448"
+                    Canvas.Top="481"/>
+
+                <mnemo:CameraControl
+                    Canvas.Left="733"
+                    Canvas.Top="22"
+                    Width="260"
+                    Height="203"/>
+
+                <mnemo:CameraControl
+                    Canvas.Left="733"
+                    Canvas.Top="234"
+                    Width="260"
+                    Height="203"/>
+
+                <mnemo:CameraControl
+                    Canvas.Left="733"
+                    Canvas.Top="509"
+                    Width="260"
+                    Height="203"
+                    RenderTransformOrigin="0.5,0.5"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top">
+                    <mnemo:CameraControl.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="180"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </mnemo:CameraControl.RenderTransform>
+                </mnemo:CameraControl>
+
+                <mnemo:ShutterControl
+                    Color="{Binding Module4_ShutterState}"
+                    ErrorIcon="{Binding Module4_ShutterError}"
+                    Command="{Binding Module4_ShutterCommand}"
+                    Width="55"
+                    Height="180"
+                    Canvas.Left="686"
+                    Canvas.Top="57"/>
+
+                <mnemo:ShutterControl
+                    Color="{Binding Module2_ShutterState}"
+                    ErrorIcon="{Binding Module2_ShutterError}"
+                    Command="{Binding Module2_ShutterCommand}"
+                    Width="55"
+                    Height="180"
+                    Canvas.Left="686"
+                    Canvas.Top="269"/>
+
+                <mnemo:ShutterControl
+                    Color="{Binding Shl2ShutterState}"
+                    ErrorIcon="{Binding Shl2ShutterError}"
+                    Command="{Binding Shl2ShutterCommand}"
+                    Width="55"
+                    Height="180"
+                    Canvas.Left="686"
+                    Canvas.Top="481"/>
+
+                <mnemo:ValveControl
+                    Color="{Binding Module4_FK_KN_DU_63State}"
+                    ErrorIcon="{Binding Module4_FK_KN_DU_63Error}"
+                    Label="ФК-КН М4"
+                    Command="{Binding Module4_FK_KN_DU_63Command}"
+                    ToolTip="{Binding Module4_FK_KN_DU_63Name}"
+                    Canvas.Left="1096"
+                    Canvas.Top="16"
+                    Width="80"
+                    Height="100"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+                    <mnemo:ValveControl.RenderTransform>
+                        <TranslateTransform Y="5.576"/>
+                    </mnemo:ValveControl.RenderTransform>
+                </mnemo:ValveControl>
+
+                <mnemo:ValveControl
+                    Color="{Binding FK_M4State}"
+                    ErrorIcon="{Binding FK_M4Error}"
+                    Label="{Binding FK_M4Name}"
+                    Command="{Binding FK_M4Command}"
+                    Canvas.Left="1014"
+                    Canvas.Top="124"
+                    Width="80"
+                    Height="100"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top">
+                    <mnemo:ValveControl.RenderTransform>
+                        <TranslateTransform Y="5.576"/>
+                    </mnemo:ValveControl.RenderTransform>
+                </mnemo:ValveControl>
+
+                <mnemo:ValveControl
+                    Color="{Binding Module2_FK_KN_DU_63State}"
+                    ErrorIcon="{Binding Module2_FK_KN_DU_63Error}"
+                    Label="ФК-КН М2"
+                    Command="{Binding Module2_FK_KN_DU_63Command}"
+                    ToolTip="{Binding Module2_FK_KN_DU_63Name}"
+                    Canvas.Left="1096"
+                    Canvas.Top="234"
+                    Width="80"
+                    Height="100">
+                    <mnemo:ValveControl.RenderTransform>
+                        <TranslateTransform Y="5.576"/>
+                    </mnemo:ValveControl.RenderTransform>
+                </mnemo:ValveControl>
+
+                <mnemo:ValveControl
+                    Color="{Binding FK_M2State}"
+                    ErrorIcon="{Binding FK_M2Error}"
+                    Label="{Binding FK_M2Name}"
+                    Command="{Binding FK_M2Command}"
+                    Canvas.Left="1014"
+                    Canvas.Top="333"
+                    Width="80"
+                    Height="100">
+                    <mnemo:ValveControl.RenderTransform>
+                        <TranslateTransform Y="4.576"/>
+                    </mnemo:ValveControl.RenderTransform>
+                </mnemo:ValveControl>
+
+                <mnemo:ValveControl
+                    Color="{Binding FK_Shl2State}"
+                    ErrorIcon="{Binding FK_Shl2Error}"
+                    Label="{Binding FK_Shl2Name}"
+                    Command="{Binding FK_Shl2Command}"
+                    Canvas.Left="1014"
+                    Canvas.Top="527"
+                    Width="80"
+                    Height="100"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top">
+                    <mnemo:ValveControl.RenderTransform>
+                        <TranslateTransform Y="5.576"/>
+                    </mnemo:ValveControl.RenderTransform>
+                </mnemo:ValveControl>
+
+                <mnemo:CryoPumpControl
+                    Color="{Binding KN1_TMState}"
+                    ErrorIcon="{Binding KN1_TMError}"
+                    Label="{Binding KN1_TMName}"
+                    Command="{Binding KN1_TMCommand}"
+                    Canvas.Left="1284"
+                    Canvas.Top="723"
+                    Width="100"
+                    Height="116"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"/>
+
+                <mnemo:ValveControl
+                    Color="{Binding KN_Zatvor_TMState}"
+                    ErrorIcon="{Binding KN_Zatvor_TMError}"
+                    Label="{Binding KN_Zatvor_TMName}"
+                    Command="{Binding KN_Zatvor_TMCommand}"
+                    Canvas.Left="1132"
+                    Canvas.Top="710"
+                    Width="80"
+                    Height="100"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top">
+                    <mnemo:ValveControl.RenderTransform>
+                        <TranslateTransform Y="5.576"/>
+                    </mnemo:ValveControl.RenderTransform>
+                </mnemo:ValveControl>
+
+                <mnemo:ValveControl
+                    Color="{Binding FK_KN1State}"
+                    ErrorIcon="{Binding FK_KN1Error}"
+                    Label="{Binding FK_KN1Name}"
+                    Command="{Binding FK_KN1Command}"
+                    Canvas.Left="1406"
+                    Canvas.Top="710"
+                    Width="80"
+                    Height="100"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    RenderTransformOrigin="0.456,0.491">
+                    <mnemo:ValveControl.RenderTransform>
+                        <TranslateTransform Y="5.576"/>
+                    </mnemo:ValveControl.RenderTransform>
+                </mnemo:ValveControl>
+
+                <mnemo:ValveControl
+                    Color="{Binding FK_TMState}"
+                    ErrorIcon="{Binding FK_TMError}"
+                    Label="{Binding FK_TMName}"
+                    Command="{Binding FK_TMCommand}"
+                    Canvas.Left="1132"
+                    Canvas.Top="810"
+                    Width="80"
+                    Height="100"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top">
+                    <mnemo:ValveControl.RenderTransform>
+                        <TranslateTransform Y="5.576"/>
+                    </mnemo:ValveControl.RenderTransform>
+                </mnemo:ValveControl>
+
+                <mnemo:CryoPumpControl
+                    Color="{Binding KN2_ShlState}"
+                    ErrorIcon="{Binding KN2_ShlError}"
+                    Label="{Binding KN2_ShlName}"
+                    Command="{Binding KN2_ShlCommand}"
+                    Canvas.Left="1284"
+                    Canvas.Top="530"
+                    Width="100"
+                    Height="126"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"/>
+
+                <mnemo:ValveControl
+                    Color="{Binding KN2_ZatvorState}"
+                    ErrorIcon="{Binding KN2_ZatvorError}"
+                    Label="{Binding KN2_ZatvorName}"
+                    Command="{Binding KN2_ZatvorCommand}"
+                    Canvas.Left="1189"
+                    Canvas.Top="527"
+                    Width="80"
+                    Height="100"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top">
+                    <mnemo:ValveControl.RenderTransform>
+                        <TranslateTransform Y="5.576"/>
+                    </mnemo:ValveControl.RenderTransform>
+                </mnemo:ValveControl>
+
+                <mnemo:ValveControl
+                    Color="{Binding FK_OKState}"
+                    ErrorIcon="{Binding FK_OKError}"
+                    Label="{Binding FK_OKName}"
+                    Command="{Binding FK_OKCommand}"
+                    Canvas.Left="1623"
+                    Canvas.Top="485"
+                    Width="80"
+                    Height="100"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top">
+                    <mnemo:ValveControl.RenderTransform>
+                        <TranslateTransform Y="7.576"/>
+                    </mnemo:ValveControl.RenderTransform>
+                </mnemo:ValveControl>
+
+                <mnemo:ValveControl
+                    Color="{Binding FK_APState}"
+                    ErrorIcon="{Binding FK_APError}"
+                    Label="{Binding FK_APName}"
+                    Command="{Binding FK_APCommand}"
+                    Canvas.Left="1519"
+                    Canvas.Top="586"
+                    Width="80"
+                    Height="100"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center">
+                    <mnemo:ValveControl.RenderTransform>
+                        <TranslateTransform Y="6.576"/>
+                    </mnemo:ValveControl.RenderTransform>
+                </mnemo:ValveControl>
+
+                <mnemo:ValveControl
+                    Color="{Binding FK_AVRState}"
+                    ErrorIcon="{Binding FK_AVRError}"
+                    Label="{Binding FK_AVRName}"
+                    Command="{Binding FK_AVRCommand}"
+                    Canvas.Left="1726"
+                    Canvas.Top="586"
+                    Width="80"
+                    Height="100"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center">
+                    <mnemo:ValveControl.RenderTransform>
+                        <TranslateTransform Y="6.576"/>
+                    </mnemo:ValveControl.RenderTransform>
+                </mnemo:ValveControl>
+
+                <mnemo:NitrogenFeederControl
+                    Color="{Binding AP1State}"
+                    ErrorIcon="{Binding AP1Error}"
+                    Label="АП1"
+                    Command="{Binding AP1Command}"
+                    ToolTip="{Binding AP1Name}"
+                    Canvas.Left="1616"
+                    Canvas.Top="589"
+                    Width="94"
+                    Height="147"/>
+
+                <mnemo:AVRPumpControl
+                    Color="{Binding AVRState}"
+                    ErrorIcon="{Binding AVRError}"
+                    Label="{Binding AVRName}"
+                    Command="{Binding AVRCommand}"
+                    Canvas.Left="1818"
+                    Canvas.Top="578"
+                    Width="108"
+                    Height="142"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"/>
+
+                <mnemo:ValveControl
+                    Color="{Binding FK_TrbState}"
+                    ErrorIcon="{Binding FK_TrbError}"
+                    Label="{Binding FK_TrbName}"
+                    Command="{Binding FK_TrbCommand}"
+                    Canvas.Left="1189"
+                    Canvas.Top="420"
+                    Width="80"
+                    Height="100"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center">
+                    <mnemo:ValveControl.RenderTransform>
+                        <TranslateTransform Y="5.576"/>
+                    </mnemo:ValveControl.RenderTransform>
+                </mnemo:ValveControl>
+
+                <mnemo:TableControl
+                    Color="{Binding Module3_TableState}"
+                    ErrorIcon="{Binding Module3_TableError}"
+                    Position="{Binding Module3_TablePosition}"
+                    Command="{Binding Module3_TableCommand}"
+                    Canvas.Left="213"
+                    Canvas.Top="90"
+                    Width="145"
+                    Height="68"/>
+
+                <mnemo:TableControl
+                    Color="Uncertain"
+                    Position="Uncertain"
+                    IsEnabled="False"
+                    ToolTip="Модуль 1 пока не подключён"
+                    Canvas.Left="213"
+                    Canvas.Top="304"
+                    Width="145"
+                    Height="68"/>
+
+                <mnemo:TableControl
+                    Color="{Binding Module4_TableState}"
+                    ErrorIcon="{Binding Module4_TableError}"
+                    Position="{Binding Module4_TablePosition}"
+                    Command="{Binding Module4_TableCommand}"
+                    Canvas.Left="751"
+                    Canvas.Top="90"
+                    Width="145"
+                    Height="68"/>
+
+                <mnemo:TableControl
+                    Color="{Binding Module2_TableState}"
+                    ErrorIcon="{Binding Module2_TableError}"
+                    Position="{Binding Module2_TablePosition}"
+                    Command="{Binding Module2_TableCommand}"
+                    Canvas.Left="751"
+                    Canvas.Top="304"
+                    Width="145"
+                    Height="68"/>
+
+                <Label Content="Шлюз 2" FontSize="16" Foreground="{DynamicResource Brush.Text}" FontWeight="Bold" Canvas.Left="826" Canvas.Top="516"/>
+                <Label Content="Шлюз 1" FontSize="16" Foreground="{DynamicResource Brush.Text}" FontWeight="Bold" Canvas.Left="286" Canvas.Top="516"/>
+                <Label Content="Транспорт" FontSize="16" Foreground="{DynamicResource Brush.Text}" FontWeight="Bold" Canvas.Left="549" Canvas.Top="77"/>
+                <Label Content="Модуль 3" FontSize="16" Foreground="{DynamicResource Brush.Text}" FontWeight="Bold" Canvas.Left="282" Canvas.Top="25"/>
+                <Label Content="Модуль 1" FontSize="16" Foreground="{DynamicResource Brush.Text}" FontWeight="Bold" Canvas.Left="282" Canvas.Top="237"/>
+                <Label Content="Модуль 4" FontSize="16" Foreground="{DynamicResource Brush.Text}" FontWeight="Bold" Canvas.Left="820" Canvas.Top="25"/>
+                <Label Content="Модуль 2" FontSize="16" Foreground="{DynamicResource Brush.Text}" FontWeight="Bold" Canvas.Left="820" Canvas.Top="237"/>
+
+                <mnemo:PressureControl
+                    LowVacuum="{Binding Module1LowVacuum}"
+                    HighVacuum="—"
+                    Canvas.Left="228"
+                    Canvas.Top="377"
+                    Width="187"
+                    Height="52"/>
+
+                <mnemo:PressureControl
+                    LowVacuum="{Binding Gateway1LowVacuum}"
+                    HighVacuum="—"
+                    ShowBottomLabels="Hidden"
+                    Canvas.Left="227"
+                    Canvas.Top="614"
+                    Width="187"
+                    Height="52"/>
+
+                <mnemo:PressureControl
+                    LowVacuum="{Binding Module3LowVacuum}"
+                    HighVacuum="{Binding Module3HighVacuum}"
+                    Canvas.Left="227"
+                    Canvas.Top="163"
+                    Width="187"
+                    Height="52"/>
+
+                <mnemo:PressureControl
+                    LowVacuum="{Binding Gateway2LowVacuum}"
+                    HighVacuum="—"
+                    ShowBottomLabels="Hidden"
+                    Canvas.Left="765"
+                    Canvas.Top="614"
+                    Width="187"
+                    Height="52"/>
+
+                <mnemo:PressureControl
+                    LowVacuum="{Binding Module4LowVacuum}"
+                    HighVacuum="{Binding Module4HighVacuum}"
+                    Canvas.Left="765"
+                    Canvas.Top="163"
+                    Width="187"
+                    Height="52"/>
+
+                <mnemo:PressureControl
+                    LowVacuum="{Binding Module2LowVacuum}"
+                    HighVacuum="{Binding Module2HighVacuum}"
+                    Canvas.Left="765"
+                    Canvas.Top="372"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Width="187"
+                    Height="52"/>
+
+                <mnemo:PressureControl
+                    LowVacuum="{Binding TransportLowVacuum}"
+                    HighVacuum="{Binding TransportHighVacuum}"
+                    Canvas.Left="503"
+                    Canvas.Top="106"
+                    Width="187"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Height="52"/>
+
+                <mnemo:PressureControl
+                    LowVacuum="{Binding AVRLowVacuum}"
+                    HighVacuum="—"
+                    ShowBottomLabels="Hidden"
+                    Canvas.Left="1829"
+                    Canvas.Top="695"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Width="187"
+                    Height="52"/>
+
+                <mnemo:PressureControl
+                    LowVacuum="{Binding KNGatewayLowVacuum}"
+                    HighVacuum="{Binding KNGatewayHighVacuum}"
+                    Canvas.Left="1291"
+                    Canvas.Top="634"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    RenderTransformOrigin="-1.125,3.774"
+                    Width="187"
+                    Height="52"/>
+                <mnemo:PressureControl
+                    LowVacuum="{Binding KNTransportLowVacuum}"
+                    HighVacuum="{Binding KNTransportHighVacuum}"
+                    Canvas.Left="1292"
+                    Canvas.Top="821"
+                    Height="52"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Width="187"/>
+
+                <mnemo:RectangleStateControl
+                    Color="{Binding Door1State}"
+                    ErrorIcon="{Binding Door1Error}"
+                    Label="{Binding Door1Name}"
+                    Command="{Binding Door1Command}"
+                    Canvas.Left="248"
+                    Canvas.Top="658"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Width="154"
+                    Height="55"/>
+
+                <mnemo:RectangleStateControl
+                    Color="{Binding Door2State}"
+                    ErrorIcon="{Binding Door2Error}"
+                    Label="{Binding Door2Name}"
+                    Command="{Binding Door2Command}"
+                    Canvas.Left="786"
+                    Canvas.Top="658"
+                    Width="154"
+                    Height="55"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"/>
+
+            </Canvas>
+        </Viewbox>
+        <Grid Grid.RowSpan="2" Panel.ZIndex="1" HorizontalAlignment="Right" Margin="0,16,8,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="3*"/>
+            </Grid.RowDefinitions>
+            <Frame x:Name="DeviceHost"
+                   Grid.Row="0"
+                   NavigationUIVisibility="Hidden"
+                   Width="540"
+                   HorizontalAlignment="Left"
+                   Background="{DynamicResource Brush.Surface}"
+                   BorderBrush="{DynamicResource Brush.BorderLight}"
+                   BorderThickness="0.5" Margin="60,0,0,500" Grid.RowSpan="2"/>
+            <Button Content="Подготовка ВС" Command="{Binding PrepareVacuumCommand}" HorizontalAlignment="Left" Margin="60,19,0,0" Grid.Row="1" VerticalAlignment="Top" Height="32" Width="150"/>
+            <Button Content="Отмена подготовки" Command="{Binding StopPrepareVacuumCommand}" HorizontalAlignment="Left" Margin="289,19,0,0" Grid.Row="1" VerticalAlignment="Top" Height="32" Width="161"/>
+        </Grid>
+    </Grid>
+</Page>
