@@ -9,6 +9,7 @@ using Oratoria.Domain.Devices.Shutter.ShutterAttributes;
 using Oratoria.Domain.Devices.Valve.ValveAttributes;
 using Oratoria.Domain.Signals;
 using Oratoria.Domain.Signals.Abstractions;
+using Oratoria.Domain.Signals.Strategies;
 using System.Collections;
 using System.Collections.ObjectModel;
 
