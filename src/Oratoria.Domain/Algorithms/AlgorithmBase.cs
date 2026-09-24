@@ -73,7 +73,7 @@
             }
             catch (OperationCanceledException)
             {
-                Status = AlgorithmStatus.Cancelled;
+                Status = AlgorithmStatus.Canceled;
                 return AlgorithmResult.Canceled(this);
             }
             catch (Exception ex)

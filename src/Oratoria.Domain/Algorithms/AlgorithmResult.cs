@@ -32,7 +32,7 @@
 
         public static AlgorithmResult Canceled(IAlgorithm? failed = null)
         {
-            return new AlgorithmResult(AlgorithmStatus.Cancelled, failed);
+            return new AlgorithmResult(AlgorithmStatus.Canceled, failed);
         }
 
         public static AlgorithmResult Blocked(IAlgorithm? failed = null)
@@ -46,6 +46,11 @@
                 return this;
 
             return new AlgorithmResult(Status, algorithm);
+        }
+
+        public override string ToString()
+        {
+            return Status.ToString();
         }
     }
 }

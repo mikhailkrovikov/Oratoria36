@@ -172,7 +172,7 @@ namespace Oratoria.Application
             model.RegisterDevice<bool>(context.FK_M3.OpenSignal.PinNumber, context.FK_M3.IsOpenSignal.PinNumber, context.FK_M3.IsCloseSignal.PinNumber, 300);
             model.RegisterDevice<bool>(context.FK_M4.OpenSignal.PinNumber, context.FK_M4.IsOpenSignal.PinNumber, context.FK_M4.IsCloseSignal.PinNumber, 300);
 
-            model.RegisterDevice<bool>(context.FK_AVR.OpenSignal.PinNumber, context.FK_AVR.IsOpenSignal.PinNumber, context.FK_AVR.IsCloseSignal.PinNumber, 300);
+            //model.RegisterDevice<bool>(context.FK_AVR.OpenSignal.PinNumber, context.FK_AVR.IsOpenSignal.PinNumber, context.FK_AVR.IsCloseSignal.PinNumber, 300);
             model.RegisterDevice<bool>(context.FK_OK.OpenSignal.PinNumber, context.FK_OK.IsOpenSignal.PinNumber, context.FK_OK.IsCloseSignal.PinNumber, 300);
             model.RegisterDevice<bool>(context.FK_AP.OpenSignal.PinNumber, context.FK_AP.IsOpenSignal.PinNumber, context.FK_AP.IsCloseSignal.PinNumber, 300);
             model.RegisterDevice<bool>(context.FK_KN1.OpenSignal.PinNumber, context.FK_KN1.IsOpenSignal.PinNumber, context.FK_KN1.IsCloseSignal.PinNumber, 300);

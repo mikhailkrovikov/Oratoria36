@@ -6,7 +6,7 @@
         Running,
         Completed,
         Failed,
-        Cancelled,
+        Canceled,
         Blocked,
     }
 }
