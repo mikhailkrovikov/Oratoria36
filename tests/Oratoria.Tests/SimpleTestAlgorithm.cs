@@ -9,7 +9,6 @@ namespace Oratoria.Tests
             bool operation1, 
             bool operation2, 
             bool operation3, 
-            bool isCancelled,
             CancellationToken cancelationToken = default)
         {
             return Execute(() => canStart,
@@ -17,6 +16,7 @@ namespace Oratoria.Tests
                 {
                     var result = body.DoTask(c => Task.FromResult(operation1));
                     result = body.DoTask(c => Task.FromResult(operation2));
+                    result = body.DoTask(c => Task.FromResult(operation3));
                     return result;
                 }, cancelationToken);
         }
