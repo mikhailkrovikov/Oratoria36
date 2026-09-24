@@ -29,6 +29,7 @@ namespace Oratoria.UI.ViewModels
         private readonly Gateway2Context _gateway2;
 
         private readonly VacuumSystemPrepareAlgorithm _prepareAlgorithm;
+        private readonly ToIdleAlgoritm _toIdleAlgoritm;
 
         public Action<object>? OpenDevice { get; set; }
 
@@ -51,8 +52,12 @@ namespace Oratoria.UI.ViewModels
         {
             get
             {
-                return new RelayCommand(_ => _prepareAlgorithm.Cancel(),
-                _ => _prepareAlgorithm.Status == AlgorithmStatus.Running);
+                return new RelayCommand(async _ =>
+               {
+                   _prepareAlgorithm.Cancel();
+                   await _toIdleAlgoritm.ToIdle();
+               },
+               _ => _prepareAlgorithm.Status == AlgorithmStatus.Running);
             }
         }
 
@@ -276,7 +281,8 @@ namespace Oratoria.UI.ViewModels
         public VacuumMnemoPageVM(VacuumContext vacuum, Module2Context module2,
             Module3Context module3, Module4Context module4,
             Gateway1Context gateway1, Gateway2Context gateway2,
-            VacuumSystemPrepareAlgorithm prepareAlgorithm)
+            VacuumSystemPrepareAlgorithm prepareAlgorithm,
+            ToIdleAlgoritm toIdleAlgoritm)
         {
             _vacuumContext = vacuum;
             _module2 = module2;
@@ -285,6 +291,7 @@ namespace Oratoria.UI.ViewModels
             _gateway1 = gateway1;
             _gateway2 = gateway2;
             _prepareAlgorithm = prepareAlgorithm;
+            _toIdleAlgoritm = toIdleAlgoritm;
 
             _module3.FK_KN_DU_63.StateChanged += () =>
             {

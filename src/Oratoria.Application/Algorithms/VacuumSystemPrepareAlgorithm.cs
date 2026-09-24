@@ -32,6 +32,7 @@ namespace Oratoria.Application.Algorithms
             return Execute(CanStart,
                 body => body
                 .DoTask(c => vacuumContext.FK_Trb.OpenValve(c))
+
                 // Откачка шлюзов до 1000 Па
                 .DoTask(c => vacuumContext.AVR.TurnOn(c))
                 .DoTask(c => vacuumContext.FK_OK.OpenValve(c))
@@ -67,6 +68,7 @@ namespace Oratoria.Application.Algorithms
                 .DoTask(c => vacuumContext.FK_AP.CloseValve(c))
                 .DoTask(c => vacuumContext.FK_OK.CloseValve(c))
                 .DoTask(c => vacuumContext.FK_Trb.CloseValve(c))
+
                 // TODO: по какому датчику и до скольки качать?
                 // Откачка шлюзов через КН2      
                 .DoTask(c => vacuumContext.KN2_Zatvor.OpenValve(c))
@@ -111,12 +113,12 @@ namespace Oratoria.Application.Algorithms
                 cancellationToken);
         }
 
-
-
         private static async Task<bool> WaitForPressure(PressureSensor sensor, double targetPressure, CancellationToken token)
         {
             if (sensor.CurrentPressure <= targetPressure)
+            {
                 return true;
+            }
 
             return await EventWaiter.WaitEvent(
                 nameof(sensor.PressureSignal.OnSignalChanged),

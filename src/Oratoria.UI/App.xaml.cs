@@ -157,6 +157,7 @@ public partial class App : Application
         });
 
         services.AddSingleton<VacuumSystemPrepareAlgorithm>();
+        services.AddSingleton<ToIdleAlgoritm>();
 
         services.AddSingleton<AlarmService>();
 
