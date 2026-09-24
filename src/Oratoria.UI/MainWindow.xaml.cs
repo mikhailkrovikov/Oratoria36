@@ -4,6 +4,7 @@ using Oratoria.UI.Services;
 using Oratoria.UI.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 
 namespace Oratoria.UI;
 
@@ -24,6 +25,25 @@ public partial class MainWindow : Window
             services.GetService(type) as Page
             ?? (Page)Activator.CreateInstance(type)!;
         NavigationBarControl.Apply(_vm.Navigation);
+    }
+
+    private const double MinimumBottomPanelHeight = 158;
+
+    private void BottomPanelResize_DragDelta(object sender, DragDeltaEventArgs e)
+    {
+        SetBottomPanelHeight(BottomPanel.ActualHeight - e.VerticalChange);
+    }
+
+    private void BottomPanelHost_SizeChanged(object sender, SizeChangedEventArgs e)
+    {
+        SetBottomPanelHeight(BottomPanel.Height);
+    }
+
+    private void SetBottomPanelHeight(double height)
+    {
+        var maximumHeight = BottomPanelHost.ActualHeight;
+        BottomPanel.Height = Math.Clamp(height,
+            Math.Min(MinimumBottomPanelHeight, maximumHeight), maximumHeight);
     }
 
     private void ShowLogs_Click(object sender, RoutedEventArgs e)

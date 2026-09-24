@@ -18,7 +18,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="150"/>
+            <RowDefinition Height="158"/>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0" Height="80">
@@ -46,115 +46,147 @@
 
         <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" Grid.Row="1"/>
 
-        <Grid Grid.Row="2" Background="{StaticResource Brush.SurfaceBorder}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="250"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="250"/>
-                <ColumnDefinition Width="130"/>
-            </Grid.ColumnDefinitions>
-
-            <Grid Grid.Column="0">
-                <Button Style="{StaticResource Button.Base}"
-                        Click="ShowErrors_Click"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Top"
-                        Height="50" Width="50"
-                        Content="Увед"/>
-                <Button Style="{StaticResource Button.Base}"
-                        Click="ShowErrors_Click"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        Height="50" Width="50"
-                        Content="Авар"/>
-                <Button Style="{StaticResource Button.Base}"
-                        Click="ShowLogs_Click"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Bottom"
-                        Height="50" Width="50"
-                        Content="Лог"/>
-            </Grid>
-
-            <DataGrid x:Name="LogGrid"
-                      Grid.Column="1"
-                      ItemsSource="{Binding Logs}"
-                      Style="{StaticResource LogDataGridStyle}"
-                      RowStyle="{StaticResource LogDataGridRowStyle}"
-                      Visibility="Collapsed">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Время" Binding="{Binding Timestamp, StringFormat='{}{0:dd-MM-yyyy HH:mm:ss}'}" Width="150"/>
-                    <DataGridTextColumn Header="Уровень" Binding="{Binding Level}" Width="80"/>
-                    <DataGridTextColumn Header="Модуль" Binding="{Binding Module}" Width="100"/>
-                    <DataGridTextColumn Header="Устройство" Binding="{Binding Logger}" Width="100"/>
-                    <DataGridTextColumn Header="Сообщение" Binding="{Binding Message}" Width="*"/>
-                </DataGrid.Columns>
-            </DataGrid>
-
-            <ListBox x:Name="ErrorsListBox" Grid.Column="1"
-                     ItemsSource="{Binding Alarms}"
-                     SelectionChanged="ErrorsListBox_SelectionChanged"
-                     Background="Transparent"
-                     Margin="0"
-                     Visibility="Visible"
-                     BorderThickness="1,0,1,0">
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="ListBoxItem">
-                        <Setter Property="Margin" Value="0"/>
-                        <Setter Property="Padding" Value="0"/>
-                        <Setter Property="BorderThickness" Value="0"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Category}" Value="Warn">
-                                <Setter Property="Background" Value="Yellow"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding Category}" Value="Error">
-                                <Setter Property="Background" Value="Orange"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding Category}" Value="Fatal">
-                                <Setter Property="Background" Value="Red"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding HasDescription}" Value="True">
-                                <Setter Property="Cursor" Value="Hand"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding HasDescription}" Value="False">
-                                <Setter Property="IsHitTestVisible" Value="False"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </ListBox.ItemContainerStyle>
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Text, Mode=OneWay}"
-                                   Style="{StaticResource Text.Header}"
-                                   Margin="0" Padding="5,2"/>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-
-            <Grid Grid.Column="3">
+        <Grid x:Name="BottomPanelHost" Grid.Row="1" Grid.RowSpan="2"
+              Panel.ZIndex="10" SizeChanged="BottomPanelHost_SizeChanged">
+            <Grid x:Name="BottomPanel" Height="158" VerticalAlignment="Bottom"
+                  MaxHeight="{Binding ActualHeight, ElementName=BottomPanelHost}"
+                  Background="{StaticResource Brush.SurfaceBorder}">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="8"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="{Binding Date}"
-                           Style="{StaticResource Text.Body}"
-                           FontSize="14"
-                           Grid.Row="0"
-                           VerticalAlignment="Bottom"/>
-                <TextBlock Text="{Binding Time}"
-                           Style="{StaticResource Text.Body}"
-                           FontSize="14"
-                           Grid.Row="1"
-                           VerticalAlignment="Top"/>
-                <Button Command="{Binding AutorizationCommand}"
-                        Style="{StaticResource Button.Base}"
-                        Grid.Row="2"
-                        VerticalAlignment="Top"
-                        HorizontalAlignment="Left"
-                        Height="65"
-                        Width="65"
-                        Margin="0,4,0,0"
-                        Content="User"/>
+                <Thumb Grid.Row="0" Cursor="SizeNS" Focusable="False"
+                       ToolTip="Потяните вверх или вниз, чтобы изменить высоту панели"
+                       DragDelta="BottomPanelResize_DragDelta">
+                    <Thumb.Template>
+                        <ControlTemplate TargetType="Thumb">
+                            <Border x:Name="ResizeGrip" Background="{StaticResource Brush.Surface}">
+                                <Border Width="48" Height="3" CornerRadius="1.5"
+                                        Background="{StaticResource Brush.TextMuted}"
+                                        VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="ResizeGrip" Property="Background" Value="#E2E7F4"/>
+                                </Trigger>
+                                <Trigger Property="IsDragging" Value="True">
+                                    <Setter TargetName="ResizeGrip" Property="Background" Value="#E2E7F4"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Thumb.Template>
+                </Thumb>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="250"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="250"/>
+                        <ColumnDefinition Width="130"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Column="0">
+                        <Button Style="{StaticResource Button.Base}"
+                                Click="ShowErrors_Click"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top"
+                                Height="50" Width="50"
+                                Content="Увед"/>
+                        <Button Style="{StaticResource Button.Base}"
+                                Click="ShowErrors_Click"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Height="50" Width="50"
+                                Content="Авар"/>
+                        <Button Style="{StaticResource Button.Base}"
+                                Click="ShowLogs_Click"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Bottom"
+                                Height="50" Width="50"
+                                Content="Лог"/>
+                    </Grid>
+
+                    <DataGrid x:Name="LogGrid"
+                              Grid.Column="1"
+                              ItemsSource="{Binding Logs}"
+                              Style="{StaticResource LogDataGridStyle}"
+                              RowStyle="{StaticResource LogDataGridRowStyle}"
+                              Visibility="Collapsed">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Время" Binding="{Binding Timestamp, StringFormat='{}{0:dd-MM-yyyy HH:mm:ss}'}" Width="165" CellStyle="{StaticResource LogTimestampCellStyle}"/>
+                            <DataGridTextColumn Header="Уровень" Binding="{Binding Level}" Width="135"/>
+                            <DataGridTextColumn Header="Модуль" Binding="{Binding Module}" Width="100"/>
+                            <DataGridTextColumn Header="Устройство" Binding="{Binding Logger}" Width="100"/>
+                            <DataGridTextColumn Header="Сообщение" Binding="{Binding Message}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+                    <ListBox x:Name="ErrorsListBox" Grid.Column="1"
+                             ItemsSource="{Binding Alarms}"
+                             SelectionChanged="ErrorsListBox_SelectionChanged"
+                             Background="Transparent"
+                             Margin="0"
+                             Visibility="Visible"
+                             BorderThickness="1,0,1,0">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Margin" Value="0"/>
+                                <Setter Property="Padding" Value="0"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Category}" Value="Warn">
+                                        <Setter Property="Background" Value="Yellow"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Category}" Value="Error">
+                                        <Setter Property="Background" Value="Orange"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Category}" Value="Fatal">
+                                        <Setter Property="Background" Value="Red"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding HasDescription}" Value="True">
+                                        <Setter Property="Cursor" Value="Hand"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding HasDescription}" Value="False">
+                                        <Setter Property="IsHitTestVisible" Value="False"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Text, Mode=OneWay}"
+                                           Style="{StaticResource Text.Header}"
+                                           Margin="0" Padding="5,2"/>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <Grid Grid.Column="3">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="{Binding Date}"
+                                   Style="{StaticResource Text.Body}"
+                                   FontSize="14"
+                                   Grid.Row="0"
+                                   VerticalAlignment="Bottom"/>
+                        <TextBlock Text="{Binding Time}"
+                                   Style="{StaticResource Text.Body}"
+                                   FontSize="14"
+                                   Grid.Row="1"
+                                   VerticalAlignment="Top"/>
+                        <Button Command="{Binding AutorizationCommand}"
+                                Style="{StaticResource Button.Base}"
+                                Grid.Row="2"
+                                VerticalAlignment="Top"
+                                HorizontalAlignment="Left"
+                                Height="65"
+                                Width="65"
+                                Margin="0,4,0,0"
+                                Content="User"/>
+                    </Grid>
+                </Grid>
             </Grid>
         </Grid>
     </Grid>
