@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:Oratoria.UI.Views.Pages"
+      xmlns:recipe="clr-namespace:Oratoria.UI.Services.Recipe"
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Module2RecipePage"
@@ -11,10 +12,10 @@
 
     <Grid Margin="16,12">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="20*" />
+            <ColumnDefinition Width="20*"/>
             <!-- Возможно, стоит удалить второй столбец и просто сделать Margin для Border -->
-            <ColumnDefinition Width="10" />
-            <ColumnDefinition Width="70*" />
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="70*"/>
         </Grid.ColumnDefinitions>
 
         <!-- Левая панель: Рецепты рессурсов -->
@@ -25,31 +26,34 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <!-- Высота TextBlock на других страницах -->
-                    <RowDefinition Height="30" />
-                    <RowDefinition Height="*" />
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="*"/>
                     <!-- Выравняется по StackPanel, где расположены кнопки -->
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0"
                            Text="Рецепты процессов"
                            Style="{StaticResource HeaderTextBlock}"
-                           HorizontalAlignment="Center" />
+                           HorizontalAlignment="Center"/>
 
                 <ListBox Grid.Row="1"
-                         x:Name="RecipeListBox" />
+                         x:Name="RecipeListBox"/>
 
-                <StackPanel Grid.Row="2">
+                <StackPanel Grid.Row="2"
+                            Margin="0,5,0,0">
                     <!-- TODO: Хотелось бы изменить стиль в соответствии с ЧМИ(HMI) -->
                     <Button Content="Загрузить рецепт"
+                            Command="{Binding LoadRecipeCommand}"
                             Style="{StaticResource Button.Base}"
                             Height="32"
-                            Margin="0,5,0,5" />
+                            Margin="0,5,0,5"/>
 
                     <Button Content="Удалить рецепт"
+                            Command="{Binding DeleteRecipeCommand}"
                             Style="{StaticResource Button.Base}"
                             Height="32"
-                            Margin="0,5,0,5" />
+                            Margin="0,5,0,5"/>
                 </StackPanel>
             </Grid>
         </Border>
@@ -59,16 +63,16 @@
             <!-- Сделала через Grid вместо DockPanel, чтобы нормально расположить кнопки управления -->
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="20*" />
-                    <ColumnDefinition Width="20*" />
-                    <ColumnDefinition Width="60*" />
+                    <ColumnDefinition Width="170"/>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto"/>
                     <!-- Высота TextBlock на других страницах -->
-                    <RowDefinition Height="30" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
                 <StackPanel Grid.Row="0"
@@ -76,13 +80,14 @@
                             Grid.ColumnSpan="3"
                             Orientation="Horizontal"
                             HorizontalAlignment="Left">
-                    <Label Content="Название текущего рецепта: "
+                    
+                    <Label Content="Название текущего рецепта:"
                            Style="{StaticResource Label.Accent}"
                            VerticalContentAlignment="Center"
-                           Margin="0,5,15,5"/>
+                           Margin="0,5,10,5"/>
                     <TextBox Height="32"
                              Width="120"
-                             Margin="0,5,5,5"
+                             Margin="0,5,0,5"
                              Style="{StaticResource TextBoxInput}"
                              VerticalContentAlignment="Center"
                              Text="Новый рецепт"/>
@@ -93,62 +98,79 @@
                             Grid.ColumnSpan="3"
                             Orientation="Horizontal"
                             HorizontalAlignment="Right">
+                    
                     <Button Content="Очистить рецепт"
+                            Command="{Binding ClearRecipeCommand}"
                             Style="{StaticResource Button.Base}"
                             Height="32"
-                            Margin="5,5,0,5" />
+                            Margin="0,5,0,5"/>
 
                 </StackPanel>
 
                 <!-- Можно было бы включить в DataGrid, но сделано по шаблону других страниц через TextBlock -->
-                <TextBlock Grid.Row="1"
+                <TextBlock Grid.Row="1" Grid.Column="0"
                            Text="Параметры"
                            Style="{StaticResource HeaderTextBlock}"
-                           HorizontalAlignment="Center" />
+                           HorizontalAlignment="Center"/>
                 <TextBlock Grid.Column="1" Grid.Row="1"
-                           Text="Ед. измерения"
+                           Text="Диапазон"
                            Style="{StaticResource HeaderTextBlock}"
-                           HorizontalAlignment="Center" />
-                <TextBlock Grid.Column="2" Grid.Row="1"
-                           Text="Значения"
-                           Style="{StaticResource HeaderTextBlock}"
-                           HorizontalAlignment="Center" />
+                           HorizontalAlignment="Center"/>
 
                 <DataGrid Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2"
-                          x:Name="RecipeDataGrid">
-                    <!-- TODO: Добавить новый Style для DataGrid -->
-                    <DataGridTextColumn IsReadOnly="True"
-                                        Width="20*" />
-                    <DataGridTextColumn IsReadOnly="True"
-                                        Width="20*" />
+                          x:Name="RecipeDataGrid"
+                          ItemsSource="{Binding Parameters}"
+                          HeadersVisibility="None"
+                          AutoGenerateColumns="False"
+                          FrozenColumnCount="2"
+                          CanUserAddRows="False"
+                          CanUserResizeColumns="False"
+                          MinRowHeight="60"
+                          recipe:DataGridColumnsBehavior.ItemsSource="{Binding Steps}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
+                            Binding="{Binding Path=Name}"
+                            IsReadOnly="True"
+                            Width="170"/>
+                        <DataGridTextColumn
+                            Binding="{Binding Path=Interval}"
+                            IsReadOnly="True"
+                            Width="80"/>
+                    </DataGrid.Columns>
                 </DataGrid>
 
                 <StackPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="3"
                             Orientation="Horizontal"
-                            HorizontalAlignment="Left">
+                            HorizontalAlignment="Left"
+                            Margin="0,5,0,0">
 
                     <Button Content="Добавить стадию"
+                            Command="{Binding AddStepCommand}"
                             Style="{StaticResource Button.Base}"
                             Height="32"
-                            Margin="0,5,15,5" />
+                            Margin="0,5,10,5"/>
 
                     <Button Content="Удалить стадию"
+                            Command="{Binding RemoveStepCommand}"
                             Style="{StaticResource Button.Base}"
                             Height="32"
-                            Margin="0,5,0,5" />
+                            Margin="0,5,0,5"/>
 
                     <ComboBox Height="32"
-                              Margin="0,5,15,5" />
+                              Margin="0,5,0,5"/>
                 </StackPanel>
 
                 <!-- Захотелось логически отделить управление таблицей и сохранение результата -->
                 <StackPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="3"
                             Orientation="Horizontal"
-                            HorizontalAlignment="Right">
+                            HorizontalAlignment="Right"
+                            Margin="0,5,0,0">
+                    
                     <Button Content="Сохранить рецепт"
+                            Command="{Binding SaveRecipeCommand}"
                             Style="{StaticResource Button.Base}"
                             Height="32"
-                            Margin="0,5,5,5" />
+                            Margin="0,5,0,5"/>
                 </StackPanel>
             </Grid>
         </Border>
