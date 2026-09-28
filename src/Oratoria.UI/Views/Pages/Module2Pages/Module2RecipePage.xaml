@@ -13,7 +13,6 @@
     <Grid Margin="16,12">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20*"/>
-            <!-- Возможно, стоит удалить второй столбец и просто сделать Margin для Border -->
             <ColumnDefinition Width="10"/>
             <ColumnDefinition Width="70*"/>
         </Grid.ColumnDefinitions>
@@ -22,13 +21,11 @@
         <Border Grid.Column="0"
                 Style="{StaticResource SoftGroupContainer}">
 
-            <!-- Сделала через Grid вместо DockPanel, чтобы нормально расположить кнопки управления -->
             <Grid>
                 <Grid.RowDefinitions>
                     <!-- Высота TextBlock на других страницах -->
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="*"/>
-                    <!-- Выравняется по StackPanel, где расположены кнопки -->
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
@@ -42,7 +39,6 @@
 
                 <StackPanel Grid.Row="2"
                             Margin="0,5,0,0">
-                    <!-- TODO: Хотелось бы изменить стиль в соответствии с ЧМИ(HMI) -->
                     <Button Content="Загрузить рецепт"
                             Command="{Binding LoadRecipeCommand}"
                             Style="{StaticResource Button.Base}"
@@ -60,7 +56,6 @@
 
         <!-- Правая панель: Таблица с данными рецепта -->
         <Border Grid.Column="2" Style="{StaticResource SoftGroupContainer}">
-            <!-- Сделала через Grid вместо DockPanel, чтобы нормально расположить кнопки управления -->
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="170"/>
@@ -107,7 +102,6 @@
 
                 </StackPanel>
 
-                <!-- Можно было бы включить в DataGrid, но сделано по шаблону других страниц через TextBlock -->
                 <TextBlock Grid.Row="1" Grid.Column="0"
                            Text="Параметры"
                            Style="{StaticResource HeaderTextBlock}"
@@ -160,7 +154,6 @@
                               Margin="0,5,0,5"/>
                 </StackPanel>
 
-                <!-- Захотелось логически отделить управление таблицей и сохранение результата -->
                 <StackPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="3"
                             Orientation="Horizontal"
                             HorizontalAlignment="Right"
