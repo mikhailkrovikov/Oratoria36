@@ -8,6 +8,7 @@ using Oratoria.Domain.Signals;
 using Oratoria.Domain.Signals.Abstractions;
 using System.Collections;
 using System.Collections.ObjectModel;
+using Oratoria.Domain.Signals.Strategies;
 
 namespace Oratoria.Application.Module3.Signals
 {

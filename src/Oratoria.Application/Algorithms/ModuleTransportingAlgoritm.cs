@@ -1,105 +1,107 @@
-﻿using Microsoft.Extensions.Logging;
-using Oratoria.Domain;
+﻿using Oratoria.Domain;
 using Oratoria.Domain.Algorithms;
-using Oratoria.Domain.Devices.Statuses;
-using Oratoria.Infrastructure;
 
 namespace Oratoria.Application.Algorithms
 {
     public class ModuleTransportingAlgorithm : AlgorithmBase
     {
         private readonly TechnologyModuleContext _context;
-        public Plate Plate;
-
-        public ModuleTransportingAlgorithm(TechnologyModuleContext context, Plate plate, ILoggerFactory loggerFactory)
-            : base(loggerFactory.CreateLogger("Транспортировка"))
+        public ModuleTransportingAlgorithm(TechnologyModuleContext context)
         {
             _context = context;
-            Plate = plate;        
         }
 
-        public bool CanLoadPlate() => true;
-        public bool CanUnloadPlate() => true;
+        private bool CanLoadPlate() => true;
+        private bool CanUnloadPlate() => true;
 
-        public Task<AlgorithmResult> LoadPlate()
+        public Task<AlgorithmResult> LoadPlate(Plate plate, CancellationToken cancellationToken = default)
         {
-            var unsub = () => _context.Shutter.Open.OnSignalChanged -= KeepShutterOpen;
+            var shutterSub = () => _context.Shutter.OpenSignal?.OnSignalChanged += KeepShutterOpen;
+            var shutterUnsub = () => _context.Shutter.OpenSignal?.OnSignalChanged -= KeepShutterOpen;
 
             return Execute(CanLoadPlate,
                 body => body
-                .DoTask(() => _context.Manipulator.FromHomeToTransport())
-                .DoTask(() => _context.Manipulator.FromTransportToHome())
-                .DoTask(TakeFromCarriage)
-                .DoTask(() => _context.Shutter.OpenValve())
-                .Subscribe(() => _context.Shutter.Open.OnSignalChanged += KeepShutterOpen, unsub)
-                .DoTask(() => _context.Manipulator.FromHomeToModule())
-                .DoTask(() => _context.Table.FromHomeToRollback())
-                .DoTask(() => _context.Manipulator.FromModuleToHome())
-                .DoTask(LeaveInModule)
-                .DoTask(() => _context.Table.FromRollbackToProcessing())
-                .Unsubscribe(unsub)
-                .DoTask(() => _context.Shutter.CloseValve()));
+                    .DoTask(_context.Manipulator.FromHomeToTransport)
+                    .DoTask(_context.Manipulator.FromTransportToHome)
+                    .DoTask(ct => TakeFromCarriage(plate, ct))
+                    .DoTask(_context.Shutter.OpenValve)
+                    .Subscribe(shutterSub, shutterUnsub)
+                    .DoTask(_context.Manipulator.FromHomeToModule)
+                    .DoTask(_context.Table.FromHomeToRollback)
+                    .DoTask(_context.Manipulator.FromModuleToHome)
+                    .DoTask(ct => LeaveInModule(plate, ct))
+                    .DoTask(_context.Table.FromRollbackToProcessing)
+                    .Unsubscribe(shutterUnsub)
+                    .DoTask(_context.Shutter.CloseValve),
+                cancellationToken);
         }
 
-
-        public Task<AlgorithmResult> UnloadPlate()
+        public Task<AlgorithmResult> UnloadPlate(Plate plate, CancellationToken cancellationToken = default)
         {
-            var unsub = () => _context.Shutter.Open.OnSignalChanged -= KeepShutterOpen;
+            var shutterSub = () => _context.Shutter.OpenSignal?.OnSignalChanged += KeepShutterOpen;
+            var shutterUnsub = () => _context.Shutter.OpenSignal?.OnSignalChanged -= KeepShutterOpen;
 
             return Execute(CanUnloadPlate,
                 body => body
-                .DoTask(() => _context.Table.FromProcessingToRollback())
-                .DoTask(() => _context.Shutter.OpenValve())
-                .Subscribe(() => _context.Shutter.Open.OnSignalChanged += KeepShutterOpen, unsub)
-                .DoTask(() => _context.Manipulator.FromHomeToModule())
-                .DoTask(() => _context.Table.FromRollbackToHome())
-                .DoTask(() => _context.Manipulator.FromModuleToHome())
-                .DoTask(TakeFromModule)
-                .Unsubscribe(unsub)
-                .DoTask(() => _context.Shutter.CloseValve()));
+                    .DoTask(_context.Table.FromProcessingToRollback)
+                    .DoTask(_context.Shutter.OpenValve)
+                    .Subscribe(shutterSub, shutterUnsub)
+                    .DoTask(_context.Manipulator.FromHomeToModule)
+                    .DoTask(_context.Table.FromRollbackToHome)
+                    .DoTask(_context.Manipulator.FromModuleToHome)
+                    .DoTask(ct => TakeFromModule(plate, ct))
+                    .Unsubscribe(shutterUnsub)
+                    .DoTask(_context.Shutter.CloseValve),
+                cancellationToken);
         }
 
-        private async Task<bool> TakeFromCarriage()
+        private static async Task<bool> TakeFromCarriage(
+            Plate plate,
+            CancellationToken cancellationToken)
         {
-            var ok = await Plate.GetState(true);
+            var ok = await plate.GetState(true, cancellationToken);
             if (!ok)
             {
-                Plate.DeviceErrors.AddError(PlateErrors.NotTakenFromTransport);
+                plate.DeviceErrors.AddError(PlateErrors.NotTakenFromTransport);
                 return false;
             }
-            Plate.SetState(PlateStatus.Manipulator);
+            plate.SetState(PlateStatus.Manipulator);
             return true;
         }
 
-        private async Task<bool> LeaveInModule()
+        private static async Task<bool> LeaveInModule(
+            Plate plate,
+            CancellationToken cancellationToken)
         {
-            var ok = await Plate.GetState(false);
+            var ok = await plate.GetState(false, cancellationToken);
             if (!ok)
             {
-                Plate.DeviceErrors.AddError(PlateErrors.NotTakenFromTransport);
+                plate.DeviceErrors.AddError(PlateErrors.NotTakenFromTransport);
                 return false;
             }
-            Plate.SetState(PlateStatus.Module);
+            plate.SetState(PlateStatus.Module);
             return true;
         }
 
-        private async Task<bool> TakeFromModule()
+        private static async Task<bool> TakeFromModule(
+            Plate plate,
+            CancellationToken cancellationToken)
         {
-            var ok = await Plate.GetState(true);
+            var ok = await plate.GetState(true, cancellationToken);
             if (!ok)
             {
-                Plate.DeviceErrors.AddError(PlateErrors.NotTakenFromModule);
+                plate.DeviceErrors.AddError(PlateErrors.NotTakenFromModule);
                 return false;
             }
-            Plate.SetState(PlateStatus.Manipulator);
+            plate.SetState(PlateStatus.Manipulator);
             return true;
         }
+
         private void KeepShutterOpen(bool value)
         {
-            if (_context.Shutter.Open != null && !_context.Shutter.Open.Value)
+            if (_context.Shutter.OpenSignal != null && !_context.Shutter.OpenSignal.Value)
             {
-                Logger.LogWarning("Неожиданное закрытие ЩЗ, принудительное открытие");
-                _context.Shutter.Open.Value = true;
+                _context.Shutter.OpenSignal.Value = true;
             }
         }
     }

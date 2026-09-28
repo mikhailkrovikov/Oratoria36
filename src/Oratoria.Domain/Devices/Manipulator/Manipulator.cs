@@ -8,7 +8,7 @@ using Oratoria.Domain.Signals.Abstractions;
 
 namespace Oratoria.Domain.Devices.Manipulator
 {
-    public class Manipulator : MechanicDevice<ManipulatorPosition, ManipulatorErrors>
+    public sealed class Manipulator : MechanicDevice<ManipulatorPosition, ManipulatorErrors>
     {
         public Manipulator(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory, ISettingsContext settings)
             : base(deviceId, signals, loggerFactory, settings)
@@ -16,12 +16,12 @@ namespace Oratoria.Domain.Devices.Manipulator
         }
 
         [DeviceAction("Исходная → Транспорт")]
-        public async Task<bool> FromHomeToTransport()
+        public async Task<bool> FromHomeToTransport(CancellationToken cancellationToken = default)
         {
             Logger.LogInformation("Из исходной в транспорт");
             try
             {
-                return await Move(ManipulatorPosition.Home, ManipulatorPosition.Transport) == ManipulatorPosition.Transport;
+                return await Move(ManipulatorPosition.Home, ManipulatorPosition.Transport, cancellationToken) == ManipulatorPosition.Transport;
             }
             catch (InvalidOperationException ex)
             {
@@ -31,12 +31,12 @@ namespace Oratoria.Domain.Devices.Manipulator
         }
 
         [DeviceAction("Модуль → Исходная")]
-        public async Task<bool> FromModuleToHome()
+        public async Task<bool> FromModuleToHome(CancellationToken cancellationToken = default)
         {
             Logger.LogInformation("Из модуля в исходную");
             try
             {
-                return await Move(ManipulatorPosition.Module, ManipulatorPosition.Home) == ManipulatorPosition.Home;
+                return await Move(ManipulatorPosition.Module, ManipulatorPosition.Home, cancellationToken) == ManipulatorPosition.Home;
             }
             catch (InvalidOperationException ex)
             {
@@ -46,12 +46,12 @@ namespace Oratoria.Domain.Devices.Manipulator
         }
 
         [DeviceAction("Исходная → Модуль")]
-        public async Task<bool> FromHomeToModule()
+        public async Task<bool> FromHomeToModule(CancellationToken cancellationToken = default)
         {
             Logger.LogInformation("Из исходной в модуль");
             try
             {
-                return await Move(ManipulatorPosition.Home, ManipulatorPosition.Module) == ManipulatorPosition.Module;
+                return await Move(ManipulatorPosition.Home, ManipulatorPosition.Module, cancellationToken) == ManipulatorPosition.Module;
             }
             catch (InvalidOperationException ex)
             {
@@ -61,12 +61,12 @@ namespace Oratoria.Domain.Devices.Manipulator
         }
 
         [DeviceAction("Транспорт → Исходная")]
-        public async Task<bool> FromTransportToHome()
+        public async Task<bool> FromTransportToHome(CancellationToken cancellationToken = default)
         {
             Logger.LogInformation("Из транспорта в исходную");
             try
             {
-                return await Move(ManipulatorPosition.Transport, ManipulatorPosition.Home) == ManipulatorPosition.Home;
+                return await Move(ManipulatorPosition.Transport, ManipulatorPosition.Home, cancellationToken) == ManipulatorPosition.Home;
             }
             catch (InvalidOperationException ex)
             {
@@ -75,7 +75,7 @@ namespace Oratoria.Domain.Devices.Manipulator
             }
         }
 
-        public override MechanicMovingProfile<ManipulatorErrors> GetMovingProfile(ManipulatorPosition startPos, ManipulatorPosition endPos)
+        protected override MechanicMovingProfile<ManipulatorErrors> GetMovingProfile(ManipulatorPosition startPos, ManipulatorPosition endPos)
         {
             if (startPos == endPos)
                 throw new InvalidOperationException("позиции перемещения манипулятора совпадают");

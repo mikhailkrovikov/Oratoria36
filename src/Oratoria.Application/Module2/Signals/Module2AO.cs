@@ -8,6 +8,7 @@ using Oratoria.Domain.Devices.RRG;
 using Oratoria.Domain.Devices.RRG.RRGAttributes;
 using Oratoria.Domain.Signals;
 using Oratoria.Domain.Signals.Abstractions;
+using Oratoria.Domain.Signals.Strategies;
 using System.Collections;
 using System.Collections.ObjectModel;
 

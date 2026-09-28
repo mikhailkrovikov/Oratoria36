@@ -1,12 +1,10 @@
-using Microsoft.Extensions.DependencyInjection;
-using Oratoria.Application.Gateway1;
-using Oratoria.Application.Gateway2;
-using Oratoria.Application.Module2;
-using Oratoria.Application.TransportModule;
-using Oratoria.Application.VacuumModule;
+using Oratoria.Domain.Devices;
+using Oratoria.UI.Controls.DialogWindows;
+using Oratoria.UI.Services;
 using Oratoria.UI.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 
 namespace Oratoria.UI;
 
@@ -16,12 +14,7 @@ public partial class MainWindow : Window
 
     public MainWindow(
         MainWindowVM maimwindowVM,
-        IServiceProvider services,
-        Module2Context module2Context,
-        VacuumContext vacuumContext,
-        TransportContext context,
-        Gateway1Context gateway1Context,
-        Gateway2Context gateway2Context)
+        IServiceProvider services)
     {
         InitializeComponent();
         _vm = maimwindowVM;
@@ -32,6 +25,25 @@ public partial class MainWindow : Window
             services.GetService(type) as Page
             ?? (Page)Activator.CreateInstance(type)!;
         NavigationBarControl.Apply(_vm.Navigation);
+    }
+
+    private const double MinimumBottomPanelHeight = 158;
+
+    private void BottomPanelResize_DragDelta(object sender, DragDeltaEventArgs e)
+    {
+        SetBottomPanelHeight(BottomPanel.ActualHeight - e.VerticalChange);
+    }
+
+    private void BottomPanelHost_SizeChanged(object sender, SizeChangedEventArgs e)
+    {
+        SetBottomPanelHeight(BottomPanel.Height);
+    }
+
+    private void SetBottomPanelHeight(double height)
+    {
+        var maximumHeight = BottomPanelHost.ActualHeight;
+        BottomPanel.Height = Math.Clamp(height,
+            Math.Min(MinimumBottomPanelHeight, maximumHeight), maximumHeight);
     }
 
     private void ShowLogs_Click(object sender, RoutedEventArgs e)
@@ -45,5 +57,31 @@ public partial class MainWindow : Window
     {
         LogGrid.Visibility = Visibility.Collapsed;
         ErrorsListBox.Visibility = Visibility.Visible;
+    }
+
+    private void ErrorsListBox_SelectionChanged(
+    object sender,
+    SelectionChangedEventArgs e)
+    {
+        if (ErrorsListBox.SelectedItem is not AlarmItem alarm)
+            return;
+
+        if (!alarm.HasDescription)
+            return;
+
+        var type = alarm.Category switch
+        {
+            DeviceErrorCategory.Warn => MBType.Warning,
+            DeviceErrorCategory.Error => MBType.Error,
+            DeviceErrorCategory.Fatal => MBType.Error,
+            _ => MBType.Info
+        };
+
+        UserMessageBox.Show(
+            alarm.Description!,
+            alarm.Text,
+            type);
+
+        ErrorsListBox.SelectedIndex = -1;
     }
 }

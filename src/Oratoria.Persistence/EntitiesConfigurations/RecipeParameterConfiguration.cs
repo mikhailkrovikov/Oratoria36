@@ -9,7 +9,10 @@ namespace Oratoria.Persistence.EntitiesConfigurations
         public void Configure(EntityTypeBuilder<RecipeParameterEntity> builder)
         {
             builder.HasKey(r => r.ParameterId);
-            builder.Property(r => r.Name).IsRequired();
+            builder
+                .Property(r => r.Name)
+                .IsRequired()
+                .HasMaxLength(50);
 
             builder
                 .HasOne(r => r.Step)

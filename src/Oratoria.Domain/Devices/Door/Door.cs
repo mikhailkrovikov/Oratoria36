@@ -12,25 +12,25 @@ namespace Oratoria.Domain.Devices.Door
     {
         public Door(Enum deviceId, IModuleSignals signals, ILoggerFactory loggerFactory, ISettingsContext settings) : base(deviceId, signals, loggerFactory, settings)
         {
-            IsOpen = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(DoorIsOpenSignalAttribute<>));
-            IsClose = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(DoorIsCloseSignalAttribute<>));
-            Open = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(DoorOpenSignalAttribute<>));
-            Close = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(DoorrCloseSignalAttribute<>));
+            IsOpenSignal = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(DoorIsOpenSignalAttribute<>));
+            IsCloseSignal = SignalHelper<InputSignal<bool>>.GetSignal(deviceId, signals.DISignals, typeof(DoorIsCloseSignalAttribute<>));
+            OpenSignal = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(DoorOpenSignalAttribute<>));
+            CloseSignal = SignalHelper<OutputSignal<bool>>.GetSignal(deviceId, signals.DOSignals, typeof(DoorrCloseSignalAttribute<>));
 
-            IsOpen?.OnSignalChanged += _ => OnStateChanged();
-            IsClose?.OnSignalChanged += _ => OnStateChanged();
-            Open?.OnSignalChanged += _ => OnStateChanged();
-            Close?.OnSignalChanged += _ => OnStateChanged();
+            IsOpenSignal?.OnSignalChanged += _ => OnStateChanged();
+            IsCloseSignal?.OnSignalChanged += _ => OnStateChanged();
+            OpenSignal?.OnSignalChanged += _ => OnStateChanged();
+            CloseSignal?.OnSignalChanged += _ => OnStateChanged();
         }
 
         [Obsolete]
-        public override Task<bool> CloseValve()
+        public override Task<bool> CloseValve(CancellationToken cancellationToken = default)
         {
             throw new NotSupportedException("В данном устройстве закрытие не предусмотрено");
         }
 
         [Obsolete]
-        public override Task<bool> OpenValve()
+        public override Task<bool> OpenValve(CancellationToken cancellationToken = default)
         {
             throw new NotSupportedException("В данном устройстве открытие не предусмотрено");
         }

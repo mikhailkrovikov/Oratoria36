@@ -33,9 +33,16 @@ namespace Oratoria.Domain.Devices.Abstractions
             Settings = settings;
         }
 
+        protected async Task<T> RunOperation<T>(CancellationToken cancellationToken, Func<CancellationToken, Task<T>> action)
+        {
+            using var operation = CreateOperationToken(cancellationToken);
+            return await action(operation.Token);
+        }
+
         [DeviceAction("Сброс ошибок")]
         public void ResetErrors()
         {
+            Logger.LogInformation($"{DeviceName}: выполнение сброса ошибок");
             DeviceErrors.ResetAllErrors();
         }
 
@@ -53,6 +60,14 @@ namespace Oratoria.Domain.Devices.Abstractions
             }
             catch { }
             CTSource = new CancellationTokenSource();
+        }
+
+        private CancellationTokenSource CreateOperationToken(CancellationToken cancellationToken = default)
+        {
+            ResetToken();
+            return CancellationTokenSource.CreateLinkedTokenSource(
+                CTSource.Token,
+                cancellationToken);
         }
     }
 }

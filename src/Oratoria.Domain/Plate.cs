@@ -74,19 +74,29 @@ namespace Oratoria.Domain
         private PlateStatus _state;
         public override PlateStatus State => _state;
 
-        public async Task<bool> GetState(bool expected)
+        public Task<bool> GetState(
+            bool expected,
+            CancellationToken cancellationToken = default)
         {
-            var token = CTSource.Token;
-            PlatePrivod3.Value = true;
+            return RunOperation(cancellationToken, async token =>
+            {
+                PlatePrivod3.Value = true;
 
-            bool res = await EventWaiter.WaitEvent(nameof(Position1In.OnSignalChanged),
-                Position1In,
-                (bool x) => Position1In.Value == expected,
-                2000, token);
-            PlatePrivod3.Value = false;
-            if(expected != res)
-                Logger.LogError(DeviceErrors.Last().GetDescription());
-            return res;
+                try
+                {
+                    bool res = await EventWaiter.WaitEvent(nameof(Position1In.OnSignalChanged),
+                        Position1In,
+                        (bool x) => Position1In.Value == expected,
+                        2000, token);
+                    if (expected != res)
+                        Logger.LogError(DeviceErrors.Last().GetDescription());
+                    return res;
+                }
+                finally
+                {
+                    PlatePrivod3.Value = false;
+                }
+            });
         }
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Extensions.Logging;
 using Oratoria.Application;
+using Oratoria.Application.Algorithms;
 using Oratoria.Application.Connection;
 using Oratoria.Application.Connection.Pollers;
 using Oratoria.Application.Gateway1;
@@ -13,7 +14,9 @@ using Oratoria.Application.Gateway2;
 using Oratoria.Application.Module1.Signals;
 using Oratoria.Application.Module2;
 using Oratoria.Application.Module2.Signals;
+using Oratoria.Application.Module3;
 using Oratoria.Application.Module3.Signals;
+using Oratoria.Application.Module4;
 using Oratoria.Application.Module4.Signals;
 using Oratoria.Application.Strategies;
 using Oratoria.Application.TransportModule;
@@ -27,9 +30,11 @@ using Oratoria.Persistence;
 using Oratoria.Persistence.Services;
 using Oratoria.UI;
 using Oratoria.UI.Logging;
+using Oratoria.UI.Services;
 using Oratoria.UI.ViewModels;
 using Oratoria.UI.Views.Pages;
 using Oratoria.UI.Views.Pages.Module2Pages;
+using Oratoria.UI.Views.Pages.VacuumPages;
 using System.IO;
 using System.Windows;
 namespace UI;
@@ -109,19 +114,21 @@ public partial class App : Application
         var settingPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "connection.json");
         services.AddSingleton(_ => new JsonFileStore<ConnectionFile>(settingPath));
         services.AddSingleton<NetContext>();
+
 #if !RELEASE
-        services.AddSingleton<TwinContext>();
-        services.AddSingleton<IRegister>(sp => sp.GetRequiredService<TwinContext>().TModel);
-        services.AddTransient<DigitalTwinStrategy>();
+        services.AddSingleton<IRegister, TwinModel>();
         services.AddSingleton<DTInitializer>();
 #endif
         services.AddSingleton<Module1Signals>();
 
         services.AddSingleton<Module2Signals>();
         services.AddSingleton<Module2Context>();
+
         services.AddSingleton<Module3Signals>();
+        services.AddSingleton<Module3Context>();
 
         services.AddSingleton<Module4Signals>();
+        services.AddSingleton<Module4Context>();
 
         services.AddSingleton<TransportSignals>();
         services.AddSingleton<TransportContext>();
@@ -149,18 +156,28 @@ public partial class App : Application
             return new GeneralPoller(pollers, sp.GetRequiredService<ILogger<GeneralPoller>>());
         });
 
+        services.AddSingleton<VacuumSystemPrepareAlgorithm>();
+        services.AddSingleton<ToIdleAlgoritm>();
+
+        services.AddSingleton<AlarmService>();
+
         services.AddTransient<ConnectionSettingsVM>();
         services.AddTransient<ConnectionSettingsPage>();
 
         services.AddTransient<Module2SignalsPage>();
         services.AddSingleton<Module2MnemoPage>();
         services.AddSingleton<Module2MnemoPageVM>();
+        services.AddSingleton<Module2RecipePage>();
+        services.AddSingleton<Module2RecipePageVM>();
+
 
         services.AddTransient<Module3SignalsPage>();
         services.AddTransient<Module4SignalsPage>();
 
         services.AddTransient<TransportSignalsPage>();
         services.AddTransient<VacuumSignalsPage>();
+        services.AddSingleton<VacuumMnemoPage>();
+        services.AddSingleton<VacuumMnemoPageVM>();
         services.AddSingleton<MainWindowVM>();
         services.AddSingleton<MainWindow>();
     }

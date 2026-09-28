@@ -9,6 +9,7 @@ namespace Oratoria.Persistence.EntitiesConfigurations
         public void Configure(EntityTypeBuilder<RecipeStepEntity> builder)
         {
             builder.HasKey(r => r.StepId);
+            builder.ToTable(t => t.HasCheckConstraint("ValidNumber", "Number > 0 AND Number < 100"));
 
             builder
                 .HasOne(r => r.Recipe)

@@ -2,7 +2,6 @@ using System.ComponentModel;
 
 namespace Oratoria.Domain.Devices.Errors
 {
-    // пока хз
     public enum CarriageErrors
     {
         [DeviceErrorCategory(DeviceErrorCategory.Error)]

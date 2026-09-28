@@ -80,6 +80,7 @@ namespace Oratoria.Persistence.Services
                     return false;
 
                 existing.Name = recipe.Name;
+                existing.ModuleId = recipe.ModuleId;
                 _dbContext.RemoveRange(existing.Steps);
                 existing.Steps = ToEntity(recipe).Steps;
                 await _dbContext.SaveChangesAsync();
@@ -95,6 +96,7 @@ namespace Oratoria.Persistence.Services
         private static RecipeEntity ToEntity(RecipeDTO dto) => new()
         {
             Name = dto.Name,
+            ModuleId = dto.ModuleId,
             Steps = dto.Steps.Select(step => new RecipeStepEntity
             {
                 Number = step.Number,
@@ -110,6 +112,7 @@ namespace Oratoria.Persistence.Services
         {
             Id = entity.RecipeId,
             Name = entity.Name,
+            ModuleId = entity.ModuleId,
             Steps = entity.Steps
                     .OrderBy(s => s.Number)
                     .Select(step => new RecipeStepDTO

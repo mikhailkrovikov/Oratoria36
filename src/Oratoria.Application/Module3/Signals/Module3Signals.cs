@@ -1,3 +1,4 @@
+using DigitalTwin;
 using Oratoria.Domain.Connection;
 using Oratoria.Domain.Signals;
 using Oratoria.Domain.Signals.Abstractions;
@@ -33,8 +34,9 @@ namespace Oratoria.Application.Module3.Signals
             AOSignals = new(_netConfig, new AOModbusStrategy(_netConfig));
         }
 #else
-        public Module3Signals(NetContext netContext, DigitalTwinStrategy twinStrategy)
+        public Module3Signals(NetContext netContext, IRegister model)
         {
+            var twinStrategy = new DigitalTwinStrategy(model.GetModule(nameof(Module3Signals)));
             _netConfig = netContext.Module3;
             DISignals = new(_netConfig, twinStrategy);
             DOSignals = new(_netConfig, twinStrategy);

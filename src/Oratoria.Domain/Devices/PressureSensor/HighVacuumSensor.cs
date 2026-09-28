@@ -29,7 +29,8 @@ namespace Oratoria.Domain.Devices.PressureSensor
 
         private static double GetHighVacuumValue(double voltage) 
         {
-            if (voltage > 9.00) return 1e5;
+            // Верхний предел измерения датчика высокого вакуума, Па.
+            if (voltage > 9.00) return 1333;
             (double voltageOffset, double multiplier) = voltage switch
             {
                 > 7.50 => (7.50, 1.0),

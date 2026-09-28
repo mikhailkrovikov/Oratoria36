@@ -1,39 +1,33 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Oratoria.Application.TransportModule;
+﻿using Oratoria.Application.TransportModule;
 using Oratoria.Domain;
 using Oratoria.Domain.Algorithms;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Oratoria.Application.Algorithms
 {
     public class CentralTransporting : AlgorithmBase
     {
         private readonly TransportContext _context;
-        public Plate Plate;
 
-        public CentralTransporting(TransportContext context, Plate plate, ILoggerFactory loggerFactory) 
-            : base(loggerFactory.CreateLogger("Транспортировка"))
+        public CentralTransporting(TransportContext context)
         {
             _context = context;
-            Plate = plate;
         }
 
         public bool CanLoadPlate() => true;
         public bool CanUnloadPlate() => true;
 
-        public Task<AlgorithmResult> LoadPlate()
+        public Task<AlgorithmResult> LoadPlate(Plate plate, int targetModule)
         {
-            // Implementation for loading plate
-            throw new NotImplementedException();
+            return Execute(CanLoadPlate, 
+                body => body
+                .DoTask((cts) => _context.Carriage.MoveCarriage(targetModule, cts)));
         }
 
-        public Task<AlgorithmResult> UnloadPlate()
+        public Task<AlgorithmResult> UnloadPlate(Plate plate, int targetModule)
         {
-            // Implementation for unloading plate
-            throw new NotImplementedException();
+            return Execute(CanLoadPlate,
+                body => body
+                .DoTask((cts) => _context.Carriage.MoveCarriage(targetModule, cts)));
         }
     }
 }

@@ -12,6 +12,7 @@ using Oratoria.Domain.Devices.Abstractions.MechanicAttributes;
 using Oratoria.Domain.Devices.Heater.HeaterAttributes;
 using Oratoria.Domain.Devices.Magnetron.MagnetronAttributes;
 using Oratoria.Domain.Devices.CryogenicPump;
+using Oratoria.Domain.Signals.Strategies;
 
 namespace Oratoria.Application.Module2.Signals
 {

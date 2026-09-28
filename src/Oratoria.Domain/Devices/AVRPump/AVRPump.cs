@@ -49,15 +49,83 @@ namespace Oratoria.Domain.Devices.AVRPump
         }
 
         [DeviceAction("Включить")]
-        public virtual async Task<bool> TurnOn()
+        public virtual Task<bool> TurnOn(CancellationToken cancellationToken = default)
         {
             Logger.LogInformation($"{DeviceName}: включение");
-            ResetToken();
-            var token = CTSource.Token;
-            try
+            return RunOperation(cancellationToken, async token =>
             {
-                if (State == PumpStatus.On)
+                try
                 {
+                    if (State == PumpStatus.On)
+                    {
+                        DeviceErrors.ResetRangeErrors(
+                            PumpErrors.CannotTurnOn,
+                            PumpErrors.UnexpectedOilShutDown,
+                            PumpErrors.UnexpectedRutsShutDown);
+                        SubscribeWatchers();
+                        return true;
+                    }
+
+                    UnsubscribeWatchers();
+
+                    OilPumpOn.Value = true;
+
+                    var res = true;
+                    var needWait = false;
+                    if (!IsOilPumpOn.Value)
+                        needWait = true;
+
+                    if (needWait)
+                    {
+                        token.ThrowIfCancellationRequested();
+                        res = await EventWaiter.WaitEvent(nameof(IsOilPumpOn.OnSignalChanged),
+                            IsOilPumpOn,
+                            (bool x) => IsOilPumpOn.Value,
+                            OilPumpTime.Value * 1000, token);
+                    }
+                    if (!res)
+                    {
+                        Logger.LogError($"{DeviceName}: масляный насос не включился, авария");
+                        DeviceErrors.AddError(PumpErrors.CannotTurnOn);
+                        return false;
+                    }
+
+                    IsOilPumpOn.OnSignalChanged += OnOilPumpFeedbackChanged;
+
+                    RutsPumpOn.Value = true;
+
+                    needWait = false;
+                    if (!IsRutsPumpOn.Value)
+                        needWait = true;
+
+                    if (needWait)
+                    {
+                        token.ThrowIfCancellationRequested();
+                        res = await EventWaiter.WaitEvent(nameof(IsRutsPumpOn.OnSignalChanged),
+                            IsRutsPumpOn,
+                            (bool x) => IsRutsPumpOn.Value,
+                            RutsPumpTime.Value * 1000, token);
+                    }
+                    if (!IsOilPumpOn.Value)
+                    {
+                        if (!DeviceErrors.HasError(PumpErrors.UnexpectedOilShutDown))
+                        {
+                            Logger.LogError($"{DeviceName}: пропал сигнал масляного насоса, авария");
+                            DeviceErrors.AddError(PumpErrors.UnexpectedOilShutDown);
+                        }
+                        RutsPumpOn.Value = false;
+                        UnsubscribeWatchers();
+                        return false;
+                    }
+                    if (!res)
+                    {
+                        Logger.LogError($"{DeviceName}: насос Рутса не включился, авария");
+                        DeviceErrors.AddError(PumpErrors.CannotTurnOn);
+                        RutsPumpOn.Value = false;
+                        UnsubscribeWatchers();
+                        return false;
+                    }
+
                     DeviceErrors.ResetRangeErrors(
                         PumpErrors.CannotTurnOn,
                         PumpErrors.UnexpectedOilShutDown,
@@ -65,166 +133,100 @@ namespace Oratoria.Domain.Devices.AVRPump
                     SubscribeWatchers();
                     return true;
                 }
-
-                UnsubscribeWatchers();
-
-                OilPumpOn.Value = true;
-
-                var res = true;
-                var needWait = false;
-                if (!IsOilPumpOn.Value)
-                    needWait = true;
-
-                if (needWait)
+                catch (OperationCanceledException)
                 {
-                    token.ThrowIfCancellationRequested();
-                    res = await EventWaiter.WaitEvent(nameof(IsOilPumpOn.OnSignalChanged),
-                        IsOilPumpOn,
-                        (bool x) => IsOilPumpOn.Value,
-                        OilPumpTime.Value * 1000, token);
+                    Logger.LogInformation($"{DeviceName}: включение отменено");
+                    UnsubscribeWatchers();
+                    throw;
                 }
-                if (!res)
+                catch (Exception ex)
                 {
-                    Logger.LogError($"{DeviceName}: масляный насос не включился, авария");
-                    DeviceErrors.AddError(PumpErrors.CannotTurnOn);
-                    return false;
-                }
-
-                IsOilPumpOn.OnSignalChanged += OnOilPumpFeedbackChanged;
-
-                RutsPumpOn.Value = true;
-
-                needWait = false;
-                if (!IsRutsPumpOn.Value)
-                    needWait = true;
-
-                if (needWait)
-                {
-                    token.ThrowIfCancellationRequested();
-                    res = await EventWaiter.WaitEvent(nameof(IsRutsPumpOn.OnSignalChanged),
-                        IsRutsPumpOn,
-                        (bool x) => IsRutsPumpOn.Value,
-                        RutsPumpTime.Value * 1000, token);
-                }
-                if (!IsOilPumpOn.Value)
-                {
-                    if (!DeviceErrors.HasError(PumpErrors.UnexpectedOilShutDown))
-                    {
-                        Logger.LogError($"{DeviceName}: пропал сигнал масляного насоса, авария");
-                        DeviceErrors.AddError(PumpErrors.UnexpectedOilShutDown);
-                    }
-                    RutsPumpOn.Value = false;
+                    Logger.LogError($"{DeviceName}: ошибка включения");
+                    Logger.LogError(ex.Message);
                     UnsubscribeWatchers();
                     return false;
                 }
-                if (!res)
-                {
-                    Logger.LogError($"{DeviceName}: насос Рутса не включился, авария");
-                    DeviceErrors.AddError(PumpErrors.CannotTurnOn);
-                    RutsPumpOn.Value = false;
-                    UnsubscribeWatchers();
-                    return false;
-                }
-
-                DeviceErrors.ResetRangeErrors(
-                    PumpErrors.CannotTurnOn,
-                    PumpErrors.UnexpectedOilShutDown,
-                    PumpErrors.UnexpectedRutsShutDown);
-                SubscribeWatchers();
-                return true;
-            }
-            catch (OperationCanceledException)
-            {
-                Logger.LogInformation($"{DeviceName}: включение отменено");
-                UnsubscribeWatchers();
-                return false;
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError($"{DeviceName}: ошибка включения");
-                Logger.LogError(ex.Message);
-                UnsubscribeWatchers();
-                return false;
-            }
+            });
         }
 
 
         [DeviceAction("Выключить")]
-        public virtual async Task<bool> TurnOff()
+        public virtual Task<bool> TurnOff(CancellationToken cancellationToken = default)
         {
             Logger.LogInformation($"{DeviceName}: выключение");
-            ResetToken();
-            var token = CTSource.Token;
-            try
+            return RunOperation(cancellationToken, async token =>
             {
-                if (State == PumpStatus.Off)
+                try
                 {
-                    DeviceErrors.ResetError(PumpErrors.CannotTurnOff);
+                    if (State == PumpStatus.Off)
+                    {
+                        DeviceErrors.ResetError(PumpErrors.CannotTurnOff);
+                        UnsubscribeWatchers();
+                        return true;
+                    }
+
                     UnsubscribeWatchers();
+                    RutsPumpOn.Value = false;
+
+                    var res = true;
+                    var needWait = false;
+                    if (IsRutsPumpOn.Value)
+                        needWait = true;
+
+                    if (needWait)
+                    {
+                        token.ThrowIfCancellationRequested();
+                        res = await EventWaiter.WaitEvent(nameof(IsRutsPumpOn.OnSignalChanged),
+                            IsRutsPumpOn,
+                            (bool x) => !IsRutsPumpOn.Value,
+                            RutsPumpTime.Value * 1000, token);
+                    }
+                    if (!res)
+                    {
+                        Logger.LogError($"{DeviceName}: насос Рутса не выключился, авария");
+                        DeviceErrors.AddError(PumpErrors.CannotTurnOff);
+                        SubscribeWatchers();
+                        return false;
+                    }
+
+                    OilPumpOn.Value = false;
+
+                    needWait = false;
+                    if (IsOilPumpOn.Value)
+                        needWait = true;
+
+                    if (needWait)
+                    {
+                        token.ThrowIfCancellationRequested();
+                        res = await EventWaiter.WaitEvent(nameof(IsOilPumpOn.OnSignalChanged),
+                            IsOilPumpOn,
+                            (bool x) => !IsOilPumpOn.Value,
+                            OilPumpTime.Value * 1000, token);
+                    }
+                    if (!res)
+                    {
+                        Logger.LogError($"{DeviceName}: масляный насос не выключился, авария");
+                        DeviceErrors.AddError(PumpErrors.CannotTurnOff);
+                        return false;
+                    }
+
+                    DeviceErrors.ResetError(PumpErrors.CannotTurnOff);
                     return true;
                 }
-
-                UnsubscribeWatchers();
-                RutsPumpOn.Value = false;
-
-                var res = true;
-                var needWait = false;
-                if (IsRutsPumpOn.Value)
-                    needWait = true;
-
-                if (needWait)
+                catch (OperationCanceledException)
                 {
-                    token.ThrowIfCancellationRequested();
-                    res = await EventWaiter.WaitEvent(nameof(IsRutsPumpOn.OnSignalChanged),
-                        IsRutsPumpOn,
-                        (bool x) => !IsRutsPumpOn.Value,
-                        RutsPumpTime.Value * 1000, token);
+                    Logger.LogInformation($"{DeviceName}: выключение отменено");
+                    SubscribeWatchers();
+                    throw;
                 }
-                if (!res)
+                catch (Exception ex)
                 {
-                    Logger.LogError($"{DeviceName}: насос Рутса не выключился, авария");
-                    DeviceErrors.AddError(PumpErrors.CannotTurnOff);
+                    Logger.LogError($"{DeviceName}: ошибка выключения");
+                    Logger.LogError(ex.Message);
                     SubscribeWatchers();
                     return false;
                 }
-
-                OilPumpOn.Value = false;
-
-                needWait = false;
-                if (IsOilPumpOn.Value)
-                    needWait = true;
-
-                if (needWait)
-                {
-                    token.ThrowIfCancellationRequested();
-                    res = await EventWaiter.WaitEvent(nameof(IsOilPumpOn.OnSignalChanged),
-                        IsOilPumpOn,
-                        (bool x) => !IsOilPumpOn.Value,
-                        OilPumpTime.Value * 1000, token);
-                }
-                if (!res)
-                {
-                    Logger.LogError($"{DeviceName}: масляный насос не выключился, авария");
-                    DeviceErrors.AddError(PumpErrors.CannotTurnOff);
-                    return false;
-                }
-
-                DeviceErrors.ResetError(PumpErrors.CannotTurnOff);
-                return true;
-            }
-            catch (OperationCanceledException)
-            {
-                Logger.LogInformation($"{DeviceName}: выключение отменено");
-                SubscribeWatchers();
-                return false;
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError($"{DeviceName}: ошибка выключения");
-                Logger.LogError(ex.Message);
-                SubscribeWatchers();
-                return false;
-            }
+            });
         }
 
         private void SubscribeWatchers()

@@ -2,6 +2,13 @@
 {
     public interface IRegister
     {
+        IRegister GetModule(string moduleId);
+
+        void SetDoubleInput(ushort pinNumber, double value);
+
+        void RegisterPressureSimulator(ushort pressurePin, ushort[] valvePins,
+            ushort oilPumpPin, ushort rutsPumpPin, ushort auxiliaryPumpPin);
+
         event Action<ushort, bool> BoolInputChanged;
         event Action<ushort, double> DoubleInputChanged;
 

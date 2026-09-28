@@ -10,13 +10,13 @@ namespace Oratoria.Domain.Devices.Abstractions
 {
     public abstract class OpenableDevice : Device<OpenableStatus, OpenableErrors>
     {
-        public InputSignal<bool>? IsOpen { get; set; }
+        public InputSignal<bool>? IsOpenSignal { get; set; }
 
-        public InputSignal<bool>? IsClose { get; set; }
+        public InputSignal<bool>? IsCloseSignal { get; set; }
 
-        public OutputSignal<bool>? Open { get; set; }
+        public OutputSignal<bool>? OpenSignal { get; set; }
 
-        public OutputSignal<bool>? Close { get; set; }
+        public OutputSignal<bool>? CloseSignal { get; set; }
 
         public Setting<int> TimeForWarning { get; }
 
@@ -26,37 +26,37 @@ namespace Oratoria.Domain.Devices.Abstractions
         {
             get
             {
-                if (IsOpen != null && IsClose != null)
+                if (IsOpenSignal != null && IsCloseSignal != null)
                 {
-                    if (IsClose.Value == IsOpen.Value)
+                    if (IsCloseSignal.Value == IsOpenSignal.Value)
                         return OpenableStatus.Transition;
-                    if (IsClose.Value)
+                    if (IsCloseSignal.Value)
                         return OpenableStatus.Close;
-                    if (IsOpen.Value)
+                    if (IsOpenSignal.Value)
                         return OpenableStatus.Open;
                     return OpenableStatus.Transition;
                 }
-                if (IsOpen != null)
+                if (IsOpenSignal != null)
                 {
-                    if (IsOpen.Value)
+                    if (IsOpenSignal.Value)
                         return OpenableStatus.Open;
                     return OpenableStatus.Close;
                 }
-                if (IsClose != null)
+                if (IsCloseSignal != null)
                 {
-                    if (IsClose.Value)
+                    if (IsCloseSignal.Value)
                         return OpenableStatus.Close;
                     return OpenableStatus.Open;
                 }
-                if (Open != null)
+                if (OpenSignal != null)
                 {
-                    if (Open.Value)
+                    if (OpenSignal.Value)
                         return OpenableStatus.Open;
                     return OpenableStatus.Close;
                 }
-                if (Close != null)
+                if (CloseSignal != null)
                 {
-                    if (Close.Value)
+                    if (CloseSignal.Value)
                         return OpenableStatus.Close;
                     return OpenableStatus.Open;
                 }
@@ -71,214 +71,218 @@ namespace Oratoria.Domain.Devices.Abstractions
         }
 
         [DeviceAction("Открыть")]
-        public virtual async Task<bool> OpenValve()
+        public virtual Task<bool> OpenValve(CancellationToken cancellationToken = default)
         {
             Logger.LogInformation($"{DeviceName}: открытие");
-            ResetToken();
-            var token = CTSource.Token;
-            try
+            return RunOperation(cancellationToken, async token =>
             {
-                if (State == OpenableStatus.Open)
+                try
                 {
-                    DeviceErrors.ResetRangeErrors(OpenableErrors.CannotOpen, OpenableErrors.TooLongOpening);
-                    return true;
-                }
-
-                Open?.Value = true;
-                Close?.Value = false;
-
-                var res = true;
-                var needWait = false;
-
-                if (IsOpen != null && !IsOpen.Value)
-                    needWait = true;
-
-                if (IsClose != null && IsClose.Value)
-                    needWait = true;
-
-
-                if (needWait)
-                {
-                    token.ThrowIfCancellationRequested();
-                    if (IsOpen != null)
+                    if (State == OpenableStatus.Open)
                     {
-                        res = await EventWaiter.WaitEvent(nameof(IsOpen.OnSignalChanged),
-                            IsOpen,
-                            (bool x) =>
-                            {
-                                if (IsOpen != null)
-                                    return IsOpen.Value;
-                                
-                                if (IsClose != null)
-                                    return !IsClose.Value;
-                                
-                                return true;
-                            },
-                            TimeForWarning.Value * 1000, token);
+                        DeviceErrors.ResetRangeErrors(OpenableErrors.CannotOpen, OpenableErrors.TooLongOpening);
+                        return true;
                     }
-                    else if (IsClose != null)
+
+                    OpenSignal?.Value = true;
+                    CloseSignal?.Value = false;
+
+                    var res = true;
+                    var needWait = false;
+
+                    if (IsOpenSignal != null && !IsOpenSignal.Value)
+                        needWait = true;
+
+                    if (IsCloseSignal != null && IsCloseSignal.Value)
+                        needWait = true;
+
+
+                    if (needWait)
                     {
-                        res = await EventWaiter.WaitEvent(nameof(IsClose.OnSignalChanged),
-                            IsClose,
-                            (bool x) => !IsClose.Value,
-                            TimeForWarning.Value * 1000, token);
-                    }
-                }
-                if (!res)
-                {
-                    Logger.LogWarning($"{DeviceName}: долгое открытие, предупреждение");
-                    DeviceErrors.AddError(OpenableErrors.TooLongOpening);
-                    if (IsOpen != null)
-                    {
-                        res = await EventWaiter.WaitEvent(nameof(IsOpen.OnSignalChanged),
-                            IsOpen,
-                            (bool x) =>
-                            {
-                                if (IsOpen != null)
-                                    return IsOpen.Value;
-                                
-                                if (IsClose != null)
-                                    return !IsClose.Value;
-                                
-                                return true;
-                            },
-                            TimeForError.Value * 1000, token);
-                    }
-                    else if (IsClose != null)
-                    {
-                        res = await EventWaiter.WaitEvent(nameof(IsClose.OnSignalChanged),
-                            IsClose,
-                            (bool x) => !IsClose.Value,
-                            TimeForError.Value * 1000, token);
+                        token.ThrowIfCancellationRequested();
+                        if (IsOpenSignal != null)
+                        {
+                            res = await EventWaiter.WaitEvent(nameof(IsOpenSignal.OnSignalChanged),
+                                IsOpenSignal,
+                                (bool x) =>
+                                {
+                                    if (IsOpenSignal != null)
+                                        return IsOpenSignal.Value;
+
+                                    if (IsCloseSignal != null)
+                                        return !IsCloseSignal.Value;
+
+                                    return true;
+                                },
+                                TimeForWarning.Value * 1000, token);
+                        }
+                        else if (IsCloseSignal != null)
+                        {
+                            res = await EventWaiter.WaitEvent(nameof(IsCloseSignal.OnSignalChanged),
+                                IsCloseSignal,
+                                (bool x) => !IsCloseSignal.Value,
+                                TimeForWarning.Value * 1000, token);
+                        }
                     }
                     if (!res)
                     {
-                        Logger.LogError($"{DeviceName}: не смог открыться, авария");
-                        DeviceErrors.AddError(OpenableErrors.CannotOpen);
-                        Open?.Value = false;
-                        return false;
+                        Logger.LogWarning($"{DeviceName}: долгое открытие, предупреждение");
+                        DeviceErrors.AddError(OpenableErrors.TooLongOpening);
+                        if (IsOpenSignal != null)
+                        {
+                            res = await EventWaiter.WaitEvent(nameof(IsOpenSignal.OnSignalChanged),
+                                IsOpenSignal,
+                                (bool x) =>
+                                {
+                                    if (IsOpenSignal != null)
+                                        return IsOpenSignal.Value;
+
+                                    if (IsCloseSignal != null)
+                                        return !IsCloseSignal.Value;
+
+                                    return true;
+                                },
+                                TimeForError.Value * 1000, token);
+                        }
+                        else if (IsCloseSignal != null)
+                        {
+                            res = await EventWaiter.WaitEvent(nameof(IsCloseSignal.OnSignalChanged),
+                                IsCloseSignal,
+                                (bool x) => !IsCloseSignal.Value,
+                                TimeForError.Value * 1000, token);
+                        }
+                        if (!res)
+                        {
+                            Logger.LogError($"{DeviceName}: не смог открыться, авария");
+                            DeviceErrors.AddError(OpenableErrors.CannotOpen);
+                            OpenSignal?.Value = false;
+                            return false;
+                        }
                     }
+                    DeviceErrors.ResetRangeErrors(OpenableErrors.CannotOpen, OpenableErrors.TooLongOpening);
+                    return true;
                 }
-                DeviceErrors.ResetRangeErrors(OpenableErrors.CannotOpen, OpenableErrors.TooLongOpening);
-                return true;
-            }
-            catch (OperationCanceledException)
-            {
-                Logger.LogInformation($"{DeviceName}: открытие отменено");
-                return false;
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError($"{DeviceName}: ошибка открытия");
-                Logger.LogError(ex.Message);
-                return false;
-            }
+                catch (OperationCanceledException)
+                {
+                    Logger.LogInformation($"{DeviceName}: открытие отменено");
+                    OpenSignal?.Value = false;
+                    throw;
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogError($"{DeviceName}: ошибка открытия");
+                    Logger.LogError(ex.Message);
+                    return false;
+                }
+            });
         }
 
 
         [DeviceAction("Закрыть")]
-        public virtual async Task<bool> CloseValve()
+        public virtual Task<bool> CloseValve(CancellationToken cancellationToken = default)
         {
             Logger.LogInformation($"{DeviceName}: закрытие");
-            ResetToken();
-            var token = CTSource.Token;
-            try
+            return RunOperation(cancellationToken, async token =>
             {
-                if (State == OpenableStatus.Close)
+                try
                 {
-                    DeviceErrors.ResetRangeErrors(OpenableErrors.CannotClose, OpenableErrors.TooLongClosing);
-                    return true;
-                }
-
-                Open?.Value = false;
-                Close?.Value = true;
-
-                var res = true;
-                var needWait = false;
-
-                if (IsClose != null && !IsClose.Value)
-                    needWait = true;
-
-                if (IsOpen != null && IsOpen.Value)
-                    needWait = true;
-
-
-                if (needWait)
-                {
-                    token.ThrowIfCancellationRequested();
-                    if (IsClose != null)
+                    if (State == OpenableStatus.Close)
                     {
-                        res = await EventWaiter.WaitEvent(nameof(IsClose.OnSignalChanged),
-                            IsClose,
-                            (bool x) =>
-                            {
-                                if (IsClose != null)
-                                    return IsClose.Value;
-
-                                if (IsOpen != null)
-                                    return !IsOpen.Value;
-
-                                return true;
-                            },
-                            TimeForWarning.Value * 1000, token);
+                        DeviceErrors.ResetRangeErrors(OpenableErrors.CannotClose, OpenableErrors.TooLongClosing);
+                        return true;
                     }
-                    else if (IsOpen != null)
-                    {
-                        res = await EventWaiter.WaitEvent(nameof(IsOpen.OnSignalChanged),
-                            IsOpen,
-                            (bool x) => !IsOpen.Value,
-                            TimeForWarning.Value * 1000, token);
-                    }
-                }
-                if (!res)
-                {
-                    Logger.LogWarning($"{DeviceName}: долгое закрытие, предупреждение");
-                    DeviceErrors.AddError(OpenableErrors.TooLongClosing);
-                    if (IsClose != null)
-                    {
-                        res = await EventWaiter.WaitEvent(nameof(IsClose.OnSignalChanged),
-                            IsClose,
-                            (bool x) =>
-                            {
-                                if (IsClose != null)
-                                    return IsClose.Value;
 
-                                if (IsOpen != null)
-                                    return !IsOpen.Value;
+                    OpenSignal?.Value = false;
+                    CloseSignal?.Value = true;
 
-                                return true;
-                            },
-                            TimeForError.Value * 1000, token);
-                    }
-                    else if (IsOpen != null)
+                    var res = true;
+                    var needWait = false;
+
+                    if (IsCloseSignal != null && !IsCloseSignal.Value)
+                        needWait = true;
+
+                    if (IsOpenSignal != null && IsOpenSignal.Value)
+                        needWait = true;
+
+
+                    if (needWait)
                     {
-                        res = await EventWaiter.WaitEvent(nameof(IsOpen.OnSignalChanged),
-                            IsOpen,
-                            (bool x) => !IsOpen.Value,
-                            TimeForError.Value * 1000, token);
+                        token.ThrowIfCancellationRequested();
+                        if (IsCloseSignal != null)
+                        {
+                            res = await EventWaiter.WaitEvent(nameof(IsCloseSignal.OnSignalChanged),
+                                IsCloseSignal,
+                                (bool x) =>
+                                {
+                                    if (IsCloseSignal != null)
+                                        return IsCloseSignal.Value;
+
+                                    if (IsOpenSignal != null)
+                                        return !IsOpenSignal.Value;
+
+                                    return true;
+                                },
+                                TimeForWarning.Value * 1000, token);
+                        }
+                        else if (IsOpenSignal != null)
+                        {
+                            res = await EventWaiter.WaitEvent(nameof(IsOpenSignal.OnSignalChanged),
+                                IsOpenSignal,
+                                (bool x) => !IsOpenSignal.Value,
+                                TimeForWarning.Value * 1000, token);
+                        }
                     }
                     if (!res)
                     {
-                        Logger.LogError($"{DeviceName}: не смог закрыться, авария");
-                        DeviceErrors.AddError(OpenableErrors.CannotClose);
-                        Close?.Value = false;
-                        return false;
+                        Logger.LogWarning($"{DeviceName}: долгое закрытие, предупреждение");
+                        DeviceErrors.AddError(OpenableErrors.TooLongClosing);
+                        if (IsCloseSignal != null)
+                        {
+                            res = await EventWaiter.WaitEvent(nameof(IsCloseSignal.OnSignalChanged),
+                                IsCloseSignal,
+                                (bool x) =>
+                                {
+                                    if (IsCloseSignal != null)
+                                        return IsCloseSignal.Value;
+
+                                    if (IsOpenSignal != null)
+                                        return !IsOpenSignal.Value;
+
+                                    return true;
+                                },
+                                TimeForError.Value * 1000, token);
+                        }
+                        else if (IsOpenSignal != null)
+                        {
+                            res = await EventWaiter.WaitEvent(nameof(IsOpenSignal.OnSignalChanged),
+                                IsOpenSignal,
+                                (bool x) => !IsOpenSignal.Value,
+                                TimeForError.Value * 1000, token);
+                        }
+                        if (!res)
+                        {
+                            Logger.LogError($"{DeviceName}: не смог закрыться, авария");
+                            DeviceErrors.AddError(OpenableErrors.CannotClose);
+                            CloseSignal?.Value = false;
+                            return false;
+                        }
                     }
+                    DeviceErrors.ResetRangeErrors(OpenableErrors.CannotClose, OpenableErrors.TooLongClosing);
+                    return true;
                 }
-                DeviceErrors.ResetRangeErrors(OpenableErrors.CannotClose, OpenableErrors.TooLongClosing);
-                return true;
-            }
-            catch (OperationCanceledException)
-            {
-                Logger.LogInformation($"{DeviceName}: закрытие отменено");
-                return false;
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError($"{DeviceName}: ошибка закрытия");
-                Logger.LogError(ex.Message);
-                return false;
-            }
+                catch (OperationCanceledException)
+                {
+                    Logger.LogInformation($"{DeviceName}: закрытие отменено");
+                    CloseSignal?.Value = false;
+                    throw;
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogError($"{DeviceName}: ошибка закрытия");
+                    Logger.LogError(ex.Message);
+                    return false;
+                }
+            });
         }
     }
 }

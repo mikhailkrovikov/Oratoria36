@@ -305,8 +305,8 @@
                           Style="{StaticResource LogDataGridStyle}"
                           RowStyle="{StaticResource LogDataGridRowStyle}">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Время" Binding="{Binding Timestamp, StringFormat='{}{0:dd-MM-yyyy HH:mm:ss}'}" Width="150"/>
-                        <DataGridTextColumn Header="Уровень" Binding="{Binding Level}" Width="80"/>
+                        <DataGridTextColumn Header="Время" Binding="{Binding Timestamp, StringFormat='{}{0:dd-MM-yyyy HH:mm:ss}'}" Width="165" CellStyle="{StaticResource LogTimestampCellStyle}"/>
+                        <DataGridTextColumn Header="Уровень" Binding="{Binding Level}" Width="135"/>
                         <DataGridTextColumn Header="Сообщение" Binding="{Binding Message}" Width="*"/>
                     </DataGrid.Columns>
                 </DataGrid>
