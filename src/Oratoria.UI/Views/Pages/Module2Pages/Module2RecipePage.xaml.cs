@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Oratoria.UI.ViewModels;
 
 namespace Oratoria.UI.Views.Pages
 {
@@ -18,9 +19,10 @@ namespace Oratoria.UI.Views.Pages
     /// </summary>
     public partial class Module2RecipePage : Page
     {
-        public Module2RecipePage()
+        public Module2RecipePage(Module2RecipePageVM vm)
         {
             InitializeComponent();
+            DataContext = vm;
         }
     }
 }
