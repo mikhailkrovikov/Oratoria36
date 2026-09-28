@@ -167,6 +167,9 @@ public partial class App : Application
         services.AddTransient<Module2SignalsPage>();
         services.AddSingleton<Module2MnemoPage>();
         services.AddSingleton<Module2MnemoPageVM>();
+        services.AddSingleton<Module2RecipePage>();
+        services.AddSingleton<Module2RecipePageVM>();
+
 
         services.AddTransient<Module3SignalsPage>();
         services.AddTransient<Module4SignalsPage>();
