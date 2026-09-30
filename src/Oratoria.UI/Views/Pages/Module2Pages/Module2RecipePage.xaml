@@ -55,24 +55,16 @@
         </Border>
 
         <!-- Правая панель: Таблица с данными рецепта -->
-        <Border Grid.Column="2" Style="{StaticResource SoftGroupContainer}">
+        <Border Grid.Column="2"
+                Style="{StaticResource SoftGroupContainer}">
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="170"/>
-                    <ColumnDefinition Width="80"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
-                    <!-- Высота TextBlock на других страницах -->
-                    <RowDefinition Height="30"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
                 <StackPanel Grid.Row="0"
-                            Grid.Column="0"
-                            Grid.ColumnSpan="3"
                             Orientation="Horizontal"
                             HorizontalAlignment="Left">
                     
@@ -89,8 +81,6 @@
                 </StackPanel>
 
                 <StackPanel Grid.Row="0"
-                            Grid.Column="0"
-                            Grid.ColumnSpan="3"
                             Orientation="Horizontal"
                             HorizontalAlignment="Right">
                     
@@ -102,41 +92,42 @@
 
                 </StackPanel>
 
-                <TextBlock Grid.Row="1" Grid.Column="0"
+                <TextBlock Grid.Row="1"
                            Text="Параметры"
                            Style="{StaticResource HeaderTextBlock}"
                            HorizontalAlignment="Center"/>
-                <TextBlock Grid.Column="1" Grid.Row="1"
+                <TextBlock Grid.Row="1"
                            Text="Диапазон"
                            Style="{StaticResource HeaderTextBlock}"
                            HorizontalAlignment="Center"/>
 
-                <DataGrid Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2"
+                <DataGrid Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1"
                           x:Name="RecipeDataGrid"
+                          Style="{StaticResource RecipeDataGrid}"
+                          ColumnHeaderStyle="{StaticResource RecipeDataGridHeader}"
+                          RowStyle="{StaticResource RecipeDataGridRow}"
+                          CellStyle="{StaticResource RecipeDataGridCell}"
                           ItemsSource="{Binding Parameters}"
-                          HeadersVisibility="None"
-                          AutoGenerateColumns="False"
-                          FrozenColumnCount="2"
-                          CanUserAddRows="False"
-                          CanUserResizeColumns="False"
-                          MinRowHeight="60"
                           recipe:DataGridColumnsBehavior.ItemsSource="{Binding Steps}">
                     <DataGrid.Columns>
                         <DataGridTextColumn
+                            Header="Параметры"
                             Binding="{Binding Path=Name}"
+                            CellStyle="{StaticResource RecipeDataGridStaticCell}"
                             IsReadOnly="True"
-                            Width="170"/>
+                            Width="220"/>
                         <DataGridTextColumn
+                            Header="Диапазон"
                             Binding="{Binding Path=Interval}"
+                            CellStyle="{StaticResource RecipeDataGridStaticCell}"
                             IsReadOnly="True"
-                            Width="80"/>
+                            Width="100"/>
                     </DataGrid.Columns>
                 </DataGrid>
 
-                <StackPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="3"
+                <StackPanel Grid.Row="3"
                             Orientation="Horizontal"
-                            HorizontalAlignment="Left"
-                            Margin="0,5,0,0">
+                            HorizontalAlignment="Left">
 
                     <Button Content="Добавить стадию"
                             Command="{Binding AddStepCommand}"
@@ -154,7 +145,7 @@
                               Margin="0,5,0,5"/>
                 </StackPanel>
 
-                <StackPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="3"
+                <StackPanel Grid.Row="3"   
                             Orientation="Horizontal"
                             HorizontalAlignment="Right"
                             Margin="0,5,0,0">

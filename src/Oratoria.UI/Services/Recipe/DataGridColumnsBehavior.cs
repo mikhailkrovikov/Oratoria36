@@ -77,6 +77,7 @@ namespace Oratoria.UI.Services.Recipe
             {
                 var column = new DataGridTextColumn
                 {
+                    Header = "Стадия " + (i + 1).ToString(),
                     Width = 80,
                     Binding = new Binding($"[{i}]")
                     {
