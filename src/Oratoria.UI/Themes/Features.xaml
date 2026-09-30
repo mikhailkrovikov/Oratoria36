@@ -116,4 +116,98 @@
         </Style.Triggers>
     </Style>
 
+    <Style x:Key="RecipeDataGrid" TargetType="DataGrid">
+        <Setter Property="Background" Value="{StaticResource Brush.Surface}"/>
+        <Setter Property="HeadersVisibility" Value="Column"/>
+        <Setter Property="FrozenColumnCount" Value="2"/>
+        <Setter Property="AutoGenerateColumns" Value="False"/>
+        <Setter Property="CanUserAddRows" Value="False"/>
+        <Setter Property="CanUserResizeColumns" Value="False"/>
+        <Setter Property="CanUserSortColumns" Value="False"/>
+        <Setter Property="VerticalScrollBarVisibility" Value="Disabled"/>
+        <Setter Property="HorizontalScrollBarVisibility" Value="Visible"/>
+        <Setter Property="SelectionUnit" Value="Cell"/>
+        <Setter Property="SelectionMode" Value="Single"/>
+        <Setter Property="GridLinesVisibility" Value="None"/>
+    </Style>
+
+    <Style x:Key="RecipeDataGridHeader" TargetType="DataGridColumnHeader">
+        <Setter Property="Background" Value="{StaticResource Brush.Surface}"/>
+        <Setter Property="Foreground" Value="{StaticResource Brush.Text}"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="5"/>
+    </Style>
+
+    <Style x:Key="RecipeDataGridRow" TargetType="DataGridRow">
+        <Setter Property="Background" Value="{StaticResource Brush.Surface}"/>
+        <Setter Property="MinHeight" Value="70"/>
+    </Style>
+
+    <Style x:Key="RecipeDataGridCell" TargetType="DataGridCell">
+        <Setter Property="Background" Value="{StaticResource Brush.Input.Background}"/>
+        <Setter Property="Foreground" Value="{StaticResource Brush.Text}"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Margin" Value="2"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="DataGridCell">
+                    <Border x:Name="CellBorder"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="Transparent"
+                        BorderThickness="1"
+                        Padding="8,0"
+                        SnapsToDevicePixels="True">
+                        <ContentPresenter VerticalAlignment="Center"
+                                          HorizontalAlignment="Center"/>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="CellBorder"
+                                    Property="BorderBrush"
+                                    Value="{StaticResource Brush.Accent}"/>
+                        </Trigger>
+
+                        <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                            <Setter TargetName="CellBorder"
+                                    Property="BorderBrush"
+                                    Value="{StaticResource Brush.Accent}"/>
+                            <Setter TargetName="CellBorder"
+                                    Property="BorderThickness"
+                                    Value="2"/> 
+                            <Setter TargetName="CellBorder"
+                                    Property="Background"
+                                    Value="White"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="RecipeDataGridStaticCell" TargetType="DataGridCell">
+        <Setter Property="Background" Value="{StaticResource Brush.Surface}"/>
+        <Setter Property="Foreground" Value="{StaticResource Brush.Text}"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="FontSize" Value="14"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="DataGridCell">
+                    <Grid>
+                        <Border x:Name="CellBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{StaticResource Brush.BorderLight}"
+                                BorderThickness="0,0,0,1"
+                                Padding="8,0"
+                                SnapsToDevicePixels="True">
+                            <ContentPresenter VerticalAlignment="Center"
+                      HorizontalAlignment="Left"/>
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>
