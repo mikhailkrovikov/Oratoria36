@@ -15,14 +15,15 @@ using Oratoria.UI.Services.Recipe;
 
 namespace Oratoria.UI.ViewModels
 {
-    public class Module2RecipePageVM: INotifyPropertyChanged
+    public class Module2RecipePageVM : INotifyPropertyChanged
     {
         private readonly Module2Context _context;
+
         public ObservableCollection<Recipe> Recipes { get; } = new();
         public ObservableCollection<Step> Steps { get; } = new();
         public ObservableCollection<ParameterRow> Parameters { get; } = new();
 
-        public RelayCommand AddStepCommand { get; } 
+        public RelayCommand AddStepCommand { get; }
         public RelayCommand RemoveStepCommand;
         public RelayCommand ClearRecipeCommand;
         public RelayCommand RemoveRecipeCommand;
@@ -38,20 +39,10 @@ namespace Oratoria.UI.ViewModels
 
         public void InitializeGrid()
         {
-            // Строка-заголовок с номерами стадий (всегда первая).
-            var headerRow = new Parameter
-            {
-                Name = string.Empty,
-                Interval = string.Empty,
-                Value = string.Empty
-            };
-            Parameters.Add(new ParameterRow(headerRow, Steps, isStepHeader: true));
-
             var defs = new (string Name, string Interval)[]
             {
                 ("Время нагрева, сек",        "-"),
                 ("Мощность нагрева, Вт",      "4000"),
-                ("Температура,°C",            "100 - 400"),
                 ("Давление, Па",              "0,13 - 1,33"),
                 ("Расход, л/ч",               "-"),
                 ("Время напыления, сек",      "-"),
@@ -82,9 +73,6 @@ namespace Oratoria.UI.ViewModels
 
             foreach (var row in Parameters)
             {
-                // У строки-заголовка нет соответствующих параметров в Step.
-                if (row.IsStepHeader) continue;
-
                 step.Parameters.Add(new Parameter
                 {
                     Name = row.Row.Name,
@@ -99,41 +87,35 @@ namespace Oratoria.UI.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
     }
+
     public sealed class ParameterRow : INotifyPropertyChanged
     {
         private readonly ObservableCollection<Step> _steps;
+
         public Parameter Row { get; }
-        public bool IsStepHeader { get; }
 
         public string Name => Row.Name;
-        public string Interval => IsStepHeader ? string.Empty : Row.Interval;
+        public string Interval => Row.Interval;
 
-        public ParameterRow(Parameter row, ObservableCollection<Step> steps, bool isStepHeader = false)
+        public ParameterRow(Parameter row, ObservableCollection<Step> steps)
         {
             Row = row;
             _steps = steps;
-            IsStepHeader = isStepHeader;
         }
-
         public string this[int stepIndex]
         {
             get
             {
                 if (stepIndex < 0 || stepIndex >= _steps.Count) return string.Empty;
 
-                if (IsStepHeader)
-                    return _steps[stepIndex].Number.ToString();
-
                 var p = _steps[stepIndex].Parameters.Find(x => x.Name == Row.Name);
                 return p?.Value ?? string.Empty;
             }
             set
             {
-                if (IsStepHeader) return;
                 if (stepIndex < 0 || stepIndex >= _steps.Count) return;
 
                 var p = _steps[stepIndex].Parameters.Find(x => x.Name == Row.Name);
@@ -159,8 +141,7 @@ namespace Oratoria.UI.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
     }
 }
