@@ -17,8 +17,14 @@ namespace Oratoria.Persistence
         {
         }
 
+        public RecipeDBContext(DbContextOptions<RecipeDBContext> options) : base(options)
+        {
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            if (optionsBuilder.IsConfigured) return;
+
             var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "recipies.db");
             optionsBuilder.UseSqlite($"Data Source={path}");
         }

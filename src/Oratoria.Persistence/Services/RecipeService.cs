@@ -8,9 +8,9 @@ namespace Oratoria.Persistence.Services
     public class RecipeService : IRecipeService
     {
         private readonly RecipeDBContext _dbContext;
-        private readonly ILogger<UserService> _logger;
+        private readonly ILogger<RecipeService> _logger;
 
-        public RecipeService(RecipeDBContext dbContext, ILogger<UserService> logger)
+        public RecipeService(RecipeDBContext dbContext, ILogger<RecipeService> logger)
         {
             _dbContext = dbContext;
             _logger = logger;
@@ -20,20 +20,24 @@ namespace Oratoria.Persistence.Services
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(recipe.Name) || recipe.Steps.Count == 0)
+                if (string.IsNullOrWhiteSpace(recipe.Name))
                     return false;
 
                 var exists = await _dbContext.Recipes.AnyAsync(r => r.Name == recipe.Name);
                 if (exists)
                     return false;
 
-                await _dbContext.Recipes.AddAsync(ToEntity(recipe));
+                var entity = ToEntity(recipe);
+                await _dbContext.Recipes.AddAsync(entity);
                 await _dbContext.SaveChangesAsync();
+                recipe.Id = entity.RecipeId;
+                recipe.CreatedAt = entity.CreatedAt;
                 return true;
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(ex.Message);
+                _dbContext.ChangeTracker.Clear();
+                _logger.LogWarning(ex, "Не удалось создать рецепт");
                 return false;
             }
         }
@@ -47,12 +51,39 @@ namespace Oratoria.Persistence.Services
                 _dbContext.Remove(rec);
                 await _dbContext.SaveChangesAsync();
             }
-            else _logger.LogDebug("Не найден рецепт с для удаления");
+            else _logger.LogDebug("Не найден рецепт для удаления");
+        }
+
+        public async Task<List<RecipeDTO>> ReadRecipes(int moduleId)
+        {
+            return await _dbContext.Recipes
+                .AsNoTracking()
+                .Where(r => r.ModuleId == moduleId)
+                .OrderBy(r => r.Name)
+                .Select(r => new RecipeDTO
+                {
+                    Id = r.RecipeId,
+                    Name = r.Name,
+                    ModuleId = r.ModuleId,
+                    CreatedAt = r.CreatedAt
+                })
+                .ToListAsync();
+        }
+
+        public async Task<RecipeDTO?> ReadRecipe(string name)
+        {
+            var id = await _dbContext.Recipes
+                .Where(r => r.Name == name)
+                .Select(r => (Guid?)r.RecipeId)
+                .FirstOrDefaultAsync();
+
+            return id.HasValue ? await ReadRecipe(id.Value) : null;
         }
 
         public async Task<RecipeDTO?> ReadRecipe(Guid id)
         {
             var entity = await _dbContext.Recipes
+                .AsNoTracking()
                 .Include(r => r.Steps)
                 .ThenInclude(s => s.Parameters)
                 .ThenInclude(p => p.Value)
@@ -67,7 +98,10 @@ namespace Oratoria.Persistence.Services
         {
             try
             {
-                if (recipe.Id == null)
+                if (recipe.Id == null || string.IsNullOrWhiteSpace(recipe.Name))
+                    return false;
+
+                if (await _dbContext.Recipes.AnyAsync(r => r.Name == recipe.Name && r.RecipeId != recipe.Id))
                     return false;
 
                 var existing = await _dbContext.Recipes
@@ -83,12 +117,15 @@ namespace Oratoria.Persistence.Services
                 existing.ModuleId = recipe.ModuleId;
                 _dbContext.RemoveRange(existing.Steps);
                 existing.Steps = ToEntity(recipe).Steps;
+                _dbContext.Steps.AddRange(existing.Steps);
                 await _dbContext.SaveChangesAsync();
+                recipe.CreatedAt = existing.CreatedAt;
                 return true;
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(ex.Message);
+                _dbContext.ChangeTracker.Clear();
+                _logger.LogWarning(ex, "Не удалось обновить рецепт");
                 return false;
             }
         }
@@ -113,6 +150,7 @@ namespace Oratoria.Persistence.Services
             Id = entity.RecipeId,
             Name = entity.Name,
             ModuleId = entity.ModuleId,
+            CreatedAt = DateTime.SpecifyKind(entity.CreatedAt, DateTimeKind.Utc),
             Steps = entity.Steps
                     .OrderBy(s => s.Number)
                     .Select(step => new RecipeStepDTO

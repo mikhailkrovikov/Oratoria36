@@ -6,6 +6,8 @@ namespace Oratoria.Persistence.Services
     {
         public Task<bool> CreateRecipe(RecipeDTO recipe);
         public Task<RecipeDTO?> ReadRecipe(Guid id);
+        public Task<List<RecipeDTO>> ReadRecipes(int moduleId);
+        public Task<RecipeDTO?> ReadRecipe(string name);
         public Task<bool> Update(RecipeDTO recipe);
         public Task DeleteRecipe(Guid id);
 

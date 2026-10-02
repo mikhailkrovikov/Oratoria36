@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Oratoria.Persistence;
 
@@ -10,9 +11,11 @@ using Oratoria.Persistence;
 namespace Oratoria.Persistence.Migrations.Recipes
 {
     [DbContext(typeof(RecipeDBContext))]
-    partial class RecipeDBContextModelSnapshot : ModelSnapshot
+    [Migration("20261002103754_RecipeCreatedAt")]
+    partial class RecipeCreatedAt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.11");
