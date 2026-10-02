@@ -82,7 +82,8 @@ namespace Oratoria.UI.Services.Recipe
                     Binding = new Binding($"[{i}]")
                     {
                         Mode = BindingMode.TwoWay,
-                        UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+                        UpdateSourceTrigger = UpdateSourceTrigger.LostFocus,
+                        ValidatesOnExceptions = true
                     }
                 };
 

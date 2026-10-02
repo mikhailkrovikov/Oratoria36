@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Oratoria.UI.ViewModels;
+using Oratoria.UI.Controls.DialogWindows;
 
 namespace Oratoria.UI.Views.Pages
 {
@@ -23,6 +24,18 @@ namespace Oratoria.UI.Views.Pages
         {
             InitializeComponent();
             DataContext = vm;
+        }
+
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                await ((Module2RecipePageVM)DataContext).LoadRecipes();
+            }
+            catch (Exception ex)
+            {
+                UserMessageBox.Show(ex.Message, "Загрузка рецептов", MBType.Error);
+            }
         }
     }
 }
