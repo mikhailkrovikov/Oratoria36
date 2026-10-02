@@ -1,4 +1,4 @@
-namespace Oratoria.Domain.Recipes
+namespace Oratoria.Persistence
 {
     public class Stage
     {

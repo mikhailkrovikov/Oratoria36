@@ -1,4 +1,3 @@
-using Oratoria.Application.Settings;
 using DigitalTwin;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;

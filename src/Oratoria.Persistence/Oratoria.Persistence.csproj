@@ -20,8 +20,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Oratoria.Domain\Oratoria.Domain.csproj" />
-  </ItemGroup>
-
 </Project>

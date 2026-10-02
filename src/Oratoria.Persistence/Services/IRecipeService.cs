@@ -1,5 +1,3 @@
-using Oratoria.Domain.Recipes;
-
 namespace Oratoria.Persistence.Services
 {
     public interface IRecipeService

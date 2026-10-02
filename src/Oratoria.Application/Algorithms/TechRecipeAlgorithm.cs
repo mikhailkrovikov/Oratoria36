@@ -1,5 +1,5 @@
-using Oratoria.Domain.Recipes;
 using Oratoria.Domain.Algorithms;
+using Oratoria.Persistence;
 
 namespace Oratoria.Application.Algorithms
 {

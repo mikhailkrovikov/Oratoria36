@@ -1,10 +1,9 @@
-using Oratoria.Domain.Settings;
-using Oratoria.Persistence.Entities;
-using Oratoria.Persistence.Services;
 using System.Globalization;
 using System.Numerics;
+using Oratoria.Persistence.Entities;
+using Oratoria.Persistence.Services;
 
-namespace Oratoria.Application.Settings
+namespace Oratoria.Domain.Settings
 {
     public class SettingsContextService : ISettingsContext
     {

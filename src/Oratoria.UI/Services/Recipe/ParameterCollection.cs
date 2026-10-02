@@ -1,4 +1,4 @@
-using Oratoria.Domain.Recipes;
+using Oratoria.Persistence;
 using System.Collections.ObjectModel;
 
 namespace Oratoria.UI.Services.Recipe

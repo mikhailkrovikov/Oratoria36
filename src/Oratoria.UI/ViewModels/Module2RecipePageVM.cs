@@ -1,5 +1,4 @@
-using Oratoria.Domain.Recipes;
-using Recipe = Oratoria.Domain.Recipes.Recipe;
+using Recipe = Oratoria.Persistence.Recipe;
 using Oratoria.Application.Module2;
 using Oratoria.Persistence.Services;
 using Oratoria.UI.Controls.DialogWindows;
@@ -9,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using Oratoria.Persistence;
 
 namespace Oratoria.UI.ViewModels
 {

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Oratoria.Domain.Recipes;
 using Oratoria.Persistence.Entities;
+using Oratoria.Persistence.ValueTypes;
 
 namespace Oratoria.Persistence.Services
 {
