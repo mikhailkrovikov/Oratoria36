@@ -1,14 +1,14 @@
-﻿using Oratoria.Persistence.DTOs;
+using Oratoria.Domain.Recipes;
 
 namespace Oratoria.Persistence.Services
 {
     public interface IRecipeService
     {
-        public Task<bool> CreateRecipe(RecipeDTO recipe);
-        public Task<RecipeDTO?> ReadRecipe(Guid id);
-        public Task<List<RecipeDTO>> ReadRecipes(int moduleId);
-        public Task<RecipeDTO?> ReadRecipe(string name);
-        public Task<bool> Update(RecipeDTO recipe);
+        public Task<bool> CreateRecipe(Recipe recipe);
+        public Task<Recipe?> ReadRecipe(Guid id);
+        public Task<List<Recipe>> ReadRecipes(int moduleId);
+        public Task<Recipe?> ReadRecipe(string name);
+        public Task<bool> Update(Recipe recipe);
         public Task DeleteRecipe(Guid id);
 
     }

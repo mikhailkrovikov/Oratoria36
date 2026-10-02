@@ -1,5 +1,6 @@
+using Oratoria.Domain.Recipes;
+using Recipe = Oratoria.Domain.Recipes.Recipe;
 using Oratoria.Application.Module2;
-using Oratoria.Persistence.DTOs;
 using Oratoria.Persistence.Services;
 using Oratoria.UI.Controls.DialogWindows;
 using Oratoria.UI.Services;
@@ -17,11 +18,11 @@ namespace Oratoria.UI.ViewModels
         private readonly IRecipeService _recipeService;
 
         private string _recipeName = "Введите название...";
-        private RecipeDTO? _selectedRecipe;
-        private RecipeStepDTO? _selectedStep;
+        private Recipe? _selectedRecipe;
+        private Stage? _selectedStep;
 
-        public ObservableCollection<RecipeDTO> Recipes { get; } = new();
-        public ObservableCollection<RecipeStepDTO> Steps { get; } = new();
+        public ObservableCollection<Recipe> Recipes { get; } = new();
+        public ObservableCollection<Stage> Steps { get; } = new();
         public ParameterCollection Parameters { get; }
 
         public string RecipeName
@@ -34,7 +35,7 @@ namespace Oratoria.UI.ViewModels
             }
         }
 
-        public RecipeDTO? SelectedRecipe
+        public Recipe? SelectedRecipe
         {
             get => _selectedRecipe;
             set
@@ -44,7 +45,7 @@ namespace Oratoria.UI.ViewModels
             }
         }
 
-        public RecipeStepDTO? SelectedStep
+        public Stage? SelectedStep
         {
             get => _selectedStep;
             set
@@ -58,7 +59,7 @@ namespace Oratoria.UI.ViewModels
         {
             get => new RelayCommand((_) =>
             {
-                var step = new RecipeStepDTO { Number = Steps.Count + 1 };
+                var step = new Stage { Number = Steps.Count + 1 };
                 Steps.Add(step);
                 SelectedStep = step;
             });
@@ -106,7 +107,7 @@ namespace Oratoria.UI.ViewModels
 
                     RecipeName = recipe.Name;
                     Steps.Clear();
-                    foreach (var step in recipe.Steps)
+                    foreach (var step in recipe.Stages)
                         Steps.Add(step);
 
                     SelectedStep = Steps.LastOrDefault();
@@ -160,16 +161,12 @@ namespace Oratoria.UI.ViewModels
                         if (result != MBResult.Ok) return;
                     }
 
-                    var recipe = new RecipeDTO
+                    var recipe = new Recipe
                     {
                         Id = existing?.Id,
                         Name = name,
                         ModuleId = 2,
-                        Steps = Steps.Select(step => new RecipeStepDTO
-                        {
-                            Number = step.Number,
-                            Parameters = new Dictionary<string, double>(step.Parameters)
-                        }).ToList()
+                        Stages = Steps.Select(stage => stage.Copy()).ToList()
                     };
 
                     var saved = existing == null
@@ -198,17 +195,17 @@ namespace Oratoria.UI.ViewModels
             _context = context;
             _recipeService = recipeService;
             Parameters = new ParameterCollection(Steps);
-            Parameters.Add("Время нагрева, сек", "-");
-            Parameters.Add("Мощность нагрева, Вт", "4000");
-            Parameters.Add("Давление, Па", "0,13 - 1,33");
-            Parameters.Add("Расход, л/ч", $"{_context.RRG.MaxFlowRate.Value}");
-            Parameters.Add("Время напыления, сек", "-");
-            Parameters.Add("Время отпыла, сек", "-");
-            Parameters.Add("Мощность магнетрона 1, Вт", "4000");
-            Parameters.Add("Мощность магнетрона 2, Вт", "4000");
-            Parameters.Add("Мощность магнетрона 3, Вт", "4000");
+            Parameters.Add("Время нагрева, сек", "-", stage => stage.HeatingTime, (stage, value) => stage.HeatingTime = value);
+            Parameters.Add("Мощность нагрева, Вт", "4000", stage => stage.HeatingPower, (stage, value) => stage.HeatingPower = value);
+            Parameters.Add("Давление, Па", "0,13 - 1,33", stage => stage.Pressure, (stage, value) => stage.Pressure = value);
+            Parameters.Add("Расход, л/ч", $"{_context.RRG.MaxFlowRate.Value}", stage => stage.Consumption, (stage, value) => stage.Consumption = value);
+            Parameters.Add("Время напыления, сек", "-", stage => stage.SputteringTime, (stage, value) => stage.SputteringTime = value);
+            Parameters.Add("Время отпыла, сек", "-", stage => stage.PreSputteringTime, (stage, value) => stage.PreSputteringTime = value);
+            Parameters.Add("Мощность магнетрона 1, Вт", "4000", stage => stage.Magn1Power, (stage, value) => stage.Magn1Power = value);
+            Parameters.Add("Мощность магнетрона 2, Вт", "4000", stage => stage.Magn2Power, (stage, value) => stage.Magn2Power = value);
+            Parameters.Add("Мощность магнетрона 3, Вт", "4000", stage => stage.Magn3Power, (stage, value) => stage.Magn3Power = value);
 
-            var step = new RecipeStepDTO { Number = 1 };
+            var step = new Stage { Number = 1 };
             Steps.Add(step);
             SelectedStep = step;
         }

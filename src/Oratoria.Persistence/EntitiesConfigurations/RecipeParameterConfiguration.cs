@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Oratoria.Persistence.Entities;
 
@@ -10,9 +10,8 @@ namespace Oratoria.Persistence.EntitiesConfigurations
         {
             builder.HasKey(r => r.ParameterId);
             builder
-                .Property(r => r.Name)
-                .IsRequired()
-                .HasMaxLength(50);
+                .Property(r => r.Parameter)
+                .IsRequired();
 
             builder
                 .HasOne(r => r.Step)

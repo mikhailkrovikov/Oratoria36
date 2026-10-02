@@ -1,3 +1,4 @@
+using Oratoria.Application.Settings;
 using DigitalTwin;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
@@ -194,7 +195,8 @@ public partial class App : Application
 
         services.AddScoped<IUserService, UserService>();
         services.AddSingleton<ISettingsService, SettingService>();
-        services.AddSingleton<ISettingsContext, SettingsContext>();
+        services.AddSingleton<SettingsContext>();
+        services.AddSingleton<ISettingsContext, SettingsContextService>();
         services.AddScoped<IRecipeService, RecipeService>();
     }
 

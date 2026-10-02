@@ -1,4 +1,4 @@
-using Oratoria.Persistence.DTOs;
+using Oratoria.Domain.Recipes;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
@@ -8,16 +8,21 @@ namespace Oratoria.UI.Services.Recipe
 {
     public class Parameter : INotifyPropertyChanged
     {
-        private readonly ObservableCollection<RecipeStepDTO> _steps;
+        private readonly ObservableCollection<Stage> _steps;
+        private readonly Func<Stage, double?> _getValue;
+        private readonly Action<Stage, double?> _setValue;
 
         public string Name { get; }
         public string Interval { get; }
 
-        public Parameter(string name, string interval, ObservableCollection<RecipeStepDTO> steps)
+        public Parameter(string name, string interval, ObservableCollection<Stage> steps,
+            Func<Stage, double?> getValue, Action<Stage, double?> setValue)
         {
             Name = name;
             Interval = interval;
             _steps = steps;
+            _getValue = getValue;
+            _setValue = setValue;
         }
 
         public string this[int stepIndex]
@@ -26,20 +31,17 @@ namespace Oratoria.UI.Services.Recipe
             {
                 if (stepIndex < 0 || stepIndex >= _steps.Count) return string.Empty;
 
-                return _steps[stepIndex].Parameters.TryGetValue(Name, out var value)
-                    ? value.ToString(CultureInfo.CurrentCulture)
-                    : string.Empty;
+                return _getValue(_steps[stepIndex])?.ToString(CultureInfo.CurrentCulture) ?? string.Empty;
             }
             set
             {
                 if (stepIndex < 0 || stepIndex >= _steps.Count) return;
 
-                if (string.IsNullOrWhiteSpace(value))
-                    _steps[stepIndex].Parameters.Remove(Name);
-                else
-                    _steps[stepIndex].Parameters[Name] =
-                        double.Parse(value, NumberStyles.Float, CultureInfo.CurrentCulture);
+                double? number = string.IsNullOrWhiteSpace(value)
+                    ? null
+                    : double.Parse(value, NumberStyles.Float, CultureInfo.CurrentCulture);
 
+                _setValue(_steps[stepIndex], number);
                 OnPropertyChanged("Item[]");
             }
         }
