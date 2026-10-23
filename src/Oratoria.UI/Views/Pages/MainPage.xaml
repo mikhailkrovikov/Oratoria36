@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Oratoria.UI.Views.Pages"
+      xmlns:mnemo="clr-namespace:Oratoria.UI.Controls.Mnemo;assembly=Oratoria.UI.Controls"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="MainPage"
@@ -73,7 +74,7 @@
                 <Button Content="Инициализация"
                         Style="{StaticResource Button.Base}"
                         Height="32"
-                        Margin="0,5,0,0"/>
+                        Margin="0,0,0,0"/>
                 <Button Content="Подготовка"
                         Style="{StaticResource Button.Base}"
                         Height="32"
@@ -124,17 +125,55 @@
                 Grid.Row="1"
                 Padding="5,5,5,0"
                 Background="{StaticResource Brush.Surface}">
-            
+
             <TextBox Text="Параметры маршрута"/>
 
         </Border>
 
         <Border Grid.Column="2"
-                Grid.Row="1"
-                Padding="5,5,5,0"
-                Background="{StaticResource Brush.Surface}">
+        Grid.Row="1"
+        Background="{StaticResource Brush.Surface}">
+            <Viewbox Stretch="Uniform">
+                <Canvas Width="750" Height="750" Background="Transparent">
+                    <mnemo:CameraControl Canvas.Left="20" Canvas.Top="22" Width="260" Height="203"/>
 
-            <TextBox Text="Мнемосхема"/>
+                    <mnemo:CameraControl Canvas.Left="20" Canvas.Top="259" Width="260" Height="203"/>
+
+                    <mnemo:CameraControl Canvas.Left="20" Canvas.Top="495" Width="260" Height="203" RenderTransformOrigin="0.5,0.5">
+                        <mnemo:CameraControl.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="180"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </mnemo:CameraControl.RenderTransform>
+                    </mnemo:CameraControl>
+
+                    <Rectangle Stroke="{DynamicResource Brush.BorderLight}"
+                       StrokeThickness="4"
+                       Canvas.Left="280"
+                       Canvas.Top="72"
+                       Width="191"
+                       Height="577"/>
+                    
+                    <mnemo:CameraControl Canvas.Left="470" Canvas.Top="22" Width="260" Height="203"/>
+
+                    <mnemo:CameraControl Canvas.Left="470" Canvas.Top="259" Width="260" Height="203"/>
+
+                    <mnemo:CameraControl Canvas.Left="470" Canvas.Top="495" Width="260" Height="203" RenderTransformOrigin="0.5,0.5">
+                        <mnemo:CameraControl.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="180"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </mnemo:CameraControl.RenderTransform>
+                    </mnemo:CameraControl>
+
+                </Canvas>
+            </Viewbox>
         </Border>
     </Grid>
 </Page>
