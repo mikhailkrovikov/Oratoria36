@@ -12,129 +12,144 @@
 
     <Grid Margin="16,12">
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="60*"/>
-            <ColumnDefinition Width="40*"/>
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="30*"/>
-            <RowDefinition Height="70*"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Border Grid.Column="0"
                 Grid.Row="0"
-                Padding="0,0,5,0"
-                Background="{StaticResource Brush.Surface}">
+                Grid.RowSpan="2">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
 
-            <DockPanel>
-                <UniformGrid DockPanel.Dock="Left"
-                             Rows="6"
-                             Margin="5">
-                    <TextBlock Text="Модуль 1"
-                               Style="{StaticResource ModulesParametersTextBlock}"/>
-                    <TextBlock Text="Модуль 2"
-                               Style="{StaticResource ModulesParametersTextBlock}"/>
-                    <TextBlock Text="Модуль 3"
-                               Style="{StaticResource ModulesParametersTextBlock}"/>
-                    <TextBlock Text="Модуль 4"
-                               Style="{StaticResource ModulesParametersTextBlock}"/>
-                    <TextBlock Text="Шлюз 1"
-                               Style="{StaticResource ModulesParametersTextBlock}"/>
-                    <TextBlock Text="Шлюз 2"
-                               Style="{StaticResource ModulesParametersTextBlock}"/>
-                </UniformGrid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="70*"/>
+                    <ColumnDefinition Width="30*"/>
+                </Grid.ColumnDefinitions>
 
-                <UniformGrid DockPanel.Dock="Right"
-                             Rows="6"
-                             Margin="5">
-                    <CheckBox x:Name="Module1"
-                              Style="{StaticResource ModulesParametersCheckBox}"/>
-                    <CheckBox x:Name="Module2"
-                              Style="{StaticResource ModulesParametersCheckBox}"/>
-                    <CheckBox x:Name="Module3"
-                              Style="{StaticResource ModulesParametersCheckBox}"/>
-                    <CheckBox x:Name="Module4"
-                              Style="{StaticResource ModulesParametersCheckBox}"/>
-                    <CheckBox x:Name="Gate1"
-                              Style="{StaticResource ModulesParametersCheckBox}"/>
-                    <CheckBox x:Name="Gate2"
-                              Style="{StaticResource ModulesParametersCheckBox}"/>
-                </UniformGrid>
-            </DockPanel>
+                <Border Grid.Column="0"
+                        Grid.Row="0"
+                        Style="{StaticResource SoftGroupContainer}"
+                        Padding="10">
+                    <UniformGrid Grid.Column="0"
+                                 Columns="3"
+                                 Rows="2">
+                        <CheckBox x:Name="Module1"
+                                  Content="Модуль 1"
+                                  FlowDirection="RightToLeft"
+                                  Style="{StaticResource ModulesParametersCheckBox}"/>
+                        <CheckBox x:Name="Module2"
+                                  Content="Модуль 2"
+                                  FlowDirection="RightToLeft"
+                                  Style="{StaticResource ModulesParametersCheckBox}"/>
+                        <CheckBox x:Name="Module3"
+                                  Content="Модуль 3"
+                                  FlowDirection="RightToLeft"
+                                  Style="{StaticResource ModulesParametersCheckBox}"/>
+                        <CheckBox x:Name="Module4"
+                                  Content="Модуль 4"
+                                  FlowDirection="RightToLeft"
+                                  Style="{StaticResource ModulesParametersCheckBox}"/>
+                        <CheckBox x:Name="Gate1"
+                                  Content="Шлюз 1"
+                                  FlowDirection="RightToLeft"
+                                  Style="{StaticResource ModulesParametersCheckBox}"/>
+                        <CheckBox x:Name="Gate2"
+                                  Content="Шлюз 2"
+                                  FlowDirection="RightToLeft"
+                                  Style="{StaticResource ModulesParametersCheckBox}"/>
+                    </UniformGrid>
+                </Border>
+
+                <Border Grid.Column="1"
+                        Style="{StaticResource SoftGroupContainer}"
+                        Padding="10">
+                    <StackPanel Grid.Column="1"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"> 
+                        <Label Content="Количество пластин: "
+                               Style="{StaticResource Label.Accent}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                        <ComboBox/>
+                    </StackPanel>
+                </Border>
+                
+                <!--<Border Grid.Row="0"
+                        Style="{StaticResource SoftGroupContainer}"
+                        Padding="10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="80*"/>
+                            <ColumnDefinition Width="20*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <UniformGrid Grid.Column="0"
+                                     Columns="3"
+                                     Rows="2">
+                            <CheckBox x:Name="Module1"
+                                      Content="Модуль 1"
+                                      FlowDirection="RightToLeft"
+                                      Style="{StaticResource ModulesParametersCheckBox}"/>
+                            <CheckBox x:Name="Module2"
+                                      Content="Модуль 2"
+                                      FlowDirection="RightToLeft"
+                                      Style="{StaticResource ModulesParametersCheckBox}"/>
+                            <CheckBox x:Name="Module3"
+                                      Content="Модуль 3"
+                                      FlowDirection="RightToLeft"
+                                      Style="{StaticResource ModulesParametersCheckBox}"/>
+                            <CheckBox x:Name="Module4"
+                                      Content="Модуль 4"
+                                      FlowDirection="RightToLeft"
+                                      Style="{StaticResource ModulesParametersCheckBox}"/>
+                            <CheckBox x:Name="Gate1"
+                                      Content="Шлюз 1"
+                                      FlowDirection="RightToLeft"
+                                      Style="{StaticResource ModulesParametersCheckBox}"/>
+                            <CheckBox x:Name="Gate2"
+                                      Content="Шлюз 2"
+                                      FlowDirection="RightToLeft"
+                                      Style="{StaticResource ModulesParametersCheckBox}"/>
+                        </UniformGrid>
+
+                        <StackPanel Grid.Column="1"
+                                    Orientation="Horizontal"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center">
+                            <Label Content="Количество пластин: "
+                                   Style="{StaticResource Label.Accent}"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                            <ComboBox/>
+                        </StackPanel>
+                    </Grid>
+                </Border>-->
+            </Grid>
         </Border>
-
-        <Border Grid.Column="0"
-                Grid.Row="1"
-                Padding="0,0,5,0"
-                Background="{StaticResource Brush.Surface}">
-
-            <StackPanel DockPanel.Dock="Top">
-
-                <Button Content="Инициализация"
-                        Style="{StaticResource Button.Base}"
-                        Height="32"
-                        Margin="0,0,0,0"/>
-                <Button Content="Подготовка"
-                        Style="{StaticResource Button.Base}"
-                        Height="32"
-                        Margin="0,5,0,0"/>
-                <Button Content="Запуск рабочего цикла"
-                        Style="{StaticResource Button.Base}"
-                        Height="32"
-                        Margin="0,5,0,0"/>
-                <Button Content="В ожидание"
-                        Style="{StaticResource Button.Base}"
-                        Height="32"
-                        Margin="0,5,0,0"/>
-                <Button Content="Напуск шлюза 1"
-                        Style="{StaticResource Button.Base}"
-                        Height="32"
-                        Margin="0,5,0,0"/>
-                <Button Content="Откачать шлюз 1"
-                        Style="{StaticResource Button.Base}"
-                        Height="32"
-                        Margin="0,5,0,0"/>
-                <Button Content="Напуск шлюза 2"
-                        Style="{StaticResource Button.Base}"
-                        Height="32"
-                        Margin="0,5,0,0"/>
-                <Button Content="Откачать шлюз 2"
-                        Style="{StaticResource Button.Base}"
-                        Height="32"
-                        Margin="0,5,0,0"/>
-            </StackPanel>
-        </Border>
-
 
         <Border Grid.Column="1"
-                Grid.ColumnSpan="2"
                 Grid.Row="0"
-                Padding="5,0,0,5"
-                Background="{StaticResource Brush.Surface}">
-
-            <ScrollViewer VerticalScrollBarVisibility="Disabled"
-                          HorizontalScrollBarVisibility="Visible">
-
-                <TextBlock Text="Путь пластины"/>
-            </ScrollViewer>
-
-        </Border>
-
-        <Border Grid.Column="1"
-                Grid.Row="1"
-                Padding="5,5,5,0"
-                Background="{StaticResource Brush.Surface}">
-
-            <TextBox Text="Параметры маршрута"/>
-
-        </Border>
-
-        <Border Grid.Column="2"
-        Grid.Row="1"
-        Background="{StaticResource Brush.Surface}">
+                Style="{StaticResource SoftGroupContainer}"
+                Padding="10">
             <Viewbox Stretch="Uniform">
                 <Canvas Width="750" Height="750" Background="Transparent">
+                    <Canvas.RenderTransform>
+                        <TransformGroup>
+                            <RotateTransform Angle="90"/>
+                            <TranslateTransform X="750" Y="0"/>
+                        </TransformGroup>
+                    </Canvas.RenderTransform>
                     <mnemo:CameraControl Canvas.Left="20" Canvas.Top="22" Width="260" Height="203"/>
 
                     <mnemo:CameraControl Canvas.Left="20" Canvas.Top="259" Width="260" Height="203"/>
@@ -151,12 +166,12 @@
                     </mnemo:CameraControl>
 
                     <Rectangle Stroke="{DynamicResource Brush.BorderLight}"
-                       StrokeThickness="4"
-                       Canvas.Left="280"
-                       Canvas.Top="72"
-                       Width="191"
-                       Height="577"/>
-                    
+                        StrokeThickness="4"
+                        Canvas.Left="280"
+                        Canvas.Top="72"
+                        Width="191"
+                        Height="577"/>
+
                     <mnemo:CameraControl Canvas.Left="470" Canvas.Top="22" Width="260" Height="203"/>
 
                     <mnemo:CameraControl Canvas.Left="470" Canvas.Top="259" Width="260" Height="203"/>
@@ -174,6 +189,31 @@
 
                 </Canvas>
             </Viewbox>
+        </Border>
+
+        <Border Grid.Column="1"
+                Grid.Row="1"
+                Style="{StaticResource SoftGroupContainer}"
+                Padding="10">
+
+            <UniformGrid Rows="4">
+                <Button Content="Напуск шлюза 1"
+                        Style="{StaticResource Button.Base}"
+                        Height="32"
+                        Margin="5"/>
+                <Button Content="Откачать шлюз 1"
+                        Style="{StaticResource Button.Base}"
+                        Height="32"
+                        Margin="5"/>
+                <Button Content="Напуск шлюза 2"
+                        Style="{StaticResource Button.Base}"
+                        Height="32"
+                        Margin="5"/>
+                <Button Content="Откачать шлюз 2"
+                        Style="{StaticResource Button.Base}"
+                        Height="32"
+                        Margin="5"/>
+            </UniformGrid>
         </Border>
     </Grid>
 </Page>
