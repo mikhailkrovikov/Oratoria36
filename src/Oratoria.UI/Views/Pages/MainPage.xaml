@@ -6,9 +6,135 @@
       xmlns:local="clr-namespace:Oratoria.UI.Views.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="MainPage">
+      Title="MainPage"
+      Background="{DynamicResource Brush.Window}">
 
-    <Grid>
-        
+    <Grid Margin="16,12">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="60*"/>
+            <ColumnDefinition Width="40*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30*"/>
+            <RowDefinition Height="70*"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Column="0"
+                Grid.Row="0"
+                Padding="0,0,5,0"
+                Background="{StaticResource Brush.Surface}">
+
+            <DockPanel>
+                <UniformGrid DockPanel.Dock="Left"
+                             Rows="6"
+                             Margin="5">
+                    <TextBlock Text="Модуль 1"
+                               Style="{StaticResource ModulesParametersTextBlock}"/>
+                    <TextBlock Text="Модуль 2"
+                               Style="{StaticResource ModulesParametersTextBlock}"/>
+                    <TextBlock Text="Модуль 3"
+                               Style="{StaticResource ModulesParametersTextBlock}"/>
+                    <TextBlock Text="Модуль 4"
+                               Style="{StaticResource ModulesParametersTextBlock}"/>
+                    <TextBlock Text="Шлюз 1"
+                               Style="{StaticResource ModulesParametersTextBlock}"/>
+                    <TextBlock Text="Шлюз 2"
+                               Style="{StaticResource ModulesParametersTextBlock}"/>
+                </UniformGrid>
+
+                <UniformGrid DockPanel.Dock="Right"
+                             Rows="6"
+                             Margin="5">
+                    <CheckBox x:Name="Module1"
+                              Style="{StaticResource ModulesParametersCheckBox}"/>
+                    <CheckBox x:Name="Module2"
+                              Style="{StaticResource ModulesParametersCheckBox}"/>
+                    <CheckBox x:Name="Module3"
+                              Style="{StaticResource ModulesParametersCheckBox}"/>
+                    <CheckBox x:Name="Module4"
+                              Style="{StaticResource ModulesParametersCheckBox}"/>
+                    <CheckBox x:Name="Gate1"
+                              Style="{StaticResource ModulesParametersCheckBox}"/>
+                    <CheckBox x:Name="Gate2"
+                              Style="{StaticResource ModulesParametersCheckBox}"/>
+                </UniformGrid>
+            </DockPanel>
+        </Border>
+
+        <Border Grid.Column="0"
+                Grid.Row="1"
+                Padding="0,0,5,0"
+                Background="{StaticResource Brush.Surface}">
+
+            <StackPanel DockPanel.Dock="Top">
+
+                <Button Content="Инициализация"
+                        Style="{StaticResource Button.Base}"
+                        Height="32"
+                        Margin="0,5,0,0"/>
+                <Button Content="Подготовка"
+                        Style="{StaticResource Button.Base}"
+                        Height="32"
+                        Margin="0,5,0,0"/>
+                <Button Content="Запуск рабочего цикла"
+                        Style="{StaticResource Button.Base}"
+                        Height="32"
+                        Margin="0,5,0,0"/>
+                <Button Content="В ожидание"
+                        Style="{StaticResource Button.Base}"
+                        Height="32"
+                        Margin="0,5,0,0"/>
+                <Button Content="Напуск шлюза 1"
+                        Style="{StaticResource Button.Base}"
+                        Height="32"
+                        Margin="0,5,0,0"/>
+                <Button Content="Откачать шлюз 1"
+                        Style="{StaticResource Button.Base}"
+                        Height="32"
+                        Margin="0,5,0,0"/>
+                <Button Content="Напуск шлюза 2"
+                        Style="{StaticResource Button.Base}"
+                        Height="32"
+                        Margin="0,5,0,0"/>
+                <Button Content="Откачать шлюз 2"
+                        Style="{StaticResource Button.Base}"
+                        Height="32"
+                        Margin="0,5,0,0"/>
+            </StackPanel>
+        </Border>
+
+
+        <Border Grid.Column="1"
+                Grid.ColumnSpan="2"
+                Grid.Row="0"
+                Padding="5,0,0,5"
+                Background="{StaticResource Brush.Surface}">
+
+            <ScrollViewer VerticalScrollBarVisibility="Disabled"
+                          HorizontalScrollBarVisibility="Visible">
+
+                <TextBlock Text="Путь пластины"/>
+            </ScrollViewer>
+
+        </Border>
+
+        <Border Grid.Column="1"
+                Grid.Row="1"
+                Padding="5,5,5,0"
+                Background="{StaticResource Brush.Surface}">
+            
+            <TextBox Text="Параметры маршрута"/>
+
+        </Border>
+
+        <Border Grid.Column="2"
+                Grid.Row="1"
+                Padding="5,5,5,0"
+                Background="{StaticResource Brush.Surface}">
+
+            <TextBox Text="Мнемосхема"/>
+        </Border>
     </Grid>
 </Page>
