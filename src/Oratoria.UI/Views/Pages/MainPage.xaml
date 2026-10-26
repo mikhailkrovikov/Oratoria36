@@ -19,66 +19,89 @@
 
         <!--Лево: пластины-->
         <Border Grid.Column="0"
-                Padding="0,0,10,0">
+                Margin="0,0,10,0">
             <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="20*"/>
-                    <RowDefinition Height="80*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-                <Border Grid.Row="0"
+                <Border Grid.Column="0"
                         Style="{StaticResource SoftGroupContainer}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="80*"/>
-                            <ColumnDefinition Width="20*"/>
-                        </Grid.ColumnDefinitions>
+                    <DockPanel LastChildFill="False">
 
-                        <UniformGrid Grid.Column="0"
-                                     Columns="3"
-                                     Rows="2">
+                        <StackPanel DockPanel.Dock="Top"
+                                    Orientation="Vertical"
+                                    Margin="0,10,0,0">
                             <CheckBox x:Name="Module1"
                                       Content="Модуль 1"
                                       FlowDirection="RightToLeft"
-                                      Style="{StaticResource ModulesParametersCheckBox}"/>
-                            <CheckBox x:Name="Module3"
-                                      Content="Модуль 3"
-                                      FlowDirection="RightToLeft"
-                                      Style="{StaticResource ModulesParametersCheckBox}"/>
-                            <CheckBox x:Name="Gate1"
-                                      Content="Шлюз 1"
-                                      FlowDirection="RightToLeft"
-                                      Style="{StaticResource ModulesParametersCheckBox}"/>
-                            
+                                      Style="{StaticResource ModulesParametersCheckBox}"
+                                      Margin="5"/>
                             <CheckBox x:Name="Module2"
                                       Content="Модуль 2"
                                       FlowDirection="RightToLeft"
-                                      Style="{StaticResource ModulesParametersCheckBox}"/>
+                                      Style="{StaticResource ModulesParametersCheckBox}"
+                                      Margin="5"/>
+                            <CheckBox x:Name="Module3"
+                                      Content="Модуль 3"
+                                      FlowDirection="RightToLeft"
+                                      Style="{StaticResource ModulesParametersCheckBox}"
+                                      Margin="5"/>
                             <CheckBox x:Name="Module4"
                                       Content="Модуль 4"
                                       FlowDirection="RightToLeft"
-                                      Style="{StaticResource ModulesParametersCheckBox}"/>
-                            <CheckBox x:Name="Gate2"
-                                      Content="Шлюз 2"
-                                      FlowDirection="RightToLeft"
-                                      Style="{StaticResource ModulesParametersCheckBox}"/>
-                        </UniformGrid>
+                                      Style="{StaticResource ModulesParametersCheckBox}"
+                                      Margin="5"/>
+                        </StackPanel>
 
-                        <StackPanel Grid.Column="1"
+                        <StackPanel DockPanel.Dock="Top"
+                                    Orientation="Vertical"
+                                    Margin="0,10,0,0">
+                            <CheckBox x:Name="Gate1"
+                                        Content="Шлюз 1"
+                                        FlowDirection="RightToLeft"
+                                        Style="{StaticResource ModulesParametersCheckBox}"
+                                        Margin="5"/>
+                            <CheckBox x:Name="Gate2"
+                                        Content="Шлюз 2"
+                                        FlowDirection="RightToLeft"
+                                        Style="{StaticResource ModulesParametersCheckBox}"
+                                        Margin="5"/>
+                        </StackPanel>
+
+                        <StackPanel DockPanel.Dock="Top"
                                     Orientation="Horizontal"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center">
+                                    Margin="0,10,0,0">
                             <Label Content="Количество пластин: "
-                                   Style="{StaticResource Label.Accent}"
-                                   HorizontalAlignment="Center"
+                                   HorizontalAlignment="Left"
                                    VerticalAlignment="Center"/>
                             <ComboBox/>
                         </StackPanel>
-                    </Grid>
+
+                        <StackPanel DockPanel.Dock="Bottom"
+                                    Orientation="Vertical">
+                            <Button Content="Инициализация"
+                                    Style="{StaticResource Button.Base}"
+                                    Height="32"
+                                    Margin="5"/>
+                            <Button Content="Подготовка"
+                                    Style="{StaticResource Button.Base}"
+                                    Height="32"
+                                    Margin="5"/>
+                            <Button Content="Запуск рабочего цикла"
+                                    Style="{StaticResource Button.Base}"
+                                    Height="32"
+                                    Margin="5"/>
+                            <Button Content="В ожидание"
+                                    Style="{StaticResource Button.Base}"
+                                    Height="32"
+                                    Margin="5"/>
+                        </StackPanel>
+                    </DockPanel>
                 </Border>
 
-                <Border Grid.Row="1"
+                <Border Grid.Column="1"
                         Style="{StaticResource SoftGroupContainer}">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -90,7 +113,7 @@
                         <StackPanel Grid.Row="0"
                                     Orientation="Horizontal">
                             <TextBlock Text="Пластина: "
-                                       Margin="5"/>
+                                        Margin="5"/>
                             <ComboBox Margin="5"/>
                         </StackPanel>
 
@@ -108,32 +131,10 @@
                                     Margin="0,10,0,0">
                             <Button Content="Добавить шаг"
                                     Height="32"
+                                    MinWidth="100"
                                     Style="{StaticResource Button.Base}"/>
                         </StackPanel>
                     </Grid>
-
-                </Border>
-
-                <Border Grid.Row="2"
-                        Style="{StaticResource SoftGroupContainer}">
-                    <UniformGrid Columns="4">
-                        <Button Content="Инициализация"
-                                Style="{StaticResource Button.Base}"
-                                Height="32"
-                                Margin="5"/>
-                        <Button Content="Подготовка"
-                                Style="{StaticResource Button.Base}"
-                                Height="32"
-                                Margin="5"/>
-                        <Button Content="Запуск рабочего цикла"
-                                Style="{StaticResource Button.Base}"
-                                Height="32"
-                                Margin="5"/>
-                        <Button Content="В ожидание"
-                                Style="{StaticResource Button.Base}"
-                                Height="32"
-                                Margin="5"/>
-                    </UniformGrid>
                 </Border>
             </Grid>
         </Border>
