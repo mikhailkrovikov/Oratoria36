@@ -76,7 +76,9 @@
                             <Label Content="Количество пластин: "
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Center"/>
-                            <ComboBox/>
+                            <TextBox Width="30"
+                                     Height="20"
+                                     HorizontalContentAlignment="Center"/>
                         </StackPanel>
 
                         <StackPanel DockPanel.Dock="Bottom"
