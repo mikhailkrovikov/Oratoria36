@@ -13,21 +13,15 @@
 
     <Grid Margin="16,12">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="50*"/>
-            <ColumnDefinition Width="50*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <!--Лево: пластины-->
         <Border Grid.Column="0"
                 Margin="0,0,10,0">
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <Border Grid.Column="0"
-                        Style="{StaticResource SoftGroupContainer}">
+                <Border Style="{StaticResource SoftGroupContainer}">
                     <DockPanel LastChildFill="False">
 
                         <StackPanel DockPanel.Dock="Top"
@@ -68,8 +62,7 @@
                                     Orientation="Horizontal"
                                     Margin="0,10,0,0">
                             <Label Content="Количество пластин: "
-                                   HorizontalAlignment="Left"
-                                   VerticalAlignment="Center"/>
+                                   HorizontalAlignment="Left"/>
                             <TextBox Width="30"
                                      Height="20"
                                      HorizontalContentAlignment="Center"/>
@@ -105,42 +98,44 @@
                                     Height="32"
                                     Margin="5"/>
                         </StackPanel>
-                    </DockPanel>
-                </Border>
-
-                <Border Grid.Column="1"
-                        Style="{StaticResource SoftGroupContainer}">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
 
                         <StackPanel Grid.Row="0"
-                                    Orientation="Horizontal">
-                            <TextBlock Text="Пластина: "
-                                        Margin="5"/>
-                            <ComboBox Margin="5"/>
-                        </StackPanel>
-
-                        <DataGrid Grid.Row="0"
-                                  CanUserAddRows="False">
-                            <DataGrid.Columns>
-                                <DataGridComboBoxColumn Header="Шаг"/>
-                                <DataGridComboBoxColumn Header="Модуль"/>
-                                <DataGridComboBoxColumn Header="Рецепт"/>
-                            </DataGrid.Columns>
-                        </DataGrid>
-
-                        <StackPanel Grid.Row="1"
-                                    HorizontalAlignment="Right"
+                                    Orientation="Vertical"
                                     Margin="0,10,0,0">
-                            <Button Content="Добавить шаг"
-                                    Height="32"
-                                    MinWidth="100"
-                                    Style="{StaticResource Button.Base}"/>
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="5">
+                                <Label Content="Модуль 1:"
+                                       HorizontalAlignment="Left"/>
+                                <Label Content="Рецепт "
+                                       HorizontalAlignment="Left"/>
+                                <ComboBox/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="5">
+                                <Label Content="Модуль 2:"
+                                       HorizontalAlignment="Left"/>
+                                <Label Content="Рецепт "
+                                       HorizontalAlignment="Left"/>
+                                <ComboBox/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="5">
+                                <Label Content="Модуль 3:"
+                                       HorizontalAlignment="Left"/>
+                                <Label Content="Рецепт "
+                                       HorizontalAlignment="Left"/>
+                                <ComboBox/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal"
+                                        Margin="5">
+                                <Label Content="Модуль 4:"
+                                       HorizontalAlignment="Left"/>
+                                <Label Content="Рецепт "
+                                       HorizontalAlignment="Left"/>
+                                <ComboBox/>
+                            </StackPanel>
                         </StackPanel>
-                    </Grid>
+                    </DockPanel>
                 </Border>
             </Grid>
         </Border>
