@@ -1,12 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Oratoria.Persistence.Entities;
 
 namespace Oratoria.Persistence
 {
     public class RecipeDBContext : DbContext
     {
-        public DbSet<RecipeValueEntity> Values { get; set; }
-
         public DbSet<RecipeParameterEntity> Parameters { get; set; }
 
         public DbSet<RecipeStepEntity> Steps { get; set; }
@@ -17,8 +15,14 @@ namespace Oratoria.Persistence
         {
         }
 
+        public RecipeDBContext(DbContextOptions<RecipeDBContext> options) : base(options)
+        {
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            if (optionsBuilder.IsConfigured) return;
+
             var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "recipies.db");
             optionsBuilder.UseSqlite($"Data Source={path}");
         }

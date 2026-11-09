@@ -12,4 +12,8 @@
     <ProjectReference Include="..\Oratoria.Infrastructure\Oratoria.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Oratoria.Persistence\Oratoria.Persistence.csproj" />
+  </ItemGroup>
+
 </Project>

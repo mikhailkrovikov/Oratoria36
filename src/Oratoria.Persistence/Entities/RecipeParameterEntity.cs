@@ -1,5 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Oratoria.Persistence.EntitiesConfigurations;
+using Oratoria.Persistence.ValueTypes;
 
 namespace Oratoria.Persistence.Entities
 {
@@ -8,8 +9,8 @@ namespace Oratoria.Persistence.Entities
     {
         public Guid ParameterId { get; set; } = Guid.NewGuid();
         public Guid StepId { get; set; }
-        public string Name { get; set; } = null!;
-        public RecipeValueEntity Value { get; set; }
+        public RecipeParameter Parameter { get; set; }
+        public double Value { get; set; }
         public RecipeStepEntity Step { get; set; }
     }
 }

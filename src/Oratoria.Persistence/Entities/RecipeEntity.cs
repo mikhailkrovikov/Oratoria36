@@ -9,6 +9,7 @@ namespace Oratoria.Persistence.Entities
         public Guid RecipeId { get; set; } = Guid.NewGuid();
         public int ModuleId { get; set; }
         public string Name { get; set; } = null!;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public List<RecipeStepEntity> Steps {  get; set; } = new();
     }
 }

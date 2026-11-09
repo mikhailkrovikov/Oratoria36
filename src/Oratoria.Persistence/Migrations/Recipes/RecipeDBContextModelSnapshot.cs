@@ -23,6 +23,9 @@ namespace Oratoria.Persistence.Migrations.Recipes
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("ModuleId")
                         .HasColumnType("INTEGER");
 
@@ -32,6 +35,9 @@ namespace Oratoria.Persistence.Migrations.Recipes
                         .HasColumnType("TEXT");
 
                     b.HasKey("RecipeId");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Recipes", t =>
                         {
@@ -45,13 +51,14 @@ namespace Oratoria.Persistence.Migrations.Recipes
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("TEXT");
+                    b.Property<int>("Parameter")
+                        .HasColumnType("INTEGER");
 
                     b.Property<Guid>("StepId")
                         .HasColumnType("TEXT");
+
+                    b.Property<double>("Value")
+                        .HasColumnType("REAL");
 
                     b.HasKey("ParameterId");
 
@@ -82,26 +89,6 @@ namespace Oratoria.Persistence.Migrations.Recipes
                         });
                 });
 
-            modelBuilder.Entity("Oratoria.Persistence.Entities.RecipeValueEntity", b =>
-                {
-                    b.Property<Guid>("ValueId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("ParameterId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<double>("Value")
-                        .HasColumnType("REAL");
-
-                    b.HasKey("ValueId");
-
-                    b.HasIndex("ParameterId")
-                        .IsUnique();
-
-                    b.ToTable("Values");
-                });
-
             modelBuilder.Entity("Oratoria.Persistence.Entities.RecipeParameterEntity", b =>
                 {
                     b.HasOne("Oratoria.Persistence.Entities.RecipeStepEntity", "Step")
@@ -124,24 +111,9 @@ namespace Oratoria.Persistence.Migrations.Recipes
                     b.Navigation("Recipe");
                 });
 
-            modelBuilder.Entity("Oratoria.Persistence.Entities.RecipeValueEntity", b =>
-                {
-                    b.HasOne("Oratoria.Persistence.Entities.RecipeParameterEntity", null)
-                        .WithOne("Value")
-                        .HasForeignKey("Oratoria.Persistence.Entities.RecipeValueEntity", "ParameterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Oratoria.Persistence.Entities.RecipeEntity", b =>
                 {
                     b.Navigation("Steps");
-                });
-
-            modelBuilder.Entity("Oratoria.Persistence.Entities.RecipeParameterEntity", b =>
-                {
-                    b.Navigation("Value")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Oratoria.Persistence.Entities.RecipeStepEntity", b =>

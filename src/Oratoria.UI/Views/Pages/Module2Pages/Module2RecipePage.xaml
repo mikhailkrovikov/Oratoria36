@@ -8,6 +8,7 @@
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Module2RecipePage"
+      Loaded="Page_Loaded"
       Background="{DynamicResource Brush.Window}">
 
     <Grid Margin="16,12">
@@ -34,8 +35,31 @@
                            Style="{StaticResource HeaderTextBlock}"
                            HorizontalAlignment="Center"/>
 
-                <ListBox Grid.Row="1"
-                         x:Name="RecipeListBox"/>
+                <DataGrid Grid.Row="1"
+                          ItemsSource="{Binding Recipes}"
+                          SelectedItem="{Binding SelectedRecipe}"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="True"
+                          CanUserAddRows="False"
+                          SelectionMode="Single"
+                          SelectionUnit="FullRow"
+                          FrozenColumnCount="0"
+                          VerticalScrollBarVisibility="Auto"
+                          Style="{StaticResource RecipeDataGrid}"
+                          ColumnHeaderStyle="{StaticResource RecipeDataGridHeader}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Название" Binding="{Binding Name}" Width="*"/>
+                        <DataGridTextColumn Header="Создан" Width="140">
+                            <DataGridTextColumn.Binding>
+                                <Binding Path="CreatedAt" StringFormat="dd.MM.yyyy HH:mm">
+                                    <Binding.Converter>
+                                        <recipe:RecipeDateConverter/>
+                                    </Binding.Converter>
+                                </Binding>
+                            </DataGridTextColumn.Binding>
+                        </DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
 
                 <StackPanel Grid.Row="2"
                             Margin="0,5,0,0">
@@ -77,7 +101,7 @@
                              Margin="0,5,0,5"
                              Style="{StaticResource TextBoxInput}"
                              VerticalContentAlignment="Center"
-                             Text="Новый рецепт"/>
+                             Text="{Binding RecipeName, UpdateSourceTrigger=PropertyChanged}"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="0"
@@ -125,7 +149,7 @@
                     </DataGrid.Columns>
                 </DataGrid>
 
-                <StackPanel Grid.Row="3"
+                <StackPanel Grid.Row="2"
                             Orientation="Horizontal"
                             HorizontalAlignment="Left">
 
@@ -142,10 +166,14 @@
                             Margin="0,5,0,5"/>
 
                     <ComboBox Height="32"
+                              Width="65"
+                              ItemsSource="{Binding Steps}"
+                              DisplayMemberPath="Number"
+                              SelectedItem="{Binding SelectedStep}"
                               Margin="0,5,0,5"/>
                 </StackPanel>
 
-                <StackPanel Grid.Row="3"   
+                <StackPanel Grid.Row="2"
                             Orientation="Horizontal"
                             HorizontalAlignment="Right"
                             Margin="0,5,0,0">
